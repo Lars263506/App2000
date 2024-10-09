@@ -1,0 +1,1 @@
+Dette er bare en test for å se om botten jeg la til på Discord oppdager pull request. 
