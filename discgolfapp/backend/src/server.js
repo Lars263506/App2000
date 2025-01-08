@@ -1,9 +1,6 @@
-import dotenv from 'dotenv';
 import express from 'express';
 import webpagesRoutes from './routes/webpagesRoutes.js';
 import userRoutes from './routes/userRoutes.js';
-
-dotenv.config();
 
 const app = express();
 
