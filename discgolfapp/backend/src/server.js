@@ -27,8 +27,6 @@ app.use('/webpages', webpagesRoutes);
 app.use('/users', userRoutes);
 
 
-// Database connection and server start
-
 /**
  * @param process.env.MONGODB_URI
  * @description Connects to the MongoDB database and starts the server
