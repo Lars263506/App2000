@@ -1,5 +1,6 @@
 import express from 'express';
 import mongoose from 'mongoose';
+import { rateLimit } from 'express-rate-limit';
 
 import passport from './config/passportConfig.js';
 import webpagesRoutes from './routes/webpagesRoutes.js';
@@ -24,6 +25,13 @@ app.use((req, res, next) => {
 
 // Passport middleware to authenticate requests
 app.use(passport.initialize());
+
+// Rate limiter middleware for all requests
+app.use(rateLimit({
+    windowMs: 10 * 60 * 1000,
+    max: 100,
+    message: "Too many requests. Please try again in 15 minutes."
+}));
 
 // Routes for handling requests
 app.use('/webpages', webpagesRoutes);

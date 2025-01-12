@@ -2,6 +2,7 @@ import express from 'express';
 
 import passport from '../config/passportConfig.js';
 import { authorizeAdmin } from '../middleware/authorization.js';
+import { loginLimiter, registerLimiter } from '../middleware/rateLimiter.js';
 import { 
     getUser,
     getUserByEmail,
@@ -23,8 +24,8 @@ const router = express.Router();
 router.get('/:id', passport.authenticate('jwt', { session: false }), authorizeAdmin, getUser);
 router.get('/logout', logoutUser);
 router.post('/get-by-email', passport.authenticate('jwt', { session: false }), authorizeAdmin, getUserByEmail);
-router.post('/', registerUser);
-router.post('/login', loginUser);
+router.post('/', registerLimiter, registerUser);
+router.post('/login', loginLimiter, loginUser);
 router.put('/change-email', passport.authenticate('jwt', { session: false }), changeEmail);
 router.put('/change-password', passport.authenticate('jwt', { session: false }), changePassword);
 router.put('/change-role', passport.authenticate('jwt', { session: false }), authorizeAdmin, changeRole);
