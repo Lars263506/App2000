@@ -11,11 +11,21 @@ const schema = new mongoose.Schema(
             type: String, 
             required: true 
         },
+        role: {
+            type: String,
+            required: true,
+            enum: ['user', 'admin', 'member', 'clubowner'],
+            default: 'user',
+        },
         emailChangedAt: { 
             type: Date, 
             required: true 
         },
         passwordChangedAt: { 
+            type: Date, 
+            required: true 
+        },
+        roleChangedAt: { 
             type: Date, 
             required: true 
         }

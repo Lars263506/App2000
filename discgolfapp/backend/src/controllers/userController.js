@@ -6,7 +6,6 @@ import * as userService from '../services/userService.js';
  */
 
 /**
- * 
  * @param req 
  * @param res
  * @description Gets a user from the database by id
@@ -24,7 +23,6 @@ const getUser = async (req, res) => {
 }
 
 /**
- * 
  * @param req 
  * @param res
  * @description Gets a user from the database by email
@@ -42,7 +40,6 @@ const getUserByEmail = async (req, res) => {
 }
 
 /**
- * 
  * @param req 
  * @param res
  * @description Registers a new user in the database
@@ -52,15 +49,14 @@ const getUserByEmail = async (req, res) => {
 const registerUser = async (req, res) => {
     const { email, password } = req.body;
     try {
-        const newUser = await userService.registerUser(email, password);
-        res.status(201).json(newUser);
+        const { createdAt } = await userService.registerUser(email, password);
+        res.status(201).json(createdAt);
     } catch (error) {
         res.status(400).json({ error: error.message });
     }
 }
 
 /**
- * 
  * @param req 
  * @param res
  * @description Logs in a user and tokens are created for the user
@@ -70,15 +66,14 @@ const registerUser = async (req, res) => {
 const loginUser = async (req, res) => {
     const { email, password } = req.body;
     try {
-        const { userEmail, accessToken, refreshToken } = await userService.loginUser(email, password);
-        res.status(200).json({ userEmail, accessToken, refreshToken });
+        const { accessToken, refreshToken } = await userService.loginUser(email, password);
+        res.status(200).json({ accessToken, refreshToken });
     } catch (error) {
         res.status(error.statusCode).json({ error: error.message });
     }
 }
 
 /**
- * 
  * @param req 
  * @param res
  * @description Logs out a user and invalidates the refresh token
@@ -95,7 +90,6 @@ const logoutUser = async (res) => {
 }
 
 /**
- * 
  * @param req 
  * @param res
  * @description Changes the email of a user in the database
@@ -105,15 +99,14 @@ const logoutUser = async (res) => {
 const changeEmail = async (req, res) => {
     const { email, newEmail } = req.body;
     try {
-        const user = await userService.changeEmail(email, newEmail);
-        res.status(200).json(user);
+        const { emailChangedAt } = await userService.changeEmail(email, newEmail);
+        res.status(200).json(emailChangedAt);
     } catch (error) {
         res.status(400).json({ error: error.message });
     }
 }
 
 /**
- * 
  * @param req 
  * @param res
  * @description Changes the password of a user in the database
@@ -123,15 +116,31 @@ const changeEmail = async (req, res) => {
 const changePassword = async (req, res) => {
     const { email, newPassword } = req.body;
     try {
-        const user = await userService.changePassword(email, newPassword);
-        res.status(200).json(user);
+        const { passwordChangedAt } = await userService.changePassword(email, newPassword);
+        res.status(200).json(passwordChangedAt);
     } catch (error) {
         res.status(400).json({ error: error.message });
     }
 }
 
 /**
- * 
+ * @param req 
+ * @param res
+ * @description Changes the role of a user in the database
+ * @throws Error if there was an error changing the role in the database
+ */
+
+const changeRole = async (req, res) => {
+    const { email, newRole } = req.body;
+    try {
+        const { userRole, roleChangedAt } = await userService.changeRole(email, newRole);
+        res.status(200).json(userRole, roleChangedAt);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+}
+
+/**
  * @param req 
  * @param res
  * @description Deletes a user from the database
@@ -148,4 +157,4 @@ const deleteUser = async (req, res) => {
     }
 }
 
-export { getUser, getUserByEmail, registerUser, loginUser, logoutUser, changeEmail, changePassword, deleteUser };
+export { getUser, getUserByEmail, registerUser, loginUser, logoutUser, changeEmail, changePassword, changeRole, deleteUser };

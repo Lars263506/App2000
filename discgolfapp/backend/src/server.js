@@ -1,6 +1,7 @@
 import express from 'express';
 import mongoose from 'mongoose';
 
+import passport from './config/passportConfig.js';
 import webpagesRoutes from './routes/webpagesRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 
@@ -21,6 +22,8 @@ app.use((req, res, next) => {
     next();
 });
 
+// Passport middleware to authenticate requests
+app.use(passport.initialize());
 
 // Routes for handling requests
 app.use('/webpages', webpagesRoutes);
