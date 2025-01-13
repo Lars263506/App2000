@@ -10,26 +10,26 @@ import User from '../models/User.js';
 
 /**
  * @param id
- * @returns User object, excluding sensitive and internal properties
+ * @returns User object, excluding hashed password
  * @description Gets a user from the database by id
  * @throws Error if the user was not found
  */
 
 const getUser = async (id) => {
-    const user = await User.findById(id).select('-hashedPassword -emailChangedAt -passwordChangedAt -__v');
+    const user = await User.findById(id).select('-hashedPassword');
     if (!user) throw new Error("User not found");
     return user;
 };
 
 /**
  * @param email
- * @returns User object, excluding sensitive and internal properties
+ * @returns User object, excluding hashed password
  * @description Gets a user from the database by email
  * @throws Error if the user was not found
  */
 
 const getUserByEmail = async (email) => {
-    const user = await User.find({ email }).select('-hashedPassword -emailChangedAt -passwordChangedAt -__v');
+    const user = await User.find({ email }).select('-hashedPassword');
     if (!user) throw new Error("User not found");
     return user;
 };
@@ -38,7 +38,7 @@ const getUserByEmail = async (email) => {
  * 
  * @param email 
  * @param password 
- * @returns New user object with email and createdAt properties
+ * @returns Time of user creation
  * @description Registers a new user in the database
  * @throws Error if there was an error registering the user in the database
  */
@@ -47,20 +47,27 @@ const registerUser = async (email, password) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const changedTime = new Date();
-    const newUser = { email, hashedPassword, emailChangedAt: changedTime, passwordChangedAt: changedTime };
+    const newUser = { 
+        email, 
+        hashedPassword, 
+        role: 'user',
+        emailChangedAt: changedTime, 
+        passwordChangedAt: changedTime,
+        roleChangedAt: changedTime
+    };
     let user;
     try {
         user = await User.create(newUser);
     } catch (error) {
         throw new Error("Email is already in use");
     }
-    return { email: user.email, createdAt: user.createdAt };
+    return {createdAt: user.createdAt };
 };
 
 /**
  * @param email
  * @param password
- * @returns Object containing the user object, access token and refresh token
+ * @returns accessToken and refreshToken
  * @description Logs in a user and tokens are created for the user
  * @throws Error if the email or password is incorrect
  */
@@ -79,9 +86,11 @@ const loginUser = async (email, password) => {
         throw error;
     }
 
-    const accessToken = jwt.sign({ id: user._id }, process.env.JWT_ACCESS_SECRET, { expiresIn: '1h' });
-    const refreshToken = jwt.sign({ id: user._id }, process.env.JWT_REFRESH_SECRET, { expiresIn: '7d' });
-    return { userEmail: user.email, accessToken, refreshToken };
+    const payload = { id: user._id, role: user.role };
+
+    const accessToken = jwt.sign(payload, process.env.JWT_ACCESS_SECRET, { expiresIn: '1h' });
+    const refreshToken = jwt.sign(payload, process.env.JWT_REFRESH_SECRET, { expiresIn: '7d' });
+    return { accessToken, refreshToken };
 };
 
 /**
@@ -103,7 +112,7 @@ const logoutUser = async () => {
 /**
  * @param email
  * @param newEmail
- * @returns User object with updated email
+ * @returns Time of email change
  * @description Changes the email of a user in the database
  */
 
@@ -111,15 +120,14 @@ const changeEmail = async (email, newEmail) => {
     const user = await User.findOneAndUpdate({ email }, { email: newEmail }, { new: true });
     if (!user) throw new Error("User not found");
 
-    user.email = newEmail;
-    return { email: user.email, emailChangedAt: user.emailChangedAt };
+    return { emailChangedAt: user.emailChangedAt };
 };
 
 /**
  * 
  * @param email 
  * @param newPassword 
- * @returns User object with email and createdAt properties
+ * @returns Time of password change
  * @description Changes the password of a user in the database
  */
 
@@ -129,7 +137,23 @@ const changePassword = async (email, newPassword) => {
     const user = await User.findOneAndUpdate({ email }, { password: newPassword }, { new: true });
     if (!user) throw new Error("User not found");
 
-    return { email: user.email, passwordChangedAt: user.passwordChangedAt };
+    return { passwordChangedAt: user.passwordChangedAt };
+};
+
+/**
+ * 
+ * @param email 
+ * @param newRole 
+ * @returns New user role and time of role change
+ * @description Changes the role of a user in the database
+ */
+
+const changeRole = async (email, newRole) => {
+    const user = User.findOneAndUpdate({ email }, { role: newRole });
+
+    if (!user) throw new Error("User not found");
+
+    return { role: user.role, roleChangedAt: user.roleChangedAt};
 };
 
 /**
@@ -144,4 +168,4 @@ const deleteUser = async (email) => {
     return { success: true };
 };
 
-export { getUser, getUserByEmail, registerUser, loginUser, logoutUser, changeEmail, changePassword, deleteUser };
+export { getUser, getUserByEmail, registerUser, loginUser, logoutUser, changeEmail, changePassword, changeRole, deleteUser };
