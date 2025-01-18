@@ -12,7 +12,8 @@ const getAllClubPages = async (req, res) => {
 const getClubPage = async (req, res) => {
     try {
         const id = req.params.id;
-        const response = await clubpageService.getClubPage(id);
+        const role = req.user.role;
+        const response = await clubpageService.getClubPage(id, role);
         res.json({mssg: "Club page found", data: response});
     } catch (err) {
         res.status(404).json({error: err.message});
