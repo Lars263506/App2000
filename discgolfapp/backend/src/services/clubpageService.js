@@ -6,8 +6,17 @@ const getAllClubPages = async () => {
     return clubPages;
 };
 
-const getClubPage = async (id) => {
-    const clubPage = await ClubPage.findById(id);
+const getClubPage = async (id, role) => {
+    const excludeFields = [];
+
+    if (role === "user") {
+        excludeFields.push("members", "events", "memberElements");
+    }
+    else if (role === "member") {
+        excludeFields.push("nonmemberElements");
+    }
+
+    const clubPage = await ClubPage.findById(id).select(`-${excludeFields.join(" -")}`);
     if (!clubPage) throw new Error("Club page not found");
     return clubPage;
 };
