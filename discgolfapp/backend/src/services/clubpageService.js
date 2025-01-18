@@ -1,7 +1,7 @@
 import ClubPage from "../models/clubpage.js";
 
 const getAllClubPages = async () => {
-    const excludeFields = ["_id", "__v", "createdAt", "updatedAt", "members", "events", "memberElements", "nonmemberElements"];
+    const excludeFields = ["_id", "clubOwner", "__v", "createdAt", "updatedAt", "members", "events", "memberElements", "nonmemberElements"];
 
     const clubPages = await ClubPage.find({}).select(`-${excludeFields.join(" -")}`);
     if (!clubPages) throw new Error("No club pages found");
