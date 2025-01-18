@@ -1,7 +1,7 @@
 import express from 'express';
 
 import passport from '../config/passportConfig.js';
-import { authorizeAdmin, authorizeClubowner } from '../middleware/authorization.js';
+import { authorizeClubowner } from '../middleware/authorization.js';
 import { 
     getAllClubPages, 
     getClubPage, 
@@ -16,12 +16,12 @@ import {
  */
 const router = express.Router();
 
-router.get('/', 
-    passport.authenticate('jwt', { session: false }),
+router.get('/',
     getAllClubPages
 );
 
 router.get('/:id',
+    passport.authenticate('jwt', { session: false }),
     getClubPage
 );
 

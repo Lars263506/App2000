@@ -1,13 +1,15 @@
 import ClubPage from "../models/clubpage.js";
 
 const getAllClubPages = async () => {
-    const clubPages = await ClubPage.find({});
+    const excludeFields = ["__v", "createdAt", "updatedAt", "members", "events", "memberElements", "nonmemberElements"];
+
+    const clubPages = await ClubPage.find({}).select(`-${excludeFields.join(" -")}`);
     if (!clubPages) throw new Error("No club pages found");
     return clubPages;
 };
 
 const getClubPage = async (id, role) => {
-    const excludeFields = [];
+    const excludeFields = ["__v", "createdAt", "updatedAt"];
 
     if (role === "user") {
         excludeFields.push("members", "events", "memberElements");
