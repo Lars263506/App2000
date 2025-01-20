@@ -47,9 +47,9 @@ const getUserByEmail = async (req, res) => {
  */
 
 const registerUser = async (req, res) => {
-    const { email, password } = req.body;
+    const { displayName, email, password } = req.body;
     try {
-        const { createdAt } = await userService.registerUser(email, password);
+        const { createdAt } = await userService.registerUser(displayName, email, password);
         res.status(201).json(createdAt);
     } catch (error) {
         res.status(400).json({ error: error.message });
@@ -86,6 +86,23 @@ const logoutUser = async (res) => {
         res.status(200).json({ expiredTokens });
     } catch (error) {
         res.status(500).json({ error: error.message });
+    }
+}
+
+/**
+ * @param req 
+ * @param res
+ * @description Changes the display name of a user in the database
+ * @throws Error if there was an error changing the display name in the database
+ */
+
+const changeDisplayName = async (req, res) => {
+    const { email, newDisplayName } = req.body;
+    try {
+        const { emailChangedAt } = await userService.changeDisplayName(email, newDisplayName);
+        res.status(200).json(emailChangedAt);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
     }
 }
 
@@ -157,4 +174,4 @@ const deleteUser = async (req, res) => {
     }
 }
 
-export { getUser, getUserByEmail, registerUser, loginUser, logoutUser, changeEmail, changePassword, changeRole, deleteUser };
+export { getUser, getUserByEmail, registerUser, loginUser, logoutUser, changeDisplayName, changeEmail, changePassword, changeRole, deleteUser };

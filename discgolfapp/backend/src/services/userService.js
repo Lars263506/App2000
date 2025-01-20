@@ -42,13 +42,14 @@ const getUserByEmail = async (email) => {
  * @throws Error if there was an error registering the user in the database
  */
 
-const registerUser = async (email, password) => {
+const registerUser = async (displayName, email, password) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const changedTime = new Date();
     const newUser = { 
-        email, 
-        hashedPassword, 
+        displayName,
+        email,
+        hashedPassword,
         role: 'user',
         emailChangedAt: changedTime, 
         passwordChangedAt: changedTime,
@@ -110,6 +111,20 @@ const logoutUser = async () => {
 
 /**
  * @param email
+ * @param displayName
+ * @returns Time of display name change
+ * @description Changes the display name of a user in the database
+ */
+
+const changeDisplayName = async (email, newDisplayName) => {
+    const user = await User.findOneAndUpdate({ email }, { displayName: newDisplayName }, { new: true });
+    if (!user) throw new Error("User not found");
+
+    return { emailChangedAt: user.emailChangedAt };
+};
+
+/**
+ * @param email
  * @param newEmail
  * @returns Time of email change
  * @description Changes the email of a user in the database
@@ -167,4 +182,15 @@ const deleteUser = async (email) => {
     return { success: true };
 };
 
-export { getUser, getUserByEmail, registerUser, loginUser, logoutUser, changeEmail, changePassword, changeRole, deleteUser };
+export { 
+    getUser, 
+    getUserByEmail, 
+    registerUser, 
+    loginUser, 
+    logoutUser, 
+    changeDisplayName, 
+    changeEmail, 
+    changePassword, 
+    changeRole, 
+    deleteUser 
+};

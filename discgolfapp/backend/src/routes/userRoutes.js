@@ -9,6 +9,7 @@ import {
     registerUser, 
     loginUser, 
     logoutUser, 
+    changeDisplayName,
     changeEmail, 
     changePassword,
     changeRole, 
@@ -44,6 +45,11 @@ router.post('/',
 router.post('/login', 
     loginLimiter, 
     loginUser
+);
+
+router.put('/change-display-name', 
+    passport.authenticate('jwt', { session: false }), 
+    changeDisplayName
 );
 
 router.put('/change-email', 
