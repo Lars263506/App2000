@@ -1,9 +1,10 @@
 import express from 'express';
 import mongoose from 'mongoose';
+import cors from 'cors';
 import { rateLimit } from 'express-rate-limit';
 
 import passport from './config/passportConfig.js';
-import webpagesRoutes from './routes/webpagesRoutes.js';
+import clubpageRoutes from './routes/clubpageRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 
 /**
@@ -13,9 +14,16 @@ import userRoutes from './routes/userRoutes.js';
 
 const app = express();
 
+// Middleware to allow cross-origin requests
+app.use(cors(
+    {
+        origin: process.env.CORS_ORIGIN,
+        credentials: true
+    }
+));
+
 // Middleware to parse JSON bodies and append them to req.body
 app.use(express.json());
-
 
 // Middleware to log request method and path
 app.use((req, res, next) => {
@@ -34,9 +42,8 @@ app.use(rateLimit({
 }));
 
 // Routes for handling requests
-app.use('/webpages', webpagesRoutes);
+app.use('/clubpage', clubpageRoutes);
 app.use('/users', userRoutes);
-
 
 /**
  * @param process.env.MONGODB_URI
