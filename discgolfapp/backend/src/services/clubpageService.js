@@ -23,7 +23,7 @@ const getClubPage = async (id, role) => {
     return clubPage;
 };
 
-const createNewClubPage = async (name, clubOwner, description, address, websiteURL, email, phone, ) => {
+const createNewClubPage = async (name, clubOwner, description, address, zipCode, websiteURL, email, phone, ) => {
     const newClubPage = {
         name,
         clubOwner,
@@ -31,6 +31,7 @@ const createNewClubPage = async (name, clubOwner, description, address, websiteU
         nonmemberElements: [],
         memberElements: [],
         address,
+        zipCode,
         websiteURL,
         email,
         phone,

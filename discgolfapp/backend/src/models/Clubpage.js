@@ -27,6 +27,10 @@ const schema = new mongoose.Schema(
             type: String,
             required: true
         },
+        zipCode: {
+            type: String,
+            required: true
+        },
         websiteURL: {
             type: String,
             required: true
