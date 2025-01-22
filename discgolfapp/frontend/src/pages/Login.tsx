@@ -1,12 +1,17 @@
-import React from "react";
+'use client'
 
-const Login: React.FC = () => {
-  return (
-    <div>
-      <h1>Logg inn</h1>
-      <p>Logg inn med e-post og passord.</p>
-    </div>
-  );
-};
+export default function Login() {
+    
 
-export default Login;
+    return (
+        <form>Login
+            <h1>Logg inn her!</h1>
+            <label htmlFor="email"></label>
+            <input id="email"
+                type="email">
+            </input>
+        </form>
+    
+    )
+
+} 
