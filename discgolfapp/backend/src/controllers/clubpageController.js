@@ -22,13 +22,14 @@ const getClubPage = async (req, res) => {
 
 const createNewClubPage = async (req, res) => {
     try {
-        const { name, clubOwner, description, address, websiteURL, email, phone } = req.body;
+        const { name, clubOwner, description, address, zipCode, websiteURL, email, phone } = req.body;
 
         const response = await clubpageService.createNewClubPage(
             name, 
             clubOwner, 
             description, 
             address, 
+            zipCode,
             websiteURL, 
             email, 
             phone
