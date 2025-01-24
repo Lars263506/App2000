@@ -1,4 +1,4 @@
-import ClubPage from "../models/clubpage.js";
+import ClubPage from "../models/Clubpage.js";
 
 const getAllClubPages = async () => {
     const excludeFields = ["_id", "clubOwner", "__v", "createdAt", "updatedAt", "members", "events", "memberElements", "nonmemberElements"];
