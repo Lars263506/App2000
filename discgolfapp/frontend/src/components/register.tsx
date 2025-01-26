@@ -55,7 +55,7 @@ const Register: React.FC<RegisterProps> = ({ togglePopup }) => {
                 <h2 className="text-2xl font-bold mb-12 text-center text-black">Registrer deg</h2>
                 <h2 className="font-bold mb-2 text-left text-black">Lag bruker i disse feltene:</h2>
                 <form onSubmit={handleSubmit} className="flex flex-col">
-                    <div className="flex flex-col mb-3">
+                    <div className="flex flex-col mb-3 text-black">
                         <input
                             type="text"
                             className="border p-2 rounded"
@@ -64,7 +64,7 @@ const Register: React.FC<RegisterProps> = ({ togglePopup }) => {
                             onChange={(e) => setDisplayName(e.target.value)}
                         />
                     </div>
-                    <div className="flex flex-col mb-3">
+                    <div className="flex flex-col mb-3 text-black">
                         <input
                             type="email"
                             className="border p-2 rounded"
@@ -73,7 +73,7 @@ const Register: React.FC<RegisterProps> = ({ togglePopup }) => {
                             onChange={(e) => setEmail(e.target.value)}
                         />
                     </div>
-                    <div className="flex flex-col">
+                    <div className="flex flex-col text-black">
                         <input
                             type="password"
                             className="border p-2 rounded"

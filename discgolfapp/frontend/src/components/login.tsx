@@ -32,14 +32,14 @@ const Login: React.FC<LoginProps> = ({ togglePopup, toggleRegisterPopup, closePo
                         Logg inn med Google
                     </button>
                     <h2 className="font-bold text-left text-black mb-2">Manuel innloging:</h2>
-                    <div className="flex flex-col mb-2">
+                    <div className="flex flex-col mb-2 text-black">
                         <input
                             type="email"
                             className="border p-2 rounded"
                             placeholder="Skriv inn e-post"
                         />
                     </div>
-                    <div className="flex flex-col mb-6">
+                    <div className="flex flex-col mb-6 text-black">
                         <input
                             type="password"
                             className="border p-2 rounded"
