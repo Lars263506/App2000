@@ -31,7 +31,7 @@ const Login: React.FC<LoginProps> = ({ togglePopup, toggleRegisterPopup, closePo
                         </svg>
                         Logg inn med Google
                     </button>
-                    <h2 className="font-bold text-left text-black mb-2">Manuell innlogging:</h2>
+                    <h2 className="text-center text-black mb-2">Innlogging:</h2>
                     <div className="flex flex-col mb-2 text-black">
                         <input
                             type="email"
@@ -45,6 +45,9 @@ const Login: React.FC<LoginProps> = ({ togglePopup, toggleRegisterPopup, closePo
                             className="border p-2 rounded"
                             placeholder="Skriv inn passord"
                         />
+                        <a href="/glemt-passord" className="text-black hover:underline mt-2 text-sm text-center">
+                            Glemt passord?
+                        </a>
                     </div>
                     <button
                         type="submit"
@@ -52,7 +55,7 @@ const Login: React.FC<LoginProps> = ({ togglePopup, toggleRegisterPopup, closePo
                     >
                         Logg inn
                     </button>
-                    <h2 className="font-bold text-left text-black mt-8">Har du ikke bruker? Trykk her:</h2>
+                    <h2 className="text-center text-black mt-8">Har du ikke bruker?</h2>
                     <button
                         type="button"
                         className="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-600 mt-2"
