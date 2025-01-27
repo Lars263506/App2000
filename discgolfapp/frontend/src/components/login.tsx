@@ -31,7 +31,7 @@ const Login: React.FC<LoginProps> = ({ togglePopup, toggleRegisterPopup, closePo
                         </svg>
                         Logg inn med Google
                     </button>
-                    <h2 className="font-bold text-left text-black mb-2">Manuel innloging:</h2>
+                    <h2 className="font-bold text-left text-black mb-2">Manuell innlogging:</h2>
                     <div className="flex flex-col mb-2 text-black">
                         <input
                             type="email"
