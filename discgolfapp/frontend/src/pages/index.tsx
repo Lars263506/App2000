@@ -5,6 +5,7 @@ import Login from '@/components/login';
 import Register from '@/components/register';
 import Navbar from '@/components/navbar';
 import Image from 'next/image';
+import Footer from '@/components/fotter'; 
 
 const Home = () => {
   const [popupType, setPopupType] = useState<'login' | 'register' | null>(null);
@@ -92,6 +93,8 @@ const Home = () => {
         <Login togglePopup={toggleLoginPopup} toggleRegisterPopup={toggleRegisterPopup} closePopup={closePopup} />
       )}
       {popupType === 'register' && <Register togglePopup={toggleRegisterPopup} />}
+      {/* Footer Component */}
+      <Footer />
     </div>
   );
 };
