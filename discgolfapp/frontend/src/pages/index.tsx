@@ -7,8 +7,8 @@ import Image from 'next/image';
 
 const Home = () => {
   const [popupType, setPopupType] = useState<'login' | 'register' | null>(null);
-  const [isBoxOpen, setIsBoxOpen] = useState(false);
-  const [isSecondBoxOpen, setIsSecondBoxOpen] = useState(false);
+  const [isBoxOpen, setIsBoxOpen] = useState(true);
+  const [isSecondBoxOpen, setIsSecondBoxOpen] = useState(true);
 
   const toggleLoginPopup = () => setPopupType(popupType === 'login' ? null : 'login');
   const toggleRegisterPopup = () => setPopupType(popupType === 'register' ? 'login' : 'register');
