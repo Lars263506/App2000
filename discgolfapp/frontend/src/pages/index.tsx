@@ -27,6 +27,7 @@ const Home = () => {
     '/golf4.webp',
     '/golf5.webp',
   ];
+  // bilder er generet fra chatgpt og ikke fra nettet, er ikke ekte mennekser
 
   useEffect(() => {
     const interval = setInterval(() => {

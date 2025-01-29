@@ -15,12 +15,11 @@ import userRoutes from './routes/userRoutes.js';
 const app = express();
 
 // Middleware to allow cross-origin requests
-app.use(cors(
-    {
-        origin: process.env.CORS_ORIGIN,
-        credentials: true
-    }
-));
+app.use(cors({
+    origin: process.env.CORS_ORIGIN,
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true
+}));
 
 // Middleware to parse JSON bodies and append them to req.body
 app.use(express.json());
