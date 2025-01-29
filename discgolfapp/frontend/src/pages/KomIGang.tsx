@@ -53,7 +53,7 @@ const KomIGang = () => {
                   <b>1. Velg riktig disc</b>
                   <ul>
                     <li>Start med en <strong>putter</strong> eller <strong>midrange-disc</strong>. De er enklere å kontrollere enn raske drivere.</li>
-                    <li>Unngå avanserte discer med høye "speed"-tall til du føler deg trygg på teknikken.</li>
+                    <li>Unngå avanserte discer med høye speed-tall til du føler deg trygg på teknikken.</li>
                   </ul>
                   <hr />
                   <br />
@@ -61,12 +61,12 @@ const KomIGang = () => {
                   <ul>
                     <li><strong>Backhand:</strong> Den vanligste teknikken. Dra discen over brystet med en jevn bevegelse.</li>
                     <li><strong>Forehand (sidearm):</strong> Kast med hånden på siden, som når du kaster en vanlig frisbee.</li>
-                    <li><strong>Putting:</strong> Øv på korte og presise kast mot kurven – presisjon er viktigere enn kraft.</li>
+                    <li><strong>Putting:</strong> Øv på korte og presise kast mot kurven - presisjon er viktigere enn kraft.</li>
                   </ul>
                   <hr />
                   <br />
                   <b>3. Forstå reglene</b>
-                  <p>Start fra "tee"-området og kast mot kurven. Etter hvert kast spiller du videre fra der discen lander. Målet er å bruke færrest mulig kast for å nå kurven.</p>
+                  <p>Start fra tee-området og kast mot kurven. Etter hvert kast spiller du videre fra der discen lander. Målet er å bruke færrest mulig kast for å nå kurven.</p>
                   <hr />
                   <br />
                   <b>4. Fokuser på teknikk fremfor kraft</b>
@@ -78,13 +78,13 @@ const KomIGang = () => {
                   <hr />
                   <br />
                   <b>6. Ha realistiske forventninger</b>
-                  <p>Ikke bekymre deg hvis discen treffer et tre eller ikke når frem til kurven – det er en del av læringsprosessen. Nyt spillet og ha det gøy!</p>
+                  <p>Ikke bekymre deg hvis discen treffer et tre eller ikke når frem til kurven - det er en del av læringsprosessen. Nyt spillet og ha det gøy!</p>
                   <hr />
                   <br />
                   <b>7. Bruk enkelt utstyr</b>
                   <ul>
                     <li>Start med rimelige discer, spesielt hvis du spiller på baner med vann eller tett skog.</li>
-                    <li>Du trenger ikke mye utstyr for å komme i gang – bare en disc og godt humør!</li>
+                    <li>Du trenger ikke mye utstyr for å komme i gang - bare en disc og godt humør!</li>
                   </ul>
                   <hr />
                   <br />

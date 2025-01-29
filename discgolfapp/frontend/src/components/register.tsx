@@ -39,8 +39,8 @@ const Register: React.FC<RegisterProps> = ({ togglePopup }) => {
             } else {
                 toast.success('Brukeren ble opprettet!');
             }
-        } catch (error: Error | any) {
-            toast.error(error.message);
+        } catch (error) {
+            toast.error("Et problem oppstod. Prøv igjen senere.");
         } finally {
             setLocked(false);
             setDisplayName('');
