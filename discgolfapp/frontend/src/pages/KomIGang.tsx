@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 import Navbar from '@/components/navbar';
 import Footer from '@/components/fotter';
 import Login from '@/components/login';
@@ -10,6 +11,7 @@ import Register from '@/components/register';
 const KomIGang = () => {
   const [popupType, setPopupType] = useState<'login' | 'register' | null>(null);
   const [selectedInfo, setSelectedInfo] = useState<'beginner' | 'advanced'>('beginner');
+  const router = useRouter();
 
   const toggleLoginPopup = () => setPopupType(popupType === 'login' ? null : 'login');
   const toggleRegisterPopup = () => setPopupType(popupType === 'register' ? 'login' : 'register');
@@ -19,7 +21,6 @@ const KomIGang = () => {
     <div>
       <Navbar toggleLoginPopup={toggleLoginPopup} />
 
-      {/* Main Content */}
       <div className="w-full mx-auto mt-8 p-4 flex justify-center">
         <div className="bg-white border border-gray-300 rounded shadow-md w-3/4 md:w-2/3 p-6 flex flex-col md:flex-row items-start">
           <div className="flex flex-col w-full md:w-2/3">
@@ -147,7 +148,6 @@ const KomIGang = () => {
             )}
           </div>
 
-          {/* Right Images */}
           <div className="w-full md:w-1/3 mt-4 md:mt-30 md:ml-4">
             <div className="flex flex-col space-y-4">
               <Image 
@@ -178,12 +178,19 @@ const KomIGang = () => {
                 height={400} 
                 className="object-cover rounded-xl shadow-lg" 
               />
+              <div className="fixed bottom-4 left-4">
             </div>
           </div>
         </div>
+        <button
+          onClick={() => router.push('/')}
+          className="px-2 py-1 bg-black text-white rounded rounded-mg"
+        >
+          Hjem
+        </button>
+      </div>
       </div>
 
-      {/* Popups */}
       {popupType === 'login' && (
         <Login togglePopup={toggleLoginPopup} toggleRegisterPopup={toggleRegisterPopup} closePopup={closePopup} />
       )}

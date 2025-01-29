@@ -13,9 +13,13 @@
     "npm": "10.x"
   },
   "dependencies": {
+    "@types/react-dnd": "^2.0.36",
     "next": "15.1.5",
     "react": "^19.0.0",
+    "react-dnd": "^16.0.1",
+    "react-dnd-html5-backend": "^16.0.1",
     "react-dom": "^19.0.0",
+    "react-resizable": "^3.0.5",
     "react-toastify": "^11.0.3"
   },
   "devDependencies": {
@@ -23,6 +27,7 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/react-resizable": "^3.0.8",
     "eslint": "^9",
     "eslint-config-next": "15.1.5",
     "postcss": "^8",
