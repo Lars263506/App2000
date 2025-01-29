@@ -1,0 +1,197 @@
+'use client';
+
+import { useState } from 'react';
+import Image from 'next/image';
+import Navbar from '@/components/navbar';
+import Footer from '@/components/fotter';
+import Login from '@/components/login';
+import Register from '@/components/register';
+
+const KomIGang = () => {
+  const [popupType, setPopupType] = useState<'login' | 'register' | null>(null);
+  const [selectedInfo, setSelectedInfo] = useState<'beginner' | 'advanced'>('beginner');
+
+  const toggleLoginPopup = () => setPopupType(popupType === 'login' ? null : 'login');
+  const toggleRegisterPopup = () => setPopupType(popupType === 'register' ? 'login' : 'register');
+  const closePopup = () => setPopupType(null);
+
+  return (
+    <div>
+      <Navbar toggleLoginPopup={toggleLoginPopup} />
+
+      {/* Main Content */}
+      <div className="w-full mx-auto mt-8 p-4 flex justify-center">
+        <div className="bg-white border border-gray-300 rounded shadow-md w-3/4 md:w-2/3 p-6 flex flex-col md:flex-row items-start">
+          <div className="flex flex-col w-full md:w-2/3">
+            <div className="flex space-x-4 mb-4">
+              <button
+                onClick={() => setSelectedInfo('beginner')}
+                className={`px-4 py-2 rounded ${
+                  selectedInfo === 'beginner' ? 'bg-gray-600 text-white' : 'bg-gray-300 text-black'
+                }`}
+              >
+                Nybegynner Tips
+              </button>
+              <button
+                onClick={() => setSelectedInfo('advanced')}
+                className={`px-4 py-2 rounded ${
+                  selectedInfo === 'advanced' ? 'bg-gray-600 text-white' : 'bg-gray-300 text-black'
+                }`}
+              >
+                Avansert Tips
+              </button>
+            </div>
+
+            {selectedInfo === 'beginner' ? (
+              <div>
+                <h2 className="text-xl font-bold text-black mb-2">Tips for nybegynnere i discgolf</h2>
+                <p className="text-black">
+                  Discgolf er en morsom og inkluderende sport som er enkel å lære, men utfordrende å mestre. Her er noen gode tips for å komme i gang:
+                  <hr />
+                  <br />
+                  <b>1. Velg riktig disc</b>
+                  <ul>
+                    <li>Start med en <strong>putter</strong> eller <strong>midrange-disc</strong>. De er enklere å kontrollere enn raske drivere.</li>
+                    <li>Unngå avanserte discer med høye "speed"-tall til du føler deg trygg på teknikken.</li>
+                  </ul>
+                  <hr />
+                  <br />
+                  <b>2. Lær de grunnleggende kastene</b>
+                  <ul>
+                    <li><strong>Backhand:</strong> Den vanligste teknikken. Dra discen over brystet med en jevn bevegelse.</li>
+                    <li><strong>Forehand (sidearm):</strong> Kast med hånden på siden, som når du kaster en vanlig frisbee.</li>
+                    <li><strong>Putting:</strong> Øv på korte og presise kast mot kurven – presisjon er viktigere enn kraft.</li>
+                  </ul>
+                  <hr />
+                  <br />
+                  <b>3. Forstå reglene</b>
+                  <p>Start fra "tee"-området og kast mot kurven. Etter hvert kast spiller du videre fra der discen lander. Målet er å bruke færrest mulig kast for å nå kurven.</p>
+                  <hr />
+                  <br />
+                  <b>4. Fokuser på teknikk fremfor kraft</b>
+                  <p>Mange nybegynnere prøver å kaste for hardt, noe som ofte gir dårligere resultater. Kast rolig og konsentrer deg om god form.</p>
+                  <hr />
+                  <br />
+                  <b>5. Spill med erfarne spillere</b>
+                  <p>Å spille med noen som har mer erfaring kan gi deg verdifulle tips om teknikk og strategi. I tillegg blir det mer sosialt og motiverende!</p>
+                  <hr />
+                  <br />
+                  <b>6. Ha realistiske forventninger</b>
+                  <p>Ikke bekymre deg hvis discen treffer et tre eller ikke når frem til kurven – det er en del av læringsprosessen. Nyt spillet og ha det gøy!</p>
+                  <hr />
+                  <br />
+                  <b>7. Bruk enkelt utstyr</b>
+                  <ul>
+                    <li>Start med rimelige discer, spesielt hvis du spiller på baner med vann eller tett skog.</li>
+                    <li>Du trenger ikke mye utstyr for å komme i gang – bare en disc og godt humør!</li>
+                  </ul>
+                  <hr />
+                  <br />
+                  <b>8. Øv jevnlig</b>
+                  <p>Finn en lokal discgolfbane og spill ofte. Mange baner er gratis og gir deg muligheten til å forbedre ferdighetene dine på en morsom måte.</p>
+                  <hr />
+                  <br />
+                  <b>Kom i gang i dag!</b>
+                  <p>Discgolf handler om å ha det gøy og nyte tiden ute i naturen. Ta med noen venner eller møt nye mennesker på banen og husk, alle har vært nybegynnere en gang! 😊</p>
+                  <hr />
+                </p>
+              </div>
+            ) : (
+              <div>
+                <h2 className="text-xl font-bold text-black mb-2">Avansert Tips for Discgolf</h2>
+                <p className="text-black">
+                  Discgolf på et mer avansert nivå krever teknikk, strategi og en dypere forståelse av hvordan forskjellige discer fungerer. Her er noen tips for erfarne spillere:
+                  <hr />
+                  <br />
+                  <b>1. Kaster med forskjellige disker</b>
+                  <ul>
+                    <li><strong>Driver:</strong> Velg en Speed 9-12 driver for bedre kontroll, og en Speed 13+ for maksimalt lengde.</li>
+                    <li><strong>Midrange:</strong> Bruk midrange-disc for presisjon på mellomlange kast.</li>
+                    <li><strong>Putter:</strong> Fokus på presisjon med pålitelig putter-teknikk.</li>
+                  </ul>
+                  <hr />
+                  <br />
+                  <b>2. Mastere avanserte kasteteknikker</b>
+                  <ul>
+                    <li><strong>Anhyzer:</strong> Kast med discen i en skrå bevegelse, perfekt for å unngå hindringer.</li>
+                    <li><strong>Hyzer:</strong> Kast med kontrollert vinkel for presisjon på lange avstander.</li>
+                    <li><strong>Roller:</strong> Øv på å bruke roller-kast for ekstra avstand.</li>
+                  </ul>
+                  <hr />
+                  <br />
+                  <b>3. Forstå vindens innvirkning</b>
+                  <p>Vær oppmerksom på hvordan vind påvirker diskene dine. Øv på å kaste i medvind, motvind og tversvind for bedre kontroll under forskjellige forhold.</p>
+                  <hr />
+                  <br />
+                  <b>4. Forbedre mental styrke og strategi</b>
+                  <p>Tenk på banen og planlegg hvert kast. Bruk strategisk spill, spesielt på utfordrende hull. Øv på å holde hodet kaldt under press.</p>
+                  <hr />
+                  <br />
+                  <b>5. Fysisk trening og vedlikehold</b>
+                  <p>Fokuser på styrke, koordinasjon og mobilitet for bedre kasteteknikk. Regelmessig fysisk trening er viktig for å opprettholde god form.</p>
+                  <hr />
+                  <br />
+                  <b>6. Spill på avanserte baner</b>
+                  <p>Spill på baner med høyere vanskelighetsgrad for å utvikle ferdighetene dine. Prøv baner med trange passasjer og utfordrende værforhold.</p>
+                  <hr />
+                  <br />
+                  <b>7. Øv på spesifikke situasjoner</b>
+                  <p>Øv på kast fra trange steder og med høy risiko. Master roller-kast og forehand for å forbedre spill på teknisk krevende hull.</p>
+                  <hr />
+                  <br />
+                  <b>Kom i gang med avanserte øvelser!</b>
+                  <p>Fortsett å utfordre deg selv, vær konsekvent i treningen og ta spillet ditt til nye høyder!</p>
+                  <hr />
+                </p>
+              </div>
+            )}
+          </div>
+
+          {/* Right Images */}
+          <div className="w-full md:w-1/3 mt-4 md:mt-30 md:ml-4">
+            <div className="flex flex-col space-y-4">
+              <Image 
+                src="/post.png" 
+                alt="Discgolf Image 1" 
+                width={400} 
+                height={400} 
+                className="object-cover rounded-xl shadow-lg" 
+              />
+              <Image 
+                src="/disc.png" 
+                alt="Discgolf Image 2" 
+                width={400} 
+                height={400} 
+                className="object-cover rounded-xl shadow-lg" 
+              />
+              <Image 
+                src="/discs.png" 
+                alt="Discgolf Image 3" 
+                width={400} 
+                height={400} 
+                className="object-cover rounded-xl shadow-lg" 
+              />
+              <Image 
+                src="/kaste.png" 
+                alt="Discgolf Image 4" 
+                width={400} 
+                height={400} 
+                className="object-cover rounded-xl shadow-lg" 
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Popups */}
+      {popupType === 'login' && (
+        <Login togglePopup={toggleLoginPopup} toggleRegisterPopup={toggleRegisterPopup} closePopup={closePopup} />
+      )}
+      {popupType === 'register' && <Register togglePopup={toggleRegisterPopup} />}
+
+      <Footer />
+    </div>
+  );
+};
+
+export default KomIGang;
