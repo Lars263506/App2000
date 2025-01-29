@@ -90,7 +90,7 @@ export default function ToolboxPage() {
             window.removeEventListener('mousemove', handleMouseMove);
             window.removeEventListener('mouseup', handleMouseUp);
         };
-    }, [selectedElement, elements, isDragging, dragOffset]);
+    }, [handleMouseMove, handleMouseUp]);
 
     const handleContentChange = (e: React.FormEvent<HTMLDivElement>, id: number) => {
         const newElements = elements.map(element => {
