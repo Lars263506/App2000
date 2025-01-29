@@ -56,30 +56,30 @@ export default function ToolboxPage() {
         }
     };
 
-    const handleMouseMove = (e: MouseEvent) => {
-        if (isDragging && selectedElement !== null) {
-            const newElements = elements.map(element => {
-                if (element.id === selectedElement) {
-                    return { ...element, x: e.clientX - dragOffset.x, y: e.clientY - dragOffset.y };
-                }
-                return element;
-            });
-            setElements(newElements);
-        }
-    };
-
-    const handleMouseUp = () => {
-        setIsDragging(false);
-    };
-
     useEffect(() => {
+        const handleMouseMove = (e: MouseEvent) => {
+            if (isDragging && selectedElement !== null) {
+                const newElements = elements.map(element => {
+                    if (element.id === selectedElement) {
+                        return { ...element, x: e.clientX - dragOffset.x, y: e.clientY - dragOffset.y };
+                    }
+                    return element;
+                });
+                setElements(newElements);
+            }
+        };
+
+        const handleMouseUp = () => {
+            setIsDragging(false);
+        };
+
         window.addEventListener('mousemove', handleMouseMove);
         window.addEventListener('mouseup', handleMouseUp);
         return () => {
             window.removeEventListener('mousemove', handleMouseMove);
             window.removeEventListener('mouseup', handleMouseUp);
         };
-    }, [handleMouseMove, handleMouseUp]);
+    });
 
     const handleContentChange = (e: React.FormEvent<HTMLDivElement>, id: number) => {
         const newElements = elements.map(element => {
