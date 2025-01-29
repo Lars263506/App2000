@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
 import Login from '@/components/login';
 import Register from '@/components/register';
 import Navbar from '@/components/navbar';
