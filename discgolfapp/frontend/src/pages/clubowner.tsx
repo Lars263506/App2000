@@ -6,6 +6,7 @@ import { useRouter } from 'next/router';
 import { DragEvent, useState, useEffect } from 'react';
 import { ResizableBox, ResizeCallbackData } from 'react-resizable';
 import 'react-resizable/css/styles.css';
+import '../app/globals.css';
 
 type ElementType = {
     type: string;
