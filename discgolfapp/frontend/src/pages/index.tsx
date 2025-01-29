@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import Login from '@/components/login';
 import Register from '@/components/register';
 import Navbar from '@/components/navbar';
-import Footer from '@/components/fotter';
+import Footer from '@/components/footer';
 import FirstBox from '@/components/firstbox';
 import SecondBox from '@/components/secondbox';
 

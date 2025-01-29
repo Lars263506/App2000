@@ -1,6 +1,6 @@
 'use client';
 
-import Footer from '@/components/fotter';
+import Footer from '@/components/footer';
 import Navbar from '@/components/navbar';
 import { useRouter } from 'next/router';
 import { DragEvent, useState, useEffect } from 'react';
