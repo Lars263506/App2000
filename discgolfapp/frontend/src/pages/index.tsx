@@ -5,7 +5,8 @@ import Login from '@/components/login';
 import Register from '@/components/register';
 import Navbar from '@/components/navbar';
 import Image from 'next/image';
-import Footer from '@/components/fotter'; 
+import Footer from '@/components/fotter';
+import Link from 'next/link'; 
 
 const Home = () => {
   const [popupType, setPopupType] = useState<'login' | 'register' | null>(null);
@@ -59,7 +60,9 @@ const Home = () => {
                 <p className="mt-2 text-black">
                   Discgolfbaner varierer i lengde og vanskelighetsgrad.<br></br> Noen baner har hindringer som trær, busker og vann som gjør spillet mer utfordrende. <br></br> Prøv å følge etikette på banen for en god opplevelse.
                 </p>
+                <Link href=" /KomIGang">
                 <button className='mt-16 bg-black text-white px-4 py-2 rounded hover:bg-blue-600"'>Kom i gang</button>
+                </Link>
               </div>
             </div>
           </div>

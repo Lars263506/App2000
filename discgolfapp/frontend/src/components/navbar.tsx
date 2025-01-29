@@ -6,7 +6,7 @@ const Navbar = ({ toggleLoginPopup }: { toggleLoginPopup: () => void }) => {
         <nav className="bg-gray-600 text-white p-4 flex justify-center">
             <div className="flex items-center w-3/4">
                 <div className="flex items-center mr-4">
-                    <Image src="/logo1.png" alt="Logo" width={32} height={32} className="mr-2" />
+                    <Image src="/logo01.png" alt="Logo" width={32} height={32} className="mr-2" />
                     <h1 className="text-xl font-bold">Norges Discgolf-forbund</h1>
                 </div>
                 <div className="flex items-center w-1/2 mx-4">
