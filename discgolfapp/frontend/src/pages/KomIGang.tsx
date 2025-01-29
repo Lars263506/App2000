@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import Navbar from '@/components/navbar';
-import Footer from '@/components/fotter';
+import Footer from '@/components/footer';
 import Login from '@/components/login';
 import Register from '@/components/register';
 
