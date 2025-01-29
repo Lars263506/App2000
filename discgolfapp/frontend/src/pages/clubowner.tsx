@@ -26,7 +26,6 @@ export default function ToolboxPage() {
     const handleDrop = (e: DragEvent<HTMLDivElement>) => {
         e.preventDefault();
         const type = e.dataTransfer.getData('type');
-        const id = e.dataTransfer.getData('id');
         const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
