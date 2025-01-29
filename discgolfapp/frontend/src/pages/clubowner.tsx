@@ -7,9 +7,20 @@ import { DragEvent, useState, useEffect } from 'react';
 import { ResizableBox, ResizeCallbackData } from 'react-resizable';
 import 'react-resizable/css/styles.css';
 
+type ElementType = {
+    type: string;
+    id: number;
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+    content: string;
+    classname: string;
+};
+
 export default function ToolboxPage() {
     const router = useRouter();
-    const [elements, setElements] = useState<any[]>([]);
+    const [elements, setElements] = useState<ElementType[]>([]);
     const [selectedElement, setSelectedElement] = useState<number | null>(null);
     const [isDragging, setIsDragging] = useState<boolean>(false);
     const [dragOffset, setDragOffset] = useState<{ x: number, y: number }>({ x: 0, y: 0 });
@@ -84,7 +95,7 @@ export default function ToolboxPage() {
     const handleContentChange = (e: React.FormEvent<HTMLDivElement>, id: number) => {
         const newElements = elements.map(element => {
             if (element.id === id) {
-                return { ...element, content: e.currentTarget.textContent };
+                return { ...element, content: e.currentTarget.textContent || '' };
             }
             return element;
         });
