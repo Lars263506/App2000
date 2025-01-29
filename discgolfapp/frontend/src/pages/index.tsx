@@ -12,7 +12,6 @@ const Home = () => {
   const [isBoxOpen, setIsBoxOpen] = useState(true);
   const [isSecondBoxOpen, setIsSecondBoxOpen] = useState(true);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const router = useRouter();
 
   const toggleLoginPopup = () => setPopupType(popupType === 'login' ? null : 'login');
   const toggleRegisterPopup = () => setPopupType(popupType === 'register' ? 'login' : 'register');
