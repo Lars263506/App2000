@@ -2,9 +2,6 @@ import React, { useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import '../app/globals.css';
 import 'react-toastify/dist/ReactToastify.css';
-import { error } from 'console';
-import { on } from 'events';
-
 
 interface LoginProps {
     togglePopup: () => void;
@@ -39,6 +36,7 @@ const Login: React.FC<LoginProps> = ({ togglePopup, toggleRegisterPopup, closePo
             });
             const data = await response.json();
             setDisplayName(data.displayName);
+            console.log(displayName);
             if (response.status !== 200) {
                 toast.error(data.message);
             } else {
