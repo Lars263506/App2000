@@ -66,8 +66,7 @@ const registerUser = async (req, res) => {
 const loginUser = async (req, res) => {
     const { email, password } = req.body;
     try {
-        const { accessToken, refreshToken } = await userService.loginUser(email, password);
-        res.status(200).json({ accessToken, refreshToken });
+        const { accessToken, refreshToken, displayName } = await userService.loginUser(email, password);
     } catch (error) {
         res.status(error.statusCode).json({ error: error.message });
     }
