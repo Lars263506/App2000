@@ -1,5 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
 import '../app/globals.css';
+import 'react-toastify/dist/ReactToastify.css';
+import { error } from 'console';
+import { on } from 'events';
+
 
 interface LoginProps {
     togglePopup: () => void;
@@ -7,12 +12,60 @@ interface LoginProps {
     closePopup: () => void;
 }
 
-const Login: React.FC<LoginProps> = ({ togglePopup, toggleRegisterPopup, closePopup }) => {
+const Login: React.FC<LoginProps> = ({ togglePopup, toggleRegisterPopup, closePopup}) => {
+    const [locked, setLocked] = useState(false);
+    const [displayName, setDisplayName] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+
+    const handleLogin = async (event: React.FormEvent) => {
+        event.preventDefault();
+        if (locked) return;
+
+        setLocked(true);
+        const url = process.env.NEXT_PUBLIC_BACKEND_BASE_URL + '/users/login';
+        console.log(url);
+
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    email,
+                    password,
+                }),
+            });
+            const data = await response.json();
+            setDisplayName(data.displayName);
+            if (response.status !== 200) {
+                toast.error(data.message);
+            } else {
+                toast.success('Logget inn med bruker: ' + data.displayName, {
+                onClose: () => {
+                togglePopup();
+                }
+            });
+            }
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                toast.error(error.message);
+            } else {
+                toast.error("Et problem oppstod. Prøv igjen senere.");
+            }
+        } finally {
+            setLocked(false);
+            setEmail('');
+            setPassword('');
+        }
+    };
+
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75">
             <div className="bg-white p-8 rounded shadow-md w-full max-w-md">
                 <h2 className="text-2xl font-bold text-center text-black mb-8">Logg inn</h2>
-                <form className="flex flex-col">
+                <form className="flex flex-col" onSubmit={handleLogin}>
                     <button
                         type="button"
                         className="flex items-center justify-center bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-900 mb-2"
@@ -37,6 +90,8 @@ const Login: React.FC<LoginProps> = ({ togglePopup, toggleRegisterPopup, closePo
                             type="email"
                             className="border p-2 rounded"
                             placeholder="Skriv inn e-post"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
                         />
                     </div>
                     <div className="flex flex-col mb-6 text-black">
@@ -44,6 +99,8 @@ const Login: React.FC<LoginProps> = ({ togglePopup, toggleRegisterPopup, closePo
                             type="password"
                             className="border p-2 rounded"
                             placeholder="Skriv inn passord"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
                         />
                         <a href="/glemt-passord" className="text-black hover:underline mt-2 text-sm text-center">
                             Glemt passord?
@@ -75,10 +132,12 @@ const Login: React.FC<LoginProps> = ({ togglePopup, toggleRegisterPopup, closePo
                             Lukk
                         </button>
                     </div>
+                    <ToastContainer />
                 </form>
             </div>
         </div>
     );
 };
+
 
 export default Login;

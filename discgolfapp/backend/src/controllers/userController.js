@@ -18,7 +18,7 @@ const getUser = async (req, res) => {
         const user = await userService.getUser(id);
         res.status(200).json(user);
     } catch (error) {
-        res.status(404).json({ error: error.message });
+        res.status(404).json({ message: error.message });
     }
 }
 
@@ -35,7 +35,7 @@ const getUserByEmail = async (req, res) => {
         const user = await userService.getUserByEmail(email);
         res.status(200).json(user);
     } catch (error) {
-        res.status(404).json({ error: error.message });
+        res.status(404).json({ message: error.message });
     }
 }
 
@@ -52,7 +52,7 @@ const registerUser = async (req, res) => {
         const { createdAt } = await userService.registerUser(displayName, email, password);
         res.status(201).json(createdAt);
     } catch (error) {
-        res.status(400).json({ error: error.message });
+        res.status(400).json({ message: error.message });
     }
 }
 
@@ -69,7 +69,7 @@ const loginUser = async (req, res) => {
         const { accessToken, refreshToken, displayName } = await userService.loginUser(email, password);
         res.status(200).json({ accessToken, refreshToken, displayName });
     } catch (error) {
-        res.status(error.statusCode).json({ error: error.message });
+        res.status(error.statusCode).json({ message: error.message });
     }
 }
 
@@ -85,7 +85,7 @@ const logoutUser = async (res) => {
         const expiredTokens = await userService.logoutUser(token);
         res.status(200).json({ expiredTokens });
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        res.status(500).json({ message: error.message });
     }
 }
 
@@ -102,7 +102,7 @@ const changeDisplayName = async (req, res) => {
         const { emailChangedAt } = await userService.changeDisplayName(email, newDisplayName);
         res.status(200).json(emailChangedAt);
     } catch (error) {
-        res.status(400).json({ error: error.message });
+        res.status(400).json({ message: error.message });
     }
 }
 
@@ -119,7 +119,7 @@ const changeEmail = async (req, res) => {
         const { emailChangedAt } = await userService.changeEmail(email, newEmail);
         res.status(200).json(emailChangedAt);
     } catch (error) {
-        res.status(400).json({ error: error.message });
+        res.status(400).json({ message: error.message });
     }
 }
 
@@ -136,7 +136,7 @@ const changePassword = async (req, res) => {
         const { passwordChangedAt } = await userService.changePassword(email, newPassword);
         res.status(200).json(passwordChangedAt);
     } catch (error) {
-        res.status(400).json({ error: error.message });
+        res.status(400).json({ message: error.message });
     }
 }
 
@@ -153,7 +153,7 @@ const changeRole = async (req, res) => {
         const { userRole, roleChangedAt } = await userService.changeRole(email, newRole);
         res.status(200).json(userRole, roleChangedAt);
     } catch (error) {
-        res.status(400).json({ error: error.message });
+        res.status(400).json({ message: error.message });
     }
 }
 
@@ -170,7 +170,7 @@ const deleteUser = async (req, res) => {
         const user = await userService.deleteUser(email);
         res.status(200).json(user);
     } catch (error) {
-        res.status(400).json({ error: error.message });
+        res.status(400).json({ message: error.message });
     }
 }
 
