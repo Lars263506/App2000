@@ -43,6 +43,7 @@ export default function ToolboxPage() {
         const y = e.clientY - rect.top;
         addElement(type, x, y);
     };
+    // copilot har hjulpet til med å lage koden som gjør det mulig å dra elementene, skrevet inn selv, men mye insprasjon fra copilot.
 
     const handleDragOver = (e: DragEvent<HTMLDivElement>) => {
         e.preventDefault();
@@ -66,7 +67,7 @@ export default function ToolboxPage() {
                 setDragOffset({ x: e.clientX - element.x, y: e.clientY - element.y });
             }
         }
-    };
+    }; // copilot har hjulpet til med å lage koden som gjør det mulig å dra elementene, skrevet inn selv, men mye insprasjon fra copilot.
 
     useEffect(() => {
         const handleMouseMove = (e: MouseEvent) => {
@@ -120,7 +121,7 @@ export default function ToolboxPage() {
                     : element
             )
         );
-    };
+    }; // copilot har hjulpet til med å lage koden som gjør det mulig å dra elementene, skrevet inn selv, men mye insprasjon fra copilot.
 
     const calculateDistance = (x1: number, y1: number, x2: number, y2: number) => {
         return Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2);
@@ -138,7 +139,7 @@ export default function ToolboxPage() {
                 return distance > radius;
             }));
         }
-    };
+    }; // copilot har hjulpet til med å lage koden som gjør det mulig å dra elementene, skrevet inn selv, men mye insprasjon fra copilot.
 
     return (
         <div className="flex flex-col h-screen">
@@ -296,8 +297,8 @@ export default function ToolboxPage() {
                         Hjem
                     </button>
                 </div>
-            </div>
+            </div> 
             <Footer />
-        </div>
+        </div>  // fått hjelp av copilot for å style med tailwind, skrevet inn selv men fått insperasjon fra copilot hvordan det kunne se ut. 
     );
 }

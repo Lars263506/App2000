@@ -44,7 +44,8 @@ const KomIGang = () => {
             </div>
 
             {selectedInfo === 'beginner' ? (
-              <div>
+              // tekst generet av chatgpt.
+              <div> 
                 <h2 className="text-xl font-bold text-black mb-2">Tips for nybegynnere i discgolf</h2>
                 <p className="text-black">
                   Discgolf er en morsom og inkluderende sport som er enkel å lære, men utfordrende å mestre. Her er noen gode tips for å komme i gang:
@@ -98,7 +99,8 @@ const KomIGang = () => {
                 </p>
               </div>
             ) : (
-              <div>
+                // tekst generet av chatgpt.
+              <div> 
                 <h2 className="text-xl font-bold text-black mb-2">Avansert Tips for Discgolf</h2>
                 <p className="text-black">
                   Discgolf på et mer avansert nivå krever teknikk, strategi og en dypere forståelse av hvordan forskjellige discer fungerer. Her er noen tips for erfarne spillere:
@@ -197,7 +199,7 @@ const KomIGang = () => {
       {popupType === 'register' && <Register togglePopup={toggleRegisterPopup} />}
 
       <Footer />
-    </div>
+    </div> // copilot har hjulpet til med å gi inspreasjon til å style tailwind, skrevet inn koden selv. 
   );
 };
 

@@ -24,7 +24,7 @@ const Home = () => {
     '/golf3.webp',
     '/golf4.webp',
     '/golf5.webp',
-  ];
+  ]; // generet bilder fra chat.gpt
 
   useEffect(() => {
     const interval = setInterval(() => {

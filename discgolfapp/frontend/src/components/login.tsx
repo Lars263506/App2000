@@ -133,7 +133,7 @@ const Login: React.FC<LoginProps> = ({ togglePopup, toggleRegisterPopup, closePo
                     <ToastContainer />
                 </form>
             </div>
-        </div>
+        </div> // tailwind css har blitt hjulpet av copilot, har skrevet det inn selv men spurt hvordan man styler i tailwind.
     );
 };
 
