@@ -80,11 +80,7 @@ const loginUser = async (email, password) => {
         passwordIsValidated = await bcrypt.compare(password, user.hashedPassword);
     };
     
-    if (!passwordIsValidated) {
-        const error = new Error("Incorrect email or password");
-        error.statusCode = 401;
-        throw error;
-    }
+    if (!passwordIsValidated) throw new Error("Incorrect email or password");
 
     const payload = { id: user._id, role: user.role };
 
