@@ -20,8 +20,7 @@ const Login: React.FC<LoginProps> = ({ togglePopup, toggleRegisterPopup, closePo
         if (locked) return;
 
         setLocked(true);
-        const url = process.env.NEXT_PUBLIC_BACKEND_BASE_URL + '/users/login';
-        console.log(url);
+        const url = process.env.NEXT_PUBLIC_BACKEND_BASE_URL + '/users/login/';
 
         try {
             const response = await fetch(url, {
