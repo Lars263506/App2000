@@ -16,7 +16,7 @@ const app = express();
 
 // Middleware to allow cross-origin requests
 app.use(cors({
-    origin: process.env.CORS_ORIGIN,
+    origin: '*',
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true
 }));
