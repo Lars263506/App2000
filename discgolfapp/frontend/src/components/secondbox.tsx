@@ -1,6 +1,11 @@
 import { useRouter } from 'next/router';
 import { FC } from 'react';
 
+/**
+ * @author Andreas263547 (Github)
+ * @description Line: 16-20, Copilot has helped generate the code that displays the box and the image. I wrote the code myself, but Copilot has assisted.
+ */
+
 interface SecondBoxProps {
     toggleSecondBox: () => void;
     isSecondBoxOpen: boolean;
@@ -32,7 +37,7 @@ const SecondBox: FC<SecondBoxProps> = ({ toggleSecondBox, isSecondBoxOpen }) => 
                     </div>
                 </div>
             </div>
-        </div> // copilot har hjulpet til med å lage koden som viser boksen og bildet, skrevet koden inn selv, men copilot har hjulpet. På linje 16-20
+        </div> 
     );
 };
 

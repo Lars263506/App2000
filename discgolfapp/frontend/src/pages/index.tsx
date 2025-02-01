@@ -6,6 +6,11 @@ import Footer from '@/components/footer';
 import FirstBox from '@/components/firstbox';
 import SecondBox from '@/components/secondbox';
 
+/**
+ * @author Andreas263547 (Github)
+ * @description Line: 26-32, Generated images from ChatGPT.
+ */
+
 const Home = () => {
   const [popupType, setPopupType] = useState<'login' | 'register' | null>(null);
   const [isBoxOpen, setIsBoxOpen] = useState(true);
@@ -24,7 +29,7 @@ const Home = () => {
     '/golf3.webp',
     '/golf4.webp',
     '/golf5.webp',
-  ]; // generet bilder fra chat.gpt
+  ]; 
 
   useEffect(() => {
     const interval = setInterval(() => {

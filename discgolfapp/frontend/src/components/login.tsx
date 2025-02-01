@@ -3,6 +3,11 @@ import { ToastContainer, toast } from 'react-toastify';
 import '../app/globals.css';
 import 'react-toastify/dist/ReactToastify.css';
 
+/**
+ * @author Andreas263547 (Github)
+ * @description Line: 68-144, Tailwind CSS has been assisted by Copilot. I wrote it myself but asked how to style in Tailwind.  
+ */
+
 interface LoginProps {
     togglePopup: () => void;
     toggleRegisterPopup: () => void;
@@ -133,7 +138,7 @@ const Login: React.FC<LoginProps> = ({ togglePopup, toggleRegisterPopup, closePo
                     <ToastContainer />
                 </form>
             </div>
-        </div> // tailwind css har blitt hjulpet av copilot, har skrevet det inn selv men spurt hvordan man styler i tailwind.
+        </div> 
     );
 };
 

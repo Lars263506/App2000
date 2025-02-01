@@ -3,6 +3,12 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
+/**
+ * @author Andreas263547 (Github)
+ * @description Line: 21-26, Copilot has helped generate the code that displays the box and the image, written the code myself.  
+ * @description Line: 30-33, Copilot has helped generate the text, written the code myself. 
+ */
+
 interface FirstBoxProps {
     images: string[];
     currentImageIndex: number;
@@ -11,7 +17,7 @@ interface FirstBoxProps {
 }
 
 const FirstBox: React.FC<FirstBoxProps> = ({ images, currentImageIndex, toggleBox, isBoxOpen }) => {
-    return ( // copilot har hjulpet til med å lage koden som viser boksen og bildet, skrevet koden inn selv, men copilot har hjulpet. På linje 17-21
+    return ( 
         <div className="w-full mx-auto mt-4 p-4">
             <div className={`relative bg-white border border-gray-300 rounded shadow-md ${isBoxOpen ? 'h-auto' : 'h-20'} overflow-hidden transition-all duration-300`}>
                 <button onClick={toggleBox} className="absolute left-0 top-0 mt-2 ml-2 bg-gray-200 rounded-full p-2">
@@ -40,7 +46,7 @@ const FirstBox: React.FC<FirstBoxProps> = ({ images, currentImageIndex, toggleBo
                 </div>
             </div>
         </div>
-    ); // teksten på linje 30 og 33 er generet av copilot.
+    ); 
 };
 
 export default FirstBox;
