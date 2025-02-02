@@ -13,19 +13,19 @@ const DiscgolfInfo: React.FC<DiscgolfInfoProps> = ({ images, currentImageIndex }
     return (
         <ToggleBox>
             <div className="flex flex-wrap justify-center gap-4">
-                <div className="bg-gray-100 p-4 rounded shadow w-80 h-80">
+                <div className="bg-gray-100 p-4 rounded shadow w-80 h-auto">
                     <Image src={images[currentImageIndex]} alt="Placeholder" width={300} height={300} className="w-full h-full object-cover rounded" />
                 </div>
-                <div className="bg-gray-100 p-4 rounded shadow w-90 h-80">
+                <div className="bg-gray-100 p-4 rounded shadow max-w-md h-auto">
                     <h2 className="text-xl font-bold text-black">Om Discgolf</h2>
                     <p className="mt-2 text-black">
-                        Discgolf er en morsom og utfordrende sport som ligner på vanlig golf,<br></br> men i stedet for å bruke en ball og kølle, bruker du en disc (frisbee). <br></br> Målet er å kaste discen fra startpunktet til kurven på færrest mulig kast.
+                        Discgolf er en morsom og utfordrende sport som ligner på vanlig golf, men i stedet for å bruke en ball og kølle, bruker du en disc (frisbee). Målet er å kaste discen fra startpunktet til kurven på færrest mulig kast.
                     </p>
                     <p className="mt-2 text-black">
-                        Discgolfbaner varierer i lengde og vanskelighetsgrad.<br></br> Noen baner har hindringer som trær, busker og vann som gjør spillet mer utfordrende. <br></br> Prøv å følge etikette på banen for en god opplevelse.
+                        Discgolfbaner varierer i lengde og vanskelighetsgrad. Noen baner har hindringer som trær, busker og vann som gjør spillet mer utfordrende. Prøv å følge etikette på banen for en god opplevelse.
                     </p>
                     <Link href="/KomIGang">
-                        <button className='mt-16 bg-black text-white px-4 py-2 rounded hover:bg-blue-600"'>Kom i gang</button>
+                        <button className='mt-16 bg-black text-white px-4 py-2 rounded hover:bg-gray-600'>Kom i gang</button>
                     </Link>
                 </div>
             </div>
