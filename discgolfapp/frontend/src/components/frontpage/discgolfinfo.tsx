@@ -4,6 +4,11 @@ import Link from 'next/link';
 
 import ToggleBox from './togglebox';
 
+/**
+ * @author Lars og Andreas 
+ * @description Line: 28 and 31, Got help from Copilot for styling with Tailwind. Wrote it myself but took inspiration from Copilot on how it could look. 
+ */
+
 interface DiscgolfInfoProps {
     images: string[];
     currentImageIndex: number;
@@ -32,5 +37,4 @@ const DiscgolfInfo: React.FC<DiscgolfInfoProps> = ({ images, currentImageIndex }
         </ToggleBox>
     );
 };
-
 export default DiscgolfInfo;

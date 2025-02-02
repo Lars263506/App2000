@@ -8,5 +8,4 @@ export default function ClubLanding() {
             Work in progress
         </div>
     )
-
 }

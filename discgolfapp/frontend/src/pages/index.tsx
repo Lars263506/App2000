@@ -6,6 +6,10 @@ import Footer from '@/components/footer';
 import DiscgolfInfo from '@/components/frontpage/discgolfinfo';
 import Navigation from '@/components/frontpage/navigation';
 
+/**
+ * @author Andreas Nilsen
+ * @description Line: 23-27, Generated images from ChatGPT.
+ */
 
 const Home = () => {
   const [popupType, setPopupType] = useState<'login' | 'register' | null>(null);
@@ -50,5 +54,4 @@ const Home = () => {
     </div>
   );
 };
-
 export default Home;

@@ -1,5 +1,10 @@
 'use client';
 
+/**
+ * @author Andreas Nilsen
+ * @description Line: 10-42, Tailwind CSS has been assisted by Copilot. I wrote it myself but asked how to style in Tailwind.  
+ */
+
 const Register = () => {
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
@@ -42,5 +47,4 @@ const Register = () => {
     </div>
   );
 };
-
 export default Register;

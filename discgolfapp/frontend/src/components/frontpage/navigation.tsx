@@ -2,6 +2,11 @@ import { useRouter } from 'next/router';
 import { FC } from 'react';
 import ToggleBox from './togglebox';
 
+/**
+ * @author Lars og Andreas 
+ * @description litt usikker hva vi gjør her, du har jo endret på css med litt lettere tailwind Lars, så du burde vel være author her :).
+ */
+
 const Navigation: FC = () => {
     const router = useRouter();
     const navigateToToolbox = () => router.push('/clubowner');

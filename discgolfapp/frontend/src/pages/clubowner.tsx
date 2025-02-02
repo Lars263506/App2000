@@ -8,6 +8,12 @@ import { ResizableBox, ResizeCallbackData } from 'react-resizable';
 import 'react-resizable/css/styles.css';
 import '../app/globals.css';
 
+/**
+ * @author Andreas263547 (Github)
+ * @description Line: 39-145, Copilot has helped generate the code that enables dragging the elements. I wrote it myself, but with a lot of inspiration from Copilot.
+ * @description Line: 150-301, Got help from Copilot for styling with Tailwind. Wrote it myself but took inspiration from Copilot on how it could look.  
+ */
+
 type ElementType = {
     type: string;
     id: number;

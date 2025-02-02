@@ -3,6 +3,11 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import '../app/globals.css';
 
+/**
+ * @author Andreas Nilsen
+ * @description Line: 62-103, Tailwind CSS has been assisted by Copilot. I wrote it myself but asked how to style in Tailwind.  
+ */
+
 interface RegisterProps {
     togglePopup: () => void;
 }
@@ -105,5 +110,4 @@ const Register: React.FC<RegisterProps> = ({ togglePopup }) => {
         </div>
     );
 };
-
 export default Register;

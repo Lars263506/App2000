@@ -26,5 +26,4 @@ const ToggleBox: React.FC<ToggleBoxProps> = ({ children }) => {
         </div>
     );
 };
-
 export default ToggleBox;
