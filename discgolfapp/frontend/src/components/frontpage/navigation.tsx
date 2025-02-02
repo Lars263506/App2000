@@ -2,12 +2,7 @@ import { useRouter } from 'next/router';
 import { FC } from 'react';
 import ToggleBox from './togglebox';
 
-interface NavigationProps {
-    toggleBox: () => void;
-    isBoxOpen: boolean;
-}
-
-const Navigation: FC<NavigationProps> = ({ toggleBox, isBoxOpen }) => {
+const Navigation: FC = () => {
     const router = useRouter();
     const navigateToToolbox = () => router.push('/clubowner');
 
