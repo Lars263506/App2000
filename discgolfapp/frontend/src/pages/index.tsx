@@ -3,20 +3,17 @@ import Login from '@/components/login';
 import Register from '@/components/register';
 import Navbar from '@/components/navbar';
 import Footer from '@/components/footer';
-import FirstBox from '@/components/firstbox';
-import SecondBox from '@/components/secondbox';
+import DiscgolfInfo from '@/components/frontpage/discgolfinfo';
+import Navigation from '@/components/frontpage/navigation';
+
 
 const Home = () => {
   const [popupType, setPopupType] = useState<'login' | 'register' | null>(null);
-  const [isBoxOpen, setIsBoxOpen] = useState(true);
-  const [isSecondBoxOpen, setIsSecondBoxOpen] = useState(true);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   const toggleLoginPopup = () => setPopupType(popupType === 'login' ? null : 'login');
   const toggleRegisterPopup = () => setPopupType(popupType === 'register' ? 'login' : 'register');
   const closePopup = () => setPopupType(null);
-  const toggleBox = () => setIsBoxOpen(!isBoxOpen);
-  const toggleSecondBox = () => setIsSecondBoxOpen(!isSecondBoxOpen);
 
   const images = [
     '/golf1.webp',
@@ -38,17 +35,12 @@ const Home = () => {
     <div>
       <Navbar toggleLoginPopup={toggleLoginPopup} />
 
-      <FirstBox
+      <DiscgolfInfo
         images={images}
         currentImageIndex={currentImageIndex}
-        toggleBox={toggleBox}
-        isBoxOpen={isBoxOpen}
       />
 
-      <SecondBox
-        toggleSecondBox={toggleSecondBox}
-        isSecondBoxOpen={isSecondBoxOpen}
-      />
+      <Navigation />
 
       {popupType === 'login' && (
         <Login togglePopup={toggleLoginPopup} toggleRegisterPopup={toggleRegisterPopup} closePopup={closePopup} />
