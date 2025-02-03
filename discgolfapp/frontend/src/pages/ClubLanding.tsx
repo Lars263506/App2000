@@ -12,7 +12,7 @@ const ClubLanding = () => {
     const [popupType, setPopupType] = useState<'login' | 'register' | null>(null);
   
     
-    const [userRole, setUserRole] = useState<'user' | 'member' | 'clubowner'>('clubowner');
+    const [userRole, setUserRole] = useState<'user' | 'member' | 'clubowner'>('user');
   
     const toggleLoginPopup = () => setPopupType(popupType === 'login' ? null : 'login');
     const toggleRegisterPopup = () => setPopupType(popupType === 'register' ? 'login' : 'register');
@@ -34,9 +34,9 @@ const ClubLanding = () => {
         )}
         {popupType === 'register' && <Register togglePopup={toggleRegisterPopup} />}
   
-      
       </div>
     );
   };
   
   export default ClubLanding;
+  

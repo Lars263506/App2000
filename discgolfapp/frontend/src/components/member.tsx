@@ -1,6 +1,6 @@
 'use client';
 
-const Member = () => {
+const MemberClubView = () => {
   return (
     <div className="text-center mt-4">
       <h2 className="text-xl font-bold">Velkommen som medlem!</h2>

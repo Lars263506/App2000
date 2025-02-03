@@ -4,7 +4,7 @@ interface UserProps {
   toggleRegisterPopup: () => void;
 }
 
-const User = ({ toggleRegisterPopup }: UserProps) => {
+const UserClubView = ({ toggleRegisterPopup }: UserProps) => {
   return (
     <div className="flex flex-col items-center space-y-6">
       {/* Informasjon til ikke-medlemmer */}
