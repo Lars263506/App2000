@@ -9,9 +9,15 @@ interface LoginProps {
     closePopup: () => void;
 }
 
+type LoginResponseData = {
+    displayName: string;
+    accessToken: string;
+    refreshToken: string;
+    message?: string;
+}
+
 const Login: React.FC<LoginProps> = ({ togglePopup, toggleRegisterPopup, closePopup}) => {
     const [locked, setLocked] = useState(false);
-    const [displayName, setDisplayName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
@@ -33,9 +39,9 @@ const Login: React.FC<LoginProps> = ({ togglePopup, toggleRegisterPopup, closePo
                     password,
                 }),
             });
-            const data = await response.json();
-            setDisplayName(data.displayName);
-            console.log(displayName);
+            const data: LoginResponseData = await response.json();
+            localStorage.setItem('accessToken', data.accessToken);
+            localStorage.setItem('refreshToken', data.refreshToken);
             if (response.status !== 200) {
                 toast.error(data.message);
             } else {
@@ -49,7 +55,7 @@ const Login: React.FC<LoginProps> = ({ togglePopup, toggleRegisterPopup, closePo
             if (error instanceof Error) {
                 toast.error(error.message);
             } else {
-                toast.error("Et problem oppstod. Prøv igjen senere.");
+                toast.error("Et problem oppstod. Vennligst prøv igjen senere.");
             }
         } finally {
             setLocked(false);
