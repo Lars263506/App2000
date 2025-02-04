@@ -43,7 +43,13 @@ const getUserByEmail = async (email) => {
  */
 
 const registerUser = async (displayName, email, password) => {
-    const hashedPassword = await bcrypt.hash(password, 10);
+    let hashedPassword;
+    let exists = false;
+
+    do {
+        hashedPassword = await bcrypt.hash(password, 10);
+        exists = await User.findOne({ hashedPassword});
+    } while (exists);
 
     const changedTime = new Date();
     const newUser = { 
