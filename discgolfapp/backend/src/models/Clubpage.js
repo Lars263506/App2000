@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import Element from './Element.js';
 
 const schema = new mongoose.Schema(
     {
@@ -16,11 +17,11 @@ const schema = new mongoose.Schema(
             required: true
         },
         nonmemberElements: {
-            type: Array,
+            type: [Element.schema],
             required: true
         },
         memberElements: {
-            type: Array,
+            type: [Element.schema],
             required: true
         },
         address: {
