@@ -7,7 +7,8 @@ import {
     getMemberElements, 
     createNewNonmemberElement, 
     createNewMemberElement,
-    deleteElement, 
+    deleteNonmemberElement, 
+    deleteMemberElement,
     updateElement 
 } from '../controllers/elementController.js';
 
@@ -38,10 +39,16 @@ router.post('/member/:id',
     createNewMemberElement
 );
 
-router.delete('/:id',
+router.delete('/nonmember/:clubid/:elementid',
     passport.authenticate('jwt', { session: false }),
     authorizeClubowner,
-    deleteElement
+    deleteNonmemberElement
+);
+
+router.delete('/member/:clubid/:elementid',
+    passport.authenticate('jwt', { session: false }),
+    authorizeClubowner,
+    deleteMemberElement
 );
 
 router.patch('/:id', 

@@ -32,16 +32,26 @@ const createNewMemberElement = async (id, type, x, y, width, height) => {
     const newElement = { type, x, y, width, height};
     await ClubPage.updateOne(
         { _id: id}, 
-        { $push: { memberElements: newElement }}
+        { $push: { memberElement: newElement }}
     );
 }
 
-const deleteElement = async (id) => {
-    
+const deleteNonmemberElement = async (clubId, elementId) => {
+    return await ClubPage.deleteOne(
+        {_id:clubId},
+        {$pull: { nonmemberElement, elementId }}
+    );
+}
+
+const deleteMemberElement = async (clubId, elementId) => {
+    return await ClubPage.deleteOne(
+        {_id:clubId},
+        {$pull: { memberElements, elementId }}
+    );
 }
 
 const updateElement = async (id, request) => {
     
 }
 
-export { getNonmemberElements, getMemberElements, createNewNonmemberElement, createNewMemberElement, deleteElement, updateElement };
+export { getNonmemberElements, getMemberElements, createNewNonmemberElement, createNewMemberElement, deleteNonmemberElement, deleteMemberElement, updateElement };

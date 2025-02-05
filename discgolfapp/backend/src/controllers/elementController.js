@@ -42,10 +42,22 @@ const createNewMemberElement = async (req, res) => {
     }
 }
 
-const deleteElement = async (req, res) => {
+const deleteNonmemberElement = async (req, res) => {
     try {
-        const id = req.params.id;
-        const success = await elementService.deleteElement(id);
+        const clubId = req.params.clubid;
+        const elementId = req.params.elementid;
+        const success = await elementService.deleteNonmemberElement(clubId, elementId);
+        res.status(200).json(success);
+    } catch(error) {
+        res.status(400).json({ message: error.message });
+    }
+}
+
+const deleteMemberElement = async (req, res) => {
+    try {
+        const clubId = req.params.clubid;
+        const elementId = req.params.elementid;
+        const success = await elementService.deleteMemberElement(clubId, elementId);
         res.status(200).json(success);
     } catch(error) {
         res.status(400).json({ message: error.message });
@@ -62,4 +74,4 @@ const updateElement = async (req, res) => {
     }
 }
 
-export { getNonmemberElements, getMemberElements, createNewNonmemberElement, createNewMemberElement,  deleteElement, updateElement };
+export { getNonmemberElements, getMemberElements, createNewNonmemberElement, createNewMemberElement,  deleteNonmemberElement, deleteMemberElement, updateElement };
