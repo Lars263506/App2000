@@ -20,11 +20,22 @@ const getMemberElements = async (req, res) => {
     }
 }
 
-const createNewElement = async (req, res) => {
+const createNewNonmemberElement = async (req, res) => {
     try {
         const id = req.params.id;
         const { type, x, y, width, height } = req.body
-        const createdAt = await elementService.createNewElement(id, type, x, y, width, height);
+        const createdAt = await elementService.createNewNonmemberElement(id, type, x, y, width, height);
+        res.status(201).json(createdAt);
+    } catch(error) {
+        res.status(500).json({ message: error.message });
+    }
+}
+
+const createNewMemberElement = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const { type, x, y, width, height } = req.body
+        const createdAt = await elementService.createNewMemberElement(id, type, x, y, width, height);
         res.status(201).json(createdAt);
     } catch(error) {
         res.status(500).json({ message: error.message });
@@ -51,4 +62,4 @@ const updateElement = async (req, res) => {
     }
 }
 
-export { getNonmemberElements, getMemberElements, createNewElement, deleteElement, updateElement };
+export { getNonmemberElements, getMemberElements, createNewNonmemberElement, createNewMemberElement,  deleteElement, updateElement };

@@ -5,7 +5,8 @@ import { authorizeClubowner } from '../middleware/authorization.js';
 import { 
     getNonmemberElements,
     getMemberElements, 
-    createNewElement, 
+    createNewNonmemberElement, 
+    createNewMemberElement,
     deleteElement, 
     updateElement 
 } from '../controllers/elementController.js';
@@ -25,10 +26,16 @@ router.get('/member/:id',
     getMemberElements
 );
 
-router.post('/:id',
+router.post('/nonmember/:id',
     passport.authenticate('jwt', { session: false }),
     authorizeClubowner,
-    createNewElement
+    createNewNonmemberElement
+);
+
+router.post('/member/:id',
+    passport.authenticate('jwt', { session: false }),
+    authorizeClubowner,
+    createNewMemberElement
 );
 
 router.delete('/:id',
