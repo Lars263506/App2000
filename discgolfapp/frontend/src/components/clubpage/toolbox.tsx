@@ -8,23 +8,35 @@ type ComponentPosition = {
     id: string;
     x: number;
     y: number;
+    content: string;
 };
 
 const Toolbox = () => {
     const [positions, setPositions] = useState<ComponentPosition[]>([]);
-    const [selectedId, setSelectedId] = useState<string | null>(null); // Tilstand for den valgte figuren
+    const [selectedId, setSelectedId] = useState<string | null>(null); 
     const dragItem = useRef<ComponentPosition | null>(null);
     const dragOffset = useRef<{ x: number; y: number } | null>(null);
 
     useEffect(() => {
+        const savedPositions = localStorage.getItem('positions');
+        if (savedPositions) {
+            setPositions(JSON.parse(savedPositions));
+        }
         document.body.style.overflow = 'hidden';
         return () => {
             document.body.style.overflow = '';
         };
     }, []);
 
+    useEffect(() => {
+        if (positions.length > 0) {
+            localStorage.setItem('positions', JSON.stringify(positions));
+        }
+    }, [positions]);
+
     const handleDragStart = (e: React.DragEvent, id: string) => {
         e.dataTransfer.setData("id", id);
+        document.body.style.userSelect = 'none'; 
     };
 
     const handleDrop = (e: React.DragEvent) => {
@@ -37,7 +49,7 @@ const Toolbox = () => {
 
         setPositions((prevPositions) => [
             ...prevPositions,
-            { id, x, y },
+            { id, x, y, content: "" },
         ]);
     };
 
@@ -79,16 +91,30 @@ const Toolbox = () => {
         }
     };
 
-    const renderComponent = (id: string, x: number, y: number) => (
+    const handleContentChange = (id: string, newContent: string) => {
+        setPositions((prevPositions) =>
+            prevPositions.map((pos) =>
+                pos.id === id ? { ...pos, content: newContent } : pos
+            )
+        );
+    };
+
+    const renderComponent = (id: string, x: number, y: number, content: string) => (
         <div
             key={id}
             className={`p-4 border bg-gray-200 absolute ${selectedId === id ? 'border-red-200' : ''}`}
-            style={{ left: `${x}px`, top: `${y}px` }}
+            style={{ left: `${x}px`, top: `${y}px`, userSelect: 'none' }}
             onMouseDown={(e) => handleMouseDown(e, id)}
         >
-            {id === "announcement" && <Announcement />}
-            {id === "fieldInformation" && <FieldInformation location={"Bø"} />}
-            {id === "memberList" && <MemberList clubName={"My Club"} />}
+            {id === "announcement" && (
+                <Announcement content={content} onContentChange={(newContent) => handleContentChange(id, newContent)} />
+            )}
+            {id === "fieldInformation" && (
+                <FieldInformation/>
+            )}
+            {id === "memberList" && (
+                <MemberList/>
+            )}
         </div>
     );
 
@@ -99,7 +125,7 @@ const Toolbox = () => {
             onMouseUp={handleMouseUp}
         >
             {/* Toolbox på venstre side */}
-            <div className="w-full bg-gray-200 relative mb-20">
+            <div className="w-80% bg-gray-200 relative mb-20 ">
                 <div className="p-4 border">
                     <h3 className="text-lg font-bold mb-4 text-black">Verktøykasse</h3>
                     <div
@@ -125,7 +151,10 @@ const Toolbox = () => {
                         onDragStart={(e) => handleDragStart(e, "memberList")}
                     >
                         Medlems liste
-                    </div>
+                        </div>
+                    <div className="text-black mt-72">
+                    Klikk på figur så kommer knapp for å slette.
+                        </div>
                 </div>
             </div>
 
@@ -135,7 +164,7 @@ const Toolbox = () => {
                 onDragOver={handleDragOver}
                 className="w-full bg-gray-200 relative p-4 pr-[1465px] border-2 border-black rounded-lg ml-2 mb-20 mt-2"
             >
-                {positions.map((pos) => renderComponent(pos.id, pos.x, pos.y))}
+                {positions.map((pos) => renderComponent(pos.id, pos.x, pos.y, pos.content))}
             </div>
 
             {/* Slett-knapp som vises når en figur er valgt */}

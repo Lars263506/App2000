@@ -1,39 +1,53 @@
 import { useState, useEffect } from "react";
 
-const MemberList = ({ clubName }: { clubName: string }) => {
-    const [members, setMembers] = useState<string[]>([]);
+type Member = {
+    id: string;
+    name: string;
+};
 
-    // Denne useEffect kan brukes til å hente data fra backend senere
+const MemberList: React.FC = () => {
+    const [members, setMembers] = useState<Member[]>([]);
+    const [loading, setLoading] = useState(true);
+
     useEffect(() => {
-        // Simulerer backend-henting av medlemsdata
-        // Senere kan du erstatte dette med en API-kall til backend for å hente medlemmene basert på klubbnavn
-        
-        // Eksempel på hvordan backend kan brukes (må implementeres senere)
-        /*
-        fetch(`/api/members?clubName=${clubName}`)
-            .then(response => response.json())
-            .then(data => setMembers(data))
-            .catch(err => console.error("Error fetching members:", err));
-        */
+        // Simulert API-kall, erstatt dette med en backend-kall senere
+        const fetchMembers = async () => {
+            try {
+                // const response = await fetch('/api/members'); 
+                // const data = await response.json();
+                // setMembers(data);
 
-        // Denne setMembers kan fjernes når du integrerer backend.
-        setMembers([]);  // Setter en tom liste til å starte med.
-    }, [clubName]);
+                // Midlertidige testdata
+                setMembers([
+                    { id: "1", name: "Ola Nordmann" },
+                    { id: "2", name: "Kari Nordmann" },
+                ]);
+            } catch (error) {
+                console.error("Feil ved henting av medlemmer:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchMembers();
+    }, []);
 
     return (
-        <div className="p-4 border rounded-lg shadow-md bg-white w-full max-w-lg">
-            <h2 className="text-xl font-bold mb-2 text-black">{clubName} - Medlemsliste</h2>
-            <ul className="list-disc pl-4">
-                {members.length > 0 ? (
-                    members.map((member, index) => (
-                        <li key={index} className="text-black">{member}</li>
-                    ))
-                ) : (
-                    <p className="text-gray-500">Ingen medlemmer ennå.</p>
-                )}
-            </ul>
+        <div className="p-4 border rounded-lg shadow-md bg-white w-full">
+            <h2 className="text-xl font-bold mb-2 text-black">Medlemsliste</h2>
+            {loading ? (
+                <p className="text-gray-500">Laster medlemmer...</p>
+            ) : members.length > 0 ? (
+                <ul className="list-disc pl-4 text-black">
+                    {members.map((member) => (
+                        <li key={member.id}>{member.name}</li>
+                    ))}
+                </ul>
+            ) : (
+                <p className="text-gray-500">Ingen medlemmer enda.</p>
+            )}
         </div>
     );
-}
+};
 
 export default MemberList;
