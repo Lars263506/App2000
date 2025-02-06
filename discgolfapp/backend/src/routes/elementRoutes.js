@@ -1,14 +1,12 @@
 import express from 'express';
 
 import passport from '../config/passportConfig.js';
+import { optionalAuth } from '../middleware/optionalauth.js';
 import { authorizeClubowner } from '../middleware/authorization.js';
 import { 
-    getNonmemberElements,
-    getMemberElements, 
-    createNewNonmemberElement, 
-    createNewMemberElement,
-    deleteNonmemberElement, 
-    deleteMemberElement,
+    getElements,
+    createNewElement,
+    deleteElement, 
     updateElement 
 } from '../controllers/elementController.js';
 
@@ -18,37 +16,21 @@ import {
  */
 const router = express.Router();
 
-router.get('/nonmember/:id',
-    getNonmemberElements
+router.get('/:id',
+    optionalAuth, 
+    getElements
 );
 
-router.get('/member/:id',
-    passport.authenticate('jwt', { session: false }),
-    getMemberElements
-);
-
-router.post('/nonmember/:id',
+router.post('/:id',
     passport.authenticate('jwt', { session: false }),
     authorizeClubowner,
-    createNewNonmemberElement
+    createNewElement
 );
 
-router.post('/member/:id',
+router.delete('/:clubid/:elementid',
     passport.authenticate('jwt', { session: false }),
     authorizeClubowner,
-    createNewMemberElement
-);
-
-router.delete('/nonmember/:clubid/:elementid',
-    passport.authenticate('jwt', { session: false }),
-    authorizeClubowner,
-    deleteNonmemberElement
-);
-
-router.delete('/member/:clubid/:elementid',
-    passport.authenticate('jwt', { session: false }),
-    authorizeClubowner,
-    deleteMemberElement
+    deleteElement
 );
 
 router.patch('/:id', 

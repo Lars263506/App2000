@@ -1,57 +1,76 @@
 import ClubPage from "../models/Clubpage.js";
 
-const getNonmemberElements = async (id) => {
-    const clubpage = await ClubPage.findById(id);
-    let elements;
+/**
+ * @author Lars Andreas Strand og Adrian Johansen
+ * @description This service contains functions for managing elements in the database. 
+ */
 
-    if (clubpage) elements = clubpage.nonmemberElements;
-    else throw new Error("No elements found for this club page");
+const getElements = async (id, role) => {
+    const clubpage = await ClubPage.findById(id);
+    let elements = {
+        nonmemberElements: [],
+        memberElements: [],
+    };
+    
+    if (role == "clubowner") {
+        elements.memberElements = clubpage.memberElements;
+        elements.nonmemberElements = clubpage.nonmemberElements;
+    }
+ 
+    else if (role == "member") elements.memberElements = clubpage.memberElements;
+    
+    else elements.nonmemberElements = clubpage.nonmemberElements;
 
     return elements;
 }
 
-const getMemberElements = async (id) => {
-    const clubpage = await ClubPage.findById(id);
-    let elements;
-
-    if (clubpage) elements = clubpage.memberElements;
-    else throw new Error("No elements found for this club page");
-
-    return elements;
-}
-
-const createNewNonmemberElement = async (id, type, x, y, width, height) => {
+const createNewElement = async (id, view, type, x, y, width, height) => {
     const newElement = { type, x, y, width, height};
-    await ClubPage.updateOne(
-        { _id: id}, 
-        { $push: { nonmemberElements: newElement }}
-    );
+
+    if (view == "member")  
+        await ClubPage.updateOne(
+            { _id: id}, 
+            { $push: { memberElements: newElement }}
+        );
+
+    else 
+        await ClubPage.updateOne(
+            { _id: id}, 
+            { $push: { nonmemberElements: newElement }}
+        );
 }
 
-const createNewMemberElement = async (id, type, x, y, width, height) => {
-    const newElement = { type, x, y, width, height};
-    await ClubPage.updateOne(
-        { _id: id}, 
-        { $push: { memberElement: newElement }}
-    );
-}
+const deleteElement = async (clubId, view, elementId) => {
 
-const deleteNonmemberElement = async (clubId, elementId) => {
-    return await ClubPage.deleteOne(
-        {_id:clubId},
-        {$pull: { nonmemberElement, elementId }}
-    );
-}
+    if (view == "member")  
+        return await ClubPage.deleteOne(
+            {_id:clubId},
+            {$pull: { memberElements, elementId }}
+        );
 
-const deleteMemberElement = async (clubId, elementId) => {
-    return await ClubPage.deleteOne(
-        {_id:clubId},
-        {$pull: { memberElements, elementId }}
-    );
-}
+    else
+        return await ClubPage.deleteOne(
+            {_id:clubId},
+            {$pull: { nonmemberElements, elementId }}
+        );
+    }
 
-const updateElement = async (id, request) => {
+
+/* const updateElement = async (clubId, view, request, elementId) => {
+
+    if (view == "member")
+        await clubpage.updateOne(
+            {_id:clubId},
+            {
+                "$set": {  
+                        "memberElements.$": {_id:elementId, ...request} 
+                }
+            },
+            { new:true}
+        );
+        
     
 }
+*/
 
-export { getNonmemberElements, getMemberElements, createNewNonmemberElement, createNewMemberElement, deleteNonmemberElement, deleteMemberElement, updateElement };
+export { getElements, createNewElement,  deleteElement };

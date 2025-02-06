@@ -1,5 +1,10 @@
 import mongoose from 'mongoose';
 
+/**
+ * @author Lars Andreas Strand og Adrian Johansen
+ * @description Model for elements
+ */
+
 const schema = new mongoose.Schema(
     {
         type: {
@@ -21,6 +26,7 @@ const schema = new mongoose.Schema(
         height: {
             type: Number,
             required: true
+
         }
     }
 );

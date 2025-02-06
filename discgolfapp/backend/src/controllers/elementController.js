@@ -1,63 +1,40 @@
 import * as elementService from '../services/elementService.js';
 
-const getNonmemberElements = async (req, res) => {
+/**
+ * @author Lars Andreas Strand og Adrian Johansen
+ * @description Controller for elements
+ */
+
+const getElements = async (req, res) => {
     try {
         const id = req.params.id;
-        const element = await elementService.getNonmemberElements(id);
+        const role = req.user.role; 
+        if (!role) role = "user"; 
+        const element = await elementService.getElements(id, role);
         res.status(200).json(element);
     } catch(error) {
         res.status(404).json({ message: error.message });
     }
 }
 
-const getMemberElements = async (req, res) => {
+const createNewElement = async (req, res) => {
     try {
         const id = req.params.id;
-        const element = await elementService.getMemberElements(id);
-        res.status(200).json(element);
-    } catch(error) {
-        res.status(404).json({ message: error.message });
-    }
-}
-
-const createNewNonmemberElement = async (req, res) => {
-    try {
-        const id = req.params.id;
-        const { type, x, y, width, height } = req.body
-        const createdAt = await elementService.createNewNonmemberElement(id, type, x, y, width, height);
+        const { role, type, x, y, width, height } = req.body
+        const createdAt = await elementService.createNewElement(id, role, type, x, y, width, height);
         res.status(201).json(createdAt);
     } catch(error) {
         res.status(500).json({ message: error.message });
     }
 }
 
-const createNewMemberElement = async (req, res) => {
-    try {
-        const id = req.params.id;
-        const { type, x, y, width, height } = req.body
-        const createdAt = await elementService.createNewMemberElement(id, type, x, y, width, height);
-        res.status(201).json(createdAt);
-    } catch(error) {
-        res.status(500).json({ message: error.message });
-    }
-}
-
-const deleteNonmemberElement = async (req, res) => {
+const deleteElement = async (req, res) => {
     try {
         const clubId = req.params.clubid;
+        const role = req.params.role;
         const elementId = req.params.elementid;
-        const success = await elementService.deleteNonmemberElement(clubId, elementId);
-        res.status(200).json(success);
-    } catch(error) {
-        res.status(400).json({ message: error.message });
-    }
-}
 
-const deleteMemberElement = async (req, res) => {
-    try {
-        const clubId = req.params.clubid;
-        const elementId = req.params.elementid;
-        const success = await elementService.deleteMemberElement(clubId, elementId);
+        const success = await elementService.deleteElement(clubId, role, elementId);
         res.status(200).json(success);
     } catch(error) {
         res.status(400).json({ message: error.message });
@@ -67,11 +44,14 @@ const deleteMemberElement = async (req, res) => {
 const updateElement = async (req, res) => {
     try {
         const id = req.params.id;
-        const success = await elementService.updateElement(id, req.body);
+        const { role, type, x, y, width, height, elementId } = req.body
+        const createdAt = await elementService.createNewElement(id, role, type, x, y, width, height);
+
+        if (createdAt) await elementService.deleteElement(id, role, elementId);
         res.status(200).json(success);
     } catch(error) {
         res.status(400).json({ message: error.message });
     }
 }
 
-export { getNonmemberElements, getMemberElements, createNewNonmemberElement, createNewMemberElement,  deleteNonmemberElement, deleteMemberElement, updateElement };
+export { getElements, createNewElement,  deleteElement, updateElement };
