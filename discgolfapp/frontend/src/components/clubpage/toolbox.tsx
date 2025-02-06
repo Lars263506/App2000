@@ -1,55 +1,56 @@
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useState } from "react";
 import Announcement from "./announcements";
 import FieldInformation from "./fieldinformation";
 import MemberList from "./memberlist";
 import '../../app/globals.css';
+import router from "next/router";
 
-type ComponentPosition = {
+type Component = {
     id: string;
+    uniqueId: number;
     x: number;
     y: number;
     content: string;
 };
 
 const Toolbox = () => {
-    const [positions, setPositions] = useState<ComponentPosition[]>([]);
-    const [selectedId, setSelectedId] = useState<string | null>(null); 
-    const dragItem = useRef<ComponentPosition | null>(null);
-    const dragOffset = useRef<{ x: number; y: number } | null>(null);
-
     useEffect(() => {
-        const savedPositions = localStorage.getItem('positions');
-        if (savedPositions) {
-            setPositions(JSON.parse(savedPositions));
-        }
-        document.body.style.overflow = 'hidden';
+        document.body.style.overflow = "hidden";
         return () => {
-            document.body.style.overflow = '';
+            document.body.style.overflow = "auto"; 
         };
     }, []);
 
-    useEffect(() => {
-        if (positions.length > 0) {
-            localStorage.setItem('positions', JSON.stringify(positions));
-        }
-    }, [positions]);
-
-    const handleDragStart = (e: React.DragEvent, id: string) => {
-        e.dataTransfer.setData("id", id);
-        document.body.style.userSelect = 'none'; 
+    const [idCounter, setIdCounter] = useState(0);
+    const [selectedComponent, setSelectedComponent] = useState<Component | null>(null);
+    const [components, setComponents] = useState<Component[]>([]);
+    
+    const handleMouseDown = (e: React.MouseEvent, component: Component) => {
+        setSelectedComponent(component);
     };
 
     const handleDrop = (e: React.DragEvent) => {
+        if(!selectedComponent) return;
+
+        setIdCounter(prevIdCounter => prevIdCounter + 1);
+
         e.preventDefault();
-        const id = e.dataTransfer.getData("id");
 
-        const rect = e.currentTarget.getBoundingClientRect();
-        const x = rect.left + dragOffset.current?.x!;  
-        const y = rect.top + dragOffset.current?.y!;
+        const dropZone = e.currentTarget.getBoundingClientRect();
+        const x = e.clientX - dropZone.left;
+        const y = e.clientY - dropZone.top;
 
-        setPositions((prevPositions) => [
-            ...prevPositions,
-            { id, x, y, content: "" },
+        const newComponent: Component = {
+            id: selectedComponent.id,
+            uniqueId: idCounter,
+            x,
+            y,
+            content: selectedComponent.content
+        };
+
+        setComponents(prevComponents => [
+            ...prevComponents.filter(component => component.uniqueId !== selectedComponent.uniqueId), 
+            newComponent
         ]);
     };
 
@@ -57,82 +58,45 @@ const Toolbox = () => {
         e.preventDefault();
     };
 
-    const handleMouseDown = (e: React.MouseEvent, id: string) => {
-        dragItem.current = positions.find((pos) => pos.id === id) || null;
-        const rect = e.currentTarget.getBoundingClientRect();
-        dragOffset.current = { x: e.clientX - rect.left, y: e.clientY - rect.top };
-        setSelectedId(id); 
-    };
-
-    const handleMouseMove = (e: React.MouseEvent) => {
-        if (dragItem.current && dragOffset.current) {
-            const x = e.clientX - dragOffset.current.x;
-            const y = e.clientY - dragOffset.current.y;
-
-            setPositions((prevPositions) =>
-                prevPositions.map((pos) =>
-                    pos.id === dragItem.current?.id ? { ...pos, x, y } : pos
-                )
-            );
-        }
-    };
-
-    const handleMouseUp = () => {
-        dragItem.current = null;
-        dragOffset.current = null;
-    };
-
     const handleDelete = () => {
-        if (selectedId) {
-            setPositions((prevPositions) =>
-                prevPositions.filter((pos) => pos.id !== selectedId)
-            );
-            setSelectedId(null); 
-        }
+        if (!selectedComponent) return;
+        setComponents(prevComponents => prevComponents.filter(component => component.uniqueId !== selectedComponent.uniqueId));
     };
 
-    const handleContentChange = (id: string, newContent: string) => {
-        setPositions((prevPositions) =>
-            prevPositions.map((pos) =>
-                pos.id === id ? { ...pos, content: newContent } : pos
-            )
-        );
-    };
-
-    const renderComponent = (id: string, x: number, y: number, content: string) => (
-        <div
-            key={id}
-            className={`p-4 border bg-gray-200 absolute ${selectedId === id ? 'border-red-200' : ''}`}
-            style={{ left: `${x}px`, top: `${y}px`, userSelect: 'none' }}
-            onMouseDown={(e) => handleMouseDown(e, id)}
-        >
-            {id === "announcement" && (
-                <Announcement content={content} onContentChange={(newContent) => handleContentChange(id, newContent)} />
-            )}
-            {id === "fieldInformation" && (
-                <FieldInformation/>
-            )}
-            {id === "memberList" && (
-                <MemberList/>
-            )}
-        </div>
-    );
+    const renderComponent = (component: Component) => { 
+        return (
+            <div
+                key={component.uniqueId}
+                style={{ position: 'absolute',  left: component.x, top: component.y }}
+                className={`p-4 border-4 bg-gray-200 ${component.uniqueId === selectedComponent?.uniqueId ? 'border-red-200' : ''}`}
+                onMouseDown={(e) => handleMouseDown(e, component)}
+                draggable
+            >
+                {component.id === "announcement" && (
+                    <Announcement/>
+                )}
+                {component.id === "fieldInformation" && (
+                    <FieldInformation/>
+                )}
+                {component.id === "memberList" && (
+                    <MemberList/>
+                )}
+            </div>
+        )};
 
     return (
         <div
             className="flex h-screen"
-            onMouseMove={handleMouseMove}
-            onMouseUp={handleMouseUp}
         >
             {/* Toolbox på venstre side */}
-            <div className="w-80% bg-gray-200 relative mb-20 ">
+            <div className="w-80% bg-gray-200 mb-20">
                 <div className="p-4 border">
                     <h3 className="text-lg font-bold mb-4 text-black">Verktøykasse</h3>
                     <div
                         id="announcement"
                         className="p-3 bg-gray-400 border rounded-lg cursor-pointer text-black mt-10"
                         draggable
-                        onDragStart={(e) => handleDragStart(e, "announcement")}
+                        onMouseDown={(e) => handleMouseDown(e, { id: "announcement", uniqueId: idCounter, x: 0, y: 0, content: "" })}
                     >
                         Kunngjøringer
                     </div>
@@ -140,7 +104,7 @@ const Toolbox = () => {
                         id="fieldInformation"
                         className="p-3 bg-gray-400 border rounded-lg cursor-pointer text-black mt-10"
                         draggable
-                        onDragStart={(e) => handleDragStart(e, "fieldInformation")}
+                        onMouseDown={(e) => handleMouseDown(e, { id: "fieldInformation", uniqueId: idCounter, x: 0, y: 0, content: "" })}
                     >
                         Bane informasjon
                     </div>
@@ -148,32 +112,39 @@ const Toolbox = () => {
                         id="memberList"
                         className="p-3 bg-gray-400 border rounded-lg cursor-pointer text-black mt-10"
                         draggable
-                        onDragStart={(e) => handleDragStart(e, "memberList")}
+                        onMouseDown={(e) => handleMouseDown(e, { id: "memberList", uniqueId: idCounter, x: 0, y: 0, content: "" })}
                     >
                         Medlems liste
                         </div>
-                    <div className="text-black mt-72">
+                        <button
+                            onClick={() => router.push('/')}
+                            className="px-2 py-1 bg-black text-white rounded rounded-mg mt-32"
+                            >
+                            Til forsiden
+                            </button>
+                    <div className="text-black mt-40">
                     Klikk på figur så kommer knapp for å slette.
-                        </div>
+                        </div>  
                 </div>
             </div>
 
             {/* Område for å plassere og flytte på elementene */}
             <div
-                onDrop={handleDrop}
+                onDrop = {e => handleDrop(e)}
                 onDragOver={handleDragOver}
-                className="w-full bg-gray-200 relative p-4 pr-[1465px] border-2 border-black rounded-lg ml-2 mb-20 mt-2"
+                className="w-full bg-gray-200 p-4 pr-[1400px] border-2 border-black rounded-lg ml-1 mb-20 mt-2"
             >
-                {positions.map((pos) => renderComponent(pos.id, pos.x, pos.y, pos.content))}
+                {components.map(renderComponent)}
             </div>
 
             {/* Slett-knapp som vises når en figur er valgt */}
-            {selectedId && (
+            {true && (
                 <div className="absolute bottom-4 left-4 p-2 bg-red-500 text-white rounded cursor-pointer" onClick={handleDelete}>
                     Slett figur
                 </div>
             )}
         </div>
+        
     );
 };
 

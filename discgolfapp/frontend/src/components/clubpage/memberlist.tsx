@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
 
 type Member = {
-    id: string;
-    name: string;
+    displayname: string;
 };
 
 const MemberList: React.FC = () => {
@@ -13,15 +12,10 @@ const MemberList: React.FC = () => {
         // Simulert API-kall, erstatt dette med en backend-kall senere
         const fetchMembers = async () => {
             try {
-                // const response = await fetch('/api/members'); 
-                // const data = await response.json();
-                // setMembers(data);
+                const response = await fetch('/api/members'); 
+                const data = await response.json();
+                setMembers(data);
 
-                // Midlertidige testdata
-                setMembers([
-                    { id: "1", name: "Ola Nordmann" },
-                    { id: "2", name: "Kari Nordmann" },
-                ]);
             } catch (error) {
                 console.error("Feil ved henting av medlemmer:", error);
             } finally {
@@ -40,7 +34,7 @@ const MemberList: React.FC = () => {
             ) : members.length > 0 ? (
                 <ul className="list-disc pl-4 text-black">
                     {members.map((member) => (
-                        <li key={member.id}>{member.name}</li>
+                        <li key={member.displayname}>{member.displayname}</li>
                     ))}
                 </ul>
             ) : (
