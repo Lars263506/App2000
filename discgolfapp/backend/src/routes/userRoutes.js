@@ -4,6 +4,7 @@ import passport from '../config/passportConfig.js';
 import { authorizeAdmin } from '../middleware/authorization.js';
 import { loginLimiter, registerLimiter } from '../middleware/rateLimiter.js';
 import { 
+    getAllUsers,
     getUser,
     getUserByEmail,
     registerUser, 
@@ -21,6 +22,12 @@ import {
  * @description Router for user requests
  */
 const router = express.Router();
+
+router.get('/', 
+    passport.authenticate('jwt', { session: false }), 
+    authorizeAdmin, 
+    getAllUsers
+);
 
 router.get('/:id', 
     passport.authenticate('jwt', { session: false }), 
