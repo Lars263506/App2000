@@ -5,6 +5,17 @@ import MemberList from "./memberlist";
 import '../../app/globals.css';
 import router from "next/router";
 
+type ToolboxProps = {
+    id: string;
+    name: string;
+    description: string;
+    address: string;
+    zipCode: string;
+    websiteURL: string;
+    email: string;
+    phone: string;
+};
+
 type Component = {
     id: string;
     uniqueId: number;
@@ -13,7 +24,16 @@ type Component = {
     content: string;
 };
 
-const Toolbox = () => {
+const Toolbox: React.FC<ToolboxProps> = ({
+    id,
+    name,
+    description,
+    address,
+    zipCode,
+    websiteURL,
+    email,
+    phone
+}) => {
     useEffect(() => {
         document.body.style.overflow = "hidden";
         return () => {
@@ -21,7 +41,6 @@ const Toolbox = () => {
         };
     }, []);
 
-    const [idCounter, setIdCounter] = useState(0);
     const [selectedComponent, setSelectedComponent] = useState<Component | null>(null);
     const [components, setComponents] = useState<Component[]>([]);
     
@@ -32,8 +51,6 @@ const Toolbox = () => {
     const handleDrop = (e: React.DragEvent) => {
         if(!selectedComponent) return;
 
-        setIdCounter(prevIdCounter => prevIdCounter + 1);
-
         e.preventDefault();
 
         const dropZone = e.currentTarget.getBoundingClientRect();
@@ -42,7 +59,7 @@ const Toolbox = () => {
 
         const newComponent: Component = {
             id: selectedComponent.id,
-            uniqueId: idCounter,
+            uniqueId: selectedComponent.uniqueId,
             x,
             y,
             content: selectedComponent.content
@@ -96,7 +113,7 @@ const Toolbox = () => {
                         id="announcement"
                         className="p-3 bg-gray-400 border rounded-lg cursor-pointer text-black mt-10"
                         draggable
-                        onMouseDown={(e) => handleMouseDown(e, { id: "announcement", uniqueId: idCounter, x: 0, y: 0, content: "" })}
+                        onMouseDown={(e) => handleMouseDown(e, { id: "announcement", uniqueId: Date.now(), x: 0, y: 0, content: "" })}
                     >
                         Kunngjøringer
                     </div>
@@ -104,7 +121,7 @@ const Toolbox = () => {
                         id="fieldInformation"
                         className="p-3 bg-gray-400 border rounded-lg cursor-pointer text-black mt-10"
                         draggable
-                        onMouseDown={(e) => handleMouseDown(e, { id: "fieldInformation", uniqueId: idCounter, x: 0, y: 0, content: "" })}
+                        onMouseDown={(e) => handleMouseDown(e, { id: "fieldInformation", uniqueId: Date.now(), x: 0, y: 0, content: "" })}
                     >
                         Bane informasjon
                     </div>
@@ -112,7 +129,7 @@ const Toolbox = () => {
                         id="memberList"
                         className="p-3 bg-gray-400 border rounded-lg cursor-pointer text-black mt-10"
                         draggable
-                        onMouseDown={(e) => handleMouseDown(e, { id: "memberList", uniqueId: idCounter, x: 0, y: 0, content: "" })}
+                        onMouseDown={(e) => handleMouseDown(e, { id: "memberList", uniqueId: Date.now(), x: 0, y: 0, content: "" })}
                     >
                         Medlems liste
                         </div>

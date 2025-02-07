@@ -9,6 +9,7 @@ import {
     deleteClubPage, 
     updateClubPage 
 } from '../controllers/clubpageController.js';
+import { optionalAuth } from '../middleware/optionalauth.js';
 
 /**
  * @author Lars263506 (Github)
@@ -21,7 +22,7 @@ router.get('/',
 );
 
 router.get('/:id',
-    passport.authenticate('jwt', { session: false }),
+    optionalAuth, 
     getClubPage
 );
 
