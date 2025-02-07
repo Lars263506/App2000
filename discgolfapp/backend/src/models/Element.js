@@ -11,6 +11,11 @@ const schema = new mongoose.Schema(
             type: String,
             required: true
         },
+        uniqueId: {
+            type: String,
+            required: true,
+            unique: true
+        },
         x: {
             type: Number,
             required: true

@@ -1,3 +1,4 @@
+import mongoose from 'mongoose';
 import * as elementService from '../services/elementService.js';
 
 /**
@@ -15,8 +16,7 @@ import * as elementService from '../services/elementService.js';
 const getElements = async (req, res) => {
     try {
         const id = req.params.id;
-        const role = req.user.role; 
-        if (!role) role = "user"; 
+        const role = req.user.role;
         const elements = await elementService.getElements(id, role);
         res.status(200).json(elements);
     } catch(error) {
@@ -34,8 +34,8 @@ const getElements = async (req, res) => {
 const createNewElement = async (req, res) => {
     try {
         const id = req.params.id;
-        const { view, type, x, y, width, height } = req.body
-        const createdAt = await elementService.createNewElement(id, view, type, x, y, width, height);
+        const { type, uniqueId, x, y, width, height, view } = req.body
+        const createdAt = await elementService.createNewElement(id, type, uniqueId, x, y, width, height, view);
         res.status(201).json(createdAt);
     } catch(error) {
         res.status(500).json({ message: error.message });
@@ -51,11 +51,9 @@ const createNewElement = async (req, res) => {
 
 const deleteElement = async (req, res) => {
     try {
-        const clubId = req.params.clubid;
-        const view = req.params.view;
-        const elementId = req.params.elementid;
+        const { clubId, view, uniqueId } = req.body;
 
-        const success = await elementService.deleteElement(clubId, view, elementId);
+        const success = await elementService.deleteElement(clubId, view, uniqueId);
         res.status(200).json(success);
     } catch(error) {
         res.status(400).json({ message: error.message });
@@ -70,15 +68,24 @@ const deleteElement = async (req, res) => {
  */
 
 const updateElement = async (req, res) => {
+    const session = await mongoose.startSession();
+    session.startTransaction();
     try {
         const id = req.params.id;
-        const { role, type, x, y, width, height, elementId } = req.body
-        const createdAt = await elementService.createNewElement(id, role, type, x, y, width, height);
+        const { type, uniqueId, x, y, width, height, view } = req.body
 
-        if (createdAt) await elementService.deleteElement(id, role, elementId);
-        res.status(200).json(success);
+        await elementService.deleteElement(id, view, uniqueId);
+
+        await elementService.createNewElement(id, type, uniqueId, x, y, width, height, view);
+        
+        await session.commitTransaction();
+
+        res.status(200).json({ success: true });
     } catch(error) {
         res.status(400).json({ message: error.message });
+        session.abortTransaction();
+    } finally {
+        session.endSession();
     }
 }
 

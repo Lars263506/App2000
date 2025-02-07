@@ -15,6 +15,8 @@ import ClubPage from "../models/Clubpage.js";
 
 const getElements = async (id, role) => {
     const clubpage = await ClubPage.findById(id);
+    if (!clubpage) throw new Error("Invalid club id");
+
     let elements = {
         nonmemberElements: [],
         memberElements: [],
@@ -40,8 +42,8 @@ const getElements = async (id, role) => {
  * @disclosure $push was suggested by Copilot
  */
 
-const createNewElement = async (id, view, type, x, y, width, height) => {
-    const newElement = { type, x, y, width, height};
+const createNewElement = async (id, type, uniqueId, x, y, width, height, view) => {
+    const newElement = { type, uniqueId, x, y, width, height};
 
     if (view == "member")  
         await ClubPage.updateOne(
@@ -64,19 +66,17 @@ const createNewElement = async (id, view, type, x, y, width, height) => {
  * @disclosure $pull was suggested by Copilot
  */
 
-const deleteElement = async (clubId, view, elementId) => {
-
+const deleteElement = async (clubId, view, uniqueId) => {
     if (view == "member")  
-        return await ClubPage.deleteOne(
-            {_id:clubId},
-            {$pull: { memberElements, elementId }}
+        return await ClubPage.updateOne(
+            {_id: clubId},
+            {$pull: { memberElements: { uniqueId: uniqueId } }}
         );
-
     else
-        return await ClubPage.deleteOne(
-            {_id:clubId},
-            {$pull: { nonmemberElements, elementId }}
+        return await ClubPage.updateOne(
+            {_id: clubId},
+            {$pull: { nonmemberElements: { uniqueId: uniqueId } }}
         );
-    }
+}
 
 export { getElements, createNewElement, deleteElement };
