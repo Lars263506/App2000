@@ -2,7 +2,15 @@ import ClubPage from "../models/Clubpage.js";
 
 /**
  * @author Lars Andreas Strand og Adrian Johansen
- * @description This service contains functions for managing elements in the database. 
+ * @description This service contains functions for managing elements in the database.
+ * @disclaimer The MQL queries in this file are somewhat inspired by Copilot's suggestions.
+ */
+
+/**
+ * @param req 
+ * @param res
+ * @description Gets elements from the database by club id and role
+ * @throws Error if no elements were found
  */
 
 const getElements = async (id, role) => {
@@ -24,6 +32,14 @@ const getElements = async (id, role) => {
     return elements;
 }
 
+/**
+ * @param req 
+ * @param res
+ * @description Creates a new element in the database
+ * @throws Error if there was an error creating the element in the database
+ * @disclosure $push was suggested by Copilot
+ */
+
 const createNewElement = async (id, view, type, x, y, width, height) => {
     const newElement = { type, x, y, width, height};
 
@@ -40,6 +56,14 @@ const createNewElement = async (id, view, type, x, y, width, height) => {
         );
 }
 
+/**
+ * @param req 
+ * @param res
+ * @description Deletes an element from the database by club id, view and element id
+ * @throws Error if there was an error deleting the element from the database
+ * @disclosure $pull was suggested by Copilot
+ */
+
 const deleteElement = async (clubId, view, elementId) => {
 
     if (view == "member")  
@@ -55,22 +79,4 @@ const deleteElement = async (clubId, view, elementId) => {
         );
     }
 
-
-/* const updateElement = async (clubId, view, request, elementId) => {
-
-    if (view == "member")
-        await clubpage.updateOne(
-            {_id:clubId},
-            {
-                "$set": {  
-                        "memberElements.$": {_id:elementId, ...request} 
-                }
-            },
-            { new:true}
-        );
-        
-    
-}
-*/
-
-export { getElements, createNewElement,  deleteElement };
+export { getElements, createNewElement, deleteElement };
