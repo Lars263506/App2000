@@ -6,6 +6,21 @@ import * as userService from '../services/userService.js';
  */
 
 /**
+ * @returns User array, excluding hashed password
+ * @description Gets all users from the database for testing and debugging purposes
+ * @throws Error if no users were found
+ */
+
+const getAllUsers = async (req, res) => {
+    try {
+        const users = await userService.getAllUsers();
+        res.status(200).json(users);
+    } catch (error) {
+        res.status(404).json({ message: error.message });
+    }
+}
+
+/**
  * @param req 
  * @param res
  * @description Gets a user from the database by id
@@ -151,7 +166,7 @@ const changeRole = async (req, res) => {
     const { email, newRole } = req.body;
     try {
         const { userRole, roleChangedAt } = await userService.changeRole(email, newRole);
-        res.status(200).json(userRole, roleChangedAt);
+        res.status(200).json({ userRole, roleChangedAt });
     } catch (error) {
         res.status(400).json({ message: error.message });
     }
@@ -174,4 +189,4 @@ const deleteUser = async (req, res) => {
     }
 }
 
-export { getUser, getUserByEmail, registerUser, loginUser, logoutUser, changeDisplayName, changeEmail, changePassword, changeRole, deleteUser };
+export { getAllUsers, getUser, getUserByEmail, registerUser, loginUser, logoutUser, changeDisplayName, changeEmail, changePassword, changeRole, deleteUser };

@@ -8,6 +8,17 @@ import User from '../models/User.js';
  */
 
 /**
+ * @returns User array, excluding hashed password
+ * @description Gets all users from the database for testing and debugging purposes
+ * @throws Error if no users were found
+ */
+
+const getAllUsers = async () => {
+    const users = await User.find({}).select('-hashedPassword');
+    if (!users) throw new Error("Users not found");
+    return users;
+};
+/**
  * @param id
  * @returns User object, excluding hashed password
  * @description Gets a user from the database by id
@@ -179,6 +190,7 @@ const deleteUser = async (email) => {
 };
 
 export { 
+    getAllUsers,
     getUser, 
     getUserByEmail, 
     registerUser, 
