@@ -1,14 +1,22 @@
 import { useEffect, useState, useRef } from "react";
 import { ToastContainer, toast } from 'react-toastify';
+import router from "next/router";
+
+import '../../app/globals.css';
+import 'react-toastify/dist/ReactToastify.css';
+
 import Announcement from "./announcements";
 import FieldInformation from "./fieldinformation";
 import MemberList from "./memberlist";
-import '../../app/globals.css';
-import router from "next/router";
-import 'react-toastify/dist/ReactToastify.css';
+
+/**
+ * @author Andreas Nilsen and Lars Andreas Strand
+ * @description This component is the toolbox for the club page. It contains the different components that can be added to the club page.
+ * @disclaimer Much of the code in this file is inspired by ChatGPT and Copilot.
+ */
 
 type Elements = {
-    nonMemberElements: Component[];
+    nonmemberElements: Component[];
     memberElements: Component[];
 };
 
@@ -23,6 +31,7 @@ type Component = {
     y: number;
     width: number;
     height: number;
+    _id?: string;
 };
 
 const Toolbox: React.FC<ToolboxProps> = ({ clubId }) => {
@@ -35,6 +44,7 @@ const Toolbox: React.FC<ToolboxProps> = ({ clubId }) => {
 
     useEffect(() => {
         const fetchElements = async () => {
+            setView("nonmember"); // For now, we only support nonmember view, so this is hardcoded
             try {
                 const accessToken = localStorage.getItem('accessToken');
                 const url = process.env.NEXT_PUBLIC_BACKEND_BASE_URL + '/element/' + id;
@@ -45,8 +55,8 @@ const Toolbox: React.FC<ToolboxProps> = ({ clubId }) => {
                 });
 
                 const data: Elements = await response.json();
-                if (data.nonMemberElements) {
-                    setComponents(data.nonMemberElements);
+                if (data.nonmemberElements) {
+                    setComponents(data.nonmemberElements);
                 } else if (data.memberElements) {
                     setComponents(data.memberElements);
                 }
@@ -55,10 +65,8 @@ const Toolbox: React.FC<ToolboxProps> = ({ clubId }) => {
                 if (error instanceof Error) toast.error(error.message);
             }
         };
-
-        if (id) {
+        if (id) 
             fetchElements();
-        }
     }, [id]);
 
     useEffect(() => {
@@ -69,6 +77,12 @@ const Toolbox: React.FC<ToolboxProps> = ({ clubId }) => {
     }, []);
 
     const handleMouseDown = (e: React.MouseEvent, component: Component) => {
+        component = {
+            ...component,
+            width: 300,
+            height: 300
+        }
+
         setSelectedComponent(component);
     };
 
@@ -121,9 +135,31 @@ const Toolbox: React.FC<ToolboxProps> = ({ clubId }) => {
         e.preventDefault();
     };
 
-    const handleDelete = () => {
+    const handleDelete = async () => {
         if (!selectedComponent) return;
         setComponents(prevComponents => prevComponents.filter(component => component.uniqueId !== selectedComponent.uniqueId));
+
+        try {
+            const accessToken = localStorage.getItem('accessToken');
+            const url = process.env.NEXT_PUBLIC_BACKEND_BASE_URL + '/element/' + id;
+
+            const response = await fetch(url, {
+                method: 'DELETE',
+                headers: { 
+                    'Authorization': 'Bearer ' + accessToken, 
+                    'Content-Type': 'application/json' 
+                },
+                body: JSON.stringify({
+                    view: view,
+                    uniqueId: selectedComponent.uniqueId
+                }),
+            });
+
+            if (response.ok) toast.success('Element deleted successfully');
+            else toast.error('Failed to delete element');
+        } catch (error: unknown) {
+            if (error instanceof Error) toast.error(error.message);
+        }
     };
 
     const createNewElement = async (element: Component) => {
@@ -150,7 +186,10 @@ const Toolbox: React.FC<ToolboxProps> = ({ clubId }) => {
 
             await fetch(url, {
                 method: 'PATCH',
-                headers: accessToken ? { 'Authorization': 'Bearer ' + accessToken, 'Content-Type': 'application/json' } : {},
+                headers: { 
+                    'Authorization': 'Bearer ' + accessToken, 
+                    'Content-Type': 'application/json' 
+                },
                 body: JSON.stringify(element),
             });
 
@@ -190,7 +229,7 @@ const Toolbox: React.FC<ToolboxProps> = ({ clubId }) => {
                             key={type}
                             className="p-3 bg-gray-400 border rounded-lg cursor-pointer text-black mt-10"
                             draggable
-                            onMouseDown={() => setSelectedComponent({
+                            onMouseDown={(e) => handleMouseDown(e, {
                                 type,
                                 uniqueId: Date.now(),
                                 x: 0,
@@ -200,8 +239,8 @@ const Toolbox: React.FC<ToolboxProps> = ({ clubId }) => {
                             })}
                         >
                             {type === "announcement" && "Kunngjøringer"}
-                            {type === "fieldInformation" && "Bane informasjon"}
-                            {type === "memberList" && "Medlems liste"}
+                            {type === "fieldInformation" && "Baneinformasjon"}
+                            {type === "memberList" && "Medlemsliste"}
                         </div>
                     ))}
                     <button

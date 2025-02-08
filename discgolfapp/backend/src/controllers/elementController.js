@@ -51,7 +51,8 @@ const createNewElement = async (req, res) => {
 
 const deleteElement = async (req, res) => {
     try {
-        const { clubId, view, uniqueId } = req.body;
+        const clubId = req.params.id;
+        const { view, uniqueId } = req.body;
 
         const success = await elementService.deleteElement(clubId, view, uniqueId);
         res.status(200).json(success);

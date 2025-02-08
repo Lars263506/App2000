@@ -27,7 +27,7 @@ router.post('/:id',
     createNewElement
 );
 
-router.delete('/',
+router.delete('/:id',
     passport.authenticate('jwt', { session: false }),
     authorizeClubowner,
     deleteElement
