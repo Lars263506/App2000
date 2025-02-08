@@ -22,8 +22,7 @@ type ClubData = {
 
 const Clubpage = () => {
     const [popupType, setPopupType] = useState<'login' | 'register' | null>(null);
-    const [clubData, setClubData] = useState<ClubData | null>(null); 
-    const [loading, setLoading] = useState(true)
+    const [clubData, setClubData] = useState<ClubData | null>(null);
 
     const toggleLoginPopup = () => setPopupType(popupType === 'login' ? null : 'login');
     const toggleRegisterPopup = () => setPopupType(popupType === 'register' ? 'login' : 'register');
@@ -33,66 +32,42 @@ const Clubpage = () => {
     const clubId = router.query.clubId as string | undefined; 
 
     const id = clubId ?? process.env.NEXT_PUBLIC_DEFAULT_CLUBID;
-    const url = process.env.NEXT_PUBLIC_BACKEND_BASE_URL + '/clubpage/' + id;
-
-    useEffect(() => {
-        const fetchClubData = async () => {
-            try { 
-                const response = await fetch(url, {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': 'Bearer ' + localStorage.getItem('accessToken'),
-                    }
-                }); 
-
-                if (response.ok) {
-                    toast.success('Data fetched successfully');
-                }
-                else {
-                    toast.error('Failed to fetch data');
-                }
-                console.log(response);
-                const data = await response.json();
-                setClubData(data);
-            } catch (error: unknown) { 
-                if (error instanceof Error) 
-                    toast.error(error.message);
-            } finally {
-                setLoading(false); 
-            }
-};
-
-        fetchClubData(); 
-    }, []); 
-
-    if (loading) {
-        return <div>Loading...</div>; 
-    }
     
+    const fetchClubData = async () => {
+        try { 
+            const accessToken = localStorage.getItem('accessToken');
+            const url = process.env.NEXT_PUBLIC_BACKEND_BASE_URL + '/clubpage/' + id;
+                
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: accessToken ? { 'Authorization': 'Bearer ' + accessToken } : {},
+            });
+
+            const data: ClubData = await response.json();
+            setClubData(data);
+
+        } catch (error: unknown) { 
+            if (error instanceof Error) 
+                toast.error(error.message);
+        } 
+    };
+    
+    useEffect(() => {
+        if (id) {
+            fetchClubData();
+        }
+    }, [id]);
 
     return (
         <div className="">
             <Navbar toggleLoginPopup={toggleLoginPopup}/>
 
-            {clubData && (
-                <Toolbox 
-                    id={clubData.id}
-                    name={clubData.name}
-                    description={clubData.description}
-                    address={clubData.address}
-                    zipCode={clubData.zipCode}
-                    websiteURL={clubData.websiteURL}
-                    email={clubData.email}
-                    phone={clubData.phone}
-                />
-            )}
+            <Toolbox clubId={clubId}/>
 
             {popupType === 'login' && (
                 <Login togglePopup={toggleLoginPopup} toggleRegisterPopup={toggleRegisterPopup} closePopup={closePopup} />
             )}
             {popupType === 'register' && <Register togglePopup={toggleRegisterPopup} />}
-            <ToastContainer />
         </div>
     )
 }

@@ -18,7 +18,7 @@ const app = express();
 // Middleware to allow cross-origin requests
 app.use(cors({
     origin: process.env.CORS_ORIGIN,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true
 }));
@@ -36,11 +36,11 @@ app.use((req, res, next) => {
 app.use(passport.initialize());
 
 // Rate limiter middleware for all requests
-app.use(rateLimit({
-    windowMs: 10 * 60 * 1000,
-    max: 100,
-    message: "Too many requests. Please try again in 15 minutes."
-}));
+// app.use(rateLimit({
+//     windowMs: 10 * 60 * 1000,
+//     max: 100,
+//     message: "Too many requests. Please try again in 15 minutes."
+// }));
 
 // Routes for handling requests
 app.use('/clubpage', clubpageRoutes);

@@ -1,74 +1,136 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState} from "react";
+import { ToastContainer, toast } from 'react-toastify';
 import Announcement from "./announcements";
 import FieldInformation from "./fieldinformation";
 import MemberList from "./memberlist";
 import '../../app/globals.css';
 import router from "next/router";
+import 'react-toastify/dist/ReactToastify.css';
+
+type Elements = {
+    nonMemberElements: Component[];
+    memberElements: Component[];
+};
 
 type ToolboxProps = {
-    id: string;
-    name: string;
-    description: string;
-    address: string;
-    zipCode: string;
-    websiteURL: string;
-    email: string;
-    phone: string;
+    clubId: string | undefined;
 };
 
 type Component = {
-    id: string;
+    type: string;
     uniqueId: number;
     x: number;
     y: number;
-    content: string;
+    width: number;
+    height: number;
 };
 
-const Toolbox: React.FC<ToolboxProps> = ({
-    id,
-    name,
-    description,
-    address,
-    zipCode,
-    websiteURL,
-    email,
-    phone
-}) => {
+const Toolbox: React.FC<ToolboxProps> = ({clubId}) => {
+
+    const id = clubId ?? process.env.NEXT_PUBLIC_DEFAULT_CLUBID;
+    const [selectedComponent, setSelectedComponent] = useState<Component | null>(null);
+    const [components, setComponents] = useState<Component[]>([]);
+    const [view , setView] = useState<"nonmember" | "member" | "clubowner">("nonmember");
+
+    useEffect(() => {
+        const fetchElements = async () => {
+            try { 
+                const accessToken = localStorage.getItem('accessToken');
+                const url = process.env.NEXT_PUBLIC_BACKEND_BASE_URL + '/element/' + id;
+
+                const response = await fetch(url, {
+                    method: 'GET',
+                    headers: accessToken ? { 'Authorization': 'Bearer ' + accessToken } : {},
+                });
+
+                const data: Elements = await response.json();
+                if (data.nonMemberElements) {
+                    setComponents(data.nonMemberElements);
+                } 
+                else if (data.memberElements) {
+                    setComponents(data.memberElements);
+                }   
+
+            } catch (error: unknown) { 
+                if (error instanceof Error) 
+                    toast.error(error.message);
+            } 
+        };
+
+        if (id) {
+            fetchElements();
+        }
+    }, [id]);
+
     useEffect(() => {
         document.body.style.overflow = "hidden";
         return () => {
             document.body.style.overflow = "auto"; 
         };
     }, []);
-
-    const [selectedComponent, setSelectedComponent] = useState<Component | null>(null);
-    const [components, setComponents] = useState<Component[]>([]);
     
     const handleMouseDown = (e: React.MouseEvent, component: Component) => {
         setSelectedComponent(component);
     };
 
-    const handleDrop = (e: React.DragEvent) => {
-        if(!selectedComponent) return;
+    const handleMouseMove = (e: React.MouseEvent) => {
+        if (!selectedComponent) return;
 
         e.preventDefault();
 
         const dropZone = e.currentTarget.getBoundingClientRect();
+        
+        setSelectedComponent(prevComponent => {
+            if (!prevComponent) return null;
+
+            return {
+                ...prevComponent,
+                x: e.clientX - dropZone.left, 
+                y: e.clientY - dropZone.top,
+                width: selectedComponent.width,
+                height: selectedComponent.height,
+            };
+        });
+    };
+
+    const handleDrop = (e: React.DragEvent) => {
+        if(!selectedComponent) return;
+
+        let isNew = true;
+        for (const component of components) {
+            if (selectedComponent.uniqueId === component.uniqueId) 
+                isNew = false;
+        };
+
+        e.preventDefault();
+
+        const dropZone = e.currentTarget.getBoundingClientRect();
+        
         const x = e.clientX - dropZone.left;
         const y = e.clientY - dropZone.top;
+        const width = selectedComponent.width;
+        const height = selectedComponent.height;
 
         const newComponent: Component = {
-            id: selectedComponent.id,
+            type: selectedComponent.type,
             uniqueId: selectedComponent.uniqueId,
             x,
             y,
-            content: selectedComponent.content
+            width, 
+            height
         };
 
         setComponents(prevComponents => [
             ...prevComponents.filter(component => component.uniqueId !== selectedComponent.uniqueId), 
             newComponent
         ]);
+
+        console.log("New component" + newComponent.width + " " + newComponent.height);
+
+        if (isNew) {
+            createNewElement(newComponent); 
+        } else 
+            updateElement(newComponent);
     };
 
     const handleDragOver = (e: React.DragEvent) => {
@@ -80,22 +142,60 @@ const Toolbox: React.FC<ToolboxProps> = ({
         setComponents(prevComponents => prevComponents.filter(component => component.uniqueId !== selectedComponent.uniqueId));
     };
 
+    const createNewElement = async (element: Component) => {
+        try {
+            const accessToken = localStorage.getItem('accessToken');
+            const url = process.env.NEXT_PUBLIC_BACKEND_BASE_URL + '/element/' + id;
+
+            await fetch(url, {
+                method: 'POST',
+                headers: accessToken ? { 'Authorization': 'Bearer ' + accessToken } : {},
+                body: JSON.stringify({...element, view}),
+            });
+            toast.success('Element created successfully');
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                toast.error(error.message);
+            }
+        }
+    };
+
+    const updateElement = async (element: Component) => {
+        try {
+            const accessToken = localStorage.getItem('accessToken');
+            const url = process.env.NEXT_PUBLIC_BACKEND_BASE_URL + '/element/' + id;
+
+            await fetch(url, {
+                method: 'PATCH',
+                headers: accessToken ? { 'Authorization': 'Bearer ' + accessToken } : {},
+                body: JSON.stringify(element),
+            });
+            toast.success('Element updated successfully');
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                toast.error(error.message);
+            }
+        }
+    };
+
     const renderComponent = (component: Component) => { 
+
         return (
-            <div
+            <div 
                 key={component.uniqueId}
-                style={{ position: 'absolute',  left: component.x, top: component.y }}
+                style={{ position: 'absolute', left: component.x, top: component.y  }}
                 className={`p-4 border-4 bg-gray-200 ${component.uniqueId === selectedComponent?.uniqueId ? 'border-red-200' : ''}`}
                 onMouseDown={(e) => handleMouseDown(e, component)}
+                onMouseMove={handleMouseMove}
                 draggable
             >
-                {component.id === "announcement" && (
+                {component.type === "announcement" && (
                     <Announcement/>
-                )}
-                {component.id === "fieldInformation" && (
+                )}  
+                {component.type === "fieldInformation" && (
                     <FieldInformation/>
                 )}
-                {component.id === "memberList" && (
+                {component.type === "memberList" && (
                     <MemberList/>
                 )}
             </div>
@@ -113,7 +213,14 @@ const Toolbox: React.FC<ToolboxProps> = ({
                         id="announcement"
                         className="p-3 bg-gray-400 border rounded-lg cursor-pointer text-black mt-10"
                         draggable
-                        onMouseDown={(e) => handleMouseDown(e, { id: "announcement", uniqueId: Date.now(), x: 0, y: 0, content: "" })}
+                        onMouseDown={(e) => handleMouseDown(e, { 
+                            type: "announcement", 
+                            uniqueId: Date.now(), 
+                            x: 0, 
+                            y: 0, 
+                            width: 0,
+                            height: 0
+                        })}
                     >
                         Kunngjøringer
                     </div>
@@ -121,7 +228,14 @@ const Toolbox: React.FC<ToolboxProps> = ({
                         id="fieldInformation"
                         className="p-3 bg-gray-400 border rounded-lg cursor-pointer text-black mt-10"
                         draggable
-                        onMouseDown={(e) => handleMouseDown(e, { id: "fieldInformation", uniqueId: Date.now(), x: 0, y: 0, content: "" })}
+                        onMouseDown={(e) => handleMouseDown(e, { 
+                            type: "fieldInformation", 
+                            uniqueId: Date.now(), 
+                            x: 0, 
+                            y: 0, 
+                            width: 0,
+                            height: 0
+                        })}
                     >
                         Bane informasjon
                     </div>
@@ -129,7 +243,14 @@ const Toolbox: React.FC<ToolboxProps> = ({
                         id="memberList"
                         className="p-3 bg-gray-400 border rounded-lg cursor-pointer text-black mt-10"
                         draggable
-                        onMouseDown={(e) => handleMouseDown(e, { id: "memberList", uniqueId: Date.now(), x: 0, y: 0, content: "" })}
+                        onMouseDown={(e) => handleMouseDown(e, { 
+                            type: "memberList", 
+                            uniqueId: Date.now(), 
+                            x: 0, 
+                            y: 0, 
+                            width: 0,
+                            height: 0
+                        })}
                     >
                         Medlems liste
                         </div>
@@ -160,6 +281,7 @@ const Toolbox: React.FC<ToolboxProps> = ({
                     Slett figur
                 </div>
             )}
+            <ToastContainer /> 
         </div>
         
     );
