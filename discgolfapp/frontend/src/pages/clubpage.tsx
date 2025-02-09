@@ -1,6 +1,5 @@
-import { useState, useEffect, Component} from 'react';
+import { useState, useEffect} from 'react';
 import { useRouter } from 'next/router';
-import { ToastContainer, toast } from 'react-toastify';
 
 import '../app/globals.css';
 import 'react-toastify/dist/ReactToastify.css';
@@ -9,20 +8,9 @@ import Toolbox from '../components/clubpage/toolbox';
 import Login from '@/components/login';
 import Register from '@/components/register';
 
-type ClubData = {
-    id: string;
-    name: string;
-    description: string;
-    address: string;
-    zipCode: string;
-    websiteURL: string;
-    email: string;
-    phone: string;
-};
-
 const Clubpage = () => {
     const [popupType, setPopupType] = useState<'login' | 'register' | null>(null);
-    const [clubData, setClubData] = useState<ClubData | null>(null);
+    const [view, setView] = useState<"nonmember" | "member" | "clubowner">("nonmember");
 
     const toggleLoginPopup = () => setPopupType(popupType === 'login' ? null : 'login');
     const toggleRegisterPopup = () => setPopupType(popupType === 'register' ? 'login' : 'register');
@@ -32,29 +20,23 @@ const Clubpage = () => {
     const clubId = router.query.clubId as string | undefined; 
 
     const id = clubId ?? process.env.NEXT_PUBLIC_DEFAULT_CLUBID;
-    
-    const fetchClubData = async () => {
-        try { 
-            const accessToken = localStorage.getItem('accessToken');
-            const url = process.env.NEXT_PUBLIC_BACKEND_BASE_URL + '/clubpage/' + id;
+
+    const getView = async () => {
+        const accessToken = localStorage.getItem('accessToken');
+        const url = process.env.NEXT_PUBLIC_BACKEND_BASE_URL + '/clubpage/view';
                 
-            const response = await fetch(url, {
-                method: 'GET',
-                headers: accessToken ? { 'Authorization': 'Bearer ' + accessToken } : {},
-            });
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: accessToken ? { 'Authorization': 'Bearer ' + accessToken } : {},
+        });
 
-            const data: ClubData = await response.json();
-            setClubData(data);
-
-        } catch (error: unknown) { 
-            if (error instanceof Error) 
-                toast.error(error.message);
-        } 
+        const data = await response.json();
+        setView(data.view);
     };
     
     useEffect(() => {
         if (id) {
-            fetchClubData();
+            getView();
         }
     }, [id]);
 
@@ -62,7 +44,7 @@ const Clubpage = () => {
         <div className="">
             <Navbar toggleLoginPopup={toggleLoginPopup}/>
 
-            <Toolbox clubId={clubId}/>
+            <Toolbox clubId={clubId} view={view}/>
 
             {popupType === 'login' && (
                 <Login togglePopup={toggleLoginPopup} toggleRegisterPopup={toggleRegisterPopup} closePopup={closePopup} />

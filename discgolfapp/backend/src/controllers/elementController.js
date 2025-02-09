@@ -90,4 +90,15 @@ const updateElement = async (req, res) => {
     }
 }
 
-export { getElements, createNewElement,  deleteElement, updateElement };
+const updateText = async (req, res) => {
+    try {
+        const uniqueId = req.params.uniqueId;
+        const { text } = req.body;
+        const success = await elementService.updateText(text, uniqueId);
+        res.status(200).json(success);
+    } catch(error) {
+        res.status(400).json({ message: error.message });
+    }
+}
+
+export { getElements, createNewElement,  deleteElement, updateElement, updateText };

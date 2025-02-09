@@ -31,7 +31,6 @@ const schema = new mongoose.Schema(
         height: {
             type: Number,
             required: true
-
         }
     }
 );

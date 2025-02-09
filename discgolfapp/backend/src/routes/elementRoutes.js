@@ -7,7 +7,8 @@ import {
     getElements,
     createNewElement,
     deleteElement, 
-    updateElement 
+    updateElement,
+    updateText
 } from '../controllers/elementController.js';
 
 /**
@@ -37,6 +38,12 @@ router.patch('/:id',
     passport.authenticate('jwt', { session: false }),
     authorizeClubowner,
     updateElement
+);
+
+router.patch('/text/:uniqueId', 
+    passport.authenticate('jwt', { session: false }),
+    authorizeClubowner,
+    updateText
 );
 
 export default router;

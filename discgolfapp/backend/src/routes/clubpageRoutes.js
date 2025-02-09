@@ -5,6 +5,7 @@ import { authorizeClubowner } from '../middleware/authorization.js';
 import { 
     getAllClubPages, 
     getClubPage, 
+    getView,
     createNewClubPage, 
     deleteClubPage, 
     updateClubPage 
@@ -24,6 +25,11 @@ router.get('/',
 router.get('/:id',
     optionalAuth, 
     getClubPage
+);
+
+router.get('/view',
+    optionalAuth,
+    getView
 );
 
 router.post('/',

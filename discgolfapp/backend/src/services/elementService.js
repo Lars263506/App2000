@@ -82,4 +82,24 @@ const deleteElement = async (clubId, view, uniqueId) => {
     if (!success) throw new Error("Failed to delete element");
 }
 
-export { getElements, createNewElement, deleteElement };
+const updateText = async (text, clubId, uniqueId) => {
+    let success;
+
+    if (view === "member") {
+        success = await ClubPage.updateOne(
+            { _id: clubId, "memberElements.uniqueId": uniqueId }, 
+            { $set: { "memberElements.$.text": text } } 
+        );
+    } else {
+        success = await ClubPage.updateOne(
+            { _id: clubId, "nonmemberElements.uniqueId": uniqueId }, 
+            { $set: { "nonmemberElements.$.text": text } } 
+        );
+    }
+
+    if (!success || success.modifiedCount === 0) {
+        throw new Error("Failed to update text");
+    }
+};
+
+export { getElements, createNewElement, deleteElement, updateText };

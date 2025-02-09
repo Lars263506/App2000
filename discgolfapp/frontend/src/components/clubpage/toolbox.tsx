@@ -22,6 +22,7 @@ type Elements = {
 
 type ToolboxProps = {
     clubId: string | undefined;
+    view: "nonmember" | "member" | "clubowner";
 };
 
 type Component = {
@@ -31,20 +32,19 @@ type Component = {
     y: number;
     width: number;
     height: number;
+    text: string;
     _id?: string;
 };
 
-const Toolbox: React.FC<ToolboxProps> = ({ clubId }) => {
+const Toolbox: React.FC<ToolboxProps> = ({ clubId, view }) => {
     const id = clubId ?? process.env.NEXT_PUBLIC_DEFAULT_CLUBID;
     const [selectedComponent, setSelectedComponent] = useState<Component | null>(null);
     const [components, setComponents] = useState<Component[]>([]);
-    const [view, setView] = useState<"nonmember" | "member" | "clubowner">("nonmember");
     
     const dropZoneRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         const fetchElements = async () => {
-            setView("nonmember"); // For now, we only support nonmember view, so this is hardcoded
             try {
                 const accessToken = localStorage.getItem('accessToken');
                 const url = process.env.NEXT_PUBLIC_BACKEND_BASE_URL + '/element/' + id;
@@ -55,6 +55,7 @@ const Toolbox: React.FC<ToolboxProps> = ({ clubId }) => {
                 });
 
                 const data: Elements = await response.json();
+
                 if (data.nonmemberElements) {
                     setComponents(data.nonmemberElements);
                 } else if (data.memberElements) {
@@ -74,14 +75,17 @@ const Toolbox: React.FC<ToolboxProps> = ({ clubId }) => {
         return () => {
             document.body.style.overflow = "auto";
         };
-    }, []);
+    }, [id]);
 
     const handleMouseDown = (e: React.MouseEvent, component: Component) => {
+        
+        e.stopPropagation();
+
         component = {
             ...component,
             width: 300,
             height: 300
-        }
+        };
 
         setSelectedComponent(component);
     };
@@ -98,6 +102,7 @@ const Toolbox: React.FC<ToolboxProps> = ({ clubId }) => {
         const y = e.clientY - dropZone.top;
 
         const elementRef = document.getElementById(`component-${selectedComponent.uniqueId}`);
+
         let width = selectedComponent.width;
         let height = selectedComponent.height;
 
@@ -125,9 +130,9 @@ const Toolbox: React.FC<ToolboxProps> = ({ clubId }) => {
         console.log(`Component updated - Width: ${width}, Height: ${height}`);
 
         if (exists) {
-            updateElement(newComponent); // Oppdater eksisterende element
+            updateElement(newComponent); 
         } else {
-            createNewElement(newComponent); // Lagre nytt element i backend
+            createNewElement(newComponent);
         }
     };
 
@@ -137,9 +142,11 @@ const Toolbox: React.FC<ToolboxProps> = ({ clubId }) => {
 
     const handleDelete = async () => {
         if (!selectedComponent) return;
-        setComponents(prevComponents => prevComponents.filter(component => component.uniqueId !== selectedComponent.uniqueId));
 
+        setComponents(prevComponents => prevComponents.filter(component => component.uniqueId !== selectedComponent.uniqueId));
+        
         try {
+
             const accessToken = localStorage.getItem('accessToken');
             const url = process.env.NEXT_PUBLIC_BACKEND_BASE_URL + '/element/' + id;
 
@@ -160,6 +167,8 @@ const Toolbox: React.FC<ToolboxProps> = ({ clubId }) => {
         } catch (error: unknown) {
             if (error instanceof Error) toast.error(error.message);
         }
+
+        setSelectedComponent(null);
     };
 
     const createNewElement = async (element: Component) => {
@@ -208,11 +217,11 @@ const Toolbox: React.FC<ToolboxProps> = ({ clubId }) => {
                 left: component.x,
                 top: component.y,
             }}
-            className={`p-4 border-4 bg-gray-200 ${component.uniqueId === selectedComponent?.uniqueId ? 'border-red-200' : ''}`}
+            className={`p-4 border-4 ${component.uniqueId === selectedComponent?.uniqueId ? 'border-red-200' : ''}`}
             onMouseDown={(e) => handleMouseDown(e, component)}
             draggable
         >
-            {component.type === "announcement" && <Announcement />}
+            {component.type === "announcement" && <Announcement uniqueId={component.uniqueId} text={component.text}/>}
             {component.type === "fieldInformation" && <FieldInformation />}
             {component.type === "memberList" && <MemberList />}
         </div>
@@ -235,7 +244,8 @@ const Toolbox: React.FC<ToolboxProps> = ({ clubId }) => {
                                 x: 0,
                                 y: 0,
                                 width: 0,
-                                height: 0
+                                height: 0,
+                                text: ""
                             })}
                         >
                             {type === "announcement" && "Kunngjøringer"}
@@ -260,6 +270,7 @@ const Toolbox: React.FC<ToolboxProps> = ({ clubId }) => {
                 ref={dropZoneRef}
                 onDrop={handleDrop}
                 onDragOver={handleDragOver}
+                onMouseDown={(e) => setSelectedComponent(null)}
                 className="w-full bg-gray-200 p-4 pr-[1400px] border-2 border-black rounded-lg ml-1 mb-20 mt-2"
             >
                 {components.map(renderComponent)}
