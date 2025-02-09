@@ -82,9 +82,7 @@ const Toolbox: React.FC<ToolboxProps> = ({ clubId, view }) => {
         e.stopPropagation();
 
         component = {
-            ...component,
-            width: 300,
-            height: 300
+            ...component
         };
 
         setSelectedComponent(component);
@@ -98,8 +96,8 @@ const Toolbox: React.FC<ToolboxProps> = ({ clubId, view }) => {
         const dropZone = dropZoneRef.current?.getBoundingClientRect();
         if (!dropZone) return;
 
-        const x = e.clientX - dropZone.left;
-        const y = e.clientY - dropZone.top;
+        let x = e.clientX - dropZone.left;
+        let y = e.clientY - dropZone.top;
 
         const elementRef = document.getElementById(`component-${selectedComponent.uniqueId}`);
 
@@ -110,6 +108,8 @@ const Toolbox: React.FC<ToolboxProps> = ({ clubId, view }) => {
             const rect = elementRef.getBoundingClientRect();
             width = rect.width;
             height = rect.height;
+            x = Math.max(dropZone.left + 4, Math.min(x, dropZone.left + dropZone.width - width - 4));
+            y = Math.max(dropZone.top + 4, Math.min(y, dropZone.top + dropZone.height - height - 4));
         }
 
         const newComponent: Component = {
@@ -126,8 +126,6 @@ const Toolbox: React.FC<ToolboxProps> = ({ clubId, view }) => {
             ...prevComponents.filter(component => component.uniqueId !== selectedComponent.uniqueId),
             newComponent
         ]);
-
-        console.log(`Component updated - Width: ${width}, Height: ${height}`);
 
         if (exists) {
             updateElement(newComponent); 
@@ -217,7 +215,7 @@ const Toolbox: React.FC<ToolboxProps> = ({ clubId, view }) => {
                 left: component.x,
                 top: component.y,
             }}
-            className={`p-4 border-4 ${component.uniqueId === selectedComponent?.uniqueId ? 'border-red-200' : ''}`}
+            className={`border-2 ${component.uniqueId === selectedComponent?.uniqueId ? 'border-red-200' : ''}`}
             onMouseDown={(e) => handleMouseDown(e, component)}
             draggable
         >
@@ -271,7 +269,7 @@ const Toolbox: React.FC<ToolboxProps> = ({ clubId, view }) => {
                 onDrop={handleDrop}
                 onDragOver={handleDragOver}
                 onMouseDown={(e) => setSelectedComponent(null)}
-                className="w-full bg-gray-200 p-4 pr-[1400px] border-2 border-black rounded-lg ml-1 mb-20 mt-2"
+                className="bg-gray-200 w-full border-2 border-black rounded-lg ml-1 mr-1 mb-20 mt-2"
             >
                 {components.map(renderComponent)}
             </div>

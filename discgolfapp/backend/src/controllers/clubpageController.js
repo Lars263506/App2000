@@ -23,7 +23,6 @@ const getClubPage = async (req, res) => {
 const getView = async (req, res) => {
     try {
         const role = req.user.role;
-        console.log(role);
         res.json({ role });
     } catch (err) {
         res.status(404).json({error: "No role found"});

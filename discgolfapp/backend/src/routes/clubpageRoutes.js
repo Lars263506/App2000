@@ -22,14 +22,14 @@ router.get('/',
     getAllClubPages
 );
 
-router.get('/:id',
-    optionalAuth, 
-    getClubPage
-);
-
 router.get('/view',
     optionalAuth,
     getView
+);
+
+router.get('/:id',
+    optionalAuth, 
+    getClubPage
 );
 
 router.post('/',
