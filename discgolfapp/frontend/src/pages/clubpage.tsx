@@ -8,6 +8,11 @@ import Toolbox from '../components/clubpage/toolbox';
 import Login from '@/components/login';
 import Register from '@/components/register';
 
+/**
+ * @author Andreas Nilsen and Lars Andreas Strand
+ * @description This is the main page for the clubpage. It contains the navbar and the toolbox.
+ */
+
 const Clubpage = () => {
     const [popupType, setPopupType] = useState<'login' | 'register' | null>(null);
     const [view, setView] = useState<"nonmember" | "member" | "clubowner">("nonmember");
@@ -35,9 +40,7 @@ const Clubpage = () => {
     };
     
     useEffect(() => {
-        if (id) {
-            getView();
-        }
+        if (id) getView();
     }, [id]);
 
     return (
