@@ -14,7 +14,7 @@ const MemberList: React.FC = () => {
             try {
                 //const response = await fetch('/api/members'); 
                 //const data = await response.json();
-                //setMembers(data);
+                setMembers([{ displayname: "Ola Nordmann" }, { displayname: "Kari Nordmann" }]);
 
             } catch (error) {
                 console.error("Feil ved henting av medlemmer:", error);

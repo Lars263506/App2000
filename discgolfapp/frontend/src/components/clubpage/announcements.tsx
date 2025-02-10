@@ -26,7 +26,7 @@ const Announcement: React.FC<AnnouncementProps> = ({ uniqueId, text }) => {
 
     useEffect(() => {
         setContent(text);
-    },[uniqueId]);
+    },[text]);
 
     return (
         <div className="p-4 border rounded-lg shadow-md bg-white w-full">
