@@ -9,7 +9,7 @@ import ToggleBox from './togglebox';
 
 const Navigation: FC = () => {
     const router = useRouter();
-    const navigateToToolbox = () => router.push('/clubpage');
+    const navigateToToolbox = () => router.push('/clublanding');
 
     return (
         <ToggleBox>
