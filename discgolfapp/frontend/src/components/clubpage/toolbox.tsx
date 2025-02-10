@@ -268,7 +268,7 @@ const Toolbox: React.FC<ToolboxProps> = ({ clubId, view }) => {
                 ref={dropZoneRef}
                 onDrop={handleDrop}
                 onDragOver={handleDragOver}
-                onMouseDown={(e) => setSelectedComponent(null)}
+                onMouseDown={() => setSelectedComponent(null)}
                 className="bg-gray-200 w-full border-2 border-black rounded-lg ml-1 mr-1 mb-20 mt-2"
             >
                 {components.map(renderComponent)}
