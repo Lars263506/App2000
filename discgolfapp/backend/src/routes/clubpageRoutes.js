@@ -5,10 +5,12 @@ import { authorizeClubowner } from '../middleware/authorization.js';
 import { 
     getAllClubPages, 
     getClubPage, 
+    getView,
     createNewClubPage, 
     deleteClubPage, 
     updateClubPage 
 } from '../controllers/clubpageController.js';
+import { optionalAuth } from '../middleware/optionalauth.js';
 
 /**
  * @author Lars263506 (Github)
@@ -20,8 +22,13 @@ router.get('/',
     getAllClubPages
 );
 
+router.get('/view',
+    optionalAuth,
+    getView
+);
+
 router.get('/:id',
-    passport.authenticate('jwt', { session: false }),
+    optionalAuth, 
     getClubPage
 );
 

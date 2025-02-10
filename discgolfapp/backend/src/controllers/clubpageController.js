@@ -20,6 +20,15 @@ const getClubPage = async (req, res) => {
     }
 };
 
+const getView = async (req, res) => {
+    try {
+        const role = req.user.role;
+        res.json({ role });
+    } catch (err) {
+        res.status(404).json({error: "No role found"});
+    }
+};
+
 const createNewClubPage = async (req, res) => {
     try {
         const { name, clubOwner, description, address, zipCode, websiteURL, email, phone } = req.body;
@@ -61,4 +70,4 @@ const updateClubPage = async (req, res) => {
     }
 };
 
-export { getAllClubPages, getClubPage, createNewClubPage, deleteClubPage, updateClubPage };
+export { getAllClubPages, getClubPage, getView, createNewClubPage, deleteClubPage, updateClubPage };

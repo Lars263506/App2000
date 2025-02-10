@@ -12,9 +12,9 @@ const MemberList: React.FC = () => {
         // Simulert API-kall, erstatt dette med en backend-kall senere
         const fetchMembers = async () => {
             try {
-                const response = await fetch('/api/members'); 
-                const data = await response.json();
-                setMembers(data);
+                //const response = await fetch('/api/members'); 
+                //const data = await response.json();
+                //setMembers(data);
 
             } catch (error) {
                 console.error("Feil ved henting av medlemmer:", error);

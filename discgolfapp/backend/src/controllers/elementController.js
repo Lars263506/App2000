@@ -51,7 +51,8 @@ const createNewElement = async (req, res) => {
 
 const deleteElement = async (req, res) => {
     try {
-        const { clubId, view, uniqueId } = req.body;
+        const clubId = req.params.id;
+        const { view, uniqueId } = req.body;
 
         const success = await elementService.deleteElement(clubId, view, uniqueId);
         res.status(200).json(success);
@@ -89,4 +90,15 @@ const updateElement = async (req, res) => {
     }
 }
 
-export { getElements, createNewElement,  deleteElement, updateElement };
+const updateText = async (req, res) => {
+    try {
+        const uniqueId = req.params.uniqueId;
+        const { text } = req.body;
+        const success = await elementService.updateText(text, uniqueId);
+        res.status(200).json(success);
+    } catch(error) {
+        res.status(400).json({ message: error.message });
+    }
+}
+
+export { getElements, createNewElement,  deleteElement, updateElement, updateText };
