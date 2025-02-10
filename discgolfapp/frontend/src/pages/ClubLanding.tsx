@@ -7,6 +7,7 @@ import Navbar from '../components/navbar';
 import Footer from '@/components/footer';
 import Login from '@/components/login';
 import Register from '@/components/register';
+import router from 'next/router';
 
 
 const Clublanding = () => {
@@ -26,8 +27,13 @@ const closePopup = () => setPopupType(null);
                 <div className="w-97 h-72 p-4 bg-transparen  rounded  items-center justify-center shadow-none">
                     <Clublist />
                 </div>
-
             </div>
+            <button
+                        onClick={() => router.push('/')}
+                        className="px-2 py-1 bg-black text-white rounded mt-32"
+                    >
+                        Til forsiden
+                    </button>
             {popupType === 'login' && (
             <Login togglePopup={toggleLoginPopup} toggleRegisterPopup={toggleRegisterPopup} closePopup={closePopup} />
             )}
