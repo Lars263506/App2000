@@ -2,7 +2,7 @@ import React from "react";
 
 const MemberBenefit = () => {
   return (
-    <div className="flex-1 bg-gray-200 p-4 rounded-xl shadow">
+    <div className="flex-1 bg-gray-200 p-4 rounded-xl shadow text-black">
       <h2 className="text-xl font-bold">Fordeler ved å bli medlem</h2>
       <p>Her er de viktigste punktene om fordelene ved å være medlem i et discgolf-forbund:</p>
       <ul className="mt-2 list-disc pl-5 space-y-2">

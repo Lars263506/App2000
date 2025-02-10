@@ -64,7 +64,7 @@ const ClubListmap = () => {
 
   return (
     <div className="flex gap-4">
-      <div className="w-96 bg-gray-200 p-4 rounded-xl shadow">
+      <div className="w-96 bg-gray-200 p-4 rounded-xl shadow text-black">
         <input
           type="text"
           placeholder="Filtrer på klubbnavn..."
