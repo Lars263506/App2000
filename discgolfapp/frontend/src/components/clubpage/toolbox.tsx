@@ -1,6 +1,5 @@
 import { useEffect, useState, useRef } from "react";
 import { ToastContainer, toast } from 'react-toastify';
-import router from "next/router";
 
 import '../../app/globals.css';
 import 'react-toastify/dist/ReactToastify.css';
@@ -251,12 +250,6 @@ const Toolbox: React.FC<ToolboxProps> = ({ clubId, view }) => {
                             {type === "memberList" && "Medlemsliste"}
                         </div>
                     ))}
-                    <button
-                        onClick={() => router.push('/')}
-                        className="px-2 py-1 bg-black text-white rounded mt-32"
-                    >
-                        Til forsiden
-                    </button>
                     <div className="text-black mt-40">
                         Klikk på figur så kommer knapp for å slette.
                     </div>
