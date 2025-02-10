@@ -8,8 +8,7 @@ import {
     getUser,
     getUserByEmail,
     registerUser, 
-    loginUser, 
-    logoutUser, 
+    loginUser,
     changeDisplayName,
     changeEmail, 
     changePassword,
@@ -33,10 +32,6 @@ router.get('/:id',
     passport.authenticate('jwt', { session: false }), 
     authorizeAdmin, 
     getUser
-);
-
-router.get('/logout', 
-    logoutUser
 );
 
 router.post('/get-by-email', 
