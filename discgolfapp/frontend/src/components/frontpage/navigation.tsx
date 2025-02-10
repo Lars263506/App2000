@@ -2,6 +2,11 @@ import { useRouter } from 'next/router';
 import { FC } from 'react';
 import ToggleBox from './togglebox';
 
+/**
+ * @author Lars Andreas Strand and Andreas Nilsen
+ * @description This component is the navigation for the frontpage. It contains the different components that can be navigated to.
+ */
+
 const Navigation: FC = () => {
     const router = useRouter();
     const navigateToToolbox = () => router.push('/clubpage');

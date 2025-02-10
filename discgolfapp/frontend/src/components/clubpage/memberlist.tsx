@@ -1,5 +1,10 @@
 import { useState, useEffect } from "react";
 
+/**
+ * @author Andreas Nilsen 
+ * @description Line: 36-40, ChatGPT has helped with styling in tailwind.  
+ */
+
 type Member = {
     displayname: string;
 };
