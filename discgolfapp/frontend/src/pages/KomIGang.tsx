@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
-import { useRouter } from 'next/router';
 import Navbar from '@/components/navbar';
 import Footer from '@/components/footer';
 import Login from '@/components/login';
@@ -17,7 +16,6 @@ import Register from '@/components/register';
 const KomIGang = () => {
   const [popupType, setPopupType] = useState<'login' | 'register' | null>(null);
   const [selectedInfo, setSelectedInfo] = useState<'beginner' | 'advanced'>('beginner');
-  const router = useRouter();
 
   const toggleLoginPopup = () => setPopupType(popupType === 'login' ? null : 'login');
   const toggleRegisterPopup = () => setPopupType(popupType === 'register' ? 'login' : 'register');

@@ -29,11 +29,15 @@ const ClubListmap = () => {
   }, []);
 
   const geocodeAddress = useCallback((address: string) => {
-    return new Promise<google.maps.LatLng>((resolve, reject) => {
-      new window.google.maps.Geocoder().geocode({ address }, (results, status) => {
-        status === 'OK' && results && results[0] ? resolve(results[0].geometry.location) : reject('Geocoding failed');
+      return new Promise<google.maps.LatLng>((resolve, reject) => {
+          new window.google.maps.Geocoder().geocode({ address }, (results, status) => {
+              if (status === 'OK' && results && results[0]) {
+                  resolve(results[0].geometry.location);
+              } else {
+                  reject('Geocoding failed');
+              }
+          });
       });
-    });
   }, []);
 
   useEffect(() => {
