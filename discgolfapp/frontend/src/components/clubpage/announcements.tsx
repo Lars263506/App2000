@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from 'react';
 
+/**
+ * @author Andreas Nilsen 
+ * @description Line: 38-41, ChatGPT has helped with styling in tailwind.  
+ */
+
 type AnnouncementProps = {
     uniqueId: number;
     text: string;
