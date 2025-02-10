@@ -188,12 +188,6 @@ const KomIGang = () => {
             </div>
           </div>
         </div>
-        <button
-          onClick={() => router.push('/')}
-          className="px-2 py-1 bg-black text-white rounded rounded-mg"
-        >
-          Hjem
-        </button>
       </div>
       </div>
 

@@ -8,7 +8,6 @@ import Footer from '@/components/footer';
 import Login from '@/components/login';
 import Register from '@/components/register';
 
-
 const Clublanding = () => {
 
 const [popupType, setPopupType] = useState<'login' | 'register' | null>(null);
@@ -26,7 +25,6 @@ const closePopup = () => setPopupType(null);
                 <div className="w-97 h-72 p-4 bg-transparen  rounded  items-center justify-center shadow-none">
                     <Clublist />
                 </div>
-
             </div>
             {popupType === 'login' && (
             <Login togglePopup={toggleLoginPopup} toggleRegisterPopup={toggleRegisterPopup} closePopup={closePopup} />
