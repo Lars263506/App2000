@@ -101,22 +101,6 @@ const loginUser = async (email, password) => {
 };
 
 /**
- * @returns Object containing expired access token and refresh token
- * @description Logs out a user by creating expired tokens to invalidate the current tokens
- */
-
-const logoutUser = async () => {
-        const expiredAccessToken = jwt.sign({}, process.env.JWT_ACCESS_SECRET, { expiresIn: '1ms' });
-        const expiredRefreshToken = jwt.sign({}, process.env.JWT_REFRESH_SECRET, { expiresIn: '1ms' });
-
-        if (!expiredAccessToken || !expiredRefreshToken) {
-            throw new Error("Error creating expired tokens and logging out user");
-        }
-
-        return { expiredAccessToken, expiredRefreshToken };
-};
-
-/**
  * @param email
  * @param displayName
  * @returns Time of display name change
@@ -194,8 +178,7 @@ export {
     getUser, 
     getUserByEmail, 
     registerUser, 
-    loginUser, 
-    logoutUser, 
+    loginUser,
     changeDisplayName, 
     changeEmail, 
     changePassword, 

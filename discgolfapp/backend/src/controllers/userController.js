@@ -91,22 +91,6 @@ const loginUser = async (req, res) => {
 /**
  * @param req 
  * @param res
- * @description Logs out a user and invalidates the refresh token
- * @throws Error if there was an error logging out the user
- */
-
-const logoutUser = async (res) => {
-    try {
-        const expiredTokens = await userService.logoutUser(token);
-        res.status(200).json({ expiredTokens });
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
-}
-
-/**
- * @param req 
- * @param res
  * @description Changes the display name of a user in the database
  * @throws Error if there was an error changing the display name in the database
  */
@@ -189,4 +173,4 @@ const deleteUser = async (req, res) => {
     }
 }
 
-export { getAllUsers, getUser, getUserByEmail, registerUser, loginUser, logoutUser, changeDisplayName, changeEmail, changePassword, changeRole, deleteUser };
+export { getAllUsers, getUser, getUserByEmail, registerUser, loginUser, changeDisplayName, changeEmail, changePassword, changeRole, deleteUser };
