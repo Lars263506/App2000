@@ -8,18 +8,7 @@ import Announcement from "./announcements";
 import FieldInformation from "./fieldinformation";
 import MemberList from "./memberlist";
 
-/**
- * @author Andreas Nilsen and Lars Andreas Strand
- * @description This component is the toolbox for the club page. It contains the different components that can be added to the club page.
- * @disclaimer Much of the code in this file is inspired by ChatGPT and Copilot.
- */
-
-type Elements = {
-    nonmemberElements: Component[];
-    memberElements: Component[];
-};
-
-type ToolboxProps = {
+type DropZoneProps = {
     clubId: string | undefined;
     view: "nonmember" | "member" | "clubowner";
 };
@@ -35,11 +24,16 @@ type Component = {
     _id?: string;
 };
 
-const Toolbox: React.FC<ToolboxProps> = ({ clubId, view }) => {
+type Elements = {
+    nonmemberElements: Component[];
+    memberElements: Component[];
+};
+
+const DropZone: React.FC<DropZoneProps> = ({ clubId, view }) => {
     const id = clubId ?? process.env.NEXT_PUBLIC_DEFAULT_CLUBID;
     const [selectedComponent, setSelectedComponent] = useState<Component | null>(null);
     const [components, setComponents] = useState<Component[]>([]);
-    
+
     const dropZoneRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -76,16 +70,6 @@ const Toolbox: React.FC<ToolboxProps> = ({ clubId, view }) => {
         };
     }, [id]);
 
-    const handleMouseDown = (e: React.MouseEvent, component: Component) => {
-        
-        e.stopPropagation();
-
-        component = {
-            ...component
-        };
-
-        setSelectedComponent(component);
-    };
 
     const handleDrop = (e: React.DragEvent) => {
         if (!selectedComponent) return;
@@ -137,35 +121,34 @@ const Toolbox: React.FC<ToolboxProps> = ({ clubId, view }) => {
         e.preventDefault();
     };
 
-    const handleDelete = async () => {
-        if (!selectedComponent) return;
+    const renderComponent = (component: Component) => (
+        <div
+            key={component.uniqueId}
+            id={`component-${component.uniqueId}`}
+            style={{
+                position: 'absolute',
+                left: component.x,
+                top: component.y,
+            }}
+            className={`border-2 ${component.uniqueId === selectedComponent?.uniqueId ? 'border-red-200' : ''}`}
+            onMouseDown={(e) => handleMouseDown(e, component)}
+            draggable
+        >
+            {component.type === "announcement" && <Announcement uniqueId={component.uniqueId} text={component.text}/>}
+            {component.type === "fieldInformation" && <FieldInformation />}
+            {component.type === "memberList" && <MemberList />}
+        </div>
+    );
 
-        setComponents(prevComponents => prevComponents.filter(component => component.uniqueId !== selectedComponent.uniqueId));
+    const handleMouseDown = (e: React.MouseEvent, component: Component) => {
         
-        try {
+        e.stopPropagation();
 
-            const accessToken = localStorage.getItem('accessToken');
-            const url = process.env.NEXT_PUBLIC_BACKEND_BASE_URL + '/element/' + id;
+        component = {
+            ...component
+        };
 
-            const response = await fetch(url, {
-                method: 'DELETE',
-                headers: { 
-                    'Authorization': 'Bearer ' + accessToken, 
-                    'Content-Type': 'application/json' 
-                },
-                body: JSON.stringify({
-                    view: view,
-                    uniqueId: selectedComponent.uniqueId
-                }),
-            });
-
-            if (response.ok) toast.success('Element deleted successfully');
-            else toast.error('Failed to delete element');
-        } catch (error: unknown) {
-            if (error instanceof Error) toast.error(error.message);
-        }
-
-        setSelectedComponent(null);
+        setSelectedComponent(component);
     };
 
     const createNewElement = async (element: Component) => {
@@ -205,66 +188,46 @@ const Toolbox: React.FC<ToolboxProps> = ({ clubId, view }) => {
         }
     };
 
-    const renderComponent = (component: Component) => (
-        <div
-            key={component.uniqueId}
-            id={`component-${component.uniqueId}`}
-            style={{
-                position: 'absolute',
-                left: component.x,
-                top: component.y,
-            }}
-            className={`border-2 ${component.uniqueId === selectedComponent?.uniqueId ? 'border-red-200' : ''}`}
-            onMouseDown={(e) => handleMouseDown(e, component)}
-            draggable
-        >
-            {component.type === "announcement" && <Announcement uniqueId={component.uniqueId} text={component.text}/>}
-            {component.type === "fieldInformation" && <FieldInformation />}
-            {component.type === "memberList" && <MemberList />}
-        </div>
-    );
+    const handleDelete = async () => {
+        if (!selectedComponent) return;
 
-    return (
-        <div className="flex h-screen">
-            {/* Toolbox på venstre side */}
-            <div className="w-80% bg-gray-200 mb-20">
-                <div className="p-4 border">
-                    <h3 className="text-lg font-bold mb-4 text-black">Verktøykasse</h3>
-                    {["announcement", "fieldInformation", "memberList"].map((type) => (
-                        <div
-                            key={type}
-                            className="p-3 bg-gray-400 border rounded-lg cursor-pointer text-black mt-10"
-                            draggable
-                            onMouseDown={(e) => handleMouseDown(e, {
-                                type,
-                                uniqueId: Date.now(),
-                                x: 0,
-                                y: 0,
-                                width: 0,
-                                height: 0,
-                                text: ""
-                            })}
-                        >
-                            {type === "announcement" && "Kunngjøringer"}
-                            {type === "fieldInformation" && "Baneinformasjon"}
-                            {type === "memberList" && "Medlemsliste"}
-                        </div>
-                    ))}
-                    <div className="text-black mt-40">
-                        Klikk på figur så kommer knapp for å slette.
-                    </div>
-                </div>
-            </div>
-            
-            {/* Slett-knapp */}
-            {selectedComponent && (
-                <div className="absolute bottom-4 left-4 p-2 bg-red-500 text-white rounded cursor-pointer" onClick={handleDelete}>
-                    Slett figur
-                </div>
-            )}
-            <ToastContainer />
-        </div>
-    );
+        setComponents(prevComponents => prevComponents.filter(component => component.uniqueId !== selectedComponent.uniqueId));
+        
+        try {
+
+            const accessToken = localStorage.getItem('accessToken');
+            const url = process.env.NEXT_PUBLIC_BACKEND_BASE_URL + '/element/' + id;
+
+            const response = await fetch(url, {
+                method: 'DELETE',
+                headers: { 
+                    'Authorization': 'Bearer ' + accessToken, 
+                    'Content-Type': 'application/json' 
+                },
+                body: JSON.stringify({
+                    view: view,
+                    uniqueId: selectedComponent.uniqueId
+                }),
+            });
+
+            if (response.ok) toast.success('Element deleted successfully');
+            else toast.error('Failed to delete element');
+        } catch (error: unknown) {
+            if (error instanceof Error) toast.error(error.message);
+        }
+
+        setSelectedComponent(null);
+    };
+    
+    return <div
+        ref={dropZoneRef}
+        onDrop={handleDrop}
+        onDragOver={handleDragOver}
+        onMouseDown={() => setSelectedComponent(null)}
+        className="bg-gray-200 w-full border-2 border-black rounded-lg ml-1 mr-1 mb-20 mt-2"
+    >
+        {components.map(renderComponent)}
+        <ToastContainer />
+    </div>;
+
 };
-
-export default Toolbox;
