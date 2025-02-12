@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import { ToastContainer, toast } from 'react-toastify';
 
+import Image from 'next/image'; 
 import '../../app/globals.css';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -39,6 +40,8 @@ const Toolbox: React.FC<ToolboxProps> = ({ clubId, view }) => {
     const id = clubId ?? process.env.NEXT_PUBLIC_DEFAULT_CLUBID;
     const [selectedComponent, setSelectedComponent] = useState<Component | null>(null);
     const [components, setComponents] = useState<Component[]>([]);
+    const [isToolboxOpen, setIsToolboxOpen] = useState(true);
+    const [currentView, setCurrentView] = useState(view);
     
     const dropZoneRef = useRef<HTMLDivElement>(null);
 
@@ -95,8 +98,8 @@ const Toolbox: React.FC<ToolboxProps> = ({ clubId, view }) => {
         const dropZone = dropZoneRef.current?.getBoundingClientRect();
         if (!dropZone) return;
 
-        let x = e.clientX - dropZone.left;
-        let y = e.clientY - dropZone.top;
+        let x = e.clientX;
+        let y = e.clientY;
 
         const elementRef = document.getElementById(`component-${selectedComponent.uniqueId}`);
 
@@ -111,10 +114,13 @@ const Toolbox: React.FC<ToolboxProps> = ({ clubId, view }) => {
             y = Math.max(dropZone.top + 4, Math.min(y, dropZone.top + dropZone.height - height - 4));
         }
 
+        const xPercent = ((x - dropZone.left) / dropZone.width) * 100;
+        const yPercent = ((y - dropZone.top) / dropZone.height) * 100;
+
         const newComponent: Component = {
             ...selectedComponent,
-            x,
-            y,
+            x: xPercent,
+            y: yPercent,
             width,
             height
         };
@@ -211,8 +217,8 @@ const Toolbox: React.FC<ToolboxProps> = ({ clubId, view }) => {
             id={`component-${component.uniqueId}`}
             style={{
                 position: 'absolute',
-                left: component.x,
-                top: component.y,
+                left: `${component.x}%`,
+                top: `${component.y}%`,
             }}
             className={`border-2 ${component.uniqueId === selectedComponent?.uniqueId ? 'border-red-200' : ''}`}
             onMouseDown={(e) => handleMouseDown(e, component)}
@@ -226,10 +232,21 @@ const Toolbox: React.FC<ToolboxProps> = ({ clubId, view }) => {
 
     return (
         <div className="flex h-screen">
-            {/* Toolbox på venstre side */}
+        <button 
+            className="absolute top-20 left-2 p-2 bg-grey-400 text-white rounded"
+            onClick={() => setIsToolboxOpen(!isToolboxOpen)}
+        >
+           <Image 
+                    src={isToolboxOpen ? "/bx-window-close.svg"  : "/bx-window-open.svg"} 
+                    alt="Toolbox Icon" 
+                    width={24} 
+                    height={24} 
+                />
+            </button> 
+        {isToolboxOpen && (
             <div className="w-80% bg-gray-200 mb-20">
                 <div className="p-4 border">
-                    <h3 className="text-lg font-bold mb-4 text-black">Verktøykasse</h3>
+                    <h3 className="text-lg font-bold mb-4 mt-8 text-black">Verktøykasse</h3>
                     {["announcement", "fieldInformation", "memberList"].map((type) => (
                         <div
                             key={type}
@@ -250,11 +267,30 @@ const Toolbox: React.FC<ToolboxProps> = ({ clubId, view }) => {
                             {type === "memberList" && "Medlemsliste"}
                         </div>
                     ))}
-                    <div className="text-black mt-40">
-                        Klikk på figur så kommer knapp for å slette.
-                    </div>
                 </div>
+                  {/* Knapp for å bytte mellom nonmember og member visning */}
+                  <div className="flex justify-around p-4 border-t mt-88">
+                        <button onClick={() => setCurrentView("member")}>
+                            <Image 
+                                src="/bxs-user-check.svg" 
+                                alt="Member View" 
+                                width={40} 
+                                height={40} 
+                                className={currentView === "member" ? "border-2 border-blue-500 rounded-lg" : ""}
+                            />
+                        </button>
+                        <button onClick={() => setCurrentView("nonmember")}>
+                            <Image 
+                                src="/bxs-user-x.svg" 
+                                alt="Nonmember View" 
+                                width={40} 
+                                height={40} 
+                                className={currentView === "nonmember" ? "border-2 border-blue-500 rounded-lg" : ""}
+                            />
+                        </button>
+                    </div>
             </div>
+        )}
 
             {/* Område for å plassere og flytte på elementene */}
             <div
@@ -279,3 +315,4 @@ const Toolbox: React.FC<ToolboxProps> = ({ clubId, view }) => {
 };
 
 export default Toolbox;
+
