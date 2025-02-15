@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import { ToastContainer, toast } from 'react-toastify';
 
-import Image from 'next/image'; 
+import Image from 'next/image';
 import '../../app/globals.css';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -15,14 +15,13 @@ import MemberList from "./memberlist";
  * @disclaimer Much of the code in this file is inspired by ChatGPT and Copilot.
  */
 
-type Elements = {
+type ComponentGroups = {
     nonmemberElements: Component[];
     memberElements: Component[];
 };
 
 type ToolboxProps = {
     clubId: string | undefined;
-    view: "nonmember" | "member" | "clubowner";
 };
 
 type Component = {
@@ -36,56 +35,100 @@ type Component = {
     _id?: string;
 };
 
-const Toolbox: React.FC<ToolboxProps> = ({ clubId, view }) => {
-    const id = clubId ?? process.env.NEXT_PUBLIC_DEFAULT_CLUBID;
+const Toolbox: React.FC<ToolboxProps> = ({ clubId }) => {
     const [selectedComponent, setSelectedComponent] = useState<Component | null>(null);
+    const [componentGroups, setComponentGroups] = useState<ComponentGroups>({ nonmemberElements: [], memberElements: [] });
     const [components, setComponents] = useState<Component[]>([]);
-    const [isToolboxOpen, setIsToolboxOpen] = useState(true);
-    const [currentView, setCurrentView] = useState(view);
-    
+    const [currentView, setCurrentView] = useState("");
+    const [isToolboxOpen, setIsToolboxOpen] = useState(false);
+    const [editRights, setEditRights] = useState(false);
+
     const dropZoneRef = useRef<HTMLDivElement>(null);
 
+    /**
+     * Runs when the component is mounted.
+     * Fetches the view and elements for the club page, and checks if the user has edit rights.
+     */
     useEffect(() => {
-        const fetchElements = async () => {
-            try {
-                const accessToken = localStorage.getItem('accessToken');
-                const url = process.env.NEXT_PUBLIC_BACKEND_BASE_URL + '/element/' + id;
+        if (clubId) {
+            const fetchData = async () => {
+                await checkEditRights();
+                await fetchElements();
+                await getView();
+            };
+            fetchData();
+            document.body.style.overflow = "hidden";
+            return () => {
+                document.body.style.overflow = "auto";
+            };
+        }
+    }, [clubId]);
 
-                const response = await fetch(url, {
-                    method: 'GET',
-                    headers: accessToken ? { 'Authorization': 'Bearer ' + accessToken } : {},
-                });
-
-                const data: Elements = await response.json();
-
-                if (data.nonmemberElements) {
-                    setComponents(data.nonmemberElements);
-                } else if (data.memberElements) {
-                    setComponents(data.memberElements);
-                }
-
-            } catch (error: unknown) {
-                if (error instanceof Error) toast.error(error.message);
-            }
-        };
-        if (id) 
-            fetchElements();
-    }, [id]);
-
+    /**
+     * Runs when the current view is changed.
+     * Updates the components to the new view.
+     */
     useEffect(() => {
-        document.body.style.overflow = "hidden";
-        return () => {
-            document.body.style.overflow = "auto";
-        };
-    }, [id]);
+        if (currentView === "nonmember")
+            setComponents(componentGroups.nonmemberElements);
+        else if (currentView === "member")
+            setComponents(componentGroups.memberElements);
+
+        console.log("View: ", currentView);
+        console.log("ComponentGroups: ", componentGroups);
+    }, [currentView, componentGroups]);
+
+    const getView = async () => {
+        const accessToken = localStorage.getItem('accessToken');
+        const url = process.env.NEXT_PUBLIC_BACKEND_BASE_URL + '/clubpage/view/' + clubId;
+
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: accessToken ? { 'Authorization': 'Bearer ' + accessToken } : {},
+        });
+
+        const data = await response.json();
+        setCurrentView(data.view);
+    };
+
+    const fetchElements = async () => {
+        try {
+            const accessToken = localStorage.getItem('accessToken');
+            const url = process.env.NEXT_PUBLIC_BACKEND_BASE_URL + '/element/' + clubId;
+
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: accessToken ? { 'Authorization': 'Bearer ' + accessToken } : {},
+            });
+
+            const data: ComponentGroups = await response.json();
+
+            setComponentGroups(data);
+        } catch (error: unknown) {
+            if (error instanceof Error) toast.error(error.message);
+        }
+    };
+
+    const checkEditRights = async () => {
+        try {
+            const accessToken = localStorage.getItem('accessToken');
+            const url = process.env.NEXT_PUBLIC_BACKEND_BASE_URL + '/users/permissions';
+
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: accessToken ? { 'Authorization': 'Bearer ' + accessToken } : {},
+            });
+
+            const data = await response.json();
+            setEditRights(data.canEditClubPage);
+        } catch (error: unknown) {
+            if (error instanceof Error) toast.error(error.message);
+        }
+    };
 
     const handleMouseDown = (e: React.MouseEvent, component: Component) => {
-        
-        e.stopPropagation();
 
-        component = {
-            ...component
-        };
+        e.stopPropagation();
 
         setSelectedComponent(component);
     };
@@ -127,16 +170,34 @@ const Toolbox: React.FC<ToolboxProps> = ({ clubId, view }) => {
 
         const exists = components.some(comp => comp.uniqueId === selectedComponent.uniqueId);
 
-        setComponents(prevComponents => [
-            ...prevComponents.filter(component => component.uniqueId !== selectedComponent.uniqueId),
-            newComponent
-        ]);
+        setComponentGroups(prevGroups => {
+            if (currentView === "nonmember") {
+                return {
+                    ...prevGroups,
+                    nonmemberElements: [
+                        ...prevGroups.nonmemberElements.filter(component => component.uniqueId !== selectedComponent.uniqueId),
+                        newComponent
+                    ]
+                };
+            } else if (currentView === "member") {
+                return {
+                    ...prevGroups,
+                    memberElements: [
+                        ...prevGroups.memberElements.filter(component => component.uniqueId !== selectedComponent.uniqueId),
+                        newComponent
+                    ]
+                };
+            }
+            return prevGroups;
+        });
 
         if (exists) {
-            updateElement(newComponent); 
+            updateElement(newComponent);
         } else {
             createNewElement(newComponent);
         }
+
+        setSelectedComponent(null);
     };
 
     const handleDragOver = (e: React.DragEvent) => {
@@ -147,20 +208,20 @@ const Toolbox: React.FC<ToolboxProps> = ({ clubId, view }) => {
         if (!selectedComponent) return;
 
         setComponents(prevComponents => prevComponents.filter(component => component.uniqueId !== selectedComponent.uniqueId));
-        
+
         try {
 
             const accessToken = localStorage.getItem('accessToken');
-            const url = process.env.NEXT_PUBLIC_BACKEND_BASE_URL + '/element/' + id;
+            const url = process.env.NEXT_PUBLIC_BACKEND_BASE_URL + '/element/' + clubId;
 
             const response = await fetch(url, {
                 method: 'DELETE',
-                headers: { 
-                    'Authorization': 'Bearer ' + accessToken, 
-                    'Content-Type': 'application/json' 
+                headers: {
+                    'Authorization': 'Bearer ' + accessToken,
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    view: view,
+                    view: currentView,
                     uniqueId: selectedComponent.uniqueId
                 }),
             });
@@ -177,15 +238,31 @@ const Toolbox: React.FC<ToolboxProps> = ({ clubId, view }) => {
     const createNewElement = async (element: Component) => {
         try {
             const accessToken = localStorage.getItem('accessToken');
-            const url = process.env.NEXT_PUBLIC_BACKEND_BASE_URL + '/element/' + id;
+            const url = process.env.NEXT_PUBLIC_BACKEND_BASE_URL + '/element/' + clubId;
 
             await fetch(url, {
                 method: 'POST',
                 headers: accessToken ? { 'Authorization': 'Bearer ' + accessToken, 'Content-Type': 'application/json' } : {},
-                body: JSON.stringify({ ...element, view }),
+                body: JSON.stringify({ ...element, view: currentView }),
             });
 
             toast.success('Element created successfully');
+
+            setComponentGroups(prevGroups => {
+                if (currentView === "nonmember") {
+                    return {
+                        ...prevGroups,
+                        nonmemberElements: [...prevGroups.nonmemberElements, element]
+                    };
+                } else if (currentView === "member") {
+                    return {
+                        ...prevGroups,
+                        memberElements: [...prevGroups.memberElements, element]
+                    };
+                }
+                return prevGroups;
+            });
+
         } catch (error: unknown) {
             if (error instanceof Error) toast.error(error.message);
         }
@@ -194,15 +271,32 @@ const Toolbox: React.FC<ToolboxProps> = ({ clubId, view }) => {
     const updateElement = async (element: Component) => {
         try {
             const accessToken = localStorage.getItem('accessToken');
-            const url = process.env.NEXT_PUBLIC_BACKEND_BASE_URL + '/element/' + id;
+            const url = process.env.NEXT_PUBLIC_BACKEND_BASE_URL + '/element/' + clubId;
+
+            const {text, _id, ...request} = element;
 
             await fetch(url, {
                 method: 'PATCH',
-                headers: { 
-                    'Authorization': 'Bearer ' + accessToken, 
-                    'Content-Type': 'application/json' 
+                headers: {
+                    'Authorization': 'Bearer ' + accessToken,
+                    'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(element),
+                body: JSON.stringify({ ...request, view: currentView }),
+            });
+
+            setComponentGroups(prevGroups => {
+                if (currentView === "nonmember") {
+                    return {
+                        ...prevGroups,
+                        nonmemberElements: prevGroups.nonmemberElements.map(comp => comp.uniqueId === element.uniqueId ? element : comp)
+                    };
+                } else if (currentView === "member") {
+                    return {
+                        ...prevGroups,
+                        memberElements: prevGroups.memberElements.map(comp => comp.uniqueId === element.uniqueId ? element : comp)
+                    };
+                }
+                return prevGroups;
             });
 
             toast.success('Element updated successfully');
@@ -221,78 +315,79 @@ const Toolbox: React.FC<ToolboxProps> = ({ clubId, view }) => {
                 top: `${component.y}%`,
             }}
             className={`border-2 ${component.uniqueId === selectedComponent?.uniqueId ? 'border-red-200' : ''}`}
-            onMouseDown={(e) => handleMouseDown(e, component)}
-            draggable
+            onMouseDown={editRights ? (e) => handleMouseDown(e, component) : undefined}
+            draggable={editRights}
         >
-            {component.type === "announcement" && <Announcement uniqueId={component.uniqueId} text={component.text}/>}
+            {component.type === "announcement" && <Announcement uniqueId={component.uniqueId} text={component.text} editRights={editRights}/>}
             {component.type === "fieldInformation" && <FieldInformation />}
             {component.type === "memberList" && <MemberList />}
         </div>
     );
 
+    /**
+     * @returns The toolbox component.
+     * @description The toolbox component contains the different components that can be added to the club page.
+     */
     return (
         <div className="flex h-screen">
-        <button 
-            className="absolute top-20 left-2 p-2 bg-grey-400 text-white rounded"
-            onClick={() => setIsToolboxOpen(!isToolboxOpen)}
-        >
-           <Image 
-                    src={isToolboxOpen ? "/bx-window-close.svg"  : "/bx-window-open.svg"} 
-                    alt="Toolbox Icon" 
-                    width={24} 
-                    height={24} 
-                />
-            </button> 
-        {isToolboxOpen && (
-            <div className="w-80% bg-gray-200 mb-20">
-                <div className="p-4 border">
-                    <h3 className="text-lg font-bold mb-4 mt-8 text-black">Verktøykasse</h3>
-                    {["announcement", "fieldInformation", "memberList"].map((type) => (
-                        <div
-                            key={type}
-                            className="p-3 bg-gray-400 border rounded-lg cursor-pointer text-black mt-10"
-                            draggable
-                            onMouseDown={(e) => handleMouseDown(e, {
-                                type,
-                                uniqueId: Date.now(),
-                                x: 0,
-                                y: 0,
-                                width: 0,
-                                height: 0,
-                                text: ""
-                            })}
+            {editRights && (
+                <button
+                    className="absolute top-20 left-2 p-2 bg-grey-400 text-white rounded"
+                    onClick={() => setIsToolboxOpen(!isToolboxOpen)}
+                >
+                    <Image
+                        src={isToolboxOpen ? "/bx-window-close.svg" : "/bx-window-open.svg"}
+                        alt="Toolbox Icon"
+                        width={24}
+                        height={24}
+                    />
+                </button>
+            )}
+            {isToolboxOpen && (
+                <div className="w-80% bg-gray-200 mb-20 flex flex-col justify-between">
+                    <div className="p-4 border">
+                        <h3 className="text-lg font-bold mb-4 mt-8 text-black">Verktøykasse</h3>
+                        {["announcement", "fieldInformation", "memberList"].map((type) => (
+                            <div
+                                key={type}
+                                className="p-3 bg-gray-400 border rounded-lg cursor-pointer text-black mt-10"
+                                draggable
+                                onMouseDown={(e) => handleMouseDown(e, {
+                                    type,
+                                    uniqueId: Date.now(),
+                                    x: 0,
+                                    y: 0,
+                                    width: 0,
+                                    height: 0,
+                                    text: ""
+                                })}
+                            >
+                                {type === "announcement" && "Kunngjøringer"}
+                                {type === "fieldInformation" && "Baneinformasjon"}
+                                {type === "memberList" && "Medlemsliste"}
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* Buttons to switch between nonmember and member view */}
+                    <div className="flex mt-4 p-4 border-t">
+                        <button
+                            className={`p-2 border rounded-lg cursor-pointer text-black ${currentView === "nonmember" ? "bg-blue-400" : ""}`}
+                            onClick={() => setCurrentView("nonmember")}
                         >
-                            {type === "announcement" && "Kunngjøringer"}
-                            {type === "fieldInformation" && "Baneinformasjon"}
-                            {type === "memberList" && "Medlemsliste"}
-                        </div>
-                    ))}
-                </div>
-                  {/* Knapp for å bytte mellom nonmember og member visning */}
-                  <div className="flex justify-around p-4 border-t mt-88">
-                        <button onClick={() => setCurrentView("member")}>
-                            <Image 
-                                src="/bxs-user-check.svg" 
-                                alt="Member View" 
-                                width={40} 
-                                height={40} 
-                                className={currentView === "member" ? "border-2 border-blue-500 rounded-lg" : ""}
-                            />
+                            Ikke-medlem
                         </button>
-                        <button onClick={() => setCurrentView("nonmember")}>
-                            <Image 
-                                src="/bxs-user-x.svg" 
-                                alt="Nonmember View" 
-                                width={40} 
-                                height={40} 
-                                className={currentView === "nonmember" ? "border-2 border-blue-500 rounded-lg" : ""}
-                            />
+                        <button
+                            className={`p-2 border rounded-lg cursor-pointer text-black ${currentView === "member" ? "bg-blue-400" : ""}`}
+                            onClick={() => setCurrentView("member")}
+                        >
+                            Medlem
                         </button>
                     </div>
-            </div>
-        )}
+                </div>
+            )}
 
-            {/* Område for å plassere og flytte på elementene */}
+            {/* Dropzone */}
             <div
                 ref={dropZoneRef}
                 onDrop={handleDrop}
@@ -303,9 +398,9 @@ const Toolbox: React.FC<ToolboxProps> = ({ clubId, view }) => {
                 {components.map(renderComponent)}
             </div>
 
-            {/* Slett-knapp */}
+            {/* Delete button */}
             {selectedComponent && (
-                <div className="absolute bottom-4 left-4 p-2 bg-red-500 text-white rounded cursor-pointer" onClick={handleDelete}>
+                <div className="absolute bottom-4 right-4 p-2 bg-red-500 text-white rounded cursor-pointer" onClick={handleDelete}>
                     Slett figur
                 </div>
             )}

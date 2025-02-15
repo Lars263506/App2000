@@ -15,39 +15,24 @@ import Register from '@/components/register';
 
 const Clubpage = () => {
     const [popupType, setPopupType] = useState<'login' | 'register' | null>(null);
-    const [view, setView] = useState<"nonmember" | "member" | "clubowner">("nonmember");
 
     const toggleLoginPopup = () => setPopupType(popupType === 'login' ? null : 'login');
     const toggleRegisterPopup = () => setPopupType(popupType === 'register' ? 'login' : 'register');
-    const closePopup = () => setPopupType(null);
+    const closePopup = () => {
+        setPopupType(null);
+        window.location.reload();
+    } 
 
     const router = useRouter();
     const clubId = router.query.clubId as string | undefined; 
 
     const id = clubId ?? process.env.NEXT_PUBLIC_DEFAULT_CLUBID;
 
-    const getView = async () => {
-        const accessToken = localStorage.getItem('accessToken');
-        const url = process.env.NEXT_PUBLIC_BACKEND_BASE_URL + '/clubpage/view';
-                
-        const response = await fetch(url, {
-            method: 'GET',
-            headers: accessToken ? { 'Authorization': 'Bearer ' + accessToken } : {},
-        });
-
-        const data = await response.json();
-        setView(data.view);
-    };
-    
-    useEffect(() => {
-        if (id) getView();
-    }, [id]);
-
     return (
         <div className="">
             <Navbar toggleLoginPopup={toggleLoginPopup}/>
 
-            <Toolbox clubId={clubId} view={view}/>
+            <Toolbox clubId={id}/>
 
             {popupType === 'login' && (
                 <Login togglePopup={toggleLoginPopup} toggleRegisterPopup={toggleRegisterPopup} closePopup={closePopup} />
@@ -56,6 +41,5 @@ const Clubpage = () => {
         </div>
     )
 }
-
 
 export default Clubpage;

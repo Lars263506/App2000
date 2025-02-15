@@ -51,7 +51,10 @@ const Login: React.FC<LoginProps> = ({ togglePopup, toggleRegisterPopup, closePo
                 localStorage.setItem('refreshToken', data.refreshToken);
                 setIsLoggedIn(true);
                 toast.success('Logget inn med bruker: ' + data.displayName, {
-                    onClose: () => togglePopup(),
+                    onClose: () => {
+                        closePopup();
+                        window.location.reload();
+                    },
                 });
             }
         } catch (error: unknown) {
@@ -72,6 +75,7 @@ const Login: React.FC<LoginProps> = ({ togglePopup, toggleRegisterPopup, closePo
         localStorage.removeItem('accessToken');
         localStorage.removeItem('refreshToken');
         toast.success("Du er logget ut.");
+        window.location.reload();
     
         setIsLoggedIn(false);
     };

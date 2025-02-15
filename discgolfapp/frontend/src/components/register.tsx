@@ -5,7 +5,7 @@ import '../app/globals.css';
 
 /**
  * @author Andreas Nilsen
- * @description Line: 62-103, Tailwind CSS has been assisted by Copilot. I wrote it myself but asked how to style in Tailwind.  
+ * @description Line: 62-103, Tailwind CSS has been assisted by Copilot. I wrote it myself but asked how to style in Tailwind.
  */
 
 interface RegisterProps {
@@ -38,7 +38,6 @@ const Register: React.FC<RegisterProps> = ({ togglePopup }) => {
                 }),
             });
             const data = await response.json();
-            console.log(data);
             if (response.status !== 201) {
                 toast.error(data.message);
             } else {

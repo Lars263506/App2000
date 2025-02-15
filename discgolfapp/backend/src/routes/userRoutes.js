@@ -2,9 +2,11 @@ import express from 'express';
 
 import passport from '../config/passportConfig.js';
 import { authorizeAdmin } from '../middleware/authorization.js';
+import { optionalAuth } from '../middleware/auth.js';
 import { loginLimiter, registerLimiter } from '../middleware/rateLimiter.js';
 import { 
     getAllUsers,
+    getPermissions,
     getUser,
     getUserByEmail,
     registerUser, 
@@ -26,6 +28,11 @@ router.get('/',
     passport.authenticate('jwt', { session: false }), 
     authorizeAdmin, 
     getAllUsers
+);
+
+router.get('/permissions',
+    optionalAuth,
+    getPermissions
 );
 
 router.get('/:id', 

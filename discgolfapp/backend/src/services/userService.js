@@ -1,6 +1,7 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
+import ClubPage from '../models/Clubpage.js';
 
 /**
  * @author Lars263506 (Github)
@@ -18,6 +19,19 @@ const getAllUsers = async () => {
     if (!users) throw new Error("Users not found");
     return users;
 };
+
+/**
+ * @param id
+ * @returns Whether the user has permission to edit the club page
+ * @description Checks the permissions of a user to edit a club page
+ */
+
+const getPermissions = async (id) => {
+    const hasPermission = await ClubPage.findOne({ clubOwner: id });
+    if (hasPermission) return { canEditClubPage: true };
+    else return { canEditClubPage: false };
+}
+
 /**
  * @param id
  * @returns User object, excluding hashed password
@@ -45,9 +59,9 @@ const getUserByEmail = async (email) => {
 };
 
 /**
- * 
- * @param email 
- * @param password 
+ *
+ * @param email
+ * @param password
  * @returns Time of user creation
  * @description Registers a new user in the database
  * @throws Error if there was an error registering the user in the database
@@ -57,12 +71,12 @@ const registerUser = async (displayName, email, password) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const changedTime = new Date();
-    const newUser = { 
+    const newUser = {
         displayName,
         email,
         hashedPassword,
         role: 'user',
-        emailChangedAt: changedTime, 
+        emailChangedAt: changedTime,
         passwordChangedAt: changedTime,
         roleChangedAt: changedTime
     };
@@ -90,7 +104,7 @@ const loginUser = async (email, password) => {
     if (user) {
         passwordIsValidated = await bcrypt.compare(password, user.hashedPassword);
     };
-    
+
     if (!passwordIsValidated) throw new Error("Incorrect email or password");
 
     const payload = { id: user._id, role: user.role };
@@ -129,9 +143,9 @@ const changeEmail = async (email, newEmail) => {
 };
 
 /**
- * 
- * @param email 
- * @param newPassword 
+ *
+ * @param email
+ * @param newPassword
  * @returns Time of password change
  * @description Changes the password of a user in the database
  */
@@ -146,9 +160,9 @@ const changePassword = async (email, newPassword) => {
 };
 
 /**
- * 
- * @param email 
- * @param newRole 
+ *
+ * @param email
+ * @param newRole
  * @returns New user role and time of role change
  * @description Changes the role of a user in the database
  */
@@ -173,15 +187,16 @@ const deleteUser = async (email) => {
     return { success: true };
 };
 
-export { 
+export {
     getAllUsers,
-    getUser, 
-    getUserByEmail, 
-    registerUser, 
+    getPermissions,
+    getUser,
+    getUserByEmail,
+    registerUser,
     loginUser,
-    changeDisplayName, 
-    changeEmail, 
-    changePassword, 
-    changeRole, 
-    deleteUser 
+    changeDisplayName,
+    changeEmail,
+    changePassword,
+    changeRole,
+    deleteUser
 };

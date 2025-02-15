@@ -1,18 +1,18 @@
-import mongoose from 'mongoose';
+import mongoose, { Mongoose } from 'mongoose';
 import Element from './Element.js';
 
 const schema = new mongoose.Schema(
     {
-        name: { 
-            type: String, 
-            required: true, 
-            unique: true 
+        name: {
+            type: String,
+            required: true,
+            unique: true
         },
         clubOwner: {
             type: mongoose.Schema.Types.ObjectId,
             required: true
         },
-        description: { 
+        description: {
             type: String,
             required: true
         },
@@ -45,7 +45,7 @@ const schema = new mongoose.Schema(
             required: true
         },
         members: {
-            type: Array,
+            type: [mongoose.Schema.Types.ObjectId],
             required: true
         },
         events: {

@@ -2,15 +2,15 @@ import express from 'express';
 
 import passport from '../config/passportConfig.js';
 import { authorizeClubowner } from '../middleware/authorization.js';
-import { 
-    getAllClubPages, 
-    getClubPage, 
+import {
+    getAllClubPages,
+    getClubPage,
     getView,
-    createNewClubPage, 
-    deleteClubPage, 
-    updateClubPage 
+    createNewClubPage,
+    deleteClubPage,
+    updateClubPage
 } from '../controllers/clubpageController.js';
-import { optionalAuth } from '../middleware/optionalauth.js';
+import { checkMemberStatus, optionalAuth } from '../middleware/auth.js';
 
 /**
  * @author Lars263506 (Github)
@@ -22,13 +22,13 @@ router.get('/',
     getAllClubPages
 );
 
-router.get('/view',
-    optionalAuth,
+router.get('/view/:id',
+    checkMemberStatus,
     getView
 );
 
 router.get('/:id',
-    optionalAuth, 
+    optionalAuth,
     getClubPage
 );
 
@@ -44,7 +44,7 @@ router.delete('/:id',
     deleteClubPage
 );
 
-router.patch('/:id', 
+router.patch('/:id',
     passport.authenticate('jwt', { session: false }),
     authorizeClubowner,
     updateClubPage
