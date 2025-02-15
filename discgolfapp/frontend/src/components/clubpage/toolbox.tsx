@@ -73,9 +73,6 @@ const Toolbox: React.FC<ToolboxProps> = ({ clubId }) => {
             setComponents(componentGroups.nonmemberElements);
         else if (currentView === "member")
             setComponents(componentGroups.memberElements);
-
-        console.log("View: ", currentView);
-        console.log("ComponentGroups: ", componentGroups);
     }, [currentView, componentGroups]);
 
     const getView = async () => {
@@ -141,24 +138,10 @@ const Toolbox: React.FC<ToolboxProps> = ({ clubId }) => {
         const dropZone = dropZoneRef.current?.getBoundingClientRect();
         if (!dropZone) return;
 
-        let x = e.clientX;
-        let y = e.clientY;
-
-        const elementRef = document.getElementById(`component-${selectedComponent.uniqueId}`);
-
-        let width = selectedComponent.width;
-        let height = selectedComponent.height;
-
-        if (elementRef) {
-            const rect = elementRef.getBoundingClientRect();
-            width = rect.width;
-            height = rect.height;
-            x = Math.max(dropZone.left + 4, Math.min(x, dropZone.left + dropZone.width - width - 4));
-            y = Math.max(dropZone.top + 4, Math.min(y, dropZone.top + dropZone.height - height - 4));
-        }
-
-        const xPercent = ((x - dropZone.left) / dropZone.width) * 100;
-        const yPercent = ((y - dropZone.top) / dropZone.height) * 100;
+        let xPercent = e.clientX / dropZone.width;
+        let yPercent = e.clientY / dropZone.height;
+        let width = 0;
+        let height = 0;
 
         const newComponent: Component = {
             ...selectedComponent,
@@ -305,24 +288,33 @@ const Toolbox: React.FC<ToolboxProps> = ({ clubId }) => {
         }
     };
 
-    const renderComponent = (component: Component) => (
-        <div
-            key={component.uniqueId}
-            id={`component-${component.uniqueId}`}
-            style={{
-                position: 'absolute',
-                left: `${component.x}%`,
-                top: `${component.y}%`,
-            }}
-            className={`border-2 ${component.uniqueId === selectedComponent?.uniqueId ? 'border-red-200' : ''}`}
-            onMouseDown={editRights ? (e) => handleMouseDown(e, component) : undefined}
-            draggable={editRights}
-        >
-            {component.type === "announcement" && <Announcement uniqueId={component.uniqueId} text={component.text} editRights={editRights}/>}
-            {component.type === "fieldInformation" && <FieldInformation />}
-            {component.type === "memberList" && <MemberList />}
-        </div>
-    );
+    const renderComponent = (component: Component) => {
+
+        const dropZone = dropZoneRef.current?.getBoundingClientRect();
+
+        if (!dropZone) return null;
+
+        return (
+            <div
+                key={component.uniqueId}
+                id={`component-${component.uniqueId}`}
+                style={{
+                    position: 'absolute',
+                    left: `${dropZone.width * component.x}px`,
+                    top: `${dropZone.height * component.y}px`,
+                }}
+                className={`border-2 ${component.uniqueId === selectedComponent?.uniqueId ? 'border-red-200' : ''}`}
+                onMouseDown={editRights ? (e) => handleMouseDown(e, component) : undefined}
+                draggable={editRights}
+            >
+                {component.type === "announcement" && <Announcement uniqueId={component.uniqueId} text={component.text} editRights={editRights}/>}
+                {component.type === "fieldInformation" && <FieldInformation />}
+                {component.type === "memberList" && <MemberList />}
+            </div>
+        );
+    }
+
+
 
     /**
      * @returns The toolbox component.
