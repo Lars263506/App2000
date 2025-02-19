@@ -4,7 +4,7 @@ import ClubPage from '../models/Clubpage.js';
 
 /**
  * @author Lars Andreas Strand
- * @description This function is used to authenticate a user and check if they are a member of a club
+ * @description This function is used to authorize a user and check if they are a member of a club
  * Even if the user is not a member of a club, they will still be authenticated as a user
  */
 

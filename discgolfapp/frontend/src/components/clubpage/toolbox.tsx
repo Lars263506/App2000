@@ -312,9 +312,7 @@ const Toolbox: React.FC<ToolboxProps> = ({ clubId }) => {
                 {component.type === "memberList" && <MemberList />}
             </div>
         );
-    }
-
-
+    };
 
     /**
      * @returns The toolbox component.
@@ -402,4 +400,3 @@ const Toolbox: React.FC<ToolboxProps> = ({ clubId }) => {
 };
 
 export default Toolbox;
-
