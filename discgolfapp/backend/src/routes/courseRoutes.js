@@ -1,7 +1,13 @@
 import express from 'express';
+import passport from '../config/passportConfig.js';
 
+import { authorizeClubowner } from '../middleware/authorization.js';
 import { 
-    getAllCourses, 
+    getAllCourses,
+    getCourse, 
+    createNewCourse,
+    deleteCourse,
+    updateCourse
 } from '../controllers/courseController.js';
 
 /**
@@ -14,32 +20,29 @@ router.get('/',
     getAllCourses
 );
 
-// router.get('/view',
-//     optionalAuth,
-//     getView
-// );
+router.get('/:id',
+    passport.authenticate('jwt', { session: false }),
+    authorizeClubowner,
+    getCourse
+);
 
-// router.get('/:id',
-//     optionalAuth, 
-//     getClubPage
-// );
+router.post('/',
+    passport.authenticate('jwt', { session: false }),
+    authorizeClubowner,
+    createNewCourse
+);
 
-// router.post('/',
-//     passport.authenticate('jwt', { session: false }),
-//     authorizeClubowner,
-//     createNewClubPage
-// );
+router.delete('/:id',
+    passport.authenticate('jwt', { session: false }),
+    authorizeClubowner,
+    deleteCourse
+);
 
-// router.delete('/:id',
-//     passport.authenticate('jwt', { session: false }),
-//     authorizeClubowner,
-//     deleteClubPage
-// );
-
-// router.patch('/:id', 
-//     passport.authenticate('jwt', { session: false }),
-//     authorizeClubowner,
-//     updateClubPage
-// );
+router.patch('/:id', 
+    passport.authenticate('jwt', { session: false }),
+    authorizeClubowner,
+    updateCourse
+);
 
 export default router;
+

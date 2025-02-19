@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
 type Course = {
-  id: number;
   name: string;
   location: string;
   url: string;
@@ -25,8 +24,6 @@ const CourseList = () => {
         const result = await response.json();
 
         const data = result.data;
-
-        console.log('API-respons:', data); 
 
         if (Array.isArray(data)) {
           setCourses(data);
@@ -58,7 +55,7 @@ const CourseList = () => {
         />
         <ul>
           {filteredCourses.map(course => (
-            <li key={course.id}>{course.name}</li>
+            <li key={course.name}>{course.name}</li>
           ))}
         </ul>
       </div>
