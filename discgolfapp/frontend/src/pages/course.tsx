@@ -5,6 +5,7 @@ import Navbar from '../components/navbar';
 import Footer from '@/components/footer';
 import Login from '@/components/login';
 import Register from '@/components/register';
+import CourseList from '@/components/course/courselist';
 
 const Field = () => {
 
@@ -17,8 +18,8 @@ const closePopup = () => setPopupType(null);
         <div>
             <Navbar toggleLoginPopup={toggleLoginPopup}/>
             <div className="flex flex-wrap justify-center gap-3">
-
             </div>
+            <CourseList />
             {popupType === 'login' && (
             <Login togglePopup={toggleLoginPopup} toggleRegisterPopup={toggleRegisterPopup} closePopup={closePopup} />
             )}
