@@ -89,7 +89,7 @@ const ClubListmap = () => {
         </ul>
       </div>
 
-      {/* Kart */}
+      {/* Map */}
       <div className="w-full md:w-1/2 bg-gray-200 p-4 rounded-xl shadow">
         <h2 className="text-xl font-bold">Kart</h2>
         <LoadScript googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string}>

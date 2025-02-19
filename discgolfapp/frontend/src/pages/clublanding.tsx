@@ -17,14 +17,14 @@ const Clublanding = () => {
     <div className=  "min-h-screen flex flex-col">
       <Navbar toggleLoginPopup={toggleLoginPopup} />
 
-      {/* Hovedinnhold */}
+      {/* Main content */}
       <div className="flex flex-col sm:flex-row items-start gap-4 px-4 py-4">
         <MemberBenefit />
         <Clublist />
       </div>
       
 
-      {/* Popup-modaler */}
+      {/* Popup */}
       {popupType === 'login' && (
         <Login togglePopup={toggleLoginPopup} toggleRegisterPopup={toggleRegisterPopup} closePopup={closePopup} />
       )}
