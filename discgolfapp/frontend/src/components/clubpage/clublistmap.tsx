@@ -29,15 +29,15 @@ const ClubListmap = () => {
   }, []);
 
   const geocodeAddress = useCallback((address: string) => {
-      return new Promise<google.maps.LatLng>((resolve, reject) => {
-          new window.google.maps.Geocoder().geocode({ address }, (results, status) => {
-              if (status === 'OK' && results && results[0]) {
-                  resolve(results[0].geometry.location);
-              } else {
-                  reject('Geocoding failed');
-              }
-          });
+    return new Promise<google.maps.LatLng>((resolve, reject) => {
+      new window.google.maps.Geocoder().geocode({ address }, (results, status) => {
+        if (status === 'OK' && results && results[0]) {
+          resolve(results[0].geometry.location);
+        } else {
+          reject('Geocoding failed');
+        }
       });
+    });
   }, []);
 
   useEffect(() => {
@@ -51,7 +51,6 @@ const ClubListmap = () => {
     if (clubs.length > 0) fetchMarkers();
   }, [clubs, geocodeAddress]);
 
- 
   useEffect(() => {
     const filteredClubs = clubs.filter((club) =>
       club.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -67,8 +66,9 @@ const ClubListmap = () => {
   }, [searchTerm, clubs, geocodeAddress]);
 
   return (
-    <div className="flex gap-4">
-      <div className="w-96 bg-gray-200 p-4 rounded-xl shadow text-black">
+    <div className="flex flex-col md:flex-row gap-6 w-full h-100 max-w-5xl ">
+      {/* Klubbliste */}
+      <div className="w-full md:w-1/2 bg-gray-200 p-4 rounded-xl shadow text-black">
         <input
           type="text"
           placeholder="Filtrer på klubbnavn..."
@@ -89,8 +89,8 @@ const ClubListmap = () => {
         </ul>
       </div>
 
-      {/* KARTVISNING */}
-      <div className="w-96 bg-gray-200 p-4 rounded-xl shadow">
+      {/* Map */}
+      <div className="w-full md:w-1/2 bg-gray-200 p-4 rounded-xl shadow">
         <h2 className="text-xl font-bold">Kart</h2>
         <LoadScript googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string}>
           <GoogleMap
@@ -104,7 +104,7 @@ const ClubListmap = () => {
             }}
             center={markers.length > 0 ? markers[0] : { lat: 59.9139, lng: 10.7522 }}
             zoom={selectedMarker ? 15 : 6}
-            mapContainerStyle={{ height: '450px', width: '100%' }}
+            mapContainerStyle={{ height: '350px', width: '100%' }}
           >
             {markers.map((marker, index) => (
               <Marker key={index} position={marker} />
