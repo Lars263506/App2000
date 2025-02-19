@@ -9,6 +9,7 @@ import ToggleBox from './togglebox';
 
 const Navigation: FC = () => {
     const router = useRouter();
+    const navigateToCourse = () => router.push('/course');
     const navigateToToolbox = () => router.push('/clublanding');
 
     return (
@@ -17,10 +18,16 @@ const Navigation: FC = () => {
                 <div className="bg-gray-100 p-4 rounded shadow w-96 h-72 flex items-center justify-center cursor-pointer">
                     <h2 className="text-3xl font-bold text-black">Spill nå</h2>
                 </div>
-                <div className="bg-gray-100 p-4 rounded shadow w-96 h-72 flex items-center justify-center cursor-pointer">
+                <div
+                    className="bg-gray-100 p-4 rounded shadow w-96 h-72 flex items-center justify-center cursor-pointer"
+                    onClick={navigateToCourse}
+                >
                     <h2 className="text-3xl font-bold text-black">Baner</h2>
                 </div>
-                <div className="bg-gray-100 p-4 rounded shadow w-96 h-72 flex items-center justify-center cursor-pointer" onClick={navigateToToolbox}>
+                <div
+                    className="bg-gray-100 p-4 rounded shadow w-96 h-72 flex items-center justify-center cursor-pointer"
+                    onClick={navigateToToolbox}
+                >
                     <h2 className="text-3xl font-bold text-black">Klubber</h2>
                 </div>
             </div>
