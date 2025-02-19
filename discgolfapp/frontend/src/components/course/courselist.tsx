@@ -1,5 +1,4 @@
-import { type } from 'os';
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 
 type Course = {
   id: number;
@@ -8,48 +7,33 @@ type Course = {
   url: string;
   latitude: number;
   longitude: number;
-}[];
+};
 
 const CourseList = () => {
-  const [courses, setCourses] = useState<Course>([]);
+  const [courses, setCourses] = useState<Course[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     const fetchCourses = async () => {
-      try {
+      const url = process.env.NEXT_PUBLIC_BACKEND_BASE_URL + 'course';
 
-        /*
-        const response = await fetch('');
-        const data = await response.json();
-        */
-        const data = [
-          {
-            id: 1,
-            name: 'Haugerud',
-            location: 'Oslo',
-            url: 'https://www.oslo.kommune.no/natur-kultur-og-fritid/tur-og-friluftsliv/friluftsliv-i-byen/discgolf-i-oslo/',
-            latitude: 59.9139,
-            longitude: 10.7522,
-          },
-          {
-            id: 2,
-            name: 'Ekeberg',
-            location: 'Oslo',
-            url: 'https://www.oslo.kommune.no/natur-kultur-og-fritid/tur-og-friluftsliv/friluftsliv-i-byen/discgolf-i-oslo/',
-            latitude: 59.9139,
-            longitude: 10.7522,
-          },
-          {
-            id: 3,
-            name: 'Voldsløkka',
-            location: 'Oslo',
-            url: 'https://www.oslo.kommune.no/natur-kultur-og-fritid/tur-og-friluftsliv/friluftsliv-i-byen/discgolf-i-oslo/',
-            latitude: 59.9139,
-            longitude: 10.7522,
-          },
-        ];
-        
+      try {
+        const response = await fetch(url, {
+            'method': "GET"
+        });
+
+        const result = await response.json();
+
+        const data = result.data;
+
         console.log('API-respons:', data); 
+
+        if (Array.isArray(data)) {
+          setCourses(data);
+        } else {
+          console.error('Fetched data is not an array:', data);
+        }
+        
         setCourses(data);
       } catch (error) {
         console.error('Feil ved henting av baner:', error);
@@ -57,6 +41,10 @@ const CourseList = () => {
     };
     fetchCourses();
   }, []);
+
+  const filteredCourses = courses.filter(course =>
+    course.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (  
     <div className="flex gap-4 p-4">
@@ -69,15 +57,9 @@ const CourseList = () => {
           onChange={(e) => setSearchTerm(e.target.value)}
         />
         <ul>
-        {courses
-            .filter((course) => course.name.toLowerCase().includes(searchTerm.toLowerCase()))
-            .map((course) => (
-              <li key={course.id} className="p-2 border-b">
-                <a href={course.url} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800">
-                  {course.name} ({course.location})
-                </a>
-              </li>
-            ))}
+          {filteredCourses.map(course => (
+            <li key={course.id}>{course.name}</li>
+          ))}
         </ul>
       </div>
 
