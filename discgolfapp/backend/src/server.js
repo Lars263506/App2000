@@ -5,6 +5,7 @@ import { rateLimit } from 'express-rate-limit';
 
 import passport from './config/passportConfig.js';
 import clubpageRoutes from './routes/clubpageRoutes.js';
+import courseRoutes from './routes/courseRoutes.js';
 import elementRoutes from './routes/elementRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 
@@ -44,6 +45,7 @@ app.use(passport.initialize());
 
 // Routes for handling requests
 app.use('/clubpage', clubpageRoutes);
+app.use('/course', courseRoutes);
 app.use('/element', elementRoutes);
 app.use('/users', userRoutes);
 
