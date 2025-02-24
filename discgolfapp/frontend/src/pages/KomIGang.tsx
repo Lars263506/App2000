@@ -1,11 +1,11 @@
 'use client';
 
+import { usePopup } from '@/components/usepopup';
 import { useState } from 'react';
 import Image from 'next/image';
 import Navbar from '@/components/navbar';
 import Footer from '@/components/footer';
-import Login from '@/components/login';
-import Register from '@/components/register';
+import PopupWrapper from '@/components/popupwrapper'; 
 
 /**
  * @author Ibrahim
@@ -14,12 +14,9 @@ import Register from '@/components/register';
  */
 
 const KomIGang = () => {
-  const [popupType, setPopupType] = useState<'login' | 'register' | null>(null);
   const [selectedInfo, setSelectedInfo] = useState<'beginner' | 'advanced'>('beginner');
 
-  const toggleLoginPopup = () => setPopupType(popupType === 'login' ? null : 'login');
-  const toggleRegisterPopup = () => setPopupType(popupType === 'register' ? 'login' : 'register');
-  const closePopup = () => setPopupType(null);
+  const { popupType, toggleLoginPopup, toggleRegisterPopup, closePopup } = usePopup();
 
   return (
     <div>
@@ -189,10 +186,11 @@ const KomIGang = () => {
       </div>
       </div>
 
-      {popupType === 'login' && (
-        <Login togglePopup={toggleLoginPopup} toggleRegisterPopup={toggleRegisterPopup} closePopup={closePopup} />
-      )}
-      {popupType === 'register' && <Register togglePopup={toggleRegisterPopup} />}
+      <PopupWrapper
+        popupType={popupType}
+        closePopup={closePopup}
+        toggleRegisterPopup={toggleRegisterPopup}
+      />
 
       <Footer />
     </div>
