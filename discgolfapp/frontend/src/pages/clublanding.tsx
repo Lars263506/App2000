@@ -1,17 +1,13 @@
 import { useState } from 'react';
 import Navbar from '@/components/navbar';
 import Footer from '@/components/footer';
-import Login from '@/components/login';
-import Register from '@/components/register';
 import MemberBenefit from '@/components/clubpage/memberbenefit';
 import Clublist from '@/components/clubpage/clublistmap';
+import { usePopup } from '@/components/usepopup';
+import PopupWrapper from '@/components/popupwrapper';
 
 const Clublanding = () => {
-  const [popupType, setPopupType] = useState<'login' | 'register' | null>(null);
-
-  const toggleLoginPopup = () => setPopupType(popupType === 'login' ? null : 'login');
-  const toggleRegisterPopup = () => setPopupType(popupType === 'register' ? 'login' : 'register');
-  const closePopup = () => setPopupType(null);
+  const { popupType, toggleLoginPopup, toggleRegisterPopup, closePopup } = usePopup();
 
   return (
     <div className=  "min-h-screen flex flex-col">
@@ -24,11 +20,11 @@ const Clublanding = () => {
       </div>
       
 
-      {/* Popup */}
-      {popupType === 'login' && (
-        <Login togglePopup={toggleLoginPopup} toggleRegisterPopup={toggleRegisterPopup} closePopup={closePopup} />
-      )}
-      {popupType === 'register' && <Register togglePopup={toggleRegisterPopup} />}
+      <PopupWrapper
+                popupType={popupType}
+                closePopup={closePopup}
+                toggleRegisterPopup={toggleRegisterPopup}
+            />
 
 <Footer />  
     </div>
