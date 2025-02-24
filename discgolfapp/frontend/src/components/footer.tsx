@@ -4,7 +4,7 @@ import Image from "next/image";
 export default function Footer() {
   return (
     <footer className="bg-gray-600 text-center p-4 border-t border-gray-300">
-      <div className="flex justify-between items-center max-w-7xl mx-auto">
+      <div className="flex justify-between items-center max-w-7xl mx-auto h-1">
         <a href="/kontakt" className="text-white hover:underline ">
           Kontakt oss
         </a>
