@@ -2,6 +2,7 @@ import Image from 'next/image';
 import router from 'next/router';
 
 const Navbar = ({ toggleLoginPopup }: { toggleLoginPopup: () => void }) => {
+
     return (
         <nav className="bg-gray-600 text-white p-4 flex justify-center relative">
             <button
@@ -29,7 +30,7 @@ const Navbar = ({ toggleLoginPopup }: { toggleLoginPopup: () => void }) => {
                         width={32}
                         height={32}
                         className="rounded-full cursor-pointer"
-                        onClick={toggleLoginPopup}
+                        onClick={toggleLoginPopup} 
                     />
                     <Image
                         src="/bx-world.svg"

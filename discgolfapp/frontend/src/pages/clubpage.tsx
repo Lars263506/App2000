@@ -5,8 +5,8 @@ import '../app/globals.css';
 import 'react-toastify/dist/ReactToastify.css';
 import Navbar from '../components/navbar';
 import Toolbox from '../components/clubpage/toolbox';
-import Login from '@/components/login';
-import Register from '@/components/register';
+import PopupWrapper from '@/components/popupwrapper';
+import { usePopup } from '@/components/usepopup';
 
 /**
  * @author Andreas Nilsen and Lars Andreas Strand
@@ -14,12 +14,8 @@ import Register from '@/components/register';
  */
 
 const Clubpage = () => {
-    const [popupType, setPopupType] = useState<'login' | 'register' | null>(null);
+    const { popupType, toggleLoginPopup, toggleRegisterPopup, closePopup } = usePopup();
     const [view, setView] = useState<"nonmember" | "member" | "clubowner">("nonmember");
-
-    const toggleLoginPopup = () => setPopupType(popupType === 'login' ? null : 'login');
-    const toggleRegisterPopup = () => setPopupType(popupType === 'register' ? 'login' : 'register');
-    const closePopup = () => setPopupType(null);
 
     const router = useRouter();
     const clubId = router.query.clubId as string | undefined; 
@@ -49,10 +45,11 @@ const Clubpage = () => {
 
             <Toolbox clubId={clubId} view={view}/>
 
-            {popupType === 'login' && (
-                <Login togglePopup={toggleLoginPopup} toggleRegisterPopup={toggleRegisterPopup} closePopup={closePopup} />
-            )}
-            {popupType === 'register' && <Register togglePopup={toggleRegisterPopup} />}
+            <PopupWrapper
+                popupType={popupType}
+                closePopup={closePopup}
+                toggleRegisterPopup={toggleRegisterPopup}
+            />
         </div>
     )
 }

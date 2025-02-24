@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
-import Login from '@/components/login';
-import Register from '@/components/register';
 import Navbar from '@/components/navbar';
 import Footer from '@/components/footer';
 import DiscgolfInfo from '@/components/frontpage/discgolfinfo';
 import Navigation from '@/components/frontpage/navigation';
+import PopupWrapper from '@/components/popupwrapper';
+import { usePopup } from '@/components/usepopup';
 
 /**
  * @author Andreas Nilsen
@@ -12,12 +12,9 @@ import Navigation from '@/components/frontpage/navigation';
  */
 
 const Home = () => {
-  const [popupType, setPopupType] = useState<'login' | 'register' | null>(null);
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const { popupType, toggleLoginPopup, toggleRegisterPopup, closePopup } = usePopup();
 
-  const toggleLoginPopup = () => setPopupType(popupType === 'login' ? null : 'login');
-  const toggleRegisterPopup = () => setPopupType(popupType === 'register' ? 'login' : 'register');
-  const closePopup = () => setPopupType(null);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   const images = [
     '/golf1.webp',
@@ -37,7 +34,7 @@ const Home = () => {
 
   return (
     <div>
-      <Navbar toggleLoginPopup={toggleLoginPopup} />
+      <Navbar toggleLoginPopup={toggleLoginPopup}/>
 
       <DiscgolfInfo
         images={images}
@@ -46,10 +43,12 @@ const Home = () => {
 
       <Navigation />
 
-      {popupType === 'login' && (
-        <Login togglePopup={toggleLoginPopup} toggleRegisterPopup={toggleRegisterPopup} closePopup={closePopup} />
-      )}
-      {popupType === 'register' && <Register togglePopup={toggleRegisterPopup} />}
+      <PopupWrapper
+        popupType={popupType}
+        closePopup={closePopup}
+        toggleRegisterPopup={toggleRegisterPopup}
+      />
+
       <Footer />
     </div>
   );
