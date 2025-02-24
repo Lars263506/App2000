@@ -2,16 +2,16 @@ import express from 'express';
 import passport from '../config/passportConfig.js';
 
 import { authorizeClubowner } from '../middleware/authorization.js';
-import { 
+import {
     getAllCourses,
-    getCourse, 
+    getCourse,
     createNewCourse,
     deleteCourse,
     updateCourse
 } from '../controllers/courseController.js';
 
 /**
- * @author Lars263506 (Github)
+ * @author Ibrahim Queeum and Lars Andreas Strand
  * @description Router for course requests
  */
 const router = express.Router();
@@ -38,7 +38,7 @@ router.delete('/:id',
     deleteCourse
 );
 
-router.patch('/:id', 
+router.patch('/:id',
     passport.authenticate('jwt', { session: false }),
     authorizeClubowner,
     updateCourse
