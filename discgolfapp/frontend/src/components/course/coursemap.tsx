@@ -29,7 +29,7 @@ const CourseMap: React.FC<CourseMapProps> = ({ selectedCourse, courses }) => {
                     }}
                     center={selectedCourse ? { lat: selectedCourse.latitude, lng: selectedCourse.longitude } : { lat: 59.9139, lng: 10.7522 }}
                     zoom={selectedCourse ? 15 : 6}
-                    mapContainerStyle={{ height: '550px', width: '100%' }}
+                    mapContainerStyle={{ height: '500px', width: '100%' }}
                 >
                     {courses.map((course) => (
                         <Marker key={course.name} position={{ lat: course.latitude, lng: course.longitude }} />
