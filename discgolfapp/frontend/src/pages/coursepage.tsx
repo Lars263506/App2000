@@ -44,7 +44,7 @@ const CoursePage = () => {
                     toggleRegisterPopup={toggleRegisterPopup}
                 />
 
-                <div className="absolute bottom-0 w-full">
+                <div className="w-full bottom-0 w-full">
                     <Footer />
                 </div>
             </div>
