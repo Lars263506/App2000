@@ -21,7 +21,7 @@ const CourseDetails: React.FC<CourseDetailsProps> = ({ selectedCourse, setSelect
               <X size={24} />
             </button>
           </div>
-          <div className="space-y-3 text-gray-700 flex-grow">
+          <div className="space-y-6 text-gray-700 flex-grow">
             <p><span className="font-medium">📍 Lokasjon:</span> {selectedCourse.location}</p>
             <p><span className="font-medium">🏙️ Post Kode:</span> {selectedCourse.postCode}</p>
             <p><span className="font-medium">🌍 Breddegrad:</span> {selectedCourse.latitude}</p>
