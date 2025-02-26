@@ -5,7 +5,7 @@ import { Course } from '../../pages/coursepage';
 type CourseMapProps = {
     selectedCourse: Course | null;
     courses: Course[];
-    setSelectedCourse: (course: Course | null) => void;
+    setSelectedCourse: React.Dispatch<React.SetStateAction<Course | null>>;
 };
 
 const CourseMap: React.FC<CourseMapProps> = ({ selectedCourse, courses, setSelectedCourse }) => {
@@ -13,7 +13,7 @@ const CourseMap: React.FC<CourseMapProps> = ({ selectedCourse, courses, setSelec
     const mapRef = useRef<google.maps.Map | null>(null);
 
     return (
-        <div className="flex-grow min-w-[300px] bg-gray-200 p-4 rounded-xl shadow">
+        <div className="flex-grow min-w-[300px] bg-white p-4 rounded-xl shadow">
             <LoadScript googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string}>
                 <GoogleMap
                     onLoad={(map) => {

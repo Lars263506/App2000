@@ -16,6 +16,8 @@ export type Course = {
     postCode: string;
     latitude: number;
     longitude: number;
+    difficulty: string; 
+    familyFriendly: boolean; 
 };
 
 const CoursePage = () => {
@@ -26,12 +28,12 @@ const CoursePage = () => {
     return (
         <div>
             <div className="min-h-screen flex flex-col">
-                <Navbar toggleLoginPopup={toggleLoginPopup}/>
+                <Navbar toggleLoginPopup={toggleLoginPopup} />
 
                 <div className="flex flex-row gap-4 p-4">
                     <CourseList courses={courses} setCourses={setCourses} setSelectedCourse={setSelectedCourse} />
 
-                    <CourseDetails selectedCourse={selectedCourse} setSelectedCourse={setSelectedCourse}/>
+                    <CourseDetails selectedCourse={selectedCourse} setSelectedCourse={setSelectedCourse} />
 
                     <CourseMap selectedCourse={selectedCourse} courses={courses} setSelectedCourse={setSelectedCourse} />
                 </div>
@@ -42,12 +44,12 @@ const CoursePage = () => {
                     toggleRegisterPopup={toggleRegisterPopup}
                 />
 
-                <div className='absolute bottom-0 w-full'>
+                <div className="absolute bottom-0 w-full">
                     <Footer />
                 </div>
             </div>
         </div>
     );
-}
+};
 
 export default CoursePage;

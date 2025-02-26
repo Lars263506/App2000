@@ -14,6 +14,8 @@ type Course = {
   postCode: string;
   latitude: number;
   longitude: number;
+  difficulty: string; 
+  familyFriendly: boolean; 
 };
 
 const CourseList: React.FC<CourseListProps> = ({ courses, setCourses, setSelectedCourse }) => {
@@ -52,7 +54,7 @@ const CourseList: React.FC<CourseListProps> = ({ courses, setCourses, setSelecte
 
   return (
     <div className="flex">
-      <div className="w-96 bg-gray-200 p-4 rounded-xl shadow text-black">
+      <div className="w-96 bg-white p-4 rounded-xl shadow text-black">
         <div className="relative">
           <input
             type="text"
