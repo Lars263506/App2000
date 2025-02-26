@@ -1,11 +1,6 @@
-<<<<<<< Updated upstream
-import React, { useState, useEffect } from 'react';
-import { Course } from '../../pages/coursepage';
-=======
 import React from 'react';
-import { Course } from '../../pages/course';
+import { Course } from '../../pages/coursepage';
 import { X } from 'lucide-react';
->>>>>>> Stashed changes
 
 type CourseDetailsProps = {
   selectedCourse: Course | null;
@@ -32,7 +27,7 @@ const CourseDetails: React.FC<CourseDetailsProps> = ({ selectedCourse, setSelect
             <p><span className="font-medium">🌍 Breddegrad:</span> {selectedCourse.latitude}</p>
             <p><span className="font-medium">🌏 Lengegrad:</span> {selectedCourse.longitude}</p>
             <p><span className="font-medium">🎯 Vanskelighetsgrad:</span> {selectedCourse.difficulty}</p>
-            
+
             {selectedCourse.familyFriendly && (
               <p><span className="font-medium">👨‍👩‍👧‍👦 Familievennlig:</span> Ja</p>
             )}

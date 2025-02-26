@@ -8,7 +8,7 @@ type CourseMapProps = {
     setSelectedCourse: React.Dispatch<React.SetStateAction<Course | null>>;
 };
 
-const CourseMap: React.FC<CourseMapProps> = ({ selectedCourse, courses, setSelectedCourse }) => {
+const CourseMap: React.FC<CourseMapProps> = ({ courses }) => {
 
     const mapRef = useRef<google.maps.Map | null>(null);
 
