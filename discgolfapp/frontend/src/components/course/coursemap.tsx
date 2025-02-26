@@ -5,6 +5,7 @@ import { Course } from '../../pages/coursepage';
 type CourseMapProps = {
     selectedCourse: Course | null;
     courses: Course[];
+    
 };
 
 const CourseMap: React.FC<CourseMapProps> = ({ selectedCourse, courses }) => {
