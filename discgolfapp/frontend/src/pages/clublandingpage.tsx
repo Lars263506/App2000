@@ -26,7 +26,9 @@ const ClublandingPage = () => {
                 toggleRegisterPopup={toggleRegisterPopup}
             />
 
-<Footer />
+      <div className='w-full bottom-0 w-full'>
+          <Footer />
+      </div> 
     </div>
   );
 };

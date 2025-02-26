@@ -11,6 +11,8 @@ const CourseDetails: React.FC<CourseDetailsProps> = ({ selectedCourse, setSelect
   return (
     <div className="flex">
       {selectedCourse && (
+
+        //md:w-1/2 flex-grow min-w-[450px] min-h-[580px] bg-gray-200 p-4 rounded-xl shadow text-black
         <div className="w-96 bg-white p-6 rounded-2xl shadow-lg text-gray-800 border border-gray-300 flex flex-col h-full">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-2xl font-semibold text-gray-900">🏆 {selectedCourse.name}</h2>
