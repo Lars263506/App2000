@@ -53,9 +53,9 @@ const CourseList: React.FC<CourseListProps> = ({ courses, setCourses, setSelecte
   );
 
   return (
-    <div className="flex">
-      <div className="w-96 bg-white p-4 rounded-xl shadow text-black">
-        <div className="relative">
+    <div className="">
+      <div className="flex-1 min-h-[580px] min-w-[450px]  bg-gray-200 p-4 rounded-xl shadow text-black">
+        <div className="relaive">
           <input
             type="text"
             placeholder="Søk etter bane..."

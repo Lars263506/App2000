@@ -30,12 +30,12 @@ const CoursePage = () => {
             <div className="min-h-screen flex flex-col">
                 <Navbar toggleLoginPopup={toggleLoginPopup} />
 
-                <div className="flex flex-row gap-4 p-4">
+                <div className="flex flex-col sm:flex-row items-start gap-4 px-4 py-4">
                     <CourseList courses={courses} setCourses={setCourses} setSelectedCourse={setSelectedCourse} />
 
                     <CourseDetails selectedCourse={selectedCourse} setSelectedCourse={setSelectedCourse} />
 
-                    <CourseMap selectedCourse={selectedCourse} courses={courses} setSelectedCourse={setSelectedCourse} />
+                    <CourseMap selectedCourse={selectedCourse} courses={courses} />
                 </div>
 
                 <PopupWrapper
