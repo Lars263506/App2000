@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
-import { Course } from '../../pages/course';
+import { Course } from '../../pages/coursepage';
 
 type CourseMapProps = {
     selectedCourse: Course | null;

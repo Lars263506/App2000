@@ -1,12 +1,12 @@
 import { useState } from 'react';
-import Navbar from '@/components/navbar';
-import Footer from '@/components/footer';
+import Navbar from '@/components/global/navbar';
+import Footer from '@/components/global/footer';
 import MemberBenefit from '@/components/clubpage/memberbenefit';
 import Clublist from '@/components/clubpage/clublistmap';
-import { usePopup } from '@/components/usepopup';
-import PopupWrapper from '@/components/popupwrapper';
+import { usePopup } from '@/components/global/usepopup';
+import PopupWrapper from '@/components/global/popupwrapper';
 
-const Clublanding = () => {
+const ClublandingPage = () => {
   const { popupType, toggleLoginPopup, toggleRegisterPopup, closePopup } = usePopup();
 
   return (
@@ -18,7 +18,7 @@ const Clublanding = () => {
         <MemberBenefit />
         <Clublist />
       </div>
-      
+
 
       <PopupWrapper
                 popupType={popupType}
@@ -26,9 +26,9 @@ const Clublanding = () => {
                 toggleRegisterPopup={toggleRegisterPopup}
             />
 
-<Footer />  
+<Footer />
     </div>
   );
 };
 
-export default Clublanding;
+export default ClublandingPage;

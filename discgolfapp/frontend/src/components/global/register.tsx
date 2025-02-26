@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import '../app/globals.css';
+import '../../app/globals.css';
 
 /**
  * @author Andreas Nilsen
- * @description Line: 62-103, Tailwind CSS has been assisted by Copilot. I wrote it myself but asked how to style in Tailwind.  
+ * @description Line: 62-103, Tailwind CSS has been assisted by Copilot. I wrote it myself but asked how to style in Tailwind.
  */
 
 interface RegisterProps {
@@ -66,7 +66,7 @@ const Register: React.FC<RegisterProps> = ({ togglePopup, closePopup }) => {
         >
             <div
                 className="bg-white p-8 rounded shadow-md w-full max-w-md relative"
-                onClick={(e) => e.stopPropagation()}  
+                onClick={(e) => e.stopPropagation()}
             >
             <div className="bg-white p-8 rounded shadow-md w-full max-w-md relative">
                 <button

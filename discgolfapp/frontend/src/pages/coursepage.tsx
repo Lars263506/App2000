@@ -1,13 +1,13 @@
 import { useState } from 'react';
 
 import '../app/globals.css';
-import Navbar from '../components/navbar';
-import Footer from '@/components/footer';
+import Navbar from '../components/global/navbar';
+import Footer from '@/components/global/footer';
 import CourseList from '@/components/course/courselist';
 import CourseDetails from '@/components/course/coursedetails';
 import CourseMap from '@/components/course/coursemap';
-import PopupWrapper from '@/components/popupwrapper';
-import { usePopup } from '@/components/usepopup';
+import PopupWrapper from '@/components/global/popupwrapper';
+import { usePopup } from '@/components/global/usepopup';
 
 export type Course = {
     name: string;
@@ -18,7 +18,7 @@ export type Course = {
     longitude: number;
 };
 
-const Course = () => {
+const CoursePage = () => {
     const { popupType, toggleLoginPopup, toggleRegisterPopup, closePopup } = usePopup();
     const [courses, setCourses] = useState<Course[]>([]);
     const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
@@ -50,4 +50,4 @@ const Course = () => {
     );
 }
 
-export default Course;
+export default CoursePage;

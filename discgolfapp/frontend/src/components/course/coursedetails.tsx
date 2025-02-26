@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Course } from '../../pages/course';
+import { Course } from '../../pages/coursepage';
 
 type CourseDetailsProps = {
   selectedCourse: Course | null;
