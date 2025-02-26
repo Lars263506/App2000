@@ -71,7 +71,6 @@ const Login: React.FC<LoginProps> = ({ togglePopup, toggleRegisterPopup, closePo
     };
 
     const handleLogout = async () => {
-       
         localStorage.removeItem('accessToken');
         localStorage.removeItem('refreshToken');
         toast.success("Du er logget ut.");
@@ -81,8 +80,19 @@ const Login: React.FC<LoginProps> = ({ togglePopup, toggleRegisterPopup, closePo
     };
 
     return (
-        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75">
-            <div className="bg-white p-8 rounded shadow-md w-full max-w-md">
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75"
+            onClick={closePopup}
+            >
+                <div
+                    className="bg-white p-8 rounded shadow-md w-full max-w-md relative"
+                    onClick={(e) => e.stopPropagation()}  
+                >
+                <button
+                    onClick={closePopup}
+                    className="absolute top-2 right-2 text-black text-4xl"
+                >
+                    &times;
+                </button>
                 <h2 className="text-2xl font-bold text-center text-black mb-8">
                     {isLoggedIn ? 'Logget inn' : 'Logg inn'}
                 </h2>
@@ -151,16 +161,6 @@ const Login: React.FC<LoginProps> = ({ togglePopup, toggleRegisterPopup, closePo
                         </button>
                     </form>
                 )}
-
-                <div className="flex justify-start mt-auto">
-                    <button
-                        type="button"
-                        className="bg-gray-600 text-white px-2 py-1 rounded hover:bg-gray-700 mt-4"
-                        onClick={closePopup}
-                    >
-                        Lukk
-                    </button>
-                </div>
 
                 <ToastContainer />
             </div>

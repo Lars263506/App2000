@@ -10,9 +10,11 @@ import '../app/globals.css';
 
 interface RegisterProps {
     togglePopup: () => void;
+    closePopup: () => void;
 }
 
-const Register: React.FC<RegisterProps> = ({ togglePopup }) => {
+const Register: React.FC<RegisterProps> = ({ togglePopup, closePopup }) => {
+
     const [locked, setLocked] = useState(false);
     const [displayName, setDisplayName] = useState('');
     const [email, setEmail] = useState('');
@@ -58,8 +60,20 @@ const Register: React.FC<RegisterProps> = ({ togglePopup }) => {
     };
 
     return (
-        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75">
-            <div className="bg-white p-8 rounded shadow-md w-full max-w-md">
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75"
+            onClick={closePopup}
+        >
+            <div
+                className="bg-white p-8 rounded shadow-md w-full max-w-md relative"
+                onClick={(e) => e.stopPropagation()}  
+            >
+            <div className="bg-white p-8 rounded shadow-md w-full max-w-md relative">
+                <button
+                    onClick={closePopup}
+                    className="absolute top-2 right-2 text-black text-4xl"
+                >
+                    &times;
+                </button>
                 <h2 className="text-2xl font-bold mb-12 text-center text-black">Registrer deg</h2>
                 <h2 className="font-bold mb-2 text-left text-black">Lag bruker i disse feltene:</h2>
                 <form onSubmit={handleSubmit} className="flex flex-col">
@@ -104,7 +118,8 @@ const Register: React.FC<RegisterProps> = ({ togglePopup }) => {
                         Tilbake til logg inn
                     </button>
                     <ToastContainer />
-                </form>
+                    </form>
+                </div>
             </div>
         </div>
     );
