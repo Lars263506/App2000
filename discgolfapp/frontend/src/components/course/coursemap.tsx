@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
-import { Course } from '../../pages/course';
+import { Course } from '../../pages/coursepage';
 
 type CourseMapProps = {
     selectedCourse: Course | null;
@@ -21,7 +21,7 @@ const CourseMap: React.FC<CourseMapProps> = ({ selectedCourse, courses }) => {
     }, [selectedCourse]);
 
     return (
-        <div className="flex-grow min-w-[300px] bg-gray-200 p-4 rounded-xl shadow">
+        <div className=" md:w-1/2 flex-grow min-w-[450px] bg-gray-200 p-4 rounded-xl shadow">
             <LoadScript googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string}>
                 <GoogleMap
                     onLoad={(map) => {
@@ -29,7 +29,7 @@ const CourseMap: React.FC<CourseMapProps> = ({ selectedCourse, courses }) => {
                     }}
                     center={selectedCourse ? { lat: selectedCourse.latitude, lng: selectedCourse.longitude } : { lat: 59.9139, lng: 10.7522 }}
                     zoom={selectedCourse ? 15 : 6}
-                    mapContainerStyle={{ height: '500px', width: '100%' }}
+                    mapContainerStyle={{ height: '570px', width: '100%' }}
                 >
                     {courses.map((course) => (
                         <Marker key={course.name} position={{ lat: course.latitude, lng: course.longitude }} />

@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import Login from '@/components/login';
-import Register from '@/components/register';
+import Login from '@/components/global/login';
+import Register from '@/components/global/register';
 
 interface PopupWrapperProps {
     popupType: 'login' | 'register' | null;
@@ -12,16 +12,16 @@ const PopupWrapper = ({ popupType, closePopup, toggleRegisterPopup }: PopupWrapp
     return (
         <>
             {popupType === 'login' && (
-                <Login 
-                    togglePopup={closePopup} 
-                    toggleRegisterPopup={toggleRegisterPopup} 
-                    closePopup={closePopup} 
+                <Login
+                    togglePopup={closePopup}
+                    toggleRegisterPopup={toggleRegisterPopup}
+                    closePopup={closePopup}
                 />
             )}
             {popupType === 'register' && (
-                <Register 
+                <Register
                     togglePopup={toggleRegisterPopup}
-                    closePopup={closePopup}  
+                    closePopup={closePopup}
                 />
             )}
         </>

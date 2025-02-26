@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
-import Navbar from '@/components/navbar';
-import Footer from '@/components/footer';
+
+import Navbar from '@/components/global/navbar';
+import Footer from '@/components/global/footer';
+import PopupWrapper from '@/components/global/popupwrapper';
+import { usePopup } from '@/components/global/usepopup';
 import DiscgolfInfo from '@/components/frontpage/discgolfinfo';
 import Navigation from '@/components/frontpage/navigation';
-import PopupWrapper from '@/components/popupwrapper';
-import { usePopup } from '@/components/usepopup';
 
 /**
  * @author Andreas Nilsen
