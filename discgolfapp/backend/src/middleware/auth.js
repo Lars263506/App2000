@@ -11,6 +11,10 @@ import ClubPage from '../models/Clubpage.js';
 const checkMemberStatus = (req, res, next) => {
     passport.authenticate('jwt', { session: false }, async (error, user) => {
         if (error) return next(error);
+        if (!user) {
+            req.user = { role: "user" };
+            return next();
+        }
         if (req.header("Authorization") === undefined) {
             req.user = { role: "user" };
             return next();
