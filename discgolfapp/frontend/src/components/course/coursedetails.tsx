@@ -32,9 +32,9 @@ const CourseDetails: React.FC<CourseDetailsProps> = ({ selectedCourse, setSelect
   }, [selectedCourse]);
 
   return (
-    <div className="flex ">
+    <div className="flex">
       {selectedCourse && (
-        <div className="flex-1 min-h-[600px] min-w-[450px]  bg-gray-200 p-4 rounded-xl shadow text-black">
+        <div className="flex-1 min-h-[600px] min-w-[450px] bg-gray-200 p-4 rounded-xl shadow text-black flex flex-col">
           <div className="flex w-full">
             <button
               className={`flex-1 py-1 text-center rounded-l-lg ${activeTab === 'details' ? 'bg-gray-700 text-white' : 'bg-gray-200 text-gray-700'}`}
@@ -51,7 +51,7 @@ const CourseDetails: React.FC<CourseDetailsProps> = ({ selectedCourse, setSelect
           </div>
 
           {/* Course title */}
-          <div className="  flex justify-between items-center mb-4 mt-6">
+          <div className="flex justify-between items-center mb-4 mt-6">
             <h2 className="text-2xl font-semibold text-gray-900">🏆 {selectedCourse.name}</h2>
           </div>
 
@@ -71,10 +71,10 @@ const CourseDetails: React.FC<CourseDetailsProps> = ({ selectedCourse, setSelect
 
             {activeTab === 'weather' && weatherData && (
               <div>
-                <h3 className=" text-md font-semibold mb-4">Vær for {selectedCourse.location}</h3>
+                <h3 className="text-md font-semibold mb-4">Vær for {selectedCourse.location}</h3>
 
                 {/* Current weather for today */}
-                <div className="bg-blue-50  p-4 rounded-lg shadow-lg flex flex-col items-center mb-6">
+                <div className="bg-blue-50 p-4 rounded-lg shadow-lg flex flex-col items-center mb-6">
                   <img
                     src={`https:${weatherData.current.condition.icon}`}
                     alt={weatherData.current.condition.text}
@@ -106,7 +106,7 @@ const CourseDetails: React.FC<CourseDetailsProps> = ({ selectedCourse, setSelect
           </div>
 
           <button
-            className="w-full bg-gray-700 text-white px-4 py-2 rounded-lg mt-6 hover:bg-gray-800 transition"
+            className="w-full bg-gray-700 text-white px-4 py-2 rounded-lg mt-auto hover:bg-gray-800 transition"
             onClick={() => setSelectedCourse(null)}
           >
             Lukk
