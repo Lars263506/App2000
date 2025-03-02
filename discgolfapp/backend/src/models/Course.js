@@ -24,7 +24,15 @@ const schema = new mongoose.Schema(
         },
         longitude: {
             type: Number
-        }
+        },
+        difficulty: {
+            type: Number,
+            required: true
+        },
+        familyFriendly: {
+            type: Boolean,
+            required: true
+        },
     },
     { timestamps: true }
 );

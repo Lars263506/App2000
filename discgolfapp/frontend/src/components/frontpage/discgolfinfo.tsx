@@ -30,7 +30,7 @@ const DiscgolfInfo: React.FC<DiscgolfInfoProps> = ({ images, currentImageIndex }
                     <p className="mt-2 text-black">
                         Discgolfbaner varierer i lengde og vanskelighetsgrad. Noen baner har hindringer som trær, busker og vann som gjør spillet mer utfordrende. Prøv å følge etikette på banen for en god opplevelse.
                     </p>
-                    <Link href="/KomIGang">
+                    <Link href="getstartedpage">
                         <button className='mt-16 bg-black text-white px-4 py-2 rounded hover:bg-gray-600'>Kom i gang</button>
                     </Link>
                 </div>

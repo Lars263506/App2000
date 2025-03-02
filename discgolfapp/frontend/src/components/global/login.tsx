@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
-import '../app/globals.css';
+import '../../app/globals.css';
 import 'react-toastify/dist/ReactToastify.css';
 
 interface LoginProps {
@@ -85,7 +85,7 @@ const Login: React.FC<LoginProps> = ({ togglePopup, toggleRegisterPopup, closePo
             >
                 <div
                     className="bg-white p-8 rounded shadow-md w-full max-w-md relative"
-                    onClick={(e) => e.stopPropagation()}  
+                    onClick={(e) => e.stopPropagation()}
                 >
                 <button
                     onClick={closePopup}

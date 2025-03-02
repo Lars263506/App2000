@@ -1,20 +1,17 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import Link from 'next/link';
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
-
 type Club = {
   _id: string;
   name: string;
   address: string;
 };
-
 const ClubListmap = () => {
   const [clubs, setClubs] = useState<Club[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [markers, setMarkers] = useState<google.maps.LatLng[]>([]);
   const [selectedMarker, setSelectedMarker] = useState<google.maps.LatLng | null>(null);
   const mapRef = useRef<google.maps.Map | null>(null);
-
   useEffect(() => {
     const fetchClubs = async () => {
       try {
@@ -27,7 +24,6 @@ const ClubListmap = () => {
     };
     fetchClubs();
   }, []);
-
   const geocodeAddress = useCallback((address: string) => {
     return new Promise<google.maps.LatLng>((resolve, reject) => {
       new window.google.maps.Geocoder().geocode({ address }, (results, status) => {
@@ -39,7 +35,6 @@ const ClubListmap = () => {
       });
     });
   }, []);
-
   useEffect(() => {
     const fetchMarkers = async () => {
       const newMarkers = (
@@ -47,15 +42,12 @@ const ClubListmap = () => {
       ).filter(Boolean);
       setMarkers(newMarkers as google.maps.LatLng[]);
     };
-
     if (clubs.length > 0) fetchMarkers();
   }, [clubs, geocodeAddress]);
-
   useEffect(() => {
     const filteredClubs = clubs.filter((club) =>
       club.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
-
     if (filteredClubs.length === 1) {
       geocodeAddress(filteredClubs[0].address)
         .then((location) => setSelectedMarker(location))
@@ -64,9 +56,8 @@ const ClubListmap = () => {
       setSelectedMarker(null);
     }
   }, [searchTerm, clubs, geocodeAddress]);
-
   return (
-    <div className="flex flex-col md:flex-row gap-6 w-full h-100 max-w-5xl ">
+    <div className="flex min-h-[580px] flex-col md:flex-row gap-6 w-full h-100 max-w-5xl ">
       {/* Klubbliste */}
       <div className="w-full md:w-1/2 bg-gray-200 p-4 rounded-xl shadow text-black">
         <input
@@ -88,7 +79,6 @@ const ClubListmap = () => {
             ))}
         </ul>
       </div>
-
       {/* Map */}
       <div className="w-full md:w-1/2 bg-gray-200 p-4 rounded-xl shadow">
         <h2 className="text-xl font-bold">Kart</h2>
@@ -102,9 +92,9 @@ const ClubListmap = () => {
                 map.fitBounds(bounds);
               }
             }}
-            center={markers.length > 0 ? markers[0] : { lat: 59.9139, lng: 10.7522 }}
+            center={selectedMarker || (markers.length > 0 ? markers[0] : { lat: 59.9139, lng: 10.7522 })}
             zoom={selectedMarker ? 15 : 6}
-            mapContainerStyle={{ height: '350px', width: '100%' }}
+            mapContainerStyle={{ height: '520px', width: '100%' }}
           >
             {markers.map((marker, index) => (
               <Marker key={index} position={marker} />
@@ -115,5 +105,4 @@ const ClubListmap = () => {
     </div>
   );
 };
-
 export default ClubListmap;

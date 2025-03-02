@@ -9,8 +9,8 @@ import ToggleBox from './togglebox';
 
 const Navigation: FC = () => {
     const router = useRouter();
-    const navigateToCourse = () => router.push('/course');
-    const navigateToToolbox = () => router.push('/clublanding');
+    const navigateToCoursePage = () => router.push('/coursepage');
+    const navigateToClubLandingPage = () => router.push('/clublandingpage');
 
     return (
         <ToggleBox>
@@ -20,13 +20,13 @@ const Navigation: FC = () => {
                 </div>
                 <div
                     className="bg-gray-100 p-4 rounded shadow w-96 h-72 flex items-center justify-center cursor-pointer"
-                    onClick={navigateToCourse}
+                    onClick={navigateToCoursePage}
                 >
                     <h2 className="text-3xl font-bold text-black">Baner</h2>
                 </div>
                 <div
                     className="bg-gray-100 p-4 rounded shadow w-96 h-72 flex items-center justify-center cursor-pointer"
-                    onClick={navigateToToolbox}
+                    onClick={navigateToClubLandingPage}
                 >
                     <h2 className="text-3xl font-bold text-black">Klubber</h2>
                 </div>
