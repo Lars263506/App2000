@@ -1,12 +1,12 @@
 import express from 'express';
 
 import passport from '../config/passportConfig.js';
-import { optionalAuth } from '../middleware/optionalauth.js';
+import { checkMemberStatus } from '../middleware/auth.js';
 import { authorizeClubowner } from '../middleware/authorization.js';
-import { 
+import {
     getElements,
     createNewElement,
-    deleteElement, 
+    deleteElement,
     updateElement,
     updateText
 } from '../controllers/elementController.js';
@@ -18,7 +18,7 @@ import {
 const router = express.Router();
 
 router.get('/:id',
-    optionalAuth, 
+    checkMemberStatus,
     getElements
 );
 
@@ -34,13 +34,13 @@ router.delete('/:id',
     deleteElement
 );
 
-router.patch('/:id', 
+router.patch('/:id',
     passport.authenticate('jwt', { session: false }),
     authorizeClubowner,
     updateElement
 );
 
-router.patch('/text/:uniqueId', 
+router.patch('/text/:uniqueId',
     passport.authenticate('jwt', { session: false }),
     authorizeClubowner,
     updateText

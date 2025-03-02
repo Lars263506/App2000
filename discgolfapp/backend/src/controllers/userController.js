@@ -21,7 +21,22 @@ const getAllUsers = async (req, res) => {
 }
 
 /**
- * @param req 
+ * @param req
+ * @param res
+ * @description Checks the permissions of a user
+ * @throws Error if the user was not found
+ */
+
+const getPermissions = async (req, res) => {
+    try {
+        res.status(200).json(await userService.getPermissions(req.user.id));
+    } catch (error) {
+        res.status(404).json({ message: error.message });
+    }
+}
+
+/**
+ * @param req
  * @param res
  * @description Gets a user from the database by id
  * @throws Error if the user was not found
@@ -37,8 +52,9 @@ const getUser = async (req, res) => {
     }
 }
 
+
 /**
- * @param req 
+ * @param req
  * @param res
  * @description Gets a user from the database by email
  * @throws Error if the user was not found
@@ -55,7 +71,7 @@ const getUserByEmail = async (req, res) => {
 }
 
 /**
- * @param req 
+ * @param req
  * @param res
  * @description Registers a new user in the database
  * @throws Error if there was an error registering the user in the database
@@ -72,7 +88,7 @@ const registerUser = async (req, res) => {
 }
 
 /**
- * @param req 
+ * @param req
  * @param res
  * @description Logs in a user and tokens are created for the user
  * @throws Error if the email or password is incorrect
@@ -89,7 +105,7 @@ const loginUser = async (req, res) => {
 }
 
 /**
- * @param req 
+ * @param req
  * @param res
  * @description Changes the display name of a user in the database
  * @throws Error if there was an error changing the display name in the database
@@ -106,7 +122,7 @@ const changeDisplayName = async (req, res) => {
 }
 
 /**
- * @param req 
+ * @param req
  * @param res
  * @description Changes the email of a user in the database
  * @throws Error if there was an error changing the email in the database
@@ -123,7 +139,7 @@ const changeEmail = async (req, res) => {
 }
 
 /**
- * @param req 
+ * @param req
  * @param res
  * @description Changes the password of a user in the database
  * @throws Error if there was an error changing the password in the database
@@ -140,7 +156,7 @@ const changePassword = async (req, res) => {
 }
 
 /**
- * @param req 
+ * @param req
  * @param res
  * @description Changes the role of a user in the database
  * @throws Error if there was an error changing the role in the database
@@ -157,7 +173,7 @@ const changeRole = async (req, res) => {
 }
 
 /**
- * @param req 
+ * @param req
  * @param res
  * @description Deletes a user from the database
  * @throws Error if there was an error deleting the user from the database
@@ -173,4 +189,4 @@ const deleteUser = async (req, res) => {
     }
 }
 
-export { getAllUsers, getUser, getUserByEmail, registerUser, loginUser, changeDisplayName, changeEmail, changePassword, changeRole, deleteUser };
+export { getAllUsers, getPermissions, getUser, getUserByEmail, registerUser, loginUser, changeDisplayName, changeEmail, changePassword, changeRole, deleteUser };

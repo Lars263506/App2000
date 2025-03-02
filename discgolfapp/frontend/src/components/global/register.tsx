@@ -40,7 +40,6 @@ const Register: React.FC<RegisterProps> = ({ togglePopup, closePopup }) => {
                 }),
             });
             const data = await response.json();
-            console.log(data);
             if (response.status !== 201) {
                 toast.error(data.message);
             } else {

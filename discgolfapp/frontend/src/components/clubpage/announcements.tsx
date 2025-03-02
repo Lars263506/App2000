@@ -8,9 +8,10 @@ import React, { useEffect, useState } from 'react';
 type AnnouncementProps = {
     uniqueId: number;
     text: string;
+    editRights: boolean;
 };
 
-const Announcement: React.FC<AnnouncementProps> = ({ uniqueId, text }) => {
+const Announcement: React.FC<AnnouncementProps> = ({ uniqueId, text, editRights }) => {
     const [content, setContent] = useState<string>("");
 
     const accessToken = localStorage.getItem('accessToken');
@@ -36,13 +37,21 @@ const Announcement: React.FC<AnnouncementProps> = ({ uniqueId, text }) => {
     return (
         <div className="p-4 border rounded-lg shadow-md bg-white w-full">
             <h2 className="text-xl font-bold mb-2 text-black">Kunngjøringer</h2>
-            <textarea 
-                className="p-2 border rounded-md text-black min-w-[300px]"
-                placeholder="Skriv her..."
-                value={content}
-                onChange={(e) => setContent(e.target.value)}
-                onBlur={(e) => handleBlur(e)}
-            />
+            
+            {editRights ? (
+                <textarea 
+                    className="p-2 border rounded-md text-black min-w-[300px]"
+                    placeholder="Skriv her..."
+                    value={content}
+                    onChange={(e) => setContent(e.target.value)}
+                    onBlur={(e) => handleBlur(e)}
+                />
+            ) : (
+                <p className="p-2 border rounded-md text-black min-w-[300px]">
+                    {content}
+                </p>
+            )}
+            
         </div>
     );
 }

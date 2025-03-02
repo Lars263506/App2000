@@ -23,7 +23,10 @@ const getClubPage = async (req, res) => {
 const getView = async (req, res) => {
     try {
         const role = req.user.role;
-        res.json({ role });
+        if (role === "member") {
+            res.json({ view: "member" });
+        }
+        else res.json({ view: "nonmember"});
     } catch (err) {
         res.status(404).json({error: "No role found"});
     }
@@ -34,13 +37,13 @@ const createNewClubPage = async (req, res) => {
         const { name, clubOwner, description, address, zipCode, websiteURL, email, phone } = req.body;
 
         const response = await clubpageService.createNewClubPage(
-            name, 
-            clubOwner, 
-            description, 
-            address, 
+            name,
+            clubOwner,
+            description,
+            address,
             zipCode,
-            websiteURL, 
-            email, 
+            websiteURL,
+            email,
             phone
         );
         res.json({mssg: "Club page has been created", data: response});

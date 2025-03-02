@@ -15,35 +15,16 @@ import { usePopup } from '@/components/global/usepopup';
 
 const Clubpage = () => {
     const { popupType, toggleLoginPopup, toggleRegisterPopup, closePopup } = usePopup();
-    const [view, setView] = useState<"nonmember" | "member" | "clubowner">("nonmember");
-
     const router = useRouter();
     const clubId = router.query.clubId as string | undefined;
 
     const id = clubId ?? process.env.NEXT_PUBLIC_DEFAULT_CLUBID;
 
-    const getView = async () => {
-        const accessToken = localStorage.getItem('accessToken');
-        const url = process.env.NEXT_PUBLIC_BACKEND_BASE_URL + '/clubpage/view';
-
-        const response = await fetch(url, {
-            method: 'GET',
-            headers: accessToken ? { 'Authorization': 'Bearer ' + accessToken } : {},
-        });
-
-        const data = await response.json();
-        setView(data.view);
-    };
-
-    useEffect(() => {
-        if (id) getView();
-    }, [id]);
-
     return (
         <div className="">
             <Navbar toggleLoginPopup={toggleLoginPopup}/>
 
-            <Toolbox clubId={clubId} view={view}/>
+            <Toolbox clubId={id}/>
 
             <PopupWrapper
                 popupType={popupType}
@@ -53,6 +34,5 @@ const Clubpage = () => {
         </div>
     )
 }
-
 
 export default Clubpage;
