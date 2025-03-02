@@ -2,43 +2,55 @@ import Image from 'next/image';
 import router from 'next/router';
 
 const Navbar = ({ toggleLoginPopup }: { toggleLoginPopup: () => void }) => {
-
     return (
         <nav className="bg-gray-600 text-white p-4 flex justify-center relative">
-            <button
-                        onClick={() => router.push('/')}
-                        className="absolute left-4 top-1/2 transform -translate-y-1/2 px-2 py-1 bg-black text-white rounded"
-                    >
-                        Hjem
-                    </button>
-            <div className="flex items-center w-3/4">
+            <div className="flex items-center w-full justify-center">
+                {/* Logo og tittel */}
                 <div className="flex items-center mr-4">
-                    <Image src="/logo01.png" alt="Logo" width={32} height={32} className="mr-2" />
+                    <Image src="/logo01.png" alt="Logo" width={32} height={32} className="mr-2 cursor-pointer" onClick={() => router.push('/')}/>
                     <h1 className="text-xl font-bold">Norges Discgolf-forbund</h1>
                 </div>
-                <div className="flex items-center w-1/2 mx-4">
+
+                {/* Søkeboks */}
+                <div className="flex items-center w-1/2">
                     <input
                         type="text"
                         placeholder="Søk..."
                         className="w-full px-4 py-2 rounded bg-gray-300 text-black placeholder-black"
                     />
                 </div>
-                <div className="flex items-center ml-4 space-x-2">
-                    <Image
-                        src="/bx-user-circle.svg"
+
+               {/* Login og flagg ikon */}
+                <div className="flex items-center space-x-4 ml-4">
+                    <div className="w-8 h-8 flex-shrink-0">
+                        <Image
+                        src="/home-regular-24.png"
+                        alt="Hjem"
+                        width={32}
+                        height={32}
+                        className="cursor-pointer w-full h-full"
+                        onClick={() => router.push('/')}
+                        />
+                    </div>
+                    <div className="w-8 h-8 flex-shrink-0">
+                        <Image
+                        src="/user-circle-regular-24.png"
                         alt="Profil"
                         width={32}
                         height={32}
-                        className="rounded-full cursor-pointer"
-                        onClick={toggleLoginPopup} 
-                    />
-                    <Image
-                        src="/bx-world.svg"
+                        className="rounded-full cursor-pointer w-full h-full"
+                        onClick={toggleLoginPopup}
+                        />
+                    </div>
+                    <div className="w-8 h-8 flex-shrink-0">
+                        <Image
+                        src="/world-regular-24.png"
                         alt="Flagg"
                         width={32}
                         height={32}
-                        className="cursor-pointer"
-                    />
+                        className="cursor-pointer w-full h-full"
+                        />
+                    </div>
                 </div>
             </div>
         </nav>
