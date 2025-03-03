@@ -35,7 +35,7 @@ const CoursePage = () => {
 
                     <CourseDetails selectedCourse={selectedCourse} setSelectedCourse={setSelectedCourse} />
 
-                    <CourseMap selectedCourse={selectedCourse} courses={courses} />
+                    <CourseMap selectedCourse={selectedCourse} courses={courses} setSelectedCourse={setSelectedCourse}/>
                 </div>
 
                 <PopupWrapper

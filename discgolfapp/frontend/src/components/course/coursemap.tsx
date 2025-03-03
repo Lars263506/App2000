@@ -1,16 +1,18 @@
-import React, { useRef, useEffect } from 'react';
-import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
+import React, { useRef, useEffect, useState } from 'react';
+import { GoogleMap, LoadScript, Marker, InfoWindow } from '@react-google-maps/api';
 import { Course } from '../../pages/coursepage';
 
 type CourseMapProps = {
     selectedCourse: Course | null;
     courses: Course[];
+    setSelectedCourse: (course: Course) => void;
 
 };
 
-const CourseMap: React.FC<CourseMapProps> = ({ selectedCourse, courses }) => {
+const CourseMap: React.FC<CourseMapProps> = ({ selectedCourse, courses, setSelectedCourse }) => {
 
     const mapRef = useRef<google.maps.Map | null>(null);
+    const [selectedMarker, setSelectedMarker] = useState<Course | null>(null);
 
     useEffect(() => {
         if (mapRef.current && selectedCourse) {
@@ -32,8 +34,34 @@ const CourseMap: React.FC<CourseMapProps> = ({ selectedCourse, courses }) => {
                     mapContainerStyle={{ height: '570px', width: '100%' }}
                 >
                     {courses.map((course) => (
-                        <Marker key={course.name} position={{ lat: course.latitude, lng: course.longitude }} />
-                    ))}
+                         <Marker 
+                         key={course.name} 
+                         position={{ lat: course.latitude, lng: course.longitude }} 
+                         onClick={() => {
+                             setSelectedCourse(course);
+                             setSelectedMarker(course);
+                         }} 
+                     />
+                 ))}
+
+                 {selectedMarker && (
+                     <InfoWindow
+                         position={{ lat: selectedMarker.latitude, lng: selectedMarker.longitude }}
+                         onCloseClick={() => setSelectedMarker(null)} 
+                     >
+                         <div>
+                             {selectedMarker.name}
+                             <a 
+                                    href={`https://www.google.com/maps?q=${selectedMarker.latitude},${selectedMarker.longitude}`} 
+                                    target="_blank" 
+                                    rel="noopener noreferrer"
+                                    className="text-blue-500 block"
+                                >
+                                    Naviger hit
+                                </a>
+                         </div>
+                     </InfoWindow>
+                 )}
                 </GoogleMap>
             </LoadScript>
         </div>
