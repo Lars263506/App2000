@@ -29,7 +29,7 @@ const GetStartedPage = () => {
               <button
                 onClick={() => setSelectedInfo('beginner')}
                 className={`px-4 py-2 rounded ${
-                  selectedInfo === 'beginner' ? 'bg-gray-600 text-white' : 'bg-gray-300 text-black'
+                  selectedInfo === 'beginner' ? 'bg-gray-600 text-white' : 'bg-gray-300'
                 }`}
               >
                 Nybegynner Tips
@@ -37,7 +37,7 @@ const GetStartedPage = () => {
               <button
                 onClick={() => setSelectedInfo('advanced')}
                 className={`px-4 py-2 rounded ${
-                  selectedInfo === 'advanced' ? 'bg-gray-600 text-white' : 'bg-gray-300 text-black'
+                  selectedInfo === 'advanced' ? 'bg-gray-600 text-white' : 'bg-gray-300'
                 }`}
               >
                 Avansert Tips
@@ -47,8 +47,8 @@ const GetStartedPage = () => {
             {selectedInfo === 'beginner'
               ? (
                 <div>
-                  <h2 className='text-xl font-bold text-black mb-2'>Tips for nybegynnere i discgolf</h2>
-                  <p className='text-black'>
+                  <h2 className='text-xl font-bold mb-2'>Tips for nybegynnere i discgolf</h2>
+                  <p className=''>
                     Discgolf er en morsom og inkluderende sport som er enkel å lære, men utfordrende å mestre. Her er noen gode tips for å komme i gang:
                     <hr />
                     <br />
@@ -102,8 +102,8 @@ const GetStartedPage = () => {
                 )
               : (
                 <div>
-                  <h2 className='text-xl font-bold text-black mb-2'>Avansert Tips for Discgolf</h2>
-                  <p className='text-black'>
+                  <h2 className='text-xl font-bold mb-2'>Avansert Tips for Discgolf</h2>
+                  <p className=''>
                     Discgolf på et mer avansert nivå krever teknikk, strategi og en dypere forståelse av hvordan forskjellige discer fungerer. Her er noen tips for erfarne spillere:
                     <hr />
                     <br />

@@ -3,6 +3,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 
 import ToggleBox from './togglebox'
+import Button from '../global/button'
 
 /**
  * @author Andreas Nilsen
@@ -23,15 +24,17 @@ const DiscgolfInfo: React.FC<DiscgolfInfoProps> = ({ images, currentImageIndex }
           <Image src={images[currentImageIndex]} alt='Placeholder' width={300} height={300} className='w-full h-full object-cover rounded' />
         </div>
         <div className='bg-gray-100 p-4 rounded shadow max-w-md h-auto'>
-          <h2 className='text-xl font-bold text-black'>Om Discgolf</h2>
-          <p className='mt-2 text-black'>
+          <h2 className='text-xl font-bold'>Om Discgolf</h2>
+          <p className='mt-2'>
             Discgolf er en morsom og utfordrende sport som ligner på vanlig golf, men i stedet for å bruke en ball og kølle, bruker du en disc (frisbee). Målet er å kaste discen fra startpunktet til kurven på færrest mulig kast.
           </p>
-          <p className='mt-2 text-black'>
+          <p className='mt-2'>
             Discgolfbaner varierer i lengde og vanskelighetsgrad. Noen baner har hindringer som trær, busker og vann som gjør spillet mer utfordrende. Prøv å følge etikette på banen for en god opplevelse.
           </p>
           <Link href='getstartedpage'>
-            <button className='mt-16 bg-black text-white px-4 py-2 rounded hover:bg-gray-600'>Kom i gang</button>
+          <Button>
+            Kom i gang
+          </Button>
           </Link>
         </div>
       </div>

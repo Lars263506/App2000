@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Course } from '../../pages/coursepage'
 import axios from 'axios'
+import Button from '../global/button'
 
 interface CourseDetailsProps {
   selectedCourse: Course | null
@@ -34,7 +35,7 @@ const CourseDetails: React.FC<CourseDetailsProps> = ({ selectedCourse, setSelect
   return (
     <div className='flex'>
       {(selectedCourse != null) && (
-        <div className='flex-1 min-h-[600px] min-w-[450px] bg-gray-200 p-4 rounded-xl shadow text-black flex flex-col'>
+        <div className='flex-1 min-h-[600px] min-w-[450px] bg-gray-200 p-4 rounded-xl shadow flex flex-col'>
           <div className='flex w-full'>
             <button
               className={`flex-1 py-1 text-center rounded-l-lg ${activeTab === 'details' ? 'bg-gray-700 text-white' : 'bg-gray-200 text-gray-700'}`}
@@ -105,12 +106,10 @@ const CourseDetails: React.FC<CourseDetailsProps> = ({ selectedCourse, setSelect
             )}
           </div>
 
-          <button
-            className='w-full bg-gray-700 text-white px-4 py-2 rounded-lg mt-auto hover:bg-gray-800 transition'
-            onClick={() => setSelectedCourse(null)}
+          <Button
           >
             Lukk
-          </button>
+          </Button>
         </div>
       )}
     </div>

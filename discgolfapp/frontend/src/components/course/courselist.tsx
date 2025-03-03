@@ -54,7 +54,7 @@ const CourseList: React.FC<CourseListProps> = ({ courses, setCourses, setSelecte
 
   return (
     <div className=''>
-      <div className='flex-1 min-h-[600px] min-w-[450px]  bg-gray-200 p-4 rounded-xl shadow text-black'>
+      <div className='flex-1 min-h-[600px] min-w-[450px]  bg-gray-200 p-4 rounded-xl shadow'>
         <div className='relative'>
           <input
             type='text'
@@ -64,7 +64,7 @@ const CourseList: React.FC<CourseListProps> = ({ courses, setCourses, setSelecte
             onChange={(e) => setSearchTerm(e.target.value)}
           />
           <button
-            className='absolute right-3 top-2.5 text-black'
+            className='absolute right-3 top-2.5'
             onClick={() => setSearchTerm('')}
           >
             <X size={20} />

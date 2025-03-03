@@ -16,19 +16,19 @@ const Navigation: FC = () => {
     <ToggleBox>
       <div className='flex flex-wrap justify-center gap-12'>
         <div className='bg-gray-100 p-4 rounded shadow w-96 h-72 flex items-center justify-center cursor-pointer'>
-          <h2 className='text-3xl font-bold text-black'>Spill nå</h2>
+          <h2 className='text-3xl font-bold'>Spill nå</h2>
         </div>
         <div
           className='bg-gray-100 p-4 rounded shadow w-96 h-72 flex items-center justify-center cursor-pointer'
           onClick={navigateToCoursePage}
         >
-          <h2 className='text-3xl font-bold text-black'>Baner</h2>
+          <h2 className='text-3xl font-bold'>Baner</h2>
         </div>
         <div
           className='bg-gray-100 p-4 rounded shadow w-96 h-72 flex items-center justify-center cursor-pointer'
           onClick={navigateToClubLandingPage}
         >
-          <h2 className='text-3xl font-bold text-black'>Klubber</h2>
+          <h2 className='text-3xl font-bold'>Klubber</h2>
         </div>
       </div>
     </ToggleBox>
@@ -48,13 +48,13 @@ export default Navigation
                 <div className={`p-4 ${isSecondBoxOpen ? 'block' : 'hidden'}`}>
                     <div className="flex flex-wrap justify-center gap-12">
                         <div className="bg-gray-100 p-4 rounded shadow w-96 h-72 flex items-center justify-center cursor-pointer">
-                            <h2 className="text-3xl font-bold text-black">Spill nå</h2>
+                            <h2 className="text-3xl font-bold">Spill nå</h2>
                         </div>
                         <div className="bg-gray-100 p-4 rounded shadow w-96 h-72 flex items-center justify-center cursor-pointer">
-                            <h2 className="text-3xl font-bold text-black">Baner</h2>
+                            <h2 className="text-3xl font-bold">Baner</h2>
                         </div>
                         <div className="bg-gray-100 p-4 rounded shadow w-96 h-72 flex items-center justify-center cursor-pointer" onClick={navigateToToolbox}>
-                            <h2 className="text-3xl font-bold text-black">Klubber</h2>
+                            <h2 className="text-3xl font-bold">Klubber</h2>
                         </div>
                     </div>
                 </div>

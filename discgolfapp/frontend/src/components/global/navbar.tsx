@@ -3,7 +3,7 @@ import router from 'next/router'
 
 const Navbar = ({ toggleLoginPopup }: { toggleLoginPopup: () => void }) => {
   return (
-    <nav className='bg-gray-600 text-white p-4 flex justify-center relative'>
+    <nav className='text-white p-4 flex justify-center relative' style={{ backgroundColor: '#4CA454' }}>
       <div className='flex items-center w-full justify-center'>
         {/* Logo og tittel */}
         <div className='flex items-center mr-4'>
@@ -16,7 +16,7 @@ const Navbar = ({ toggleLoginPopup }: { toggleLoginPopup: () => void }) => {
           <input
             type='text'
             placeholder='Søk...'
-            className='w-full px-4 py-2 rounded bg-gray-300 text-black placeholder-black'
+            className='w-full px-4 py-2 rounded bg-gray-300 placeholder-black'
           />
         </div>
 
