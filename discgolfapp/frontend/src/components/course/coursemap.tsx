@@ -21,7 +21,7 @@ const CourseMap: React.FC<CourseMapProps> = ({ selectedCourse, courses }) => {
     }, [selectedCourse]);
 
     return (
-        <div className=" md:w-1/2 flex-grow min-w-[450px] bg-gray-200 p-4 rounded-xl shadow">
+        <div className="<div className=flex-grow min-w-[450px] h-[600px] bg-gray-200 p-4 rounded-xl shadow">
             <LoadScript googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string}>
                 <GoogleMap
                     onLoad={(map) => {
