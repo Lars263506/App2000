@@ -1,6 +1,6 @@
-import passport from '../config/passportConfig.js';
-import User from '../models/User.js';
-import ClubPage from '../models/Clubpage.js';
+import passport from '../config/passportConfig.js'
+import User from '../models/User.js'
+import ClubPage from '../models/Clubpage.js'
 
 /**
  * @author Lars Andreas Strand
@@ -9,38 +9,38 @@ import ClubPage from '../models/Clubpage.js';
  */
 
 const checkMemberStatus = (req, res, next) => {
-    passport.authenticate('jwt', { session: false }, async (error, user) => {
-        if (error) return next(error);
-        if (!user) {
-            req.user = { role: "user" };
-            return next();
-        }
-        if (req.header("Authorization") === undefined) {
-            req.user = { role: "user" };
-            return next();
-        }
+  passport.authenticate('jwt', { session: false }, async (error, user) => {
+    if (error) return next(error)
+    if (!user) {
+      req.user = { role: 'user' }
+      return next()
+    }
+    if (req.header('Authorization') === undefined) {
+      req.user = { role: 'user' }
+      return next()
+    }
 
-        if (user.role === 'clubowner' || user.role === 'admin') {
-            req.user = user;
-            return next();
-        }
+    if (user.role === 'clubowner' || user.role === 'admin') {
+      req.user = user
+      return next()
+    }
 
-        try {
-            const member = await User.findById({ _id: user.id });
+    try {
+      const member = await User.findById({ _id: user.id })
 
-            if (!member) {
-                req.user = { ...user, role: 'user' };
-                return next();
-            }
+      if (!member) {
+        req.user = { ...user, role: 'user' }
+        return next()
+      }
 
-            const isMember = await ClubPage.findOne({ _id: req.params.id, members: member._id });
-            req.user = { ...user, role: isMember ? 'member' : 'user' };
-            return next();
-        } catch (err) {
-            return next(err);
-        }
-    })(req, res, next);
-};
+      const isMember = await ClubPage.findOne({ _id: req.params.id, members: member._id })
+      req.user = { ...user, role: isMember ? 'member' : 'user' }
+      return next()
+    } catch (err) {
+      return next(err)
+    }
+  })(req, res, next)
+}
 
 /**
  *
@@ -50,16 +50,16 @@ const checkMemberStatus = (req, res, next) => {
  */
 
 const optionalAuth = (req, res, next) => {
-    if (req.header("Authorization")) {
-        passport.authenticate('jwt', { session: false }, (err, user) => {
-            if (err) return next(err);
-            req.user = user;
-            return next();
-        })(req, res, next);
-    } else {
-        req.user = { role: "user" };
-        next();
-    }
+  if (req.header('Authorization')) {
+    passport.authenticate('jwt', { session: false }, (err, user) => {
+      if (err) return next(err)
+      req.user = user
+      return next()
+    })(req, res, next)
+  } else {
+    req.user = { role: 'user' }
+    next()
+  }
 }
 
-export { checkMemberStatus, optionalAuth };
+export { checkMemberStatus, optionalAuth }

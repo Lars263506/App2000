@@ -1,4 +1,4 @@
-import * as userService from '../services/userService.js';
+import * as userService from '../services/userService.js'
 
 /**
  * @author Lars263506 (Github)
@@ -12,12 +12,12 @@ import * as userService from '../services/userService.js';
  */
 
 const getAllUsers = async (req, res) => {
-    try {
-        const users = await userService.getAllUsers();
-        res.status(200).json(users);
-    } catch (error) {
-        res.status(404).json({ message: error.message });
-    }
+  try {
+    const users = await userService.getAllUsers()
+    res.status(200).json(users)
+  } catch (error) {
+    res.status(404).json({ message: error.message })
+  }
 }
 
 /**
@@ -28,11 +28,11 @@ const getAllUsers = async (req, res) => {
  */
 
 const getPermissions = async (req, res) => {
-    try {
-        res.status(200).json(await userService.getPermissions(req.user.id));
-    } catch (error) {
-        res.status(404).json({ message: error.message });
-    }
+  try {
+    res.status(200).json(await userService.getPermissions(req.user.id))
+  } catch (error) {
+    res.status(404).json({ message: error.message })
+  }
 }
 
 /**
@@ -43,15 +43,14 @@ const getPermissions = async (req, res) => {
  */
 
 const getUser = async (req, res) => {
-    try {
-        const id = req.params.id;
-        const user = await userService.getUser(id);
-        res.status(200).json(user);
-    } catch (error) {
-        res.status(404).json({ message: error.message });
-    }
+  try {
+    const id = req.params.id
+    const user = await userService.getUser(id)
+    res.status(200).json(user)
+  } catch (error) {
+    res.status(404).json({ message: error.message })
+  }
 }
-
 
 /**
  * @param req
@@ -61,13 +60,13 @@ const getUser = async (req, res) => {
  */
 
 const getUserByEmail = async (req, res) => {
-    try {
-        const email = req.body.email;
-        const user = await userService.getUserByEmail(email);
-        res.status(200).json(user);
-    } catch (error) {
-        res.status(404).json({ message: error.message });
-    }
+  try {
+    const email = req.body.email
+    const user = await userService.getUserByEmail(email)
+    res.status(200).json(user)
+  } catch (error) {
+    res.status(404).json({ message: error.message })
+  }
 }
 
 /**
@@ -78,13 +77,13 @@ const getUserByEmail = async (req, res) => {
  */
 
 const registerUser = async (req, res) => {
-    const { displayName, email, password } = req.body;
-    try {
-        const { createdAt } = await userService.registerUser(displayName, email, password);
-        res.status(201).json(createdAt);
-    } catch (error) {
-        res.status(400).json({ message: error.message });
-    }
+  const { displayName, email, password } = req.body
+  try {
+    const { createdAt } = await userService.registerUser(displayName, email, password)
+    res.status(201).json(createdAt)
+  } catch (error) {
+    res.status(400).json({ message: error.message })
+  }
 }
 
 /**
@@ -95,13 +94,13 @@ const registerUser = async (req, res) => {
  */
 
 const loginUser = async (req, res) => {
-    const { email, password } = req.body;
-    try {
-        const { accessToken, refreshToken, displayName } = await userService.loginUser(email, password);
-        res.status(200).json({ accessToken, refreshToken, displayName });
-    } catch (error) {
-        res.status(401).json({ message: error.message });
-    }
+  const { email, password } = req.body
+  try {
+    const { accessToken, refreshToken, displayName } = await userService.loginUser(email, password)
+    res.status(200).json({ accessToken, refreshToken, displayName })
+  } catch (error) {
+    res.status(401).json({ message: error.message })
+  }
 }
 
 /**
@@ -112,13 +111,13 @@ const loginUser = async (req, res) => {
  */
 
 const changeDisplayName = async (req, res) => {
-    const { email, newDisplayName } = req.body;
-    try {
-        const { emailChangedAt } = await userService.changeDisplayName(email, newDisplayName);
-        res.status(200).json(emailChangedAt);
-    } catch (error) {
-        res.status(400).json({ message: error.message });
-    }
+  const { email, newDisplayName } = req.body
+  try {
+    const { emailChangedAt } = await userService.changeDisplayName(email, newDisplayName)
+    res.status(200).json(emailChangedAt)
+  } catch (error) {
+    res.status(400).json({ message: error.message })
+  }
 }
 
 /**
@@ -129,13 +128,13 @@ const changeDisplayName = async (req, res) => {
  */
 
 const changeEmail = async (req, res) => {
-    const { email, newEmail } = req.body;
-    try {
-        const { emailChangedAt } = await userService.changeEmail(email, newEmail);
-        res.status(200).json(emailChangedAt);
-    } catch (error) {
-        res.status(400).json({ message: error.message });
-    }
+  const { email, newEmail } = req.body
+  try {
+    const { emailChangedAt } = await userService.changeEmail(email, newEmail)
+    res.status(200).json(emailChangedAt)
+  } catch (error) {
+    res.status(400).json({ message: error.message })
+  }
 }
 
 /**
@@ -146,13 +145,13 @@ const changeEmail = async (req, res) => {
  */
 
 const changePassword = async (req, res) => {
-    const { email, newPassword } = req.body;
-    try {
-        const { passwordChangedAt } = await userService.changePassword(email, newPassword);
-        res.status(200).json(passwordChangedAt);
-    } catch (error) {
-        res.status(400).json({ message: error.message });
-    }
+  const { email, newPassword } = req.body
+  try {
+    const { passwordChangedAt } = await userService.changePassword(email, newPassword)
+    res.status(200).json(passwordChangedAt)
+  } catch (error) {
+    res.status(400).json({ message: error.message })
+  }
 }
 
 /**
@@ -163,13 +162,13 @@ const changePassword = async (req, res) => {
  */
 
 const changeRole = async (req, res) => {
-    const { email, newRole } = req.body;
-    try {
-        const { userRole, roleChangedAt } = await userService.changeRole(email, newRole);
-        res.status(200).json({ userRole, roleChangedAt });
-    } catch (error) {
-        res.status(400).json({ message: error.message });
-    }
+  const { email, newRole } = req.body
+  try {
+    const { userRole, roleChangedAt } = await userService.changeRole(email, newRole)
+    res.status(200).json({ userRole, roleChangedAt })
+  } catch (error) {
+    res.status(400).json({ message: error.message })
+  }
 }
 
 /**
@@ -180,13 +179,13 @@ const changeRole = async (req, res) => {
  */
 
 const deleteUser = async (req, res) => {
-    const { email } = req.body;
-    try {
-        const user = await userService.deleteUser(email);
-        res.status(200).json(user);
-    } catch (error) {
-        res.status(400).json({ message: error.message });
-    }
+  const { email } = req.body
+  try {
+    const user = await userService.deleteUser(email)
+    res.status(200).json(user)
+  } catch (error) {
+    res.status(400).json({ message: error.message })
+  }
 }
 
-export { getAllUsers, getPermissions, getUser, getUserByEmail, registerUser, loginUser, changeDisplayName, changeEmail, changePassword, changeRole, deleteUser };
+export { getAllUsers, getPermissions, getUser, getUserByEmail, registerUser, loginUser, changeDisplayName, changeEmail, changePassword, changeRole, deleteUser }
