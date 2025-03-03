@@ -27,25 +27,57 @@ const CoursePage = () => {
 
   return (
     <div>
-      <div className='min-h-screen flex flex-col'>
+      <div className="min-h-screen flex flex-col">
         <Navbar toggleLoginPopup={toggleLoginPopup} />
-
-        <div className='flex flex-col sm:flex-row items-start gap-4 px-4 py-4'>
-          <CourseList courses={courses} setCourses={setCourses} setSelectedCourse={setSelectedCourse} />
-
-          <CourseDetails selectedCourse={selectedCourse} setSelectedCourse={setSelectedCourse} />
-
-          <CourseMap selectedCourse={selectedCourse} courses={courses} setSelectedCourse={setSelectedCourse} />
-        </div>
-
-        <PopupWrapper
-          popupType={popupType}
-          closePopup={closePopup}
-          toggleRegisterPopup={toggleRegisterPopup}
+  
+        {/* Hovedinnhold */}
+          <div className="flex-grow px-4 py-4">
+            {/* Flex-container for responsiv layout */}
+          <div
+          className={`flex flex-wrap lg:flex-nowrap w-full h-full gap-4 ${
+          popupType ? 'flex-col' : 'lg:flex-row'
+          }`}
+        >
+      {/* CourseList - Fikset bredde og fleksibel tilpasning */}
+      <div className="flex-grow lg:flex-shrink-0 lg:basis-1/4">
+        <CourseList 
+          courses={courses} 
+          setCourses={setCourses} 
+          setSelectedCourse={setSelectedCourse} 
         />
+      
+       {/* CourseDetails - Kun synlig når et kurs er valgt */}
+       {selectedCourse && (
+        <div className="flex-grow lg:flex-shrink-0 lg:basis-1/4">
+          <CourseDetails 
+            selectedCourse={selectedCourse} 
+            setSelectedCourse={setSelectedCourse} 
+          />
+        </div>
+      )}
+      
+        {/* CourseMap - Tar opp all resterende plass */}
+        <div
+          className={`flex-grow ${
+            selectedCourse ? 'lg:basis-2/4' : 'lg:basis-3/4'
+          } w-full lg:w-auto ${popupType ? 'lg:basis-full' : ''}`}
+        >
+          <CourseMap 
+            selectedCourse={selectedCourse} 
+            courses={courses} 
+            setSelectedCourse={setSelectedCourse}
+          />
+        </div>
+      </div>
+    </div>
 
-        <div className='w-full bottom-0 w-full'>
-          <Footer />
+    <PopupWrapper
+      popupType={popupType}
+      closePopup={closePopup}
+      toggleRegisterPopup={toggleRegisterPopup}
+    />
+
+    <Footer />
         </div>
       </div>
     </div>

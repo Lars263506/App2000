@@ -94,7 +94,7 @@ const ClubListmap = () => {
             }}
             center={(selectedMarker != null) || (markers.length > 0 ? markers[0] : { lat: 59.9139, lng: 10.7522 })}
             zoom={(selectedMarker != null) ? 15 : 6}
-            mapContainerStyle={{ height: '520px', width: '100%' }}
+            mapContainerStyle={{ height: '680px', width: '100%' }}
           >
             {markers.map((marker, index) => (
               <Marker key={index} position={marker} />

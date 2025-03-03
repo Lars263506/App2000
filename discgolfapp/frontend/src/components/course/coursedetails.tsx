@@ -59,9 +59,7 @@ const CourseDetails: React.FC<CourseDetailsProps> = ({ selectedCourse, setSelect
             {activeTab === 'details' && (
               <>
                 <p><span className='font-medium'>📍 Lokasjon:</span> {selectedCourse.location}</p>
-                <p><span className='font-medium'>🏙️ Post Kode:</span> {selectedCourse.postCode}</p>
-                <p><span className='font-medium'>🌍 Breddegrad:</span> {selectedCourse.latitude}</p>
-                <p><span className='font-medium'>🌏 Lengegrad:</span> {selectedCourse.longitude}</p>
+                <p><span className='font-medium'>🏙️ Postnummer:</span> {selectedCourse.postCode}</p>
                 <p><span className='font-medium'>🎯 Vanskelighetsgrad:</span> {selectedCourse.difficulty}</p>
                 {selectedCourse.familyFriendly && (
                   <p><span className='font-medium'>👨‍👩‍👧‍👦 Familievennlig:</span> Ja</p>
