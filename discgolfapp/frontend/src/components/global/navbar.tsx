@@ -12,7 +12,7 @@ const Navbar = ({ toggleLoginPopup }: { toggleLoginPopup: () => void }) => {
                 </div>
 
                 {/* Søkeboks */}
-                <div className="flex items-center w-1/2">
+                <div className="flex items-center w-1/4">
                     <input
                         type="text"
                         placeholder="Søk..."
