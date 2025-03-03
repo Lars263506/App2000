@@ -1,6 +1,6 @@
-import passport from 'passport';
-import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt';
-import User from '../models/User.js';
+import passport from 'passport'
+import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt'
+import User from '../models/User.js'
 
 /**
  * @author Lars263506 (Github)
@@ -8,24 +8,24 @@ import User from '../models/User.js';
  */
 
 const options = {
-    jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-    secretOrKey: process.env.JWT_ACCESS_SECRET
+  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+  secretOrKey: process.env.JWT_ACCESS_SECRET
 }
 
 const jwtStrategy = new JwtStrategy(options, async (payload, done) => {
-    try {
-        const authorizedUser = await User.findById(payload.id);
+  try {
+    const authorizedUser = await User.findById(payload.id)
 
-        if (authorizedUser) {
-            done(null, { id: authorizedUser.id, role: authorizedUser.role });
-        } else {
-            done(null, false);
-        }
-    } catch (error) {
-        done(error, false);
+    if (authorizedUser) {
+      done(null, { id: authorizedUser.id, role: authorizedUser.role })
+    } else {
+      done(null, false)
     }
-});
+  } catch (error) {
+    done(error, false)
+  }
+})
 
-passport.use(jwtStrategy);
+passport.use(jwtStrategy)
 
-export default passport;
+export default passport

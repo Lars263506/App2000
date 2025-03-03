@@ -1,5 +1,5 @@
-import mongoose from 'mongoose';
-import * as elementService from '../services/elementService.js';
+import mongoose from 'mongoose'
+import * as elementService from '../services/elementService.js'
 
 /**
  * @author Lars Andreas Strand og Adrian Johansen
@@ -14,14 +14,14 @@ import * as elementService from '../services/elementService.js';
  */
 
 const getElements = async (req, res) => {
-    try {
-        const id = req.params.id;
-        const role = req.user.role;
-        const elements = await elementService.getElements(id, role);
-        res.status(200).json(elements);
-    } catch(error) {
-        res.status(404).json({ message: error.message });
-    }
+  try {
+    const id = req.params.id
+    const role = req.user.role
+    const elements = await elementService.getElements(id, role)
+    res.status(200).json(elements)
+  } catch (error) {
+    res.status(404).json({ message: error.message })
+  }
 }
 
 /**
@@ -32,14 +32,14 @@ const getElements = async (req, res) => {
  */
 
 const createNewElement = async (req, res) => {
-    try {
-        const id = req.params.id;
-        const { type, uniqueId, x, y, width, height, view } = req.body
-        const createdAt = await elementService.createNewElement(id, type, uniqueId, x, y, width, height, view);
-        res.status(201).json(createdAt);
-    } catch(error) {
-        res.status(500).json({ message: error.message });
-    }
+  try {
+    const id = req.params.id
+    const { type, uniqueId, x, y, width, height, view } = req.body
+    const createdAt = await elementService.createNewElement(id, type, uniqueId, x, y, width, height, view)
+    res.status(201).json(createdAt)
+  } catch (error) {
+    res.status(500).json({ message: error.message })
+  }
 }
 
 /**
@@ -50,15 +50,15 @@ const createNewElement = async (req, res) => {
  */
 
 const deleteElement = async (req, res) => {
-    try {
-        const clubId = req.params.id;
-        const { view, uniqueId } = req.body;
+  try {
+    const clubId = req.params.id
+    const { view, uniqueId } = req.body
 
-        const success = await elementService.deleteElement(clubId, view, uniqueId);
-        res.status(200).json(success);
-    } catch(error) {
-        res.status(400).json({ message: error.message });
-    }
+    const success = await elementService.deleteElement(clubId, view, uniqueId)
+    res.status(200).json(success)
+  } catch (error) {
+    res.status(400).json({ message: error.message })
+  }
 }
 
 /**
@@ -69,36 +69,36 @@ const deleteElement = async (req, res) => {
  */
 
 const updateElement = async (req, res) => {
-    const session = await mongoose.startSession();
-    session.startTransaction();
-    try {
-        const id = req.params.id;
-        const { type, uniqueId, x, y, width, height, view } = req.body
+  const session = await mongoose.startSession()
+  session.startTransaction()
+  try {
+    const id = req.params.id
+    const { type, uniqueId, x, y, width, height, view } = req.body
 
-        await elementService.deleteElement(id, view, uniqueId);
+    await elementService.deleteElement(id, view, uniqueId)
 
-        await elementService.createNewElement(id, type, uniqueId, x, y, width, height, view);
+    await elementService.createNewElement(id, type, uniqueId, x, y, width, height, view)
 
-        await session.commitTransaction();
+    await session.commitTransaction()
 
-        res.status(200).json({ success: true });
-    } catch(error) {
-        res.status(400).json({ message: error.message });
-        session.abortTransaction();
-    } finally {
-        session.endSession();
-    }
+    res.status(200).json({ success: true })
+  } catch (error) {
+    res.status(400).json({ message: error.message })
+    session.abortTransaction()
+  } finally {
+    session.endSession()
+  }
 }
 
 const updateText = async (req, res) => {
-    try {
-        const uniqueId = req.params.uniqueId;
-        const { text } = req.body;
-        const success = await elementService.updateText(text, uniqueId);
-        res.status(200).json(success);
-    } catch(error) {
-        res.status(400).json({ message: error.message });
-    }
+  try {
+    const uniqueId = req.params.uniqueId
+    const { text, view } = req.body
+    const success = await elementService.updateText(text, view, uniqueId)
+    res.status(200).json(success)
+  } catch (error) {
+    res.status(400).json({ message: error.message })
+  }
 }
 
-export { getElements, createNewElement,  deleteElement, updateElement, updateText };
+export { getElements, createNewElement, deleteElement, updateElement, updateText }

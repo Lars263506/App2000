@@ -1,73 +1,73 @@
-import React, { useState, useEffect } from 'react';
-import { X } from 'lucide-react';
+import React, { useState, useEffect } from 'react'
+import { X } from 'lucide-react'
 
-type CourseListProps = {
-  courses: Course[];
-  setCourses: (courses: Course[]) => void;
-  setSelectedCourse: (course: Course | null) => void;
-};
+interface CourseListProps {
+  courses: Course[]
+  setCourses: (courses: Course[]) => void
+  setSelectedCourse: (course: Course | null) => void
+}
 
-type Course = {
-  name: string;
-  location: string;
-  url: string;
-  postCode: string;
-  latitude: number;
-  longitude: number;
-  difficulty: string; 
-  familyFriendly: boolean; 
-};
+interface Course {
+  name: string
+  location: string
+  url: string
+  postCode: string
+  latitude: number
+  longitude: number
+  difficulty: string
+  familyFriendly: boolean
+}
 
 const CourseList: React.FC<CourseListProps> = ({ courses, setCourses, setSelectedCourse }) => {
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState('')
 
   useEffect(() => {
     const fetchCourses = async () => {
-      const url = process.env.NEXT_PUBLIC_BACKEND_BASE_URL + '/course';
+      const url = process.env.NEXT_PUBLIC_BACKEND_BASE_URL + '/course'
 
       try {
         const response = await fetch(url, {
-            'method': "GET"
-        });
+          method: 'GET'
+        })
 
-        const result = await response.json();
+        const result = await response.json()
 
-        const data = result.data;
+        const data = result.data
 
         if (Array.isArray(data)) {
-          setCourses(data);
+          setCourses(data)
         } else {
-          console.error('Fetched data is not an array:', data);
+          console.error('Fetched data is not an array:', data)
         }
 
-        setCourses(data);
+        setCourses(data)
       } catch (error) {
-        console.error('Feil ved henting av baner:', error);
+        console.error('Feil ved henting av baner:', error)
       }
-    };
-    fetchCourses();
-  }, []);
+    }
+    fetchCourses()
+  }, [])
 
   const filteredCourses = courses.filter(course =>
     course.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  )
 
   return (
-    <div className="">
-      <div className="flex-1 min-h-[600px] min-w-[450px]  bg-gray-200 p-4 rounded-xl shadow text-black">
-        <div className="relative">
+    <div className=''>
+      <div className='flex-1 min-h-[600px] min-w-[450px]  bg-gray-200 p-4 rounded-xl shadow text-black'>
+        <div className='relative'>
           <input
-            type="text"
-            placeholder="Søk etter bane..."
-            className="border p-2 rounded w-full mb-4"
+            type='text'
+            placeholder='Søk etter bane...'
+            className='border p-2 rounded w-full mb-4'
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
           <button
-            className="absolute right-3 top-2.5 text-black"
-            onClick={() => setSearchTerm("")}
-            >
-              <X size={20} />
+            className='absolute right-3 top-2.5 text-black'
+            onClick={() => setSearchTerm('')}
+          >
+            <X size={20} />
           </button>
         </div>
         <ul>
@@ -79,7 +79,7 @@ const CourseList: React.FC<CourseListProps> = ({ courses, setCourses, setSelecte
         </ul>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default CourseList;
+export default CourseList
