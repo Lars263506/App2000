@@ -1,13 +1,12 @@
 import { useState } from 'react'
-
 import '../app/globals.css'
 import Navbar from '../components/global/navbar'
 import Footer from '@/components/global/footer'
 import CourseList from '@/components/course/courselist'
 import CourseDetails from '@/components/course/coursedetails'
 import CourseMap from '@/components/course/coursemap'
-import PopupWrapper from '@/components/global/popupwrapper'
 import { usePopup } from '@/components/global/usepopup'
+import PopupWrapper from '@/components/global/popupwrapper'
 
 export interface Course {
   name: string
@@ -21,65 +20,55 @@ export interface Course {
 }
 
 const CoursePage = () => {
-  const { popupType, toggleLoginPopup, toggleRegisterPopup, closePopup } = usePopup()
   const [courses, setCourses] = useState<Course[]>([])
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null)
+  const { popupType, toggleLoginPopup, toggleRegisterPopup, closePopup } = usePopup()
 
   return (
-    <div>
-      <div className="min-h-screen flex flex-col">
-        <Navbar toggleLoginPopup={toggleLoginPopup} />
-  
-        {/* Hovedinnhold */}
-          <div className="flex-grow px-4 py-4">
-            {/* Flex-container for responsiv layout */}
-          <div
-          className={`flex flex-wrap lg:flex-nowrap w-full h-full gap-4 ${
-          popupType ? 'flex-col' : 'lg:flex-row'
-          }`}
-        >
-      {/* CourseList - Fikset bredde og fleksibel tilpasning */}
-      <div className="flex-grow lg:flex-shrink-0 lg:basis-1/4">
-        <CourseList 
-          courses={courses} 
-          setCourses={setCourses} 
-          setSelectedCourse={setSelectedCourse} 
-        />
+    <div className="min-h-screen flex flex-col">
+      <Navbar toggleLoginPopup={toggleLoginPopup}/>
       
-       {/* CourseDetails - Kun synlig når et kurs er valgt */}
-       {selectedCourse && (
-        <div className="flex-grow lg:flex-shrink-0 lg:basis-1/4">
-          <CourseDetails 
-            selectedCourse={selectedCourse} 
-            setSelectedCourse={setSelectedCourse} 
-          />
-        </div>
-      )}
-      
-        {/* CourseMap - Tar opp all resterende plass */}
-        <div
-          className={`flex-grow ${
-            selectedCourse ? 'lg:basis-2/4' : 'lg:basis-3/4'
-          } w-full lg:w-auto ${popupType ? 'lg:basis-full' : ''}`}
-        >
-          <CourseMap 
-            selectedCourse={selectedCourse} 
-            courses={courses} 
-            setSelectedCourse={setSelectedCourse}
-          />
+      {/* Hovedinnhold */}
+      <div className="flex-grow p-4">
+        <div className="flex flex-col lg:flex-row gap-8 lg:flex-wrap">
+          {/* CourseList - tar en fast bredde */}
+          <div className="lg:w-1/4 xl:w-1/5 w-full">
+            <CourseList
+              courses={courses}
+              setCourses={setCourses}
+              setSelectedCourse={setSelectedCourse}
+            />
+          </div>
+          
+          {/* CourseDetails - vises kun når et kurs er valgt */}
+          {selectedCourse && (
+            <div className="lg:w-1/4 xl:w-1/5 w-full mb-8 lg:mb-0 mr-6">
+              <CourseDetails
+                selectedCourse={selectedCourse}
+                setSelectedCourse={setSelectedCourse}
+              />
+            </div>
+          )}
+          
+          {/* CourseMap - tar resten av plassen, justerer når CourseDetails er åpen */}
+          <div className={`flex-1 h-96 lg:h-auto ${selectedCourse ? 'lg:ml-8' : ''}`}>
+            <CourseMap
+              selectedCourse={selectedCourse}
+              courses={courses}
+              setSelectedCourse={setSelectedCourse}
+            />
+          </div>
         </div>
       </div>
-    </div>
-
-    <PopupWrapper
-      popupType={popupType}
-      closePopup={closePopup}
-      toggleRegisterPopup={toggleRegisterPopup}
-    />
-
-    <Footer />
-        </div>
-      </div>
+      
+      {/* Popup Wrapper - Dette er popupen som vises på toppen */}
+      <PopupWrapper
+        popupType={popupType}
+        closePopup={closePopup}
+        toggleRegisterPopup={toggleRegisterPopup}
+      />
+      
+      <Footer />
     </div>
   )
 }

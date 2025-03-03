@@ -54,7 +54,7 @@ const CourseList: React.FC<CourseListProps> = ({ courses, setCourses, setSelecte
 
   return (
     <div className=''>
-      <div className='flex-1 min-h-[710px] min-w-[450px]  bg-gray-200 p-4 rounded-xl shadow text-black'>
+      <div className='flex-1 min-h-[720px] min-w-[300px] bg-gray-200 p-4 rounded-xl shadow text-black ml-2'>
         <div className='relative'>
           <input
             type='text'

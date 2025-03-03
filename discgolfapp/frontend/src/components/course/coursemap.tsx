@@ -22,7 +22,7 @@ const CourseMap: React.FC<CourseMapProps> = ({ selectedCourse, courses, setSelec
   }, [selectedCourse])
 
     return (
-      <div className=' md:w-1/2 flex-grow min-w-[450px] bg-gray-200 p-4 rounded-xl shadow'>
+      <div className=' flex-grow bg-gray-200 p-4 rounded-xl shadow mr-2 ml-6'>
         <LoadScript googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string}>
           <GoogleMap
             onLoad={(map) => {
@@ -30,7 +30,7 @@ const CourseMap: React.FC<CourseMapProps> = ({ selectedCourse, courses, setSelec
             }}
             center={(selectedCourse != null) ? { lat: selectedCourse.latitude, lng: selectedCourse.longitude } : { lat: 59.9139, lng: 10.7522 }}
             zoom={(selectedCourse != null) ? 15 : 6}
-            mapContainerStyle={{ height: '680px', width: '100%' }}
+            mapContainerStyle={{ height: '690px', width: '100%' }}
           >
             {courses.map((course) => (
               <Marker
