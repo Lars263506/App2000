@@ -26,13 +26,19 @@ const schema = new mongoose.Schema(
       type: Number
     },
     difficulty: {
-      type: Number,
-      required: true
+      type: String,
+      required: true,
+      enum: ['Easy', 'Medium', 'Difficult'],
+      default: 'Medium'
     },
     familyFriendly: {
       type: Boolean,
-      required: true
-    }
+      
+    },
+    holes: {
+      type: Number,
+      resquired: true,
+    }, 
   },
   { timestamps: true }
 )
