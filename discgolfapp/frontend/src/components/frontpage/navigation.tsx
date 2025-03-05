@@ -11,11 +11,14 @@ const Navigation: FC = () => {
   const router = useRouter()
   const navigateToCoursePage = async () => await router.push('/coursepage')
   const navigateToClubLandingPage = async () => await router.push('/clublandingpage')
+  const navigateToplaypage = async () => await router.push('/playpage')
 
   return (
     <ToggleBox>
       <div className='flex flex-wrap justify-center gap-12'>
-        <div className='bg-gray-100 p-4 rounded shadow w-96 h-72 flex items-center justify-center cursor-pointer'>
+        <div className='bg-gray-100 p-4 rounded shadow w-96 h-72 flex items-center justify-center cursor-pointer'
+          onClick={navigateToplaypage}
+          >
           <h2 className='text-3xl font-bold text-black'>Spill nå</h2>
         </div>
         <div
