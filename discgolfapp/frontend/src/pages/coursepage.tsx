@@ -18,6 +18,7 @@ export interface Course {
   longitude: number
   difficulty: string
   familyFriendly: boolean
+  holes: number 
 }
 
 const CoursePage = () => {
