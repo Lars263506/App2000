@@ -34,6 +34,18 @@ const getPermissions = async (id) => {
 
 /**
  * @param id
+ * @returns User profile object
+ * @description Gets the profile of a user
+ */
+
+const getProfile = async (id) => {
+  const userProfile = await User.findById(id).select('-hashedPassword, -emailChangedAt, -passwordChangedAt, -roleChangedAt')
+  if (!userProfile) throw new Error('User not found')
+  return userProfile
+}
+
+/**
+ * @param id
  * @returns User object, excluding hashed password
  * @description Gets a user from the database by id
  * @throws Error if the user was not found
@@ -190,6 +202,7 @@ const deleteUser = async (email) => {
 export {
   getAllUsers,
   getPermissions,
+  getProfile,
   getUser,
   getUserByEmail,
   registerUser,

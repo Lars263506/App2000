@@ -38,6 +38,22 @@ const getPermissions = async (req, res) => {
 /**
  * @param req
  * @param res
+ * @description Gets the profile of a user
+ * @throws Error if the user was not found
+ */
+
+const getProfile = async (req, res) => {
+  try {
+    console.log(req.user.id)
+    res.status(200).json(await userService.getProfile(req.user.id))
+  } catch (error) {
+    res.status(404).json({ message: error.message })
+  }
+}
+
+/**
+ * @param req
+ * @param res
  * @description Gets a user from the database by id
  * @throws Error if the user was not found
  */
@@ -188,4 +204,4 @@ const deleteUser = async (req, res) => {
   }
 }
 
-export { getAllUsers, getPermissions, getUser, getUserByEmail, registerUser, loginUser, changeDisplayName, changeEmail, changePassword, changeRole, deleteUser }
+export { getAllUsers, getPermissions, getProfile, getUser, getUserByEmail, registerUser, loginUser, changeDisplayName, changeEmail, changePassword, changeRole, deleteUser }

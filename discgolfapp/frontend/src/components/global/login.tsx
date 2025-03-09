@@ -2,11 +2,14 @@ import React, { useState, useEffect } from 'react'
 import { ToastContainer, toast } from 'react-toastify'
 import '../../app/globals.css'
 import 'react-toastify/dist/ReactToastify.css'
+import MyPagePopup from '@/pages/mypage'
+import router from 'next/router'
 
 interface LoginProps {
   togglePopup: () => void
   toggleRegisterPopup: () => void
   closePopup: () => void
+  toggleMyPagePopup: () => void
 }
 
 interface LoginResponseData {
@@ -16,7 +19,7 @@ interface LoginResponseData {
   message?: string
 }
 
-const Login: React.FC<LoginProps> = ({ togglePopup, toggleRegisterPopup, closePopup }) => {
+const Login: React.FC<LoginProps> = ({ togglePopup, toggleRegisterPopup, closePopup, toggleMyPagePopup }) => {
   const [locked, setLocked] = useState(false)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -97,15 +100,18 @@ const Login: React.FC<LoginProps> = ({ togglePopup, toggleRegisterPopup, closePo
         <h2 className='text-2xl font-bold text-center text-black mb-8'>
           {isLoggedIn ? 'Logget inn' : 'Logg inn'}
         </h2>
-        {isLoggedIn
-          ? (
-            <button
-              type='button'
-              className='bg-red-600 text-white px-4 py-2 rounded hover:bg-red-800 mb-4'
-              onClick={handleLogout}
-            >
+        {isLoggedIn ? (
+           <div className="flex flex-col items-center">
+           <button
+             onClick={() => router.push("/mypage")} 
+             className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 mb-2"
+           >
+             Min Side
+           </button>
+            <button onClick={handleLogout} className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-800">
               Logg ut
             </button>
+          </div>
             )
           : (
             <form className='flex flex-col' onSubmit={handleLogin}>
