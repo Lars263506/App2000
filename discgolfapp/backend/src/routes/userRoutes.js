@@ -7,6 +7,7 @@ import { loginLimiter, registerLimiter } from '../middleware/rateLimiter.js'
 import {
   getAllUsers,
   getPermissions,
+  getProfile,
   getUser,
   getUserByEmail,
   registerUser,
@@ -33,6 +34,11 @@ router.get('/',
 router.get('/permissions',
   optionalAuth,
   getPermissions
+)
+
+router.get('/me',
+  passport.authenticate('jwt', { session: false }),
+  getProfile
 )
 
 router.get('/:id',

@@ -48,6 +48,7 @@ const Home = () => {
         popupType={popupType}
         closePopup={closePopup}
         toggleRegisterPopup={toggleRegisterPopup}
+        toggleMyPagePopup={toggleLoginPopup}
       />
 
       <Footer />
