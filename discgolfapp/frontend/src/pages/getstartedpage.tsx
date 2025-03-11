@@ -16,7 +16,7 @@ import PopupWrapper from '@/components/global/popupwrapper'
 const GetStartedPage = () => {
   const [selectedInfo, setSelectedInfo] = useState<'beginner' | 'advanced'>('beginner')
 
-  const { popupType, toggleLoginPopup, toggleRegisterPopup, closePopup } = usePopup()
+  const { popupType, toggleLoginPopup, toggleRegisterPopup, closePopup, toggleMyPagePopup } = usePopup()
 
   return (
     <div>
@@ -191,6 +191,7 @@ const GetStartedPage = () => {
         popupType={popupType}
         closePopup={closePopup}
         toggleRegisterPopup={toggleRegisterPopup}
+        toggleMyPagePopup={toggleMyPagePopup}
       />
 
       <div className='w-full bottom-0 w-full'>
