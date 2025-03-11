@@ -6,7 +6,7 @@ import { usePopup } from '@/components/global/usepopup'
 import PopupWrapper from '@/components/global/popupwrapper'
 
 const ClublandingPage = () => {
-  const { popupType, toggleLoginPopup, toggleRegisterPopup, closePopup } = usePopup()
+  const { popupType, toggleLoginPopup, toggleRegisterPopup, closePopup, toggleMyPagePopup } = usePopup()
 
   return (
     <div className='min-h-screen flex flex-col'>
@@ -22,6 +22,7 @@ const ClublandingPage = () => {
         popupType={popupType}
         closePopup={closePopup}
         toggleRegisterPopup={toggleRegisterPopup}
+        toggleMyPagePopup={toggleMyPagePopup}
       />
 
       <div className='w-full bottom-0 w-full'>
