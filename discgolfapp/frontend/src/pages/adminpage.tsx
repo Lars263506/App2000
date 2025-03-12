@@ -1,10 +1,10 @@
-'use client'
-
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { toast, ToastContainer } from 'react-toastify'
 
 import NavBar from '../components/global/navbar';
 import Footer from '../components/global/footer';
+import ClubAdminDetails from '@/components/adminpage/clubadmindetails';
+import UserAdminDetails from '@/components/adminpage/useradmindetails';
 import { usePopup } from '@/components/global/usepopup'
 import PopupWrapper from '@/components/global/popupwrapper'
 
@@ -25,6 +25,10 @@ const AdminPage: React.FC = () => {
     const { popupType, toggleLoginPopup, toggleRegisterPopup, closePopup, toggleMyPagePopup } = usePopup()
     const [settings, setSettings] = useState<Setting[] | null>();
     const [selectedSetting, setSelectedSetting] = useState<Setting | null>(null);
+    const settingComponents: { [key: string]: React.FC } = {
+        'Klubbadministrasjon': ClubAdminDetails,
+        'Brukeradministrasjon': UserAdminDetails
+    };
 
     useEffect(() => {
         const fetchSettings = async () => {
@@ -40,8 +44,8 @@ const AdminPage: React.FC = () => {
                 // const data = await response.json()
 
                 const data: Setting[] = [
-                    { name: 'Forsidebilde', description: 'Bilde som vises på forsiden.' },
-                    { name: 'Klubbinformasjon', description: "Informasjonen for klubbene." },
+                    { name: 'Klubbadministrasjon', description: 'Administrer klubbene på nettsiden.' },
+                    { name: 'Brukeradministrasjon', description: 'Administrer brukerne på nettsiden.' }
                 ];
 
                 if (Array.isArray(data)) {
@@ -63,7 +67,7 @@ const AdminPage: React.FC = () => {
             <NavBar toggleLoginPopup={toggleLoginPopup}/>
             
             <div className="flex flex-row h-[80vh] bg-white">
-                <div className="w-fit border border-solid border-black rounded-lg p-4 m-4 bg-gray-600">
+                <div className="w-fit rounded-lg p-4 m-4 mr-0 bg-gray-600">
                     <ul>
                         {settings && 
                             settings.map(setting => (
@@ -76,11 +80,13 @@ const AdminPage: React.FC = () => {
                         ))}
                     </ul>
                 </div>
-                <div className="flex-grow border border-solid border-black rounded-lg p-4 m-4 bg-gray-600">
+                <div className="flex-grow rounded-lg p-4 m-4 bg-gray-600">
                     {selectedSetting ? (
                         <div>
-                            <h2>{selectedSetting.name}</h2>
-                            <p>{selectedSetting.description}</p>
+                            {settingComponents[selectedSetting.name] &&
+                                React.createElement(
+                                    settingComponents[selectedSetting.name]
+                                )}
                         </div>
                     ) : (
                         <p>Velg en innstilling i menyen til venstre for å se alternativer.</p>

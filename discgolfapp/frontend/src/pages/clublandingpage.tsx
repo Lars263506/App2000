@@ -1,7 +1,8 @@
 import Navbar from '@/components/global/navbar'
 import Footer from '@/components/global/footer'
 import MemberBenefit from '@/components/clubpage/memberbenefit'
-import Clublist from '@/components/clubpage/clublistmap'
+import ClubList from '@/components/global/ClubList'
+import ClubListmap from '@/components/clubpage/clublistmap'
 import { usePopup } from '@/components/global/usepopup'
 import PopupWrapper from '@/components/global/popupwrapper'
 
@@ -15,7 +16,8 @@ const ClublandingPage = () => {
       {/* Main content */}
       <div className='flex flex-col sm:flex-row items-start gap-4 px-4 py-4'>
         <MemberBenefit />
-        <Clublist />
+        <ClubList />
+        <ClubListmap />
       </div>
 
       <PopupWrapper
