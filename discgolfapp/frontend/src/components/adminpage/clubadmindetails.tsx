@@ -1,10 +1,19 @@
-import ClubList from '../global/ClubList'
+import { useState } from 'react'
+
+import { Club } from '../../types/club'
+import ClubList from '../global/clublist'
+import ClubDetails from '../global/clubdetails'
 
 const ClubAdminDetails = () => {
-  return (
-    <div className=''>
-      <ClubList />
-    </div>
-  )
+
+	const [selectedClub, setSelectedClub] = useState<Club | null>(null)
+
+	return (
+		<div className=''>
+      		<ClubList setSelectedClub={setSelectedClub} />
+			<ClubDetails selectedClub={selectedClub} />
+    	</div>
+  	)
 }
+
 export default ClubAdminDetails

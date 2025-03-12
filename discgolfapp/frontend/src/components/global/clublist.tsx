@@ -1,13 +1,17 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react'
 import Link from 'next/link'
 
+interface ClubListProps {
+  setSelectedClub: (club: Club) => void
+}
+
 interface Club {
   _id: string
   name: string
   address: string
 }
 
-const ClubList = () => {
+const ClubList: React.FC<ClubListProps> = ({ setSelectedClub }) => {
   const [clubs, setClubs] = useState<Club[]>([])
   const [searchTerm, setSearchTerm] = useState('')
 
@@ -39,9 +43,9 @@ const ClubList = () => {
             .filter((club) => club.name.toLowerCase().includes(searchTerm.toLowerCase()))
             .map((club) => (
               <li key={club._id} className='p-1 border-b last:border-none'>
-                <Link href={`/clubpage?clubId=${club._id}`} className='text-blue-600 hover:text-blue-800'>
+                <button onClick={() => setSelectedClub(club)} className='text-blue-600 hover:text-blue-800'>
                   {club.name}
-                </Link>
+                </button>
               </li>
             ))}
         </ul>
