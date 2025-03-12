@@ -33,6 +33,10 @@ const schema = new mongoose.Schema(
     roleChangedAt: {
       type: Date,
       required: true
+    },
+    profileImage: { 
+      type: String, 
+      default: '' 
     }
   },
   { timestamps: true }
