@@ -1,14 +1,8 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react'
-import Link from 'next/link'
+import { Club } from '../../types/club'
 
 interface ClubListProps {
   setSelectedClub: (club: Club) => void
-}
-
-interface Club {
-  _id: string
-  name: string
-  address: string
 }
 
 const ClubList: React.FC<ClubListProps> = ({ setSelectedClub }) => {
@@ -29,12 +23,12 @@ const ClubList: React.FC<ClubListProps> = ({ setSelectedClub }) => {
   }, [])
   
   return (
-    <div className='flex min-h-[580px] flex-col md:flex-row gap-6 w-full h-100 max-w-5xl '>
-      <div className='w-full md:w-1/2 bg-gray-200 p-4 rounded-xl shadow text-black'>
+    <div className='flex bg-gray-100 p-4 rounded-xl shadow text-black'>
+      <div className='flex-grow'>
         <input
           type='text'
           placeholder='Filtrer på klubbnavn...'
-          className='border p-2 rounded w-full mb-4'
+          className='border p-2 rounded w-fit'
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />

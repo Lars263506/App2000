@@ -66,7 +66,7 @@ const AdminPage: React.FC = () => {
         <div className="admin-page">
             <NavBar toggleLoginPopup={toggleLoginPopup}/>
             
-            <div className="flex flex-row h-[80vh] bg-white">
+            <div className="flex flex-row justify-center h-[80vh] bg-white">
                 <div className="w-fit rounded-lg p-4 m-4 mr-0 bg-gray-600">
                     <ul>
                         {settings && 
@@ -80,9 +80,9 @@ const AdminPage: React.FC = () => {
                         ))}
                     </ul>
                 </div>
-                <div className="flex-grow rounded-lg p-4 m-4 bg-gray-600">
+                <div className="w-auto rounded-lg p-4 m-4 bg-gray-600">
                     {selectedSetting ? (
-                        <div>
+                        <div className="h-full">
                             {settingComponents[selectedSetting.name] &&
                                 React.createElement(
                                     settingComponents[selectedSetting.name]
