@@ -10,8 +10,10 @@ import {
   getProfile,
   getUser,
   getUserByEmail,
+  getProfileImage,
   registerUser,
   loginUser,
+  postProfileImage,
   changeDisplayName,
   changeEmail,
   changePassword,
@@ -41,6 +43,11 @@ router.get('/me',
   getProfile
 )
 
+router.get('/profile-image',
+  passport.authenticate('jwt', { session: false }),
+  getProfileImage
+)
+
 router.get('/:id',
   passport.authenticate('jwt', { session: false }),
   authorizeAdmin,
@@ -60,6 +67,11 @@ router.post('/',
 router.post('/login',
   loginLimiter,
   loginUser
+)
+
+router.post('/profile-image',
+  passport.authenticate('jwt', { session: false }),
+  postProfileImage
 )
 
 router.put('/change-display-name',

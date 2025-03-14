@@ -54,6 +54,22 @@ const getProfile = async (req, res) => {
 /**
  * @param req
  * @param res
+ * @description Gets the profile of a user
+ * @throws Error if the user was not found
+ */
+
+const getProfileImage = async (req, res) => {
+  try {
+    console.log(req.user.id)
+    res.status(200).json(await userService.getProfileImage(req.user.id))
+  } catch (error) {
+    res.status(404).json({ message: error.message })
+  }
+}
+
+/**
+ * @param req
+ * @param res
  * @description Gets a user from the database by id
  * @throws Error if the user was not found
  */
@@ -114,6 +130,24 @@ const loginUser = async (req, res) => {
   try {
     const { accessToken, refreshToken, displayName } = await userService.loginUser(email, password)
     res.status(200).json({ accessToken, refreshToken, displayName })
+  } catch (error) {
+    res.status(401).json({ message: error.message })
+  }
+}
+
+/**
+ * @param req
+ * @param res
+ * @description Logs in a user and tokens are created for the user
+ * @throws Error if the email or password is incorrect
+ */
+
+const postProfileImage = async (req, res) => {
+  const id = req.user.id
+  const { profileImage } = req.body
+  try {
+    await userService.postProfileImage(profileImage, id)
+    res.status(200)
   } catch (error) {
     res.status(401).json({ message: error.message })
   }
@@ -204,4 +238,4 @@ const deleteUser = async (req, res) => {
   }
 }
 
-export { getAllUsers, getPermissions, getProfile, getUser, getUserByEmail, registerUser, loginUser, changeDisplayName, changeEmail, changePassword, changeRole, deleteUser }
+export { getAllUsers, getPermissions, getProfile, getProfileImage, getUser, getUserByEmail, registerUser, loginUser, postProfileImage, changeDisplayName, changeEmail, changePassword, changeRole, deleteUser }

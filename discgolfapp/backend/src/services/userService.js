@@ -128,6 +128,23 @@ const loginUser = async (email, password) => {
 
 /**
  * @param email
+ * @param password
+ * @returns accessToken and refreshToken
+ * @description Logs in a user and tokens are created for the user
+ * @throws Error if the email or password is incorrect
+ */
+
+const postProfileImage = async (profileImage, id) => {
+  const user = await User.findOne({ id })
+
+  if (user) {
+    user.profileImage = profileImage
+    await user.save()
+  };
+}
+
+/**
+ * @param email
  * @param displayName
  * @returns Time of display name change
  * @description Changes the display name of a user in the database
@@ -207,6 +224,7 @@ export {
   getUserByEmail,
   registerUser,
   loginUser,
+  postProfileImage,
   changeDisplayName,
   changeEmail,
   changePassword,
