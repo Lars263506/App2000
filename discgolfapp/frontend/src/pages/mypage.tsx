@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
+
+import '../app/globals.css'
 import User from "../types/user";
+import { toast, ToastContainer } from "react-toastify";
 
 const MyPage = () => {
   const [user, setUser] = useState<User | null>(null);
@@ -23,7 +26,7 @@ const MyPage = () => {
         setUser(data);
 
         if (data.displayName) {
-          const imageUrl = `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/profileImage/${data.displayName}`;
+          const imageUrl = `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/users/profile-image/${data.profileImage}`;
           setProfileImage(imageUrl);
         }
       } catch (error) {
@@ -52,10 +55,9 @@ const MyPage = () => {
     try {
       const formData = new FormData();
       formData.append('profileImage', imageFile);
-      formData.append('displayName', user.displayName); // Send displayName i stedet for userId
-  
+
       const accessToken = localStorage.getItem('accessToken');
-      const url = process.env.NEXT_PUBLIC_BACKEND_BASE_URL + "/users/updateProfileImage"; 
+      const url = `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/users/update-profile-image`;
       const res = await fetch(url, {
         method: "POST",
         headers: {
@@ -63,15 +65,14 @@ const MyPage = () => {
         },
         body: formData,
       });
-  
-      if (!res.ok) throw new Error("Could not update profile image");
+
       const data = await res.json();
-      setProfileImage(`${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/profileImage/${user.displayName}`);
-      alert("Profilbildet ble oppdatert!");
+      toast.success("Bilde er lagret!");
+      setProfileImage(`${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/users/profile-image/${data.profileImage}`);
     } catch (error) {
       console.error("Error updating profile image:", error);
     }
-  };  
+  };
 
   if (!user) {
     return (
@@ -106,7 +107,7 @@ const MyPage = () => {
               <strong>Rolle:</strong> {user.role ?? "Ukjent"}
             </p>
           </div>
-  
+
           {/* Forside-knapp på bunnen av brukerinfo */}
           <button
             onClick={() => router.push("/")}
@@ -115,7 +116,7 @@ const MyPage = () => {
             Forside
           </button>
         </div>
-  
+
         {/* Høyre side - Profilbilde */}
         <div className="w-2/3 flex flex-col items-center justify-center">
           {profileImage ? (
@@ -139,6 +140,7 @@ const MyPage = () => {
           </button>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };
