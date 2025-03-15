@@ -8,9 +8,13 @@ import clubpageRoutes from './routes/clubpageRoutes.js'
 import courseRoutes from './routes/courseRoutes.js'
 import elementRoutes from './routes/elementRoutes.js'
 import userRoutes from './routes/userRoutes.js'
+import User from './models/User.js'
+import multer from 'multer';
+import { GridFSBucket } from 'mongodb';
 
 /**
  * @author Lars263506 (Github)
+ * @author Andreas Nilsen line 56-124
  * @description This is the main server file for the Discgolf app, which sets up middleware, routes and database connection, and starts the server
  */
 
@@ -54,6 +58,7 @@ app.use('/users', userRoutes)
  * @description Connects to the MongoDB database and starts the server
  * @throws Error if there was an error connecting to the database
  */
+
 mongoose.connect(process.env.MONGODB_URI)
   .then(() => {
     /**
