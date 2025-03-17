@@ -16,9 +16,7 @@ import PopupWrapper from '@/components/global/popupwrapper'
 
 interface Setting {
     name: string,
-    description: string,
-    isToggled?: boolean,
-    value?: string
+    description: string
 }
 
 const AdminPage: React.FC = () => {
@@ -33,27 +31,22 @@ const AdminPage: React.FC = () => {
     useEffect(() => {
         const fetchSettings = async () => {
             try {
-                // const accessToken = localStorage.getItem('accessToken')
-                // const url = process.env.NEXT_PUBLIC_BACKEND_BASE_URL + '/settings/'
-            
-                // const response = await fetch(url, {
-                //     method: 'GET',
-                //     headers: accessToken ? { Authorization: 'Bearer ' + accessToken } : undefined
-                // })
+                const accessToken = localStorage.getItem('accessToken')
+                const url = process.env.NEXT_PUBLIC_BACKEND_BASE_URL + '/settings/'
 
-                // const data = await response.json()
+                const response = await fetch(url, {
+                    method: 'GET',
+                    headers: accessToken ? { Authorization: 'Bearer ' + accessToken } : undefined
+                })
 
-                const data: Setting[] = [
-                    { name: 'Klubbadministrasjon', description: 'Administrer klubbene på nettsiden.' },
-                    { name: 'Brukeradministrasjon', description: 'Administrer brukerne på nettsiden.' }
-                ];
+                const data: Setting[] = await response.json()
 
                 if (Array.isArray(data)) {
                     setSettings(data)
                 } else {
                     toast.error('Responsen fra serveren var ikke en liste med innstillinger.')
                 }
-        
+
             } catch (error: unknown) {
               if (error instanceof Error) toast.error(error.message)
                 else toast.error('Det var en feil med å hente innstillingene. Prøv igjen senere.')
@@ -65,15 +58,15 @@ const AdminPage: React.FC = () => {
     return (
         <div className="admin-page">
             <NavBar toggleLoginPopup={toggleLoginPopup}/>
-            
+
             <div className="flex flex-row justify-center h-[80vh] bg-white">
                 <div className="w-fit rounded-lg p-4 m-4 mr-0 bg-gray-600">
                     <ul>
-                        {settings && 
+                        {settings &&
                             settings.map(setting => (
                             <li
                                 className="cursor-pointer hover:bg-green-600"
-                                key={setting.name} 
+                                key={setting.name}
                                 onClick={() => setSelectedSetting(setting)}>
                                 {setting.name}
                             </li>
