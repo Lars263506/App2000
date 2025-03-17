@@ -100,6 +100,23 @@ const getUserByEmail = async (email) => {
 }
 
 /**
+ * @param id
+ * @returns List of clubs the user is a member of
+ * @description Gets all clubs a user is a member of
+ * @throws Error if no clubs are found
+ */
+const getUserClubs = async (id) => {
+  try {
+    const clubs = await ClubPage.find({ members: id });
+    if (!clubs) throw new Error('No clubs found for the user');
+    return clubs;
+  } catch (error) {
+    console.error("Error fetching user's clubs:", error);
+    throw new Error('Error fetching clubs');
+  }
+}
+
+/**
  *
  * @param email
  * @param password
@@ -280,6 +297,7 @@ export {
   getProfileImage,
   getUser,
   getUserByEmail,
+  getUserClubs,
   registerUser,
   loginUser,
   postProfileImage,

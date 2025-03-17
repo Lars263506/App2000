@@ -1,16 +1,23 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-
 import '../app/globals.css'
 import User from "../types/user";
 import { toast, ToastContainer } from "react-toastify";
+import Navbar from '@/components/global/navbar'
+import Footer from '@/components/global/footer'
+import PopupWrapper from '@/components/global/popupwrapper'
+import { usePopup } from '@/components/global/usepopup'
+import { PencilIcon } from '@heroicons/react/20/solid'
 
 const MyPage = () => {
+  const { popupType, toggleLoginPopup, toggleRegisterPopup, closePopup } = usePopup();
   const [user, setUser] = useState<User | null>(null);
   const [profileImage, setProfileImage] = useState<string | null>(null);
-  const [imageFile, setImageFile] = useState<File | null>(null);  // To store the image file itself
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [clubs, setClubs] = useState<any[]>([]);
   const router = useRouter();
 
+  // Første useEffect: Henter brukerdata
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -30,12 +37,35 @@ const MyPage = () => {
           setProfileImage(imageUrl);
         }
       } catch (error) {
-        console.error("Could not find user information:", error);
+        console.error("Error fetching user data:", error);
+      }
+    };
+    fetchUser();
+  }, []);
+
+  // Andre useEffect: Henter klubbene etter at brukerdata er hentet
+  useEffect(() => {
+    const fetchClubs = async () => {
+      if (!user) return; 
+
+      try {
+        const accessToken = localStorage.getItem('accessToken');
+        const clubsUrl = process.env.NEXT_PUBLIC_BACKEND_BASE_URL + "/users/my-clubs";
+        const clubsRes = await fetch(clubsUrl, {
+          headers: {
+            "Authorization": `Bearer ${accessToken}`
+          }
+        });
+        if (clubsRes.status !== 200) throw new Error("Could not fetch clubs");
+        const clubsData = await clubsRes.json();
+        setClubs(clubsData);
+      } catch (error) {
+        console.error("Error fetching clubs:", error);
       }
     };
 
-    fetchUser();
-  }, []);
+    fetchClubs();
+  }, [user]); // Denne useEffect kjøres hver gang 'user' endres
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -45,16 +75,18 @@ const MyPage = () => {
       reader.onloadend = () => {
         const imageUrl = reader.result as string;
         setProfileImage(imageUrl);
+        
+        handleSaveProfileImage(file); 
       };
       reader.readAsDataURL(file);
     }
   };
 
-  const handleSaveProfileImage = async () => {
-    if (!imageFile || !user) return;
+  const handleSaveProfileImage = async (file: File) => {
+    if (!file || !user) return;
     try {
       const formData = new FormData();
-      formData.append('profileImage', imageFile);
+      formData.append('profileImage', file);
 
       const accessToken = localStorage.getItem('accessToken');
       const url = `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/users/update-profile-image`;
@@ -74,6 +106,11 @@ const MyPage = () => {
     }
   };
 
+  const handleClubClick = (clubId: string) => {
+    router.push(`/clubpage?clubId=${clubId}`); 
+  };
+  
+
   if (!user) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen">
@@ -89,36 +126,14 @@ const MyPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 p-8">
-      <div className="max-w-10xl mx-auto bg-white p-6 rounded-lg shadow-lg flex">
-        {/* Venstre side - Brukerinformasjon */}
-        <div className="w-1/3 flex flex-col">
-          <h1 className="text-4xl font-extrabold text-gray-800 mt-4">
-            Velkommen til din side, {user.displayName ?? "Ukjent"}!
-          </h1>
-          <div className="mt-16">
-            <p className="text-lg text-gray-800">
-              <strong>Brukernavn:</strong> {user.displayName ?? "Ukjent"}
-            </p>
-            <p className="text-lg text-gray-800">
-              <strong>E-post:</strong> {user.email ?? "Ukjent"}
-            </p>
-            <p className="text-lg text-gray-800">
-              <strong>Rolle:</strong> {user.role ?? "Ukjent"}
-            </p>
-          </div>
-
-          {/* Forside-knapp på bunnen av brukerinfo */}
-          <button
-            onClick={() => router.push("/")}
-            className="mt-8 py-1 w-32 text-black text-lg font-semibold rounded hover:bg-gray-400"
-          >
-            Forside
-          </button>
-        </div>
-
-        {/* Høyre side - Profilbilde */}
-        <div className="w-2/3 flex flex-col items-center justify-center">
+    <div className="flex flex-col min-h-screen">
+      <Navbar toggleLoginPopup={toggleLoginPopup} />
+      <div className="flex-grow bg-gray-100 p-8 flex flex-col items-center">
+        <h1 className="text-4xl font-extrabold mt-6 text-gray-800">Min Side</h1>
+        <h2 className="text-2xl text-gray-700 mb-8">Velkommen, {user.displayName ?? "Ukjent"}!</h2>
+        
+        {/* Profilbilde med redigeringsikon */}
+        <div className="relative">
           {profileImage ? (
             <img src={profileImage} alt="Profilbilde" className="w-52 h-52 rounded-full object-cover mb-4" />
           ) : (
@@ -126,21 +141,64 @@ const MyPage = () => {
               <span className="text-black">Ingen bilde</span>
             </div>
           )}
+
+          {/* Skjult input for bildeopplasting */}
           <input
             type="file"
             accept="image/*"
             onChange={handleImageChange}
-            className="mb-4 ml-28 text-black"
+            className="hidden"
+            id="fileInput"
           />
+
+          {/* Redigeringsikon - klikker på dette åpner filvelger */}
           <button
-            onClick={handleSaveProfileImage}
-            className="px-6 py-3 bg-blue-500 text-white text-lg font-semibold rounded hover:bg-blue-700"
+            onClick={() => document.getElementById("fileInput")?.click()}
+            className="absolute bottom-3 right-4 bg-gray-800 p-2 rounded-full hover:bg-gray-600"
           >
-            Lagre profilbilde
+            <PencilIcon className="h-4 w-4 text-white" />
           </button>
         </div>
+
+        {/* Tre bokser */}
+        <div className="grid grid-cols-1 md:grid-cols-3 text-black gap-4 mt-8 w-full max-w-4xl">
+          {/* Brukerinformasjon */}
+          <div className="bg-white p-6 rounded-lg shadow-lg max-h-80 overflow-y-auto">
+            <h3 className="text-lg text-black mb-6 font-semibold">Brukerinformasjon:</h3>
+            <p><strong>Brukernavn:</strong> {user.displayName ?? "Ukjent"}</p>
+            <p><strong>E-post:</strong> {user.email ?? "Ukjent"}</p>
+            <p><strong>Rolle:</strong> {user.role ?? "Ukjent"}</p>
+          </div>
+          {/* Tomme bokser */}
+          <div className="text-lg bg-white p-6 rounded-lg shadow-lg font-semibold max-h-80 overflow-y-auto">Mine spill:</div>
+          <div className="bg-white p-6 rounded-lg shadow-lg">
+              <h3 className="text-lg text-black mb-6 font-semibold max-h-80 overflow-y-auto">Mine klubber:</h3>
+              {clubs.length > 0 ? (
+                <ul>
+                  {clubs.map((club) => (
+                    <li key={club._id} className="mb-2">
+                      <button 
+                        onClick={() => handleClubClick(club._id)} 
+                        className="text-blue-500 hover:underline">
+                        {club.name}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p>Du er ikke medlem av noen klubber.</p>
+              )}
+            </div>
+        </div>
+        <ToastContainer />
       </div>
-      <ToastContainer />
+      <PopupWrapper
+        popupType={popupType}
+        closePopup={closePopup}
+        toggleRegisterPopup={toggleRegisterPopup}
+        toggleMyPagePopup={toggleLoginPopup}
+      />
+      <Footer />
     </div>
   );
 };

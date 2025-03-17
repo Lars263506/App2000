@@ -10,6 +10,7 @@ import {
   getPermissions,
   getProfile,
   getProfileImage,
+  getUserClubsHandler,
   getUser,
   getUserByEmail,
   registerUser,
@@ -21,6 +22,7 @@ import {
   changeRole,
   deleteUser
 } from '../controllers/userController.js'
+import { get } from 'mongoose'
 
 /**
  * @author Lars263506 (Github)
@@ -47,6 +49,11 @@ router.get('/me',
 router.get('/profile-image/:filename',
   getProfileImage
 )
+
+router.get('/my-clubs',
+  passport.authenticate('jwt', { session: false }),
+  getUserClubsHandler 
+) 
 
 router.get('/:id',
   passport.authenticate('jwt', { session: false }),

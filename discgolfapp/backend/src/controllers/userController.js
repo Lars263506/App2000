@@ -99,6 +99,16 @@ const getUserByEmail = async (req, res) => {
   }
 }
 
+const getUserClubsHandler = async (req, res) => {
+  try {
+    const userId = req.user.id
+    const clubs = await userService.getUserClubs(userId)
+    res.status(200).json(clubs);  
+  } catch (error) {
+    res.status(500).json({ error: error.message }); 
+  }
+}
+
 /**
  * @param req
  * @param res
@@ -242,6 +252,7 @@ export {
   getProfileImage,
   getUser,
   getUserByEmail,
+  getUserClubsHandler,
   registerUser,
   loginUser,
   postProfileImage,
