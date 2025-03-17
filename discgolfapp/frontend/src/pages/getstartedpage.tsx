@@ -10,7 +10,7 @@ import PopupWrapper from '@/components/global/popupwrapper'
 const GetStartedPage = () => {
   const [selectedInfo, setSelectedInfo] = useState<'beginner' | 'advanced'>('beginner')
 
-  const { popupType, toggleLoginPopup, toggleRegisterPopup, closePopup } = usePopup()
+  const { popupType, toggleLoginPopup, toggleRegisterPopup, closePopup, toggleMyPagePopup } = usePopup()
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -94,7 +94,7 @@ const GetStartedPage = () => {
       </div>
 
       {/* Popup Wrapper */}
-      <PopupWrapper popupType={popupType} closePopup={closePopup} toggleRegisterPopup={toggleRegisterPopup} />
+      <PopupWrapper popupType={popupType} closePopup={closePopup} toggleRegisterPopup={toggleRegisterPopup} toggleMyPagePopup={toggleMyPagePopup} />
 
       {/* Footer */}
       <Footer />

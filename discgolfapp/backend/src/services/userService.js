@@ -1,5 +1,9 @@
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
+import mongoose from 'mongoose'
+import { GridFSBucket } from 'mongodb';
+import { v4 as uuid4 } from 'uuid';
+
 import User from '../models/User.js'
 import ClubPage from '../models/Clubpage.js'
 
@@ -30,6 +34,43 @@ const getPermissions = async (id) => {
   const hasPermission = await ClubPage.findOne({ clubOwner: id })
   if (hasPermission) return { canEditClubPage: true }
   else return { canEditClubPage: false }
+}
+
+/**
+ * @param id
+ * @returns User profile object
+ * @description Gets the profile of a user
+ */
+
+const getProfile = async (id) => {
+  const userProfile = await User.findById(id).select('-hashedPassword, -emailChangedAt, -passwordChangedAt, -roleChangedAt')
+  if (!userProfile) throw new Error('User not found')
+  return userProfile
+}
+
+/**
+ * @param id
+ * @returns User profile object
+ * @description Gets the profile of a user
+ */
+
+const getProfileImage = async (filename, res) => {
+  console.log(filename)
+    try {
+    const db = mongoose.connection.db;
+    const bucket = new GridFSBucket(db, { bucketName: 'profileImages' });
+
+    const downloadStream = bucket.openDownloadStreamByName(filename);
+    downloadStream.pipe(res);
+
+    downloadStream.on('error', (err) => {
+        res.status(404).json({ error: 'Image not found' });
+    });
+
+    } catch (error) {
+    console.error('Error fetching profile image:', error);
+    res.status(500).json({ error: 'Internal server error' });
+    }
 }
 
 /**
@@ -116,6 +157,51 @@ const loginUser = async (email, password) => {
 
 /**
  * @param email
+ * @param password
+ * @returns accessToken and refreshToken
+ * @description Logs in a user and tokens are created for the user
+ * @throws Error if the email or password is incorrect
+ */
+
+const postProfileImage = async (id, buffer, mimetype) => {
+  console.log("Service: postProfileImage called");
+  try {
+    const user = await User.findById(id);
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    const db = mongoose.connection.db;
+    const bucket = new GridFSBucket(db, { bucketName: 'profileImages' });
+
+    const filename = `${id}-${uuid4()}`;
+
+    const uploadStream = bucket.openUploadStream(filename, {
+      contentType: mimetype
+    });
+
+    uploadStream.end(buffer);
+
+    return new Promise((resolve, reject) => {
+      uploadStream.on('finish', async () => {
+        user.profileImage = filename;
+        await user.save();
+        resolve({ message: 'Profile image updated!', profileImage: filename });
+      });
+
+      uploadStream.on('error', (err) => {
+        console.error('GridFS upload error:', err);
+        reject(new Error('Internal server error'));
+      });
+    });
+  } catch (error) {
+    console.error('Error updating profile image:', error);
+    throw new Error('Internal server error');
+  }
+};
+
+/**
+ * @param email
  * @param displayName
  * @returns Time of display name change
  * @description Changes the display name of a user in the database
@@ -190,10 +276,13 @@ const deleteUser = async (email) => {
 export {
   getAllUsers,
   getPermissions,
+  getProfile,
+  getProfileImage,
   getUser,
   getUserByEmail,
   registerUser,
   loginUser,
+  postProfileImage,
   changeDisplayName,
   changeEmail,
   changePassword,

@@ -1,16 +1,20 @@
 import express from 'express'
 
 import passport from '../config/passportConfig.js'
+import upload from '../middleware/uploadMiddleware.js'
 import { authorizeAdmin } from '../middleware/authorization.js'
 import { optionalAuth } from '../middleware/auth.js'
 import { loginLimiter, registerLimiter } from '../middleware/rateLimiter.js'
 import {
   getAllUsers,
   getPermissions,
+  getProfile,
+  getProfileImage,
   getUser,
   getUserByEmail,
   registerUser,
   loginUser,
+  postProfileImage,
   changeDisplayName,
   changeEmail,
   changePassword,
@@ -35,6 +39,15 @@ router.get('/permissions',
   getPermissions
 )
 
+router.get('/me',
+  passport.authenticate('jwt', { session: false }),
+  getProfile
+)
+
+router.get('/profile-image/:filename',
+  getProfileImage
+)
+
 router.get('/:id',
   passport.authenticate('jwt', { session: false }),
   authorizeAdmin,
@@ -46,6 +59,7 @@ router.post('/get-by-email',
   authorizeAdmin,
   getUserByEmail
 )
+
 router.post('/',
   registerLimiter,
   registerUser
@@ -54,6 +68,12 @@ router.post('/',
 router.post('/login',
   loginLimiter,
   loginUser
+)
+
+router.post('/update-profile-image',
+  passport.authenticate('jwt', { session: false }),
+  upload.single('profileImage'),
+  postProfileImage
 )
 
 router.put('/change-display-name',

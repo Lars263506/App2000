@@ -14,7 +14,7 @@ import { usePopup } from '@/components/global/usepopup'
  */
 
 const Clubpage = () => {
-  const { popupType, toggleLoginPopup, toggleRegisterPopup, closePopup } = usePopup()
+  const { popupType, toggleLoginPopup, toggleRegisterPopup, closePopup, toggleMyPagePopup } = usePopup()
   const router = useRouter()
   const clubId = router.query.clubId as string | undefined
 
@@ -30,6 +30,7 @@ const Clubpage = () => {
         popupType={popupType}
         closePopup={closePopup}
         toggleRegisterPopup={toggleRegisterPopup}
+        toggleMyPagePopup={toggleMyPagePopup}
       />
     </div>
   )

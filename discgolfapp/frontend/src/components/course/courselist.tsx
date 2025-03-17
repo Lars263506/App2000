@@ -16,6 +16,7 @@ interface Course {
   longitude: number
   difficulty: string
   familyFriendly: boolean
+  holes: number;
 }
 
 const CourseList: React.FC<CourseListProps> = ({ courses, setCourses, setSelectedCourse }) => {
@@ -49,7 +50,8 @@ const CourseList: React.FC<CourseListProps> = ({ courses, setCourses, setSelecte
   }, [])
 
   const filteredCourses = courses.filter(course =>
-    course.name.toLowerCase().includes(searchTerm.toLowerCase())
+    course.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    course.location.toLowerCase().includes(searchTerm.toLowerCase())
   )
 
   return (

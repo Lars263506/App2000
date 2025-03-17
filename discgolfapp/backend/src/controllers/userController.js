@@ -38,6 +38,36 @@ const getPermissions = async (req, res) => {
 /**
  * @param req
  * @param res
+ * @description Gets the profile of a user
+ * @throws Error if the user was not found
+ */
+
+const getProfile = async (req, res) => {
+  try {
+    res.status(200).json(await userService.getProfile(req.user.id))
+  } catch (error) {
+    res.status(404).json({ message: error.message })
+  }
+}
+
+/**
+ * @param req
+ * @param res
+ * @description Gets the profile of a user
+ * @throws Error if the user was not found
+ */
+
+const getProfileImage = async (req, res) => {
+  try {
+    await userService.getProfileImage(req.params.filename, res)
+  } catch (error) {
+    res.status(404).json({ message: error.message })
+  }
+}
+
+/**
+ * @param req
+ * @param res
  * @description Gets a user from the database by id
  * @throws Error if the user was not found
  */
@@ -102,6 +132,23 @@ const loginUser = async (req, res) => {
     res.status(401).json({ message: error.message })
   }
 }
+
+/**
+ * @param req
+ * @param res
+ * @description Logs in a user and tokens are created for the user
+ * @throws Error if the email or password is incorrect
+ */
+
+const postProfileImage = async (req, res) => {
+  console.log("Controller: postProfileImage called");
+  try {
+    const result = await userService.postProfileImage(req.user.id, req.file.buffer, req.file.mimetype);
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(500).json({ message: "Something went wrong with the image upload" });
+  }
+};
 
 /**
  * @param req
@@ -188,4 +235,19 @@ const deleteUser = async (req, res) => {
   }
 }
 
-export { getAllUsers, getPermissions, getUser, getUserByEmail, registerUser, loginUser, changeDisplayName, changeEmail, changePassword, changeRole, deleteUser }
+export {
+  getAllUsers,
+  getPermissions,
+  getProfile,
+  getProfileImage,
+  getUser,
+  getUserByEmail,
+  registerUser,
+  loginUser,
+  postProfileImage,
+  changeDisplayName,
+  changeEmail,
+  changePassword,
+  changeRole,
+  deleteUser
+}

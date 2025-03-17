@@ -18,10 +18,11 @@ export interface Course {
   longitude: number
   difficulty: string
   familyFriendly: boolean
+  holes: number 
 }
 
 const CoursePage = () => {
-  const { popupType, toggleLoginPopup, toggleRegisterPopup, closePopup } = usePopup()
+  const { popupType, toggleLoginPopup, toggleRegisterPopup, closePopup, toggleMyPagePopup } = usePopup()
   const [courses, setCourses] = useState<Course[]>([])
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null)
 
@@ -42,6 +43,7 @@ const CoursePage = () => {
           popupType={popupType}
           closePopup={closePopup}
           toggleRegisterPopup={toggleRegisterPopup}
+          toggleMyPagePopup={toggleMyPagePopup}
         />
 
         <div className='w-full bottom-0 w-full'>

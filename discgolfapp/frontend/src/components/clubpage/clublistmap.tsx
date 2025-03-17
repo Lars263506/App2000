@@ -92,7 +92,7 @@ const ClubListmap = () => {
                 map.fitBounds(bounds)
               }
             }}
-            center={(selectedMarker != null) || (markers.length > 0 ? markers[0] : { lat: 59.9139, lng: 10.7522 })}
+            center={selectedMarker || (markers.length > 0 ? markers[0] : { lat: 59.9139, lng: 10.7522 })}
             zoom={(selectedMarker != null) ? 15 : 6}
             mapContainerStyle={{ height: '520px', width: '100%' }}
           >
