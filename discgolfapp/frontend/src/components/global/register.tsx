@@ -70,14 +70,14 @@ const Register: React.FC<RegisterProps> = ({ togglePopup, closePopup }) => {
         <div className='bg-white p-8 rounded shadow-md w-full max-w-md relative'>
           <button
             onClick={closePopup}
-            className='absolute top-2 right-2 text-black text-4xl'
+            className='absolute top-2 right-2 text-4xl'
           >
             &times;
           </button>
-          <h2 className='text-2xl font-bold mb-12 text-center text-black'>Registrer deg</h2>
-          <h2 className='font-bold mb-2 text-left text-black'>Lag bruker i disse feltene:</h2>
+          <h2 className='text-2xl font-bold mb-12 text-center'>Registrer deg</h2>
+          <h2 className='font-bold mb-2 text-left'>Lag bruker i disse feltene:</h2>
           <form onSubmit={handleSubmit} className='flex flex-col'>
-            <div className='flex flex-col mb-3 text-black'>
+            <div className='flex flex-col mb-3'>
               <input
                 type='text'
                 className='border p-2 rounded'
@@ -86,7 +86,7 @@ const Register: React.FC<RegisterProps> = ({ togglePopup, closePopup }) => {
                 onChange={(e) => setDisplayName(e.target.value)}
               />
             </div>
-            <div className='flex flex-col mb-3 text-black'>
+            <div className='flex flex-col mb-3'>
               <input
                 type='email'
                 className='border p-2 rounded'
@@ -95,7 +95,7 @@ const Register: React.FC<RegisterProps> = ({ togglePopup, closePopup }) => {
                 onChange={(e) => setEmail(e.target.value)}
               />
             </div>
-            <div className='flex flex-col text-black'>
+            <div className='flex flex-col'>
               <input
                 type='password'
                 className='border p-2 rounded'

@@ -38,20 +38,20 @@ const FieldInformation: React.FC = () => {
 
   return (
     <div className='p-4 border rounded-lg shadow-md bg-white w-full'>
-      <h2 className='text-xl font-bold mb-2 text-black'>Baneinformasjon</h2>
+      <h2 className='text-xl font-bold mb-2'>Baneinformasjon</h2>
       {loading
         ? (
-          <p className='text-black'>Laster baneinformasjon...</p>
+          <p className=''>Laster baneinformasjon...</p>
           )
         : (field != null)
             ? (
               <>
-                <p className='text-black'>Bane: {field.fieldName}</p>
-                <p className='text-black'>Sted: {field.location}</p>
+                <p className=''>Bane: {field.fieldName}</p>
+                <p className=''>Sted: {field.location}</p>
               </>
               )
             : (
-              <p className='text-black'>Ingen baneinformasjon tilgjengelig.</p>
+              <p className=''>Ingen baneinformasjon tilgjengelig.</p>
               )}
     </div>
   )

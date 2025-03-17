@@ -93,11 +93,11 @@ const Login: React.FC<LoginProps> = ({ togglePopup, toggleRegisterPopup, closePo
       >
         <button
           onClick={closePopup}
-          className='absolute top-2 right-2 text-black text-4xl'
+          className='absolute top-2 right-2 text-4xl'
         >
           &times;
         </button>
-        <h2 className='text-2xl font-bold text-center text-black mb-8'>
+        <h2 className='text-2xl font-bold text-center mb-8'>
           {isLoggedIn ? 'Logget inn' : 'Logg inn'}
         </h2>
         {isLoggedIn ? (
@@ -128,8 +128,8 @@ const Login: React.FC<LoginProps> = ({ togglePopup, toggleRegisterPopup, closePo
                 Logg inn med Google
               </button>
 
-              <h2 className='text-center text-black mb-2'>Innlogging:</h2>
-              <div className='flex flex-col mb-2 text-black'>
+              <h2 className='text-center mb-2'>Innlogging:</h2>
+              <div className='flex flex-col mb-2'>
                 <input
                   type='email'
                   className='border p-2 rounded'
@@ -138,7 +138,7 @@ const Login: React.FC<LoginProps> = ({ togglePopup, toggleRegisterPopup, closePo
                   onChange={(e) => setEmail(e.target.value)}
                 />
               </div>
-              <div className='flex flex-col mb-6 text-black'>
+              <div className='flex flex-col mb-6'>
                 <input
                   type='password'
                   className='border p-2 rounded'
@@ -146,7 +146,7 @@ const Login: React.FC<LoginProps> = ({ togglePopup, toggleRegisterPopup, closePo
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />
-                <a href='/glemt-passord' className='text-black hover:underline mt-2 text-sm text-center'>
+                <a href='/glemt-passord' className='hover:underline mt-2 text-sm text-center'>
                   Glemt passord?
                 </a>
               </div>
@@ -157,7 +157,7 @@ const Login: React.FC<LoginProps> = ({ togglePopup, toggleRegisterPopup, closePo
                 Logg inn
               </button>
 
-              <h2 className='text-center text-black mt-8'>Har du ikke bruker?</h2>
+              <h2 className='text-center mt-8'>Har du ikke bruker?</h2>
               <button
                 type='button'
                 className='bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700 mt-2'
