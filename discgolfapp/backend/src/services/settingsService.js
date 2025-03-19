@@ -12,16 +12,20 @@ import User from '../models/User.js'
  */
 
 const getSettings = async (admin) => {
-
     if (!admin) {
         throw new Error('No admin found.')
     }
 
-    const settings = await User.find({ admin }).select('settings')
+    const user = await User.findById(admin).select('settings')
 
-    if (!settings) {
+    if (!user || !user.settings) {
         throw new Error('No settings found on this user. Ask superadmin for access.')
     }
+
+    const settings = user.settings.map(setting => ({
+        name: setting.name,
+        description: setting.description
+    }))
 
     return settings
 }

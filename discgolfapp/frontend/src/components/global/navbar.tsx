@@ -6,20 +6,20 @@ const Navbar = ({ toggleLoginPopup }: { toggleLoginPopup: () => void }) => {
 
   return (
     <nav className='bg-[#1B365D] text-white py-4 px-6 flex justify-center'>
-      
+
       {/* Wrapper for å sentrere innholdet */}
       <div className='w-full max-w-6xl flex items-center justify-between'>
 
         {/* Logo + Tittel (Sentrert i sin del av navbaren) */}
-        <div 
+        <div
           className='flex items-center space-x-3 cursor-pointer'
           onClick={async () => await router.push('/')}
         >
-          <Image 
-            src='/logo01.png' 
-            alt='Logo' 
-            width={50} 
-            height={50} 
+          <Image
+            src='/logo01.png'
+            alt='Logo'
+            width={50}
+            height={50}
           />
           <h1 className='text-xl font-bold leading-tight'>
             <span className='block'>Norges</span>
@@ -60,6 +60,14 @@ const Navbar = ({ toggleLoginPopup }: { toggleLoginPopup: () => void }) => {
             width={26}
             height={26}
             className='cursor-pointer invert'
+          />
+          <Image
+            src='/adminsettings.png'
+            alt='AdminPage'
+            width={26}
+            height={26}
+            className='cursor-pointer invert'
+            onClick={async () => await router.push('/adminpage')}
           />
         </div>
 

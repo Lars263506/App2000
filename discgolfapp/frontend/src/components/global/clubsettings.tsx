@@ -2,37 +2,40 @@ import React, { useState, useEffect } from 'react'
 import { toast, ToastContainer } from 'react-toastify'
 
 import { Club } from '../../types/club'
+import SelectButton from './selectButton'
 
 interface ClubDetailsProps {
   selectedClub: Club | null;
+  setSelectedClub: (club: Club) => void;
 }
 
-const ClubSettings: React.FC<ClubDetailsProps> = ({ selectedClub }) => {
-
-    const [club, setClub] = useState<Club | null>(null);
-
-    useEffect(() => {
-        setClub(selectedClub);
-    }, [selectedClub]);
+const ClubSettings: React.FC<ClubDetailsProps> = ({ selectedClub, setSelectedClub }) => {
 
     const changeClubInformation = async () => {
-        if (!club)
+        if (!selectedClub)
             {
                 toast.error('Klubben eksisterer ikke');
                 return;
             };
 
-        const url = process.env.NEXT_PUBLIC_BACKEND_BASE_URL + '/clubpage/' + club._id;
+        const accessToken = localStorage.getItem('accessToken')
+        const url = process.env.NEXT_PUBLIC_BACKEND_BASE_URL + '/clubpage/' + selectedClub._id;
 
         try {
           const response = await fetch(url, {
             method: 'PATCH',
             headers: {
-              'Content-Type': 'application/json',
+              Authorization: 'Bearer ' + accessToken,
+              'Content-Type': 'application/json'
             },
-            body: JSON.stringify(club),
+            body: JSON.stringify(selectedClub),
           });
-          const data = await response.json();
+          if (response.status === 200) {
+            toast.success('Klubbinformasjonen ble endret!');
+          }
+          else {
+            toast.error('Klubbinformasjonen ble ikke endret. Prøv igjen senere.');
+          }
         } catch (error: unknown) {
           if (error instanceof Error) {
             toast.error(error.message);
@@ -43,16 +46,16 @@ const ClubSettings: React.FC<ClubDetailsProps> = ({ selectedClub }) => {
       };
 
       return (
-        <div className='flex w-auto bg-gray-200 rounded-xl shadow text-black overflow-y-auto'>
-            {club ? (
+        <div className='flex w-auto shadow text-black overflow-y-auto'>
+            {selectedClub ? (
                 <div className='flex flex-col gap-2 p-4 text-black'>
                     <div className='flex flex-col'>
                         <strong>Endre klubbnavn</strong>
                         <input
                             type='text'
                             className='border p-2 rounded'
-                            value={club.name}
-                            onChange={(e) => setClub({ ...club, name: e.target.value })}
+                            value={selectedClub.name}
+                            onChange={(e) => setSelectedClub({ ...selectedClub, name: e.target.value })}
                         />
                     </div>
                     <div className='flex flex-col'>
@@ -60,8 +63,8 @@ const ClubSettings: React.FC<ClubDetailsProps> = ({ selectedClub }) => {
                         <input
                             type='text'
                             className='border p-2 rounded'
-                            value={club.address}
-                            onChange={(e) => setClub({ ...club, name: e.target.value })}
+                            value={selectedClub.address}
+                            onChange={(e) => setSelectedClub({ ...selectedClub, address: e.target.value })}
                         />
                     </div>
                     <div className='flex flex-col'>
@@ -69,8 +72,8 @@ const ClubSettings: React.FC<ClubDetailsProps> = ({ selectedClub }) => {
                         <input
                             type='text'
                             className='border p-2 rounded'
-                            value={club.zipCode}
-                            onChange={(e) => setClub({ ...club, name: e.target.value })}
+                            value={selectedClub.zipCode}
+                            onChange={(e) => setSelectedClub({ ...selectedClub, zipCode: e.target.value })}
                         />
                     </div>
                     <div className='flex flex-col'>
@@ -78,8 +81,8 @@ const ClubSettings: React.FC<ClubDetailsProps> = ({ selectedClub }) => {
                         <input
                             type='text'
                             className='border p-2 rounded'
-                            value={club.websiteURL}
-                            onChange={(e) => setClub({ ...club, name: e.target.value })}
+                            value={selectedClub.websiteURL}
+                            onChange={(e) => setSelectedClub({ ...selectedClub, websiteURL: e.target.value })}
                         />
                     </div>
                     <div className='flex flex-col'>
@@ -87,8 +90,8 @@ const ClubSettings: React.FC<ClubDetailsProps> = ({ selectedClub }) => {
                         <input
                             type='text'
                             className='border p-2 rounded'
-                            value={club.email}
-                            onChange={(e) => setClub({ ...club, name: e.target.value })}
+                            value={selectedClub.email}
+                            onChange={(e) => setSelectedClub({ ...selectedClub, email: e.target.value })}
                         />
                     </div>
                     <div className='flex flex-col'>
@@ -96,19 +99,20 @@ const ClubSettings: React.FC<ClubDetailsProps> = ({ selectedClub }) => {
                         <input
                             type='text'
                             className='border p-2 rounded'
-                            value={club.phone}
-                            onChange={(e) => setClub({ ...club, name: e.target.value })}
+                            value={selectedClub.phone}
+                            onChange={(e) => setSelectedClub({ ...selectedClub, phone: e.target.value })}
                         />
                     </div>
 
-                    <button
-                        className='bg-gray-600 text-white rounded hover:bg-green-600 mt-2'
+                    <SelectButton
                         onClick={() => changeClubInformation()}
                     >
                         Lagre klubbinformasjon
-                    </button>
+                    </SelectButton>
                 </div>
-            ) : null}
+            ) : (
+                <header>Ingen klubb valgt.</header>
+            )}
 
             <ToastContainer />
         </div>

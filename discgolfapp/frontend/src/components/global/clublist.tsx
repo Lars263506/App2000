@@ -1,37 +1,46 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
+
 import { Club } from '../../types/club'
 
 interface ClubListProps {
+  selectedClub: Club | null
   setSelectedClub: (club: Club) => void
 }
 
-const ClubList: React.FC<ClubListProps> = ({ setSelectedClub }) => {
+const ClubList: React.FC<ClubListProps> = ({ selectedClub, setSelectedClub }) => {
   const [clubs, setClubs] = useState<Club[]>([])
   const [searchTerm, setSearchTerm] = useState('')
 
-  useEffect(() => {
-    const fetchClubs = async () => {
-      try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/clubpage/`)
-        const data = await response.json()
-        if (Array.isArray(data.data)) setClubs(data.data)
-      } catch (error) {
-        console.error('Feil ved henting av klubber:', error)
-      }
+  const fetchClubs = async () => {
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/clubpage/`)
+      const data = await response.json()
+      if (Array.isArray(data.data)) setClubs(data.data)
+    } catch (error) {
+      console.error('Feil ved henting av klubber:', error)
     }
+  }
+
+  useEffect(() => {
     fetchClubs()
-  }, [])
-  
+  }, [selectedClub])
+
   return (
-    <div className='flex bg-gray-100 p-4 rounded-xl shadow text-black'>
+    <div className='flex p-4 text-black'>
       <div className='flex-grow'>
-        <input
-          type='text'
-          placeholder='Filtrer på klubbnavn...'
-          className='border p-2 rounded w-fit'
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
+        <div className="flex flex-row gap-2">
+          <input
+            type='text'
+            placeholder='Filtrer på klubbnavn...'
+            className='border p-2 rounded w-fit'
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+          <button onClick={fetchClubs}>
+            &#x21bb; {/* refresh icon */}
+          </button>
+        </div>
+
         <ul>
           {clubs
             .filter((club) => club.name.toLowerCase().includes(searchTerm.toLowerCase()))
