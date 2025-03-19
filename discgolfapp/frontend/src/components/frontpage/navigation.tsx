@@ -10,17 +10,6 @@ const Navigation = () => {
   return (
     <div className='max-w-6xl mx-auto flex flex-wrap justify-center gap-4 py-2'>
 
-      {/* Spill nå */}
-      <div 
-        className='bg-[#E7EFFB] p-6 rounded-lg shadow-md w-full sm:w-[30%] cursor-pointer transition-transform duration-300 hover:scale-105 text-center'
-        onClick={navigateToPlayPage}
-      >
-        <h2 className='text-[#1B365D] text-xl font-bold'>Spill nå</h2>
-        <p className='mt-1 text-[#2A4470] text-sm'>
-          Start en runde discgolf og finn en bane nær deg.
-        </p>
-      </div>
-
       {/* Kom i gang */}
       <div 
         className='bg-[#E7EFFB] p-6 rounded-lg shadow-md w-full sm:w-[30%] cursor-pointer transition-transform duration-300 hover:scale-105 text-center'
