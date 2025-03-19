@@ -1,4 +1,6 @@
 import passport from '../config/passportConfig.js'
+import { Strategy as GoogleStrategy } from 'passport-google-oauth20'
+import { Strategy as FacebookStrategy } from 'passport-facebook'
 import User from '../models/User.js'
 import ClubPage from '../models/Clubpage.js'
 

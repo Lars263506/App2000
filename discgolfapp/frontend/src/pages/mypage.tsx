@@ -16,6 +16,7 @@ const MyPage = () => {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [clubs, setClubs] = useState<any[]>([]);
   const router = useRouter();
+  const [games, setGames] = useState<{ id: number; name: string; genre: string }[]>([]);
 
   // Første useEffect: Henter brukerdata
   useEffect(() => {
@@ -65,7 +66,31 @@ const MyPage = () => {
     };
 
     fetchClubs();
-  }, [user]); // Denne useEffect kjøres hver gang 'user' endres
+  }, [user]); 
+
+  useEffect(() => {
+    const fetchGames = async () => {
+      try {
+        const accessToken = localStorage.getItem('accessToken');
+        const url = `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/games`;
+        const res = await fetch(url, {
+        headers: {
+          "Authorization": `Bearer ${accessToken}`
+        }});
+     
+        if (res.status !== 200) {
+          throw new Error(`Failed to fetch games: ${res.statusText}`);
+        }
+  
+        const data = await res.json();
+        setGames(data);
+      } catch (error) {
+        console.error("Error fetching games:", error);
+      }
+    };
+  
+    fetchGames();
+  }, []);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -170,7 +195,20 @@ const MyPage = () => {
             <p><strong>Rolle:</strong> {user.role ?? "Ukjent"}</p>
           </div>
           {/* Tomme bokser */}
-          <div className="text-lg bg-white p-6 rounded-lg shadow-lg font-semibold max-h-80 overflow-y-auto">Mine spill:</div>
+          <div className="text-lg bg-white p-6 rounded-lg shadow-lg font-semibold max-h-80 overflow-y-auto">
+                <h3 className="text-lg text-black mb-6 font-semibold">Mine spill:</h3>
+                {games.length > 0 ? (
+                    <ul>
+                        {games.map((game) => (
+                            <li key={game.id} className="mb-2">
+                                {game.name} - <span className="text-gray-600">{game.genre}</span>
+                            </li>
+                        ))}
+                    </ul>
+                ) : (
+                    <p>Ingen spill funnet.</p>
+                )}
+            </div>
           <div className="bg-white p-6 rounded-lg shadow-lg">
               <h3 className="text-lg text-black mb-6 font-semibold max-h-80 overflow-y-auto">Mine klubber:</h3>
               {clubs.length > 0 ? (

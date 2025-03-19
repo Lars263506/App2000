@@ -8,6 +8,7 @@ import clubpageRoutes from './routes/clubpageRoutes.js'
 import courseRoutes from './routes/courseRoutes.js'
 import elementRoutes from './routes/elementRoutes.js'
 import userRoutes from './routes/userRoutes.js'
+import gameRoutes from './routes/gameRoutes.js'
 import User from './models/User.js'
 import multer from 'multer';
 import { GridFSBucket } from 'mongodb';
@@ -52,6 +53,7 @@ app.use('/clubpage', clubpageRoutes)
 app.use('/course', courseRoutes)
 app.use('/element', elementRoutes)
 app.use('/users', userRoutes)
+app.use('/games', gameRoutes)
 
 /**
  * @param process.env.MONGODB_URI
