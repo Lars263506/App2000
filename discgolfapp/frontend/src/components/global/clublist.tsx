@@ -5,11 +5,12 @@ import { Club } from '../../types/club'
 interface ClubListProps {
   selectedClub: Club | null
   setSelectedClub: (club: Club) => void
+  searchTerm: string
+  setSearchTerm: (searchTerm: string) => void
 }
 
-const ClubList: React.FC<ClubListProps> = ({ selectedClub, setSelectedClub }) => {
+const ClubList: React.FC<ClubListProps> = ({ selectedClub, setSelectedClub, searchTerm, setSearchTerm }) => {
   const [clubs, setClubs] = useState<Club[]>([])
-  const [searchTerm, setSearchTerm] = useState('')
 
   const fetchClubs = async () => {
     try {

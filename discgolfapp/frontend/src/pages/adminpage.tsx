@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { toast, ToastContainer } from 'react-toastify'
+import { } from 'react-toastify'
 
 import NavBar from '../components/global/navbar';
 import Footer from '../components/global/footer';
@@ -13,7 +13,11 @@ import Settings from '@/components/adminpage/settings'
  * This page is only accessible by users with the role 'admin'.
 */
 
-const AdminPage: React.FC = () => {
+interface AdminPageProps {
+    setSelectedPage: (page: string) => void;
+}
+
+const AdminPage: React.FC<AdminPageProps> = ({ setSelectedPage }) => {
     const { popupType, toggleLoginPopup, toggleRegisterPopup, closePopup, toggleMyPagePopup } = usePopup()
 
     return (
@@ -21,7 +25,7 @@ const AdminPage: React.FC = () => {
 
             {/* Navbar */}
             <div className="h-[15vh]">
-                <NavBar toggleLoginPopup={toggleLoginPopup}/>
+                <NavBar toggleLoginPopup={toggleLoginPopup} setSelectedPage={setSelectedPage}/>
             </div>
 
             {/* Main content */}
@@ -41,8 +45,6 @@ const AdminPage: React.FC = () => {
                 toggleRegisterPopup={toggleRegisterPopup}
                 toggleMyPagePopup={toggleMyPagePopup}
             />
-
-            <ToastContainer />
         </div>
     );
 };

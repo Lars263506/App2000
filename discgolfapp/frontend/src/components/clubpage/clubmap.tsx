@@ -1,17 +1,17 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react'
-import Link from 'next/link'
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api'
-interface Club {
-  _id: string
-  name: string
-  address: string
+import { Club } from '../../types/club'
+
+interface ClubmapProps {
+  searchTerm: string
 }
-const ClubListmap = () => {
+
+const Clubmap: React.FC<ClubmapProps> = ({ searchTerm }) => {
   const [clubs, setClubs] = useState<Club[]>([])
-  const [searchTerm, setSearchTerm] = useState('')
   const [markers, setMarkers] = useState<google.maps.LatLng[]>([])
   const [selectedMarker, setSelectedMarker] = useState<google.maps.LatLng | null>(null)
   const mapRef = useRef<google.maps.Map | null>(null)
+
   useEffect(() => {
     const fetchClubs = async () => {
       try {
@@ -24,6 +24,7 @@ const ClubListmap = () => {
     }
     fetchClubs()
   }, [])
+
   const geocodeAddress = useCallback(async (address: string) => {
     return await new Promise<google.maps.LatLng>((resolve, reject) => {
       new window.google.maps.Geocoder().geocode({ address }, (results, status) => {
@@ -35,6 +36,7 @@ const ClubListmap = () => {
       })
     })
   }, [])
+
   useEffect(() => {
     const fetchMarkers = async () => {
       const newMarkers = (
@@ -44,6 +46,7 @@ const ClubListmap = () => {
     }
     if (clubs.length > 0) fetchMarkers()
   }, [clubs, geocodeAddress])
+
   useEffect(() => {
     const filteredClubs = clubs.filter((club) =>
       club.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -56,6 +59,7 @@ const ClubListmap = () => {
       setSelectedMarker(null)
     }
   }, [searchTerm, clubs, geocodeAddress])
+
   return (
     <div className='flex min-h-[580px] flex-col md:flex-row gap-6 w-full h-100 max-w-5xl '>
       <div className='w-full md:w-1/2 bg-gray-200 p-4 rounded-xl shadow'>
@@ -83,4 +87,4 @@ const ClubListmap = () => {
     </div>
   )
 }
-export default ClubListmap
+export default Clubmap

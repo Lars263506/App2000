@@ -1,9 +1,11 @@
 import Image from 'next/image'
-import { useRouter } from 'next/router'
 
-const Navbar = ({ toggleLoginPopup }: { toggleLoginPopup: () => void }) => {
-  const router = useRouter();
+interface NavBarProps {
+  toggleLoginPopup: () => void
+  setSelectedPage: (page: string) => void
+}
 
+const Navbar: React.FC<NavBarProps> =  ({ toggleLoginPopup, setSelectedPage }) => {
   return (
     <nav className='bg-[#1B365D] text-white py-4 px-6 flex justify-center'>
 
@@ -13,7 +15,7 @@ const Navbar = ({ toggleLoginPopup }: { toggleLoginPopup: () => void }) => {
         {/* Logo + Tittel (Sentrert i sin del av navbaren) */}
         <div
           className='flex items-center space-x-3 cursor-pointer'
-          onClick={async () => await router.push('/')}
+          onClick={async () => setSelectedPage('Home')}
         >
           <Image
             src='/logo01.png'
@@ -44,7 +46,7 @@ const Navbar = ({ toggleLoginPopup }: { toggleLoginPopup: () => void }) => {
             width={26}
             height={26}
             className='cursor-pointer invert'
-            onClick={async () => await router.push('/')}
+            onClick={() => setSelectedPage('Home')}
           />
           <Image
             src='/user-circle-regular-24.png'
@@ -67,7 +69,7 @@ const Navbar = ({ toggleLoginPopup }: { toggleLoginPopup: () => void }) => {
             width={26}
             height={26}
             className='cursor-pointer invert'
-            onClick={async () => await router.push('/adminpage')}
+            onClick={() => setSelectedPage('AdminPage')}
           />
         </div>
 

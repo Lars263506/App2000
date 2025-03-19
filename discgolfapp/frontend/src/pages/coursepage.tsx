@@ -18,7 +18,7 @@ export interface Course {
   longitude: number
   difficulty: string
   familyFriendly: boolean
-  holes: number 
+  holes: number
 }
 
 const CoursePage = () => {
@@ -29,8 +29,6 @@ const CoursePage = () => {
   return (
     <div>
       <div className='min-h-screen flex flex-col'>
-        <Navbar toggleLoginPopup={toggleLoginPopup} />
-
         <div className='flex flex-col sm:flex-row items-start gap-4 px-4 py-4'>
           <CourseList courses={courses} setCourses={setCourses} setSelectedCourse={setSelectedCourse} />
 

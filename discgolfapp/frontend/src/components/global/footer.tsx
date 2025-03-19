@@ -14,16 +14,16 @@ export default function Footer() {
         {/* Sosiale medier */}
         <div className='flex space-x-6 my-4 sm:my-0'>
           <a href='https://facebook.com' target='_blank' rel='noopener noreferrer'>
-            <Image src='/bxl-facebook-circle.svg' alt='Facebook' width={24} height={24} className='w-6 h-6 invert' />
+            <Image src='/svg/bxl-facebook-circle.svg' alt='Facebook' width={24} height={24} className='w-6 h-6 invert' />
           </a>
           <a href='https://instagram.com' target='_blank' rel='noopener noreferrer'>
-            <Image src='/bxl-instagram-alt.svg' alt='Instagram' width={24} height={24} className='w-6 h-6 invert' />
+            <Image src='/svg/bxl-instagram-alt.svg' alt='Instagram' width={24} height={24} className='w-6 h-6 invert' />
           </a>
           <a href='https://snapchat.com' target='_blank' rel='noopener noreferrer'>
-            <Image src='/bxl-snapchat.svg' alt='Snapchat' width={24} height={24} className='w-6 h-6 invert' />
+            <Image src='/svg/bxl-snapchat.svg' alt='Snapchat' width={24} height={24} className='w-6 h-6 invert' />
           </a>
           <a href='https://twitter.com' target='_blank' rel='noopener noreferrer'>
-            <Image src='/bxl-twitter.svg' alt='Twitter' width={24} height={24} className='w-6 h-6 invert' />
+            <Image src='/svg/bxl-twitter.svg' alt='Twitter' width={24} height={24} className='w-6 h-6 invert' />
           </a>
         </div>
 

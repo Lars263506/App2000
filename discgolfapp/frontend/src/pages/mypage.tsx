@@ -46,7 +46,7 @@ const MyPage = () => {
   // Andre useEffect: Henter klubbene etter at brukerdata er hentet
   useEffect(() => {
     const fetchClubs = async () => {
-      if (!user) return; 
+      if (!user) return;
 
       try {
         const accessToken = localStorage.getItem('accessToken');
@@ -75,8 +75,8 @@ const MyPage = () => {
       reader.onloadend = () => {
         const imageUrl = reader.result as string;
         setProfileImage(imageUrl);
-        
-        handleSaveProfileImage(file); 
+
+        handleSaveProfileImage(file);
       };
       reader.readAsDataURL(file);
     }
@@ -107,9 +107,9 @@ const MyPage = () => {
   };
 
   const handleClubClick = (clubId: string) => {
-    router.push(`/clubpage?clubId=${clubId}`); 
+    router.push(`/clubpage?clubId=${clubId}`);
   };
-  
+
 
   if (!user) {
     return (
@@ -131,7 +131,7 @@ const MyPage = () => {
       <div className="flex-grow bg-gray-100 p-8 flex flex-col items-center">
         <h1 className="text-4xl font-extrabold mt-6 text-gray-800">Min Side</h1>
         <h2 className="text-2xl text-gray-700 mb-8">Velkommen, {user.displayName ?? "Ukjent"}!</h2>
-        
+
         {/* Profilbilde med redigeringsikon */}
         <div className="relative">
           {profileImage ? (
@@ -177,8 +177,8 @@ const MyPage = () => {
                 <ul>
                   {clubs.map((club) => (
                     <li key={club._id} className="mb-2">
-                      <button 
-                        onClick={() => handleClubClick(club._id)} 
+                      <button
+                        onClick={() => handleClubClick(club._id)}
                         className="text-blue-500 hover:underline">
                         {club.name}
                       </button>
