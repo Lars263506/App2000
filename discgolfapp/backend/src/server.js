@@ -9,9 +9,6 @@ import courseRoutes from './routes/courseRoutes.js'
 import elementRoutes from './routes/elementRoutes.js'
 import userRoutes from './routes/userRoutes.js'
 import gameRoutes from './routes/gameRoutes.js'
-import User from './models/User.js'
-import multer from 'multer';
-import { GridFSBucket } from 'mongodb';
 
 /**
  * @author Lars263506 (Github)
