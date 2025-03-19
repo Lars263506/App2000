@@ -16,6 +16,7 @@
     "project": "./tsconfig.json"
   },
   "dependencies": {
+    "@heroicons/react": "^2.2.0",
     "@react-google-maps/api": "^2.20.5",
     "@types/react-dnd": "^2.0.36",
     "axios": "^1.8.1",
