@@ -66,7 +66,7 @@ const updateClubPage = async (req, res) => {
     const id = req.params.id
     const request = req.body
     await clubpageService.updateClubPage(id, request)
-    res.json({ mssg: 'Club page has been updated' })
+    res.status(200).json({ mssg: 'Club page updated' })
   } catch (err) {
     res.status(500).json({ error: err.message })
   }

@@ -56,6 +56,8 @@ const deleteClubPage = async (id) => {
 const updateClubPage = async (id, request) => {
   const clubPage = await ClubPage.findByIdAndUpdate(id, request, { new: true })
   if (!clubPage) throw new Error('Club page not found')
+
+  console.log(clubPage)
 }
 
 export { getAllClubPages, getClubPage, createNewClubPage, deleteClubPage, updateClubPage }
