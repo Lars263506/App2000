@@ -7,6 +7,7 @@ import passport from './config/passportConfig.js'
 import clubpageRoutes from './routes/clubpageRoutes.js'
 import courseRoutes from './routes/courseRoutes.js'
 import elementRoutes from './routes/elementRoutes.js'
+import settingsRoutes from './routes/settingsRoutes.js'
 import userRoutes from './routes/userRoutes.js'
 import gameRoutes from './routes/gameRoutes.js'
 
@@ -49,6 +50,7 @@ app.use(rateLimit({
 app.use('/clubpage', clubpageRoutes)
 app.use('/course', courseRoutes)
 app.use('/element', elementRoutes)
+app.use('/settings', settingsRoutes)
 app.use('/users', userRoutes)
 app.use('/games', gameRoutes)
 

@@ -3,19 +3,25 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #B0B8C3;  /* Mørkere grå for bedre kontrast */
+  --foreground: #1B365D;  /* Mørk blå tekst for lesbarhet */
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #cdc9c9;
-    --foreground: #ededed;
+    --background: #ffffff;  /* Mørk blå i mørk modus */
+    --foreground: #000000;  /* Lys grå tekst for bedre kontrast */
   }
 }
 
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: Arial;
+  font-family: Arial, sans-serif;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }

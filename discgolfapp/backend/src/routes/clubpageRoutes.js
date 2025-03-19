@@ -1,7 +1,7 @@
 import express from 'express'
 
 import passport from '../config/passportConfig.js'
-import { authorizeClubowner } from '../middleware/authorization.js'
+import { authorizeAdmin } from '../middleware/authorization.js'
 import {
   getAllClubPages,
   getClubPage,
@@ -34,19 +34,19 @@ router.get('/:id',
 
 router.post('/',
   passport.authenticate('jwt', { session: false }),
-  authorizeClubowner,
+  authorizeAdmin,
   createNewClubPage
 )
 
 router.delete('/:id',
   passport.authenticate('jwt', { session: false }),
-  authorizeClubowner,
+  authorizeAdmin,
   deleteClubPage
 )
 
 router.patch('/:id',
   passport.authenticate('jwt', { session: false }),
-  authorizeClubowner,
+  authorizeAdmin,
   updateClubPage
 )
 

@@ -8,6 +8,7 @@ import 'react-toastify/dist/ReactToastify.css'
 import Announcement from './announcements'
 import FieldInformation from './fieldinformation'
 import MemberList from './memberlist'
+import Button from '../global/button'
 
 /**
  * @author Andreas Nilsen and Lars Andreas Strand
@@ -329,11 +330,11 @@ const Toolbox: React.FC<ToolboxProps> = ({ clubId }) => {
       {isToolboxOpen && (
         <div className='w-80% bg-gray-200 mb-20 flex flex-col justify-between'>
           <div className='p-4 border'>
-            <h3 className='text-lg font-bold mb-4 mt-8 text-black'>Verktøykasse</h3>
+            <h3 className='text-lg font-bold mb-4 mt-8'>Verktøykasse</h3>
             {['announcement', 'fieldInformation', 'memberList'].map((type) => (
               <div
                 key={type}
-                className='p-3 bg-gray-400 border rounded-lg cursor-pointer text-black mt-10'
+                className='p-3 bg-gray-400 border rounded-lg cursor-pointer mt-10'
                 draggable
                 onMouseDown={(e) => handleMouseDown(e, {
                   type,
@@ -354,14 +355,12 @@ const Toolbox: React.FC<ToolboxProps> = ({ clubId }) => {
 
           {/* Buttons to switch between nonmember and member view */}
           <div className='flex mt-4 p-4 border-t'>
-            <button
-              className={`p-2 border rounded-lg cursor-pointer text-black ${currentView === 'nonmember' ? 'bg-blue-400' : ''}`}
-              onClick={() => setCurrentView('nonmember')}
+            <Button
             >
               Ikke-medlem
-            </button>
+            </Button>
             <button
-              className={`p-2 border rounded-lg cursor-pointer text-black ${currentView === 'member' ? 'bg-blue-400' : ''}`}
+              className={`p-2 border rounded-lg cursor-pointer ${currentView === 'member' ? 'bg-blue-400' : ''}`}
               onClick={() => setCurrentView('member')}
             >
               Medlem

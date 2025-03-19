@@ -1,30 +1,37 @@
 import React from 'react'
 import Image from 'next/image'
 
-export default function Footer () {
+export default function Footer() {
   return (
-    <footer className='bg-gray-600 text-center p-4 border-t border-gray-300'>
-      <div className='flex justify-between items-center max-w-7xl mx-auto h-1'>
-        <a href='/kontakt' className='text-white hover:underline '>
+    <footer className='bg-[#1B365D] text-white text-center py-6'>
+      <div className='max-w-6xl mx-auto flex flex-col sm:flex-row justify-between items-center'>
+
+        {/* Kontakt oss */}
+        <a href='/kontakt' className='hover:text-[#5A8FCC] transition-colors duration-300'>
           Kontakt oss
         </a>
-        <div className='flex space-x-4'>
+
+        {/* Sosiale medier */}
+        <div className='flex space-x-6 my-4 sm:my-0'>
           <a href='https://facebook.com' target='_blank' rel='noopener noreferrer'>
-            <Image src='/bxl-facebook-circle.svg' alt='Facebook' width={24} height={24} className='w-6 h-6' />
+            <Image src='/bxl-facebook-circle.svg' alt='Facebook' width={24} height={24} className='w-6 h-6 invert' />
           </a>
           <a href='https://instagram.com' target='_blank' rel='noopener noreferrer'>
-            <Image src='/bxl-instagram-alt.svg' alt='Instagram' width={24} height={24} className='w-6 h-6' />
+            <Image src='/bxl-instagram-alt.svg' alt='Instagram' width={24} height={24} className='w-6 h-6 invert' />
           </a>
           <a href='https://snapchat.com' target='_blank' rel='noopener noreferrer'>
-            <Image src='/bxl-snapchat.svg' alt='Snapchat' width={24} height={24} className='w-6 h-6' />
+            <Image src='/bxl-snapchat.svg' alt='Snapchat' width={24} height={24} className='w-6 h-6 invert' />
           </a>
           <a href='https://twitter.com' target='_blank' rel='noopener noreferrer'>
-            <Image src='/bxl-twitter.svg' alt='Twitter' width={24} height={24} className='w-6 h-6' />
+            <Image src='/bxl-twitter.svg' alt='Twitter' width={24} height={24} className='w-6 h-6 invert' />
           </a>
         </div>
-        <a href='/personvern' className='text-white hover:underline'>
+
+        {/* Personvern */}
+        <a href='/personvern' className='hover:text-[#5A8FCC] transition-colors duration-300'>
           Personvern
         </a>
+
       </div>
     </footer>
   )

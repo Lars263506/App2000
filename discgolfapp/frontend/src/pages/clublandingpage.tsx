@@ -1,12 +1,13 @@
 import Navbar from '@/components/global/navbar'
 import Footer from '@/components/global/footer'
 import MemberBenefit from '@/components/clubpage/memberbenefit'
-import Clublist from '@/components/clubpage/clublistmap'
+import ClubList from '@/components/global/ClubList'
+import ClubListmap from '@/components/clubpage/clublistmap'
 import { usePopup } from '@/components/global/usepopup'
 import PopupWrapper from '@/components/global/popupwrapper'
 
 const ClublandingPage = () => {
-  const { popupType, toggleLoginPopup, toggleRegisterPopup, closePopup } = usePopup()
+  const { popupType, toggleLoginPopup, toggleRegisterPopup, closePopup, toggleMyPagePopup } = usePopup()
 
   return (
     <div className='min-h-screen flex flex-col'>
@@ -15,13 +16,15 @@ const ClublandingPage = () => {
       {/* Main content */}
       <div className='flex flex-col sm:flex-row items-start gap-4 px-4 py-4'>
         <MemberBenefit />
-        <Clublist />
+        <ClubList />
+        <ClubListmap />
       </div>
 
       <PopupWrapper
         popupType={popupType}
         closePopup={closePopup}
         toggleRegisterPopup={toggleRegisterPopup}
+        toggleMyPagePopup={toggleMyPagePopup}
       />
 
       <div className='w-full bottom-0 w-full'>

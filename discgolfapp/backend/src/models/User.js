@@ -1,4 +1,5 @@
 import mongoose from 'mongoose'
+import Setting from './Setting.js'
 
 const schema = new mongoose.Schema(
   {
@@ -34,9 +35,12 @@ const schema = new mongoose.Schema(
       type: Date,
       required: true
     },
-    profileImage: { 
-      type: String, 
-      default: '' 
+    profileImage: {
+      type: String,
+      default: ''
+    },
+    settings: {
+      type: [Setting.schema],
     }
   },
   { timestamps: true }
