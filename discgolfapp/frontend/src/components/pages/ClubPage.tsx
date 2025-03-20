@@ -1,7 +1,7 @@
 
 /**
  * @author Andreas Nilsen and Lars Andreas Strand
- * @description This is the main page for the clubpage. It contains the navbar and the toolbox.
+ * @description This is the main page for the clubpage.
  */
 
 import { useEffect } from "react"
