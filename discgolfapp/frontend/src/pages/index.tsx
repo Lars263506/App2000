@@ -5,8 +5,11 @@ import Home from '@/components/pages/Home';
 import AdminPage from '@/components/pages/AdminPage';
 import PlayPage from '@/components/pages/PlayPage';
 import GetStartedPage from '@/components/pages/GetStartedPage';
-import CourseLandingPage from '@/components/pages/ClubLandingPage';
+import ClubLandingPage from '@/components/pages/ClubLandingPage';
+import ClubPage from '@/components/pages/ClubPage';
 import CoursePage from '@/components/pages/CoursePage';
+import MyPage from '@/components/pages/MyPage';
+import ContactPage from '@/components/pages/ContactPage';
 
 import Navbar from '@/components/global/navbar';
 import Footer from '@/components/global/footer';
@@ -18,13 +21,13 @@ import { usePopup } from '@/components/global/usepopup';
  * @description The main page of the website.
  * This page contains the navbar, main content and footer.
  * The main content is determined by the selected page.
- * The selected page is changed by the navbar or navigation components.
+ * The selected page is changed by passing setSelectedPage to subcomponents.
  * The page also contains a popup for login, register and my page.
  * All toasts are displayed in the toast container on this page.
  */
 
 const Index = () => {
-  const { popupType, toggleLoginPopup, toggleRegisterPopup, toggleMyPagePopup, closePopup } = usePopup();
+  const { popupType, toggleLoginPopup, toggleRegisterPopup, closePopup } = usePopup();
   const [selectedPage, setSelectedPage] = React.useState('Home');
 
   const currentPage: { [key: string]: React.FC } = {
@@ -32,9 +35,11 @@ const Index = () => {
     'Admin': () => <AdminPage />,
     'Play': () => <PlayPage />,
     'GetStarted': () => <GetStartedPage />,
-    'Courses': () => <CourseLandingPage />,
-    'Clubs': () => <CoursePage />,
-    'Contact': () => <div>Contact</div>,
+    'Courses': () => <CoursePage />,
+    'ClubLanding': () => <ClubLandingPage />,
+    'Club': () => <ClubPage />,
+    'MyPage': () => <MyPage setSelectedPage={setSelectedPage}/>,
+    'Contact': () => <ContactPage />,
     'Privacy': () => <div>Privacy</div>,
   };
 
@@ -54,26 +59,26 @@ const Index = () => {
   return (
     <div aria-label="Index root">
       <div aria-label="Navbar container" className="h-[15vh]">
-        <Navbar toggleLoginPopup={toggleLoginPopup} setSelectedPage={setSelectedPage}/>
+        <Navbar toggleLoginPopup={toggleLoginPopup} setSelectedPage={setSelectedPage} />
       </div>
 
       <div aria-label="Main content container" className="flex-grow">
         {currentPage[selectedPage] ? (
           React.createElement(currentPage[selectedPage])
         ) : (
-          <Home setSelectedPage={setSelectedPage}/>
+          <Home setSelectedPage={setSelectedPage} />
         )}
       </div>
 
       <div aria-label="Footer container" className="h-[10vh]">
-        <Footer />
+        <Footer setSelectedPage={setSelectedPage} />
       </div>
 
       <PopupWrapper
         popupType={popupType}
         closePopup={closePopup}
         toggleRegisterPopup={toggleRegisterPopup}
-        toggleMyPagePopup={toggleMyPagePopup}
+        setSelectedPage={setSelectedPage}
       />
 
       <ToastContainer />

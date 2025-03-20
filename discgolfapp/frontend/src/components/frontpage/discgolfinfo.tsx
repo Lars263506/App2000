@@ -1,8 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
+
 import Button from '../global/button'
 
-const DiscgolfInfo = () => {
+interface DiscGolfInfoProps {
+  setSelectedPage: (page: string) => void;
+}
+
+const DiscgolfInfo: React.FC<DiscGolfInfoProps> = ({ setSelectedPage }) => {
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
 
@@ -53,7 +58,7 @@ const DiscgolfInfo = () => {
         </div>
 
         <div className="text-center">
-          <Button>Spill nå</Button>
+          <Button onClick={() => setSelectedPage("Play")}>Spill nå</Button>
         </div>
       </div>
 

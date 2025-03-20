@@ -32,7 +32,7 @@ const Navigation: React.FC<NavigationProps> = ({ setSelectedPage }) => {
       {/* Klubber */}
       <div
         className='bg-[#E7EFFB] p-6 rounded-lg shadow-md w-full sm:w-[30%] cursor-pointer transition-transform duration-300 hover:scale-105 text-center'
-        onClick={() => setSelectedPage('Clubs')}
+        onClick={() => setSelectedPage('ClubLanding')}
       >
         <h2 className='text-[#1B365D] text-xl font-bold'>Klubber</h2>
         <p className='mt-1 text-[#2A4470] text-sm'>

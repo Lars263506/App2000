@@ -1,16 +1,20 @@
+'use client'
+
 import React from 'react'
 import Image from 'next/image'
-import { useRouter } from 'next/router'
 
-export default function Footer() {
-  const router = useRouter()
+interface FooterProps {
+  setSelectedPage: (page: string) => void
+}
+
+const Footer: React.FC<FooterProps> = ({ setSelectedPage }) => {
   return (
     <footer className='bg-[#1B365D] text-white text-center py-6'>
       <div className='max-w-6xl mx-auto flex flex-col sm:flex-row justify-between items-center'>
-    
+
         {/* Kontakt oss-knapp */}
         <button
-          onClick={() => router.push('/callus')}
+          onClick={() => setSelectedPage('Contact')}
           className='hover:text-[#5A8FCC] transition-colors duration-300'
         >
           Kontakt oss
@@ -41,3 +45,5 @@ export default function Footer() {
     </footer>
   )
 }
+
+export default Footer
