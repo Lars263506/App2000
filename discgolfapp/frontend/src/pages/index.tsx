@@ -17,7 +17,6 @@ import PopupWrapper from '@/components/global/popupwrapper';
 import { usePopup } from '@/components/global/usepopup';
 
 /**
- * @author Lars Andreas Strand, Andreas Nilsen and Adrian Johansen
  * @description The main page of the website.
  * This page contains the navbar, main content and footer.
  * The main content is determined by the selected page.
@@ -57,7 +56,7 @@ const Index = () => {
   }, [selectedPage]);
 
   return (
-    <div aria-label="Index root">
+    <div aria-label="Index root" className="flex flex-col min-h-screen">
       <div aria-label="Navbar container" className="h-[15vh]">
         <Navbar toggleLoginPopup={toggleLoginPopup} setSelectedPage={setSelectedPage} />
       </div>
@@ -70,7 +69,7 @@ const Index = () => {
         )}
       </div>
 
-      <div aria-label="Footer container" className="h-[10vh]">
+      <div aria-label="Footer container" className="mt-auto">
         <Footer setSelectedPage={setSelectedPage} />
       </div>
 

@@ -6,12 +6,17 @@ import ClubSettings from '../global/clubsettings'
 
 const ClubAdminDetails = () => {
 
+	const [searchTerm, setSearchTerm] = useState('')
 	const [selectedClub, setSelectedClub] = useState<Club | null>(null)
 
 	return (
 		<div className='flex flex-row h-full gap-4'>
 			<div className="w-5/10 bg-white">
-				<ClubList selectedClub={selectedClub} setSelectedClub={setSelectedClub} />
+				<ClubList 
+					selectedClub={selectedClub} 
+					setSelectedClub={setSelectedClub} 
+					searchTerm={searchTerm} 
+					setSearchTerm={setSearchTerm}/>
 			</div>
 
 			{selectedClub && (
