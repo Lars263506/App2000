@@ -99,13 +99,27 @@ const getUserByEmail = async (req, res) => {
   }
 }
 
-const getUserClubsHandler = async (req, res) => {
+const getUserClubs = async (req, res) => {
   try {
     const userId = req.user.id
     const clubs = await userService.getUserClubs(userId)
     res.status(200).json(clubs);  
   } catch (error) {
     res.status(500).json({ error: error.message }); 
+  }
+}
+
+/**
+ * @returns boolean that is true if the user is an admin, false if not
+ * @description Checks if a user is an admin
+ */
+
+const checkIfAdmin = async (req, res) => {
+  try {
+    const isAdmin = req.user.role === 'admin'
+    res.status(200).json({ isAdmin })
+  } catch (error) {
+    res.status(500).json({ error: "Couldn't check if user is an admin, try again later." }); 
   }
 }
 
@@ -252,7 +266,8 @@ export {
   getProfileImage,
   getUser,
   getUserByEmail,
-  getUserClubsHandler,
+  getUserClubs,
+  checkIfAdmin,
   registerUser,
   loginUser,
   postProfileImage,

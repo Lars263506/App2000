@@ -1,4 +1,5 @@
 import React from 'react'
+import WithAdminAccess from '../adminpage/withadminaccess';
 import Settings from '@/components/adminpage/settings'
 
 /**
@@ -7,11 +8,15 @@ import Settings from '@/components/adminpage/settings'
  * This page is only accessible by users with the role 'admin'.
 */
 
-const AdminPage: React.FC = () => {
+interface AdminPageProps {
+    setSelectedPage: (page: string) => void;
+}
+
+const AdminPage: React.FC<AdminPageProps> = ({ setSelectedPage }) => {
     return (
-        <div className="min-h-screen flex flex-col overflow-hidden">
+        <WithAdminAccess setSelectedPage={setSelectedPage}>
             <Settings />
-        </div>
+        </WithAdminAccess>
     );
 };
 
