@@ -1,15 +1,12 @@
+import { set } from 'mongoose'
 import React, { useState, useEffect } from 'react'
-import { ToastContainer, toast } from 'react-toastify'
-import '../../app/globals.css'
-import 'react-toastify/dist/ReactToastify.css'
-import MyPagePopup from '@/pages/mypage'
-import router from 'next/router'
+import { toast } from 'react-toastify'
 
 interface LoginProps {
   togglePopup: () => void
   toggleRegisterPopup: () => void
   closePopup: () => void
-  toggleMyPagePopup: () => void
+  setSelectedPage: (page: string) => void
 }
 
 interface LoginResponseData {
@@ -19,14 +16,16 @@ interface LoginResponseData {
   message?: string
 }
 
-const Login: React.FC<LoginProps> = ({ togglePopup, toggleRegisterPopup, closePopup, toggleMyPagePopup }) => {
+const Login: React.FC<LoginProps> = ({ togglePopup, toggleRegisterPopup, closePopup, setSelectedPage }) => {
   const [locked, setLocked] = useState(false)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [loggedInUser, setLoggedInUser] = useState('')
 
   useEffect(() => {
     const token = localStorage.getItem('accessToken')
+    setLoggedInUser(localStorage.getItem('displayName') || '')
     setIsLoggedIn(!!token)
   }, [])
 
@@ -47,18 +46,18 @@ const Login: React.FC<LoginProps> = ({ togglePopup, toggleRegisterPopup, closePo
       })
 
       const data: LoginResponseData = await response.json()
+
       if (response.status !== 200) {
         toast.error(data.message)
+
       } else {
         localStorage.setItem('accessToken', data.accessToken)
         localStorage.setItem('refreshToken', data.refreshToken)
+        localStorage.setItem('displayName', data.displayName)
         setIsLoggedIn(true)
-        toast.success('Logget inn med bruker: ' + data.displayName, {
-          onClose: () => {
-            closePopup()
-            window.location.reload()
-          }
-        })
+        toast.success('Logget inn med bruker: ' + data.displayName)
+        setLoggedInUser(data.displayName)
+        closePopup()
       }
     } catch (error: unknown) {
       if (error instanceof Error) {
@@ -82,6 +81,11 @@ const Login: React.FC<LoginProps> = ({ togglePopup, toggleRegisterPopup, closePo
     setIsLoggedIn(false)
   }
 
+  const goToMyPage = () => {
+    setSelectedPage('MyPage')
+    closePopup()
+  }
+
   return (
     <div
       className='fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75'
@@ -97,13 +101,13 @@ const Login: React.FC<LoginProps> = ({ togglePopup, toggleRegisterPopup, closePo
         >
           &times;
         </button>
-        <h2 className='text-2xl font-bold text-center mb-8'>
-          {isLoggedIn ? 'Logget inn' : 'Logg inn'}
-        </h2>
+        <header className='text-2xl font-bold text-center mb-8'>
+          {isLoggedIn && loggedInUser ? 'Logget inn med bruker ' + loggedInUser : 'Logg inn'}
+        </header>
         {isLoggedIn ? (
            <div className="flex flex-col items-center">
            <button
-             onClick={() => router.push("/mypage")} 
+             onClick={() => goToMyPage()}
              className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 mb-2"
            >
              Min Side
@@ -115,20 +119,6 @@ const Login: React.FC<LoginProps> = ({ togglePopup, toggleRegisterPopup, closePo
             )
           : (
             <form className='flex flex-col' onSubmit={handleLogin}>
-              <button
-                type='button'
-                className='flex items-center justify-center bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700 mb-2'
-              >
-                Logg inn med GitHub
-              </button>
-              <button
-                type='button'
-                className='flex items-center justify-center bg-gray-600 text-white px-4 py-2 rounded hover:bg-red-600 mb-4'
-              >
-                Logg inn med Google
-              </button>
-
-              <h2 className='text-center mb-2'>Innlogging:</h2>
               <div className='flex flex-col mb-2'>
                 <input
                   type='email'
@@ -170,8 +160,6 @@ const Login: React.FC<LoginProps> = ({ togglePopup, toggleRegisterPopup, closePo
               </button>
             </form>
             )}
-
-        <ToastContainer />
       </div>
     </div>
   )

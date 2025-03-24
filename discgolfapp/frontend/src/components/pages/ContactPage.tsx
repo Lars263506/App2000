@@ -1,12 +1,7 @@
 import React, { useState } from 'react'
 import { useRouter } from 'next/router'
-import Navbar from '@/components/global/navbar'
-import Footer from '@/components/global/footer'
-import PopupWrapper from '@/components/global/popupwrapper'
-import { usePopup } from '@/components/global/usepopup'
 
-const CallUs = () => {
-  const { popupType, toggleLoginPopup, toggleRegisterPopup, closePopup } = usePopup()
+const ContactPage = () => {
   const router = useRouter()
   const [formData, setFormData] = useState({
     name: '',
@@ -42,7 +37,6 @@ const CallUs = () => {
 
   return (
     <div className='flex flex-col min-h-screen'>
-      <Navbar toggleLoginPopup={toggleLoginPopup} />
       <div className='flex-grow bg-gray-100 p-8'>
         <h1 className='text-4xl font-semibold text-center text-[#1B365D] mb-8'>
           Kontakt oss
@@ -120,15 +114,8 @@ const CallUs = () => {
           </div>
         </form>
       </div>
-      <PopupWrapper
-        popupType={popupType}
-        closePopup={closePopup}
-        toggleRegisterPopup={toggleRegisterPopup}
-        toggleMyPagePopup={toggleLoginPopup}
-      />
-      <Footer />
     </div>
   )
 }
 
-export default CallUs
+export default ContactPage

@@ -1,9 +1,5 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-import Navbar from '@/components/global/navbar';
-import Footer from '@/components/global/footer';
-import PopupWrapper from '@/components/global/popupwrapper';
-import { usePopup } from '@/components/global/usepopup';
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 
 interface Course {
@@ -15,7 +11,6 @@ interface Course {
 }
 
 export default function StartGame() {
-  const { popupType, toggleLoginPopup, toggleRegisterPopup, closePopup } = usePopup();
   const [selectedCourse, setSelectedCourse] = useState("");
   const [players, setPlayers] = useState(["Spiller 1"]);
   const [scores, setScores] = useState<{ [key: string]: number[] }>({});
@@ -112,8 +107,6 @@ export default function StartGame() {
 
   return (
     <div className="min-h-screen flex flex-col text-black">
-      <Navbar toggleLoginPopup={toggleLoginPopup} />
-
       <div className="flex-grow flex items-center justify-center bg-gray-100">
         <div className="max-w-5xl w-full p-10 bg-white shadow-xl rounded-3xl min-h-[600px] relative">
           {/* Plasseringen av knappen */}
@@ -364,12 +357,6 @@ export default function StartGame() {
           )}
         </div>
       </div>
-      <PopupWrapper
-        popupType={popupType}
-        closePopup={closePopup}
-        toggleRegisterPopup={toggleRegisterPopup}
-      />
-      <Footer />
     </div>
   );
 }

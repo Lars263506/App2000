@@ -1,23 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { useRouter } from "next/router";
-import '../app/globals.css'
-import User from "../types/user";
-import { toast, ToastContainer } from "react-toastify";
-import Navbar from '@/components/global/navbar'
-import Footer from '@/components/global/footer'
-import PopupWrapper from '@/components/global/popupwrapper'
-import { usePopup } from '@/components/global/usepopup'
+import { toast } from "react-toastify";
 import { PencilIcon } from '@heroicons/react/20/solid'
 
-const MyPage = () => {
-  const { popupType, toggleLoginPopup, toggleRegisterPopup, closePopup } = usePopup();
+import User from "../../types/user";
+
+interface MyPageProps {
+    setSelectedPage: (page: string) => void;
+}
+
+const MyPage: React.FC<MyPageProps> = ({ setSelectedPage }) => {
   const [user, setUser] = useState<User | null>(null);
   const [profileImage, setProfileImage] = useState<string | null>(null);
-  const [imageFile, setImageFile] = useState<File | null>(null);
   const [clubs, setClubs] = useState<any[]>([]);
-  const router = useRouter();
 
-  // Første useEffect: Henter brukerdata
+  // Henter brukerdata
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -43,10 +39,10 @@ const MyPage = () => {
     fetchUser();
   }, []);
 
-  // Andre useEffect: Henter klubbene etter at brukerdata er hentet
+  // Henter klubbene som brukeren er medlem av
   useEffect(() => {
     const fetchClubs = async () => {
-      if (!user) return; 
+      if (!user) return;
 
       try {
         const accessToken = localStorage.getItem('accessToken');
@@ -65,18 +61,17 @@ const MyPage = () => {
     };
 
     fetchClubs();
-  }, [user]); // Denne useEffect kjøres hver gang 'user' endres
+  }, [user]);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      setImageFile(file);
       const reader = new FileReader();
       reader.onloadend = () => {
         const imageUrl = reader.result as string;
         setProfileImage(imageUrl);
-        
-        handleSaveProfileImage(file); 
+
+        handleSaveProfileImage(file);
       };
       reader.readAsDataURL(file);
     }
@@ -107,16 +102,17 @@ const MyPage = () => {
   };
 
   const handleClubClick = (clubId: string) => {
-    router.push(`/clubpage?clubId=${clubId}`); 
+    localStorage.setItem("selectedClub", clubId);
+    setSelectedPage("ClubPage");
   };
-  
+
 
   if (!user) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen">
         <p className="text-lg">Du er ikke logget inn. Vennligst logg inn først.</p>
         <button
-          onClick={() => router.push("/")}
+          onClick={() => setSelectedPage("Home")}
           className="mt-4 px-6 py-3 bg-blue-500 text-white text-lg font-semibold rounded hover:bg-blue-700"
         >
           Logg inn
@@ -127,11 +123,10 @@ const MyPage = () => {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <Navbar toggleLoginPopup={toggleLoginPopup} />
       <div className="flex-grow bg-gray-100 p-8 flex flex-col items-center">
         <h1 className="text-4xl font-extrabold mt-6 text-gray-800">Min Side</h1>
         <h2 className="text-2xl text-gray-700 mb-8">Velkommen, {user.displayName ?? "Ukjent"}!</h2>
-        
+
         {/* Profilbilde med redigeringsikon */}
         <div className="relative">
           {profileImage ? (
@@ -177,8 +172,8 @@ const MyPage = () => {
                 <ul>
                   {clubs.map((club) => (
                     <li key={club._id} className="mb-2">
-                      <button 
-                        onClick={() => handleClubClick(club._id)} 
+                      <button
+                        onClick={() => handleClubClick(club._id)}
                         className="text-blue-500 hover:underline">
                         {club.name}
                       </button>
@@ -190,15 +185,7 @@ const MyPage = () => {
               )}
             </div>
         </div>
-        <ToastContainer />
       </div>
-      <PopupWrapper
-        popupType={popupType}
-        closePopup={closePopup}
-        toggleRegisterPopup={toggleRegisterPopup}
-        toggleMyPagePopup={toggleLoginPopup}
-      />
-      <Footer />
     </div>
   );
 };
