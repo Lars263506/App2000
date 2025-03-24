@@ -9,7 +9,7 @@ interface FooterProps {
 
 const Footer: React.FC<FooterProps> = ({ setSelectedPage }) => {
   return (
-    <footer className='bg-[#1B365D] text-white text-center py-6'>
+    <footer className='text-center py-2 bg-[#1B365D] text-white'>
       <div className='max-w-6xl mx-auto flex flex-col sm:flex-row justify-between items-center'>
 
         {/* Kontakt oss-knapp */}
@@ -37,9 +37,12 @@ const Footer: React.FC<FooterProps> = ({ setSelectedPage }) => {
         </div>
 
         {/* Personvern */}
-        <a href='/personvern' className='hover:text-[#5A8FCC] transition-colors duration-300'>
+        <button
+          onClick={() => setSelectedPage('Privacy')}
+          className='hover:text-[#5A8FCC] transition-colors duration-300'
+        >
           Personvern
-        </a>
+        </button>
 
       </div>
     </footer>

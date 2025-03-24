@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ToastContainer } from 'react-toastify';
 
 import Home from '@/components/pages/Home';
@@ -27,7 +27,7 @@ import { usePopup } from '@/components/global/usepopup';
 
 const Index = () => {
   const { popupType, toggleLoginPopup, toggleRegisterPopup, closePopup } = usePopup();
-  const [selectedPage, setSelectedPage] = React.useState('Home');
+  const [selectedPage, setSelectedPage] = useState('Home');
 
   const currentPage: { [key: string]: React.FC } = {
     'Home': () => <Home setSelectedPage={setSelectedPage} />,
