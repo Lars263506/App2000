@@ -12,11 +12,12 @@ interface Course {
   longitude: number;
   difficulty: string;
   par: number;
+  holes: number;
 }
 
 export default function StartGame() {
   const { popupType, toggleLoginPopup, toggleRegisterPopup, closePopup } = usePopup();
-  const [selectedCourse, setSelectedCourse] = useState("");
+  const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
   const [players, setPlayers] = useState(["Spiller 1"]);
   const [scores, setScores] = useState<{ [key: string]: number[] }>({});
   const [currentBasket, setCurrentBasket] = useState(1);
@@ -52,7 +53,7 @@ export default function StartGame() {
     if (selectedCourse) {
       setGameStarted(true);
       const initialScores = players.reduce<{ [key: string]: number[] }>((acc, player) => {
-        acc[player] = Array(baskets).fill(0);
+        acc[player] = Array(selectedCourse.holes).fill(0);
         return acc;
       }, {});
       setScores(initialScores);
@@ -63,7 +64,7 @@ export default function StartGame() {
     const updatedScores = { ...scores };
 
     if (!updatedScores[player]) {
-      updatedScores[player] = Array(baskets).fill(0);
+      updatedScores[player] = Array(selectedCourse?.holes || baskets).fill(0);
     }
     updatedScores[player][basket - 1] = value;
     setScores(updatedScores);
@@ -78,7 +79,7 @@ export default function StartGame() {
   };
 
   const handleNextBasket = () => {
-    if (currentBasket < baskets) {
+    if (currentBasket < (selectedCourse?.holes || baskets)) {
       setCurrentBasket(currentBasket + 1);
     }
   };
@@ -89,8 +90,35 @@ export default function StartGame() {
     }
   };
 
-  const finishGame = () => {
+  const finishGame = async () => {
     setGameEnded(true);
+
+    const gameResult = {
+      course: selectedCourse?.name,
+      players: players,
+      scores: scores,
+      date: new Date().toISOString(),
+    };
+
+    try {
+      const accessToken = localStorage.getItem('accessToken');
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/games`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify(gameResult),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to save game result');
+      }
+
+      console.log('Game result saved successfully');
+    } catch (error) {
+      console.error('Error saving game result:', error);
+    }
   };
 
   const calculateTotalScore = (player: string) => {
@@ -99,7 +127,7 @@ export default function StartGame() {
 
   const getScoreDescription = (player: string, basketIndex: number) => {
     const score = scores[player]?.[basketIndex];
-    const coursePar = courses.find(course => course.name === selectedCourse)?.par || 4;
+    const coursePar = courses.find(course => course.name === selectedCourse?.name)?.par || 4;
 
     if (score === 1) return "Ace";
     if (score === coursePar - 2) return "Eagle";
@@ -127,16 +155,16 @@ export default function StartGame() {
           )}
 
           {!gameStarted ? (
-            <div className="grid grid-cols-3 gap-8">
+            <div className=" grid grid-cols-3 gap-10">
               <div className="col-span-1">
                 <h1 className="text-xl font-bold text-center mb-4">Velg Bane</h1>
-                <div className="w-full mt-6">
+                <div className="w-full mt-10">
                   <ul className="space-y-6">
                     {courses.map((course) => (
                       <li
                         key={course.name}
-                        className={`p-4 border rounded-lg cursor-pointer ${selectedCourse === course.name ? 'bg-gray-400 text-white' : ''}`}
-                        onClick={() => setSelectedCourse(course.name)}
+                        className={`p-4 border rounded-lg cursor-pointer ${selectedCourse?.name === course.name ? 'bg-gray-400 text-white' : ''}`}
+                        onClick={() => setSelectedCourse(course)}
                       >
                         {course.name}
                       </li>
@@ -150,14 +178,14 @@ export default function StartGame() {
                   <LoadScript googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string}>
                     <GoogleMap
                       center={{
-                        lat: courses.find(course => course.name === selectedCourse)?.latitude || 59.9139,
-                        lng: courses.find(course => course.name === selectedCourse)?.longitude || 10.7522
+                        lat: courses.find(course => course.name === selectedCourse.name)?.latitude || 59.9139,
+                        lng: courses.find(course => course.name === selectedCourse.name)?.longitude || 10.7522
                       }}
                       zoom={15}
                       mapContainerStyle={{ height: "600px", width: "100%", borderRadius: "1rem" }}
                     >
                       {courses.map((course) => (
-                        course.name === selectedCourse && (
+                        course.name === selectedCourse.name && (
                           <Marker
                             key={course.name}
                             position={{
@@ -176,7 +204,9 @@ export default function StartGame() {
                 {selectedCourse && (
                   <>
                     <h2 className="text-lg font-semibold mb-3">Vanskelighetsgrad: </h2>
-                    <p>{courses.find(course => course.name === selectedCourse)?.difficulty}</p>
+                    <p>{selectedCourse.difficulty}</p>
+                    <h2 className="text-lg font-semibold mb-3">Antall hull: </h2>
+                    <p>{selectedCourse.holes}</p>
 
                     <h2 className="text-base font-semibold mt-8 mb-3">Legg til spillere</h2>
                     <div className="overflow-y-auto max-h-80">
@@ -249,7 +279,7 @@ export default function StartGame() {
                           </td>
                         ))}
                         <td className="p-3">
-                          {courses.find(course => course.name === selectedCourse)?.par}
+                          {courses.find(course => course.name === selectedCourse?.name)?.par}
                         </td>
                         <td className="p-3">
                           {players.map((player) => (
@@ -282,14 +312,14 @@ export default function StartGame() {
                 <LoadScript googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string}>
                   <GoogleMap
                     center={{
-                      lat: courses.find(course => course.name === selectedCourse)?.latitude || 59.9139,
-                      lng: courses.find(course => course.name === selectedCourse)?.longitude || 10.7522
+                      lat: selectedCourse ? courses.find(course => course.name === selectedCourse.name)?.latitude || 59.9139 : 59.9139,
+                      lng: courses.find(course => course.name === selectedCourse?.name)?.longitude || 10.7522
                     }}
                     zoom={15}
                     mapContainerStyle={{ height: "300px", width: "100%" }}
                   >
                     {courses.map((course) => (
-                      course.name === selectedCourse && (
+                      course.name === selectedCourse?.name && (
                         <Marker
                           key={course.name}
                           position={{
@@ -368,6 +398,7 @@ export default function StartGame() {
         popupType={popupType}
         closePopup={closePopup}
         toggleRegisterPopup={toggleRegisterPopup}
+        toggleMyPagePopup={toggleLoginPopup}
       />
       <Footer />
     </div>
