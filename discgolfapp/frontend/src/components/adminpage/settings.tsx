@@ -4,6 +4,7 @@ import { toast } from 'react-toastify'
 import ClubAdminDetails from './clubadmindetails'
 import CourseAdminDetails from './courseadmindetails'
 import UserAdminDetails from './useradmindetails'
+import TranslationDetails from './translationdetails'
 import { Setting } from '../../types/setting';
 import SelectButton from '../global/selectButton'
 
@@ -13,7 +14,8 @@ const Settings: React.FC = () => {
     const settingComponents: { [key: string]: React.FC } = {
         'Klubbadministrasjon': ClubAdminDetails,
         "Baneadministarjon": CourseAdminDetails,
-        'Brukeradministrasjon': UserAdminDetails
+        'Brukeradministrasjon': UserAdminDetails,
+        "Oversettelser": TranslationDetails
     };
 
     useEffect(() => {
