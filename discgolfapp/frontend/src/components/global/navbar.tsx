@@ -1,9 +1,11 @@
 import Image from 'next/image'
-import { useRouter } from 'next/router'
 
-const Navbar = ({ toggleLoginPopup }: { toggleLoginPopup: () => void }) => {
-  const router = useRouter();
+interface NavBarProps {
+  toggleLoginPopup: () => void
+  setSelectedPage: (page: string) => void
+}
 
+const Navbar: React.FC<NavBarProps> =  ({ toggleLoginPopup, setSelectedPage }) => {
   return (
     <nav className='bg-[#1B365D] text-white py-4 px-6 flex justify-center'>
 
@@ -13,10 +15,10 @@ const Navbar = ({ toggleLoginPopup }: { toggleLoginPopup: () => void }) => {
         {/* Logo + Tittel (Sentrert i sin del av navbaren) */}
         <div
           className='flex items-center space-x-3 cursor-pointer'
-          onClick={async () => await router.push('/')}
+          onClick={async () => setSelectedPage('Home')}
         >
           <Image
-            src='/logo01.png'
+            src='/images/logo01.png'
             alt='Logo'
             width={50}
             height={50}
@@ -39,15 +41,15 @@ const Navbar = ({ toggleLoginPopup }: { toggleLoginPopup: () => void }) => {
         {/* Ikoner (Jevnt fordelt, sentrert i sin del) */}
         <div className='flex space-x-6'>
           <Image
-            src='/home-regular-24.png'
+            src='/images/home-regular-24.png'
             alt='Hjem'
             width={26}
             height={26}
             className='cursor-pointer invert'
-            onClick={async () => await router.push('/')}
+            onClick={() => setSelectedPage('Home')}
           />
           <Image
-            src='/user-circle-regular-24.png'
+            src='/images/user-circle-regular-24.png'
             alt='Profil'
             width={26}
             height={26}
@@ -55,19 +57,19 @@ const Navbar = ({ toggleLoginPopup }: { toggleLoginPopup: () => void }) => {
             onClick={toggleLoginPopup}
           />
           <Image
-            src='/world-regular-24.png'
+            src='/images/world-regular-24.png'
             alt='Språk'
             width={26}
             height={26}
             className='cursor-pointer invert'
           />
           <Image
-            src='/adminsettings.png'
+            src='/images/adminsettings.png'
             alt='AdminPage'
             width={26}
             height={26}
             className='cursor-pointer invert'
-            onClick={async () => await router.push('/adminpage')}
+            onClick={() => setSelectedPage('Admin')}
           />
         </div>
 

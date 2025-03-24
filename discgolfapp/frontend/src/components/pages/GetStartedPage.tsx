@@ -1,25 +1,16 @@
 'use client'
 
-import { usePopup } from '@/components/global/usepopup'
 import { useState } from 'react'
 import Image from 'next/image'
-import Navbar from '@/components/global/navbar'
-import Footer from '@/components/global/footer'
-import PopupWrapper from '@/components/global/popupwrapper'
 
 const GetStartedPage = () => {
   const [selectedInfo, setSelectedInfo] = useState<'beginner' | 'advanced'>('beginner')
 
-  const { popupType, toggleLoginPopup, toggleRegisterPopup, closePopup, toggleMyPagePopup } = usePopup()
-
   return (
-    <div className="flex flex-col min-h-screen">
-      {/* Navbar */}
-      <Navbar toggleLoginPopup={toggleLoginPopup} />
-
+    <div className="flex flex-col">
       {/* Hovedinnhold */}
-      <div className="flex-grow flex flex-col items-center justify-center px-6 py-12">
-        <div className="max-w-4xl w-full bg-[#E7EFFB] p-8 rounded-lg shadow-lg text-center">
+      <div className="flex-grow flex flex-col items-center justify-center pb-8">
+        <div className="max-w-4xl w-full p-8 rounded-lg shadow-lg text-center bg-[#E7EFFB]">
           <h1 className="text-2xl font-bold text-[#1B365D] mb-4">Kom i gang med Discgolf</h1>
           <p className="text-[#2A4470] mb-6">
             Velg mellom nybegynner- og avanserte tips for å forbedre ditt spill.
@@ -86,18 +77,12 @@ const GetStartedPage = () => {
 
         {/* Bildekarusell - Matcher frontpage design */}
         <div className="flex justify-center mt-8 space-x-4">
-          <Image src="/post.png" alt="Discgolf Image 1" width={200} height={200} className="rounded-lg shadow-md" />
-          <Image src="/disc.png" alt="Discgolf Image 2" width={200} height={200} className="rounded-lg shadow-md" />
-          <Image src="/discs.png" alt="Discgolf Image 3" width={200} height={200} className="rounded-lg shadow-md" />
-          <Image src="/kaste.png" alt="Discgolf Image 4" width={200} height={200} className="rounded-lg shadow-md" />
+          <Image src="/images/post.png" alt="Discgolf Image 1" width={200} height={200} className="rounded-lg shadow-md" />
+          <Image src="/images/disc.png" alt="Discgolf Image 2" width={200} height={200} className="rounded-lg shadow-md" />
+          <Image src="/images/discs.png" alt="Discgolf Image 3" width={200} height={200} className="rounded-lg shadow-md" />
+          <Image src="/images/kaste.png" alt="Discgolf Image 4" width={200} height={200} className="rounded-lg shadow-md" />
         </div>
       </div>
-
-      {/* Popup Wrapper */}
-      <PopupWrapper popupType={popupType} closePopup={closePopup} toggleRegisterPopup={toggleRegisterPopup} toggleMyPagePopup={toggleMyPagePopup} />
-
-      {/* Footer */}
-      <Footer />
     </div>
   )
 }

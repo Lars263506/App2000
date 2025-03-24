@@ -1,61 +1,88 @@
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
+import { ToastContainer } from 'react-toastify';
 
-import Navbar from '@/components/global/navbar'
-import Footer from '@/components/global/footer'
-import PopupWrapper from '@/components/global/popupwrapper'
-import { usePopup } from '@/components/global/usepopup'
-import DiscgolfInfo from '@/components/frontpage/discgolfinfo'
-import Navigation from '@/components/frontpage/navigation'
+import Home from '@/components/pages/Home';
+import AdminPage from '@/components/pages/AdminPage';
+import PlayPage from '@/components/pages/PlayPage';
+import GetStartedPage from '@/components/pages/GetStartedPage';
+import ClubLandingPage from '@/components/pages/ClubLandingPage';
+import ClubPage from '@/components/pages/ClubPage';
+import CoursePage from '@/components/pages/CoursePage';
+import MyPage from '@/components/pages/MyPage';
+import ContactPage from '@/components/pages/ContactPage';
+
+import Navbar from '@/components/global/navbar';
+import Footer from '@/components/global/footer';
+import PopupWrapper from '@/components/global/popupwrapper';
+import { usePopup } from '@/components/global/usepopup';
 
 /**
- * @author Andreas Nilsen
- * @description Line: 23-27, Generated images from ChatGPT.
+ * @description The main page of the website.
+ * This page contains the navbar, main content and footer.
+ * The main content is determined by the selected page.
+ * The selected page is changed by passing setSelectedPage to subcomponents.
+ * The page also contains a popup for login, register and my page.
+ * All toasts are displayed in the toast container on this page.
  */
 
-const Home = () => {
-  const { popupType, toggleLoginPopup, toggleRegisterPopup, closePopup } = usePopup()
+const Index = () => {
+  const { popupType, toggleLoginPopup, toggleRegisterPopup, closePopup } = usePopup();
+  const [selectedPage, setSelectedPage] = useState('Home');
 
-  const [currentImageIndex, setCurrentImageIndex] = useState(0)
+  const currentPage: { [key: string]: React.FC } = {
+    'Home': () => <Home setSelectedPage={setSelectedPage} />,
+    'Admin': () => <AdminPage setSelectedPage={setSelectedPage} />,
+    'Play': () => <PlayPage />,
+    'GetStarted': () => <GetStartedPage />,
+    'Courses': () => <CoursePage />,
+    'ClubLanding': () => <ClubLandingPage />,
+    'Club': () => <ClubPage />,
+    'MyPage': () => <MyPage setSelectedPage={setSelectedPage}/>,
+    'Contact': () => <ContactPage />,
+    'Privacy': () => <div>Privacy</div>,
+  };
 
-  const images = [
-    '/golf1.webp',
-    '/golf2.webp',
-    '/golf3.webp',
-    '/golf4.webp',
-    '/golf5.webp'
-  ]
-
+  // Load selected page from local storage on page load
   useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length)
-    }, 5000)
+    const selectedPage = localStorage.getItem('selectedPage');
+    if (selectedPage) {
+      setSelectedPage(selectedPage);
+    }
+  }, []);
 
-    return () => clearInterval(interval)
-  }, [images.length])
+  // Save selected page to local storage on change
+  useEffect(() => {
+    localStorage.setItem('selectedPage', selectedPage);
+  }, [selectedPage]);
 
   return (
-    <div>
-      <Navbar toggleLoginPopup={toggleLoginPopup} />
+    <div aria-label="Index root" className="flex flex-col min-h-screen">
+      <div aria-label="Navbar container" className="h-[15vh]">
+        <Navbar toggleLoginPopup={toggleLoginPopup} setSelectedPage={setSelectedPage} />
+      </div>
 
-      <DiscgolfInfo
-        images={images}
-        currentImageIndex={currentImageIndex}
-      />
+      <div aria-label="Main content container" className="flex-grow">
+        {currentPage[selectedPage] ? (
+          React.createElement(currentPage[selectedPage])
+        ) : (
+          <Home setSelectedPage={setSelectedPage} />
+        )}
+      </div>
 
-      <Navigation />
+      <div aria-label="Footer container" className="mt-auto">
+        <Footer setSelectedPage={setSelectedPage} />
+      </div>
 
       <PopupWrapper
         popupType={popupType}
         closePopup={closePopup}
         toggleRegisterPopup={toggleRegisterPopup}
-        toggleMyPagePopup={toggleLoginPopup}
+        setSelectedPage={setSelectedPage}
       />
 
-      <div className="absolute bottom-0 left-0 w-full">
-        <Footer />
-      </div>
+      <ToastContainer />
     </div>
-  )
-}
+  );
+};
 
-export default Home
+export default Index;

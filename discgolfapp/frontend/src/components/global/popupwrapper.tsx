@@ -1,15 +1,14 @@
 import Login from '@/components/global/login'
 import Register from '@/components/global/register'
-import MyPagePopup from '@/pages/mypage'
 
 interface PopupWrapperProps {
   popupType: 'login' | 'register' | 'mypage' | null
   closePopup: () => void
   toggleRegisterPopup: () => void
-  toggleMyPagePopup: () => void
+  setSelectedPage: (page: string) => void
 }
 
-const PopupWrapper = ({ popupType, closePopup, toggleRegisterPopup, toggleMyPagePopup }: PopupWrapperProps) => {
+const PopupWrapper: React.FC<PopupWrapperProps> = ({ popupType, toggleRegisterPopup, closePopup, setSelectedPage}) => {
   return (
     <>
       {popupType === 'login' && (
@@ -17,7 +16,7 @@ const PopupWrapper = ({ popupType, closePopup, toggleRegisterPopup, toggleMyPage
           togglePopup={closePopup}
           toggleRegisterPopup={toggleRegisterPopup}
           closePopup={closePopup}
-          toggleMyPagePopup={toggleMyPagePopup}
+          setSelectedPage={setSelectedPage}
         />
       )}
       {popupType === 'register' && (
@@ -26,8 +25,6 @@ const PopupWrapper = ({ popupType, closePopup, toggleRegisterPopup, toggleMyPage
           closePopup={closePopup}
         />
       )}
-      {popupType === 'mypage' && 
-      (<MyPagePopup/>)}
     </>
   )
 }

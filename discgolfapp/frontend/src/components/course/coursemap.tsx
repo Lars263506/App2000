@@ -26,20 +26,18 @@ const CourseMap: React.FC<CourseMapProps> = ({ selectedCourse, courses, setSelec
   );
 
   return (
-    <div className="md:w-2/3 flex-grow min-w-[450px] bg-gray-200 p-4 rounded-xl shadow">
-      <div className="mb-4 flex flex-wrap gap-2">
-        {/* Filter with difficulty level */}
-        <select
-          className="p-2 border rounded w-full md:w-1/4"
-          value={difficultyFilter}
-          onChange={(e) => setDifficultyFilter(e.target.value)}
-        >
-          <option value="">Alle vanskelighetsgrader</option>
-          <option value="Easy">Lett</option>
-          <option value="Medium">Middels</option>
-          <option value="Difficult">Vanskelig</option>
-        </select>
-      </div>
+    <div className="flex flex-col gap-2 p-4 rounded-xl shadow bg-gray-200 ">
+      {/* Filter with difficulty level */}
+      <select
+        className="p-2 border rounded"
+        value={difficultyFilter}
+        onChange={(e) => setDifficultyFilter(e.target.value)}
+      >
+        <option value="">Alle vanskelighetsgrader</option>
+        <option value="Easy">Lett</option>
+        <option value="Medium">Middels</option>
+        <option value="Difficult">Vanskelig</option>
+      </select>
 
       <LoadScript googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string}>
         <GoogleMap
