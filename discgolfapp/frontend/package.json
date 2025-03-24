@@ -24,13 +24,14 @@
     "lucide-react": "^0.475.0",
     "mongoose": "^8.12.1",
     "multer": "^1.4.5-lts.1",
-    "next": "15.1.5",
+    "next": "^15.2.3",
     "react": "^19.0.0",
     "react-dnd": "^16.0.1",
     "react-dnd-html5-backend": "^16.0.1",
     "react-dom": "^19.0.0",
     "react-resizable": "^3.0.5",
-    "react-toastify": "^11.0.3"
+    "react-toastify": "^11.0.3",
+    "uuid": "^11.1.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
