@@ -11,7 +11,7 @@ const ClubAdminDetails = () => {
 
 	return (
 		<div className='flex flex-row h-full gap-4'>
-			<div className="w-5/10 bg-white">
+			<div className="w-5/10 rounded-md bg-white border border-solid border-black">
 				<ClubList 
 					selectedClub={selectedClub} 
 					setSelectedClub={setSelectedClub} 
@@ -20,7 +20,7 @@ const ClubAdminDetails = () => {
 			</div>
 
 			{selectedClub && (
-				<div className="bg-white w-5/10 overflow-y-auto">
+				<div className="w-5/10 rounded-md bg-white border border-solid border-black overflow-y-auto">
 					<ClubSettings selectedClub={selectedClub} setSelectedClub={setSelectedClub}/>
 				</div>
 			)}

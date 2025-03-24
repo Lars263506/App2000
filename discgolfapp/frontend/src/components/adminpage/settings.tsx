@@ -44,7 +44,8 @@ const Settings: React.FC = () => {
     }, [])
 
     return (
-        <div className="flex flex-row gap-4 p-4 h-full bg-white">
+        <div className="flex flex-row gap-4 p-4 rounded-md min-h-[80vh] bg-white">
+
             {/* Settings list */}
             <div className="flex flex-col w-1/5 p-2 rounded-md bg-[#E7EFFB] overflow-y-auto">
                 {settings && settings.length > 0 ? (

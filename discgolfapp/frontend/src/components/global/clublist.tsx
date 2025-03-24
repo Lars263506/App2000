@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react'
 
 import { Club } from '../../types/club'
+import WithAdminAccess from '../adminpage/withadminaccess'
+import { toast } from 'react-toastify'
 
 interface ClubListProps {
   selectedClub: Club | null
-  setSelectedClub: (club: Club) => void
+  setSelectedClub: (club: Club | null) => void
   searchTerm: string
   setSearchTerm: (searchTerm: string) => void
 }
@@ -25,6 +27,44 @@ const ClubList: React.FC<ClubListProps> = ({ selectedClub, setSelectedClub, sear
   useEffect(() => {
     fetchClubs()
   }, [selectedClub])
+
+  const handleCreateClub = async () => {
+    const accessToken = localStorage.getItem('accessToken')
+    if (!accessToken) return
+
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/clubpage/`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ 
+          name: 'Ny klubb',
+          clubOwner: '',
+          description: 'Beskrivelse av ny klubb',
+          nonmemberElements: [],
+          memberElements: [],
+          address: 'Sted for ny klubb',
+          zipCode: '1234',
+          websiteURL: 'plassholder.no',
+          email: 'email@plassholder.no',
+          phone: '12345678',
+          members: [],
+          events: []
+        })
+      })
+      const data = await response.json()
+      if (data.status === 201) {
+        toast.success('Klubben ble opprettet under navnet "Ny klubb". Husk å bytte navn og fylle inn informasjon.')
+        fetchClubs()
+      }
+    } catch (error) {
+      if (error instanceof Error)
+        toast.error(error.message)
+      else toast.error('Det skjedde en feil ved oppretting av klubb. Prøv igjen senere')
+    }
+  }
 
   return (
     <div className='flex p-4 text-black'>
@@ -53,6 +93,15 @@ const ClubList: React.FC<ClubListProps> = ({ selectedClub, setSelectedClub, sear
               </li>
             ))}
         </ul>
+
+        <WithAdminAccess setSelectedPage={() => {}}>
+          <button 
+            className='p-2 mt-2 bg-blue-600 text-white rounded' 
+            onClick={() => handleCreateClub()}
+          >
+            Legg til ny klubb
+          </button>
+        </WithAdminAccess>
       </div>
     </div>
   )
