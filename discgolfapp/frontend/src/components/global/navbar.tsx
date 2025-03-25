@@ -35,8 +35,8 @@ const Navbar: React.FC<NavBarProps> = ({ toggleLoginPopup, setSelectedPage }) =>
             height={50}
           />
           <h1 className='text-xl font-bold leading-tight'>
-            <span className='block'><UseTranslation variable="navbar_norway" /></span>
-            <span className='block'><UseTranslation variable="navbar_discgolf_association" /></span>
+            <span className='block'><UseTranslation variable="navbar_logotext_norways" /></span>
+            <span className='block'><UseTranslation variable="navbar_logotext_association" /></span>
           </h1>
         </div>
 

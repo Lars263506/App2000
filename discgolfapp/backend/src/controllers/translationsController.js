@@ -23,9 +23,10 @@ const getTranslations = async (req, res) => {
 
 const updateTranslations = async (req, res) => {
     try {
-        res.status(200).json(await translationsService.updateTranslations(req.body))
+        const newTranslations = req.body
+        res.status(204).json(await translationsService.updateTranslations(newTranslations))
     } catch (error) {
-        res.status(404).json({ message: error.message })
+        res.status(500).json({ message: error.message })
     }
 }
 

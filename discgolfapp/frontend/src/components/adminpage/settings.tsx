@@ -5,8 +5,10 @@ import ClubAdminDetails from './clubadmindetails'
 import CourseAdminDetails from './courseadmindetails'
 import UserAdminDetails from './useradmindetails'
 import TranslationDetails from './translationdetails'
+
 import { Setting } from '../../types/setting';
 import SelectButton from '../global/selectButton'
+import UseTranslation from '../global/utils/usetranslation'
 
 const Settings: React.FC = () => {
     const [settings, setSettings] = useState<Setting[] | null>();
@@ -67,7 +69,7 @@ const Settings: React.FC = () => {
                 {selectedSetting ? (
                     React.createElement(settingComponents[selectedSetting.name])
                 ) : (
-                    <header>Velg en innstilling fra listen til venstre.</header>
+                    <header><UseTranslation variable='adminpage_settings_prompt' /></header>
                 )}
             </div>
         </div>

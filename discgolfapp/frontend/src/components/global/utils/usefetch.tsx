@@ -32,10 +32,15 @@ const useFetch = ({ endpoint, method, body, expectedStatus, customErrorMessage }
         return;
       }
 
+      console.log(body);
+
       const response = await fetch(url, {
         method: method,
         body: JSON.stringify(body),
-        headers: { Authorization: `Bearer ${accessToken}` },
+        headers: { 
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}` 
+        },
       });
 
       if (response.status === expectedStatus) {

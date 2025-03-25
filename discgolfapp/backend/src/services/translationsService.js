@@ -38,8 +38,7 @@ const updateTranslations = async (newTranslations) => {
 
     await Promise.all(updatePromises);
 
-    const updatedTranslations = await Translation.find();
-    return updatedTranslations;
+    return { message: 'Translations updated' };
 };
 
 export { getTranslations, updateTranslations }
