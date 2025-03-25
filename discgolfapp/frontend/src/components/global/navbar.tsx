@@ -1,17 +1,27 @@
-import Image from 'next/image'
+import React, { useState, useEffect } from 'react';
+import Image from 'next/image';
+
+import UseTranslation from '../global/utils/usetranslation';
 
 interface NavBarProps {
-  toggleLoginPopup: () => void
-  setSelectedPage: (page: string) => void
+  toggleLoginPopup: () => void;
+  setSelectedPage: (page: string) => void;
 }
 
-const Navbar: React.FC<NavBarProps> =  ({ toggleLoginPopup, setSelectedPage }) => {
+const Navbar: React.FC<NavBarProps> = ({ toggleLoginPopup, setSelectedPage }) => {
+  const [selectedLanguage, setSelectedLanguage] = useState<string>('no');
+
+  useEffect(() => {
+    const storedLanguage = localStorage.getItem('selectedLanguage');
+    if (storedLanguage) {
+      setSelectedLanguage(storedLanguage);
+    }
+  }, []);
+
   return (
     <nav className='bg-[#1B365D] text-white py-4 px-6 flex justify-center'>
-
       {/* Wrapper for å sentrere innholdet */}
       <div className='w-full max-w-6xl flex items-center justify-between'>
-
         {/* Logo + Tittel (Sentrert i sin del av navbaren) */}
         <div
           className='flex items-center space-x-3 cursor-pointer'
@@ -24,8 +34,8 @@ const Navbar: React.FC<NavBarProps> =  ({ toggleLoginPopup, setSelectedPage }) =
             height={50}
           />
           <h1 className='text-xl font-bold leading-tight'>
-            <span className='block'>Norges</span>
-            <span className='block'>Discgolf-forbund</span>
+            <span className='block'><UseTranslation variable="navbar_norway" /></span>
+            <span className='block'><UseTranslation variable="navbar_discgolf_association" /></span>
           </h1>
         </div>
 
@@ -58,7 +68,7 @@ const Navbar: React.FC<NavBarProps> =  ({ toggleLoginPopup, setSelectedPage }) =
           />
           <Image
             src='/images/world-regular-24.png'
-            alt='Språk'
+            alt={selectedLanguage === 'no' ? 'Språk: Norsk' : 'Language: English'}
             width={26}
             height={26}
             className='cursor-pointer invert'
@@ -72,10 +82,9 @@ const Navbar: React.FC<NavBarProps> =  ({ toggleLoginPopup, setSelectedPage }) =
             onClick={() => setSelectedPage('Admin')}
           />
         </div>
-
       </div>
     </nav>
-  )
-}
+  );
+};
 
 export default Navbar;

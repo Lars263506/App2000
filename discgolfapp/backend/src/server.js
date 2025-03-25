@@ -8,6 +8,7 @@ import clubpageRoutes from './routes/clubpageRoutes.js'
 import courseRoutes from './routes/courseRoutes.js'
 import elementRoutes from './routes/elementRoutes.js'
 import settingsRoutes from './routes/settingsRoutes.js'
+import translationsRoutes from './routes/translationsRoutes.js'
 import userRoutes from './routes/userRoutes.js'
 
 /**
@@ -21,7 +22,7 @@ const app = express()
 // Middleware to allow cross-origin requests
 app.use(cors({
   origin: process.env.CORS_ORIGIN,
-  methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
 }))
@@ -50,6 +51,7 @@ app.use('/clubpage', clubpageRoutes)
 app.use('/course', courseRoutes)
 app.use('/element', elementRoutes)
 app.use('/settings', settingsRoutes)
+app.use('/translations', translationsRoutes)
 app.use('/users', userRoutes)
 
 /**

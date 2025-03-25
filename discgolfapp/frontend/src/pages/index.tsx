@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ToastContainer } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 
 import Home from '@/components/pages/Home';
 import AdminPage from '@/components/pages/AdminPage';
@@ -15,6 +15,7 @@ import Navbar from '@/components/global/navbar';
 import Footer from '@/components/global/footer';
 import PopupWrapper from '@/components/global/popupwrapper';
 import { usePopup } from '@/components/global/usepopup';
+import useFetch from '@/components/global/utils/usefetch';
 
 /**
  * @description The main page of the website.
@@ -28,6 +29,12 @@ import { usePopup } from '@/components/global/usepopup';
 const Index = () => {
   const { popupType, toggleLoginPopup, toggleRegisterPopup, closePopup } = usePopup();
   const [selectedPage, setSelectedPage] = useState('Home');
+  const { data: translations, error, fetch } = useFetch({
+    endpoint: '/translations',
+    method: 'GET',
+    expectedStatus: 200,
+    customErrorMessage: 'Failed to fetch translations',
+  });
 
   const currentPage: { [key: string]: React.FC } = {
     'Home': () => <Home setSelectedPage={setSelectedPage} />,
@@ -41,6 +48,17 @@ const Index = () => {
     'Contact': () => <ContactPage />,
     'Privacy': () => <div>Privacy</div>,
   };
+
+  // Fetch translations on page load
+  useEffect(() => {
+    const fetchTranslations = async () => {
+      await fetch();
+      if (translations) localStorage.setItem('translations', JSON.stringify(translations));
+      if (error) toast.error(error);
+    };
+
+    fetchTranslations();
+  }, []);
 
   // Load selected page from local storage on page load
   useEffect(() => {

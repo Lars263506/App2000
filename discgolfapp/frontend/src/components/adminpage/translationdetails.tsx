@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { v4 as uuid4 } from 'uuid';
+import { toast } from 'react-toastify';
 
-import UseTranslation from '../global/usetranslation';
+import getTranslation from '../global/utils/gettranslation';
+import UseTranslation from '../global/utils/usetranslation';
 import Translation from '../../types/translation';
+
+import useFetch from '../global/utils/usefetch'
 
 interface Language {
   code: string;
@@ -23,6 +27,23 @@ const TranslationDetails = () => {
   const [translations, setTranslations] = useState<Translation[]>(initialTranslations);
   const [languages, setLanguages] = useState<Language[]>(initialLanguages);
   const [filter, setFilter] = useState<string>('');
+
+  const { error, fetch } = useFetch({
+    endpoint: '/translations',
+    method: 'PUT',
+    body: translations,
+    expectedStatus: 204,
+    customErrorMessage: 'Failed to update translations',
+  });
+
+  const [selectedLanguage, setSelectedLanguage] = useState<string>(
+    localStorage.getItem('selectedLanguage') || 'no'
+  );
+  
+  const updateTranslations = async () => {
+    await fetch();
+    if (error) toast.error(error);
+  };
 
   useEffect(() => {
     fetchTranslations();
@@ -65,6 +86,7 @@ const TranslationDetails = () => {
     if (existingLanguage) {
       existingLanguage.deactivated = false;
       setLanguages([...languages]);
+      alert('Language already exists, if it was deactivated it is now active again');
     } else {
       setLanguages([...languages, { code: newLanguage, deactivated: false }]);
       const updatedTranslations = translations.map(translation => ({
@@ -115,9 +137,19 @@ const TranslationDetails = () => {
       return variableMatches || translationMatches;
     });
 
+    const clearDeactivatedTranslations = () => {
+      if (window.confirm(getTranslation('adminpage_settings_cleardeactivated_warning1', selectedLanguage))) {
+          if (window.confirm(getTranslation('adminpage_settings_cleardeactivated_warning2', selectedLanguage))) {
+              const activeTranslations = translations.filter(translation => !translation.deactivated);
+              setTranslations(activeTranslations);
+              localStorage.setItem('translations', JSON.stringify(activeTranslations));
+          }
+      }
+    };
+
   return (
     <div aria-label="Translation details root">
-      <div className="mb-4">
+      <div className="mb-4 overflow-scroll-auto">
         <input
           type="text"
           placeholder="Filter variables"
@@ -181,6 +213,18 @@ const TranslationDetails = () => {
           className="text-green-500"
         >
           <UseTranslation variable={"adminpage_settings_addvariable"} />
+        </button>
+        <button 
+          onClick={clearDeactivatedTranslations} 
+          className="ml-2 text-red-500"
+        >
+          <UseTranslation variable={"adminpage_settings_cleardeactivated"} />
+        </button>
+        <button 
+          onClick={updateTranslations} 
+          className="ml-2 "
+        >
+          <UseTranslation variable={"adminpage_settings_savetranslations"} />
         </button>
       </div>
     </div>
