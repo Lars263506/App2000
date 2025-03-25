@@ -10,11 +10,11 @@ const Navbar: React.FC<NavBarProps> =  ({ toggleLoginPopup, setSelectedPage }) =
     <nav className='bg-[#1B365D] text-white py-4 px-6 flex justify-center'>
 
       {/* Wrapper for å sentrere innholdet */}
-      <div className='w-full max-w-6xl flex items-center justify-between'>
+      <div className='w-full max-w-5xl flex items-center justify-between'>
 
         {/* Logo + Tittel (Sentrert i sin del av navbaren) */}
         <div
-          className='flex items-center space-x-3 cursor-pointer'
+          className='flex items-center cursor-pointer'
           onClick={async () => setSelectedPage('Home')}
         >
           <Image
@@ -27,15 +27,6 @@ const Navbar: React.FC<NavBarProps> =  ({ toggleLoginPopup, setSelectedPage }) =
             <span className='block'>Norges</span>
             <span className='block'>Discgolf-forbund</span>
           </h1>
-        </div>
-
-        {/* Søkeboks (Sentrert i navbaren) */}
-        <div className='flex-grow flex justify-center'>
-          <input
-            type='text'
-            placeholder='Søk...'
-            className='w-full max-w-md px-4 py-2 rounded bg-gray-200 text-black placeholder-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500'
-          />
         </div>
 
         {/* Ikoner (Jevnt fordelt, sentrert i sin del) */}
