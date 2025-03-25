@@ -95,25 +95,27 @@ export default function StartGame() {
       date: new Date().toISOString(),
     };
 
-    try {
-      const accessToken = localStorage.getItem('accessToken');
-      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/games`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${accessToken}`,
-        },
-        body: JSON.stringify(gameResult),
-      });
+    const accessToken = localStorage.getItem('accessToken');
 
-      if (!response.ok) {
+    if (accessToken) {
+      try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/games`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${accessToken}`,
+          },
+          body: JSON.stringify(gameResult),
+        });
+  
+      if (response.status !== 201) {
         throw new Error('Failed to save game result');
       }
 
-      console.log('Game result saved successfully');
     } catch (error) {
       console.error('Error saving game result:', error);
-    }
+    } 
+  }
   };
 
   const calculateTotalScore = (player: string) => {
@@ -125,11 +127,11 @@ export default function StartGame() {
     const coursePar = courses.find(course => course.name === selectedCourse?.name)?.par || 4;
 
     if (score === 1) return "Ace";
-    if (score === coursePar - 2) return "Eagle";
-    if (score === coursePar - 1) return "Birdie";
-    if (score === coursePar) return "Par";
-    if (score === coursePar + 1) return "Bogey";
-    if (score === coursePar + 2) return "Double Bogey";
+    if (score === coursePar - 2) return "Eagle ";
+    if (score === coursePar - 1) return "Birdie ";
+    if (score === coursePar) return "Par ";
+    if (score === coursePar + 1) return "Bogey ";
+    if (score === coursePar + 2) return "Double Bogey ";
     return `${score} - Over Par`;
   };
 

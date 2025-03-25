@@ -1,10 +1,13 @@
 import express from 'express';
-import { saveGameResult, getUserGames } from '../controllers/gameController.js';
-import { protect } from '../middleware/authMiddleware.js'; // Sørg for at du har en middleware for autentisering
+import passport from '../config/passportConfig.js';
+
+import { saveGameResult } from '../controllers/gameController.js';
 
 const router = express.Router();
 
-router.post('/games', protect, saveGameResult);
-router.get('/users/my-games', protect, getUserGames);
+router.post('/',
+    passport.authenticate('jwt', { session: false }), 
+    saveGameResult
+);
 
 export default router;

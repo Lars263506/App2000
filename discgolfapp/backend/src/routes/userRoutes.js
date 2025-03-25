@@ -11,6 +11,7 @@ import {
   getProfile,
   getProfileImage,
   getUserClubs,
+  getUserGames,
   checkIfAdmin,
   getUser,
   getUserByEmail,
@@ -54,6 +55,11 @@ router.get('/profile-image/:filename',
 router.get('/my-clubs',
   passport.authenticate('jwt', { session: false }),
   getUserClubs
+)
+
+router.get('/my-games', 
+  passport.authenticate('jwt', { session: false }),
+  getUserGames
 )
 
 router.get('/admin',

@@ -3,6 +3,8 @@ import { toast } from "react-toastify";
 import { PencilIcon } from '@heroicons/react/20/solid'
 
 import User from "../../types/user";
+import Game from "../../types/game";
+import GameResultsModal from '../myprofile/GameResultsModal';
 
 interface MyPageProps {
     setSelectedPage: (page: string) => void;
@@ -12,7 +14,9 @@ const MyPage: React.FC<MyPageProps> = ({ setSelectedPage }) => {
   const [user, setUser] = useState<User | null>(null);
   const [profileImage, setProfileImage] = useState<string | null>(null);
   const [clubs, setClubs] = useState<any[]>([]);
-  const [games, setGames] = useState<any[]>([]);
+  const [games, setGames] = useState<Game[] | null>([]);
+  const [selectedGame, setSelectedGame] = useState<Game | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   
   useEffect(() => {
     const fetchUser = async () => {
@@ -69,13 +73,15 @@ const MyPage: React.FC<MyPageProps> = ({ setSelectedPage }) => {
       try {
         const accessToken = localStorage.getItem('accessToken');
         const gamesUrl = process.env.NEXT_PUBLIC_BACKEND_BASE_URL + "/users/my-games";
-        const gamesRes = await fetch(gamesUrl, {
+        const result = await fetch(gamesUrl, {
           headers: {
             "Authorization": `Bearer ${accessToken}`
           }
         });
-        if (gamesRes.status !== 200) throw new Error("Could not fetch games");
-        const gamesData = await gamesRes.json();
+        const data = await result.json();
+        const gamesData: Game[] = data.games;
+        gamesData.sort((b, a) => new Date(a.date).getTime() - new Date(b.date).getTime());
+      
         setGames(gamesData);
       } catch (error) {
         console.error("Error fetching games:", error);
@@ -126,6 +132,30 @@ const MyPage: React.FC<MyPageProps> = ({ setSelectedPage }) => {
   const handleClubClick = (clubId: string) => {
     localStorage.setItem("selectedClub", clubId);
     setSelectedPage("ClubPage");
+  };
+
+  const calculateTotalScore = (scores: number[]) => {
+    return scores.reduce((total, score) => total + score, 0);
+  };
+
+  const getScoreDescription = (score: number, par: number) => {
+    if (score === 1) return "Ace";
+    if (score === par - 2) return "Eagle";
+    if (score === par - 1) return "Birdie";
+    if (score === par) return "Par";
+    if (score === par + 1) return "Bogey";
+    if (score === par + 2) return "Double Bogey";
+    return `${score} - Over Par`;
+  };
+
+  const openModal = (game: Game) => {
+    setSelectedGame(game);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setSelectedGame(null);
+    setIsModalOpen(false);
   };
 
   if (!user) {
@@ -180,23 +210,15 @@ const MyPage: React.FC<MyPageProps> = ({ setSelectedPage }) => {
             <p><strong>E-post:</strong> {user.email ?? "Ukjent"}</p>
             <p><strong>Rolle:</strong> {user.role ?? "Ukjent"}</p>
           </div>
-          <div className="text-lg bg-white p-6 rounded-lg shadow-lg font-semibold max-h-80 overflow-y-auto">
+          <div className="text-lg bg-white p-6 rounded-lg shadow-lg max-h-80 overflow-y-auto">
             <h3 className="text-lg text-black mb-6 font-semibold">Mine spill:</h3>
-            {games.length > 0 ? (
+            {games !== null && games.length > 0 ? (
               <ul>
                 {games.map((game) => (
-                  <li key={game._id} className="mb-2">
-                    <p><strong>Bane:</strong> {game.course}</p>
-                    <p><strong>Dato:</strong> {new Date(game.date).toLocaleDateString()}</p>
-                    <p><strong>Spillere:</strong> {game.players.join(', ')}</p>
-                    <p><strong>Resultater:</strong></p>
-                    <ul>
-                      {Object.entries(game.scores).map(([player, scores]) => (
-                        <li key={player}>
-                          {player}: {(scores as number[]).join(', ')}
-                        </li>
-                      ))}
-                    </ul>
+                  <li key={game.gameId} className="mb-2">
+                    <button onClick={() => openModal(game)} className="cursor-pointer hover:underline">
+                      {game.course} - {new Date(game.date).toLocaleDateString("no-NO")}
+                    </button>
                   </li>
                 ))}
               </ul>
@@ -224,6 +246,15 @@ const MyPage: React.FC<MyPageProps> = ({ setSelectedPage }) => {
           </div>
         </div>
       </div>
+      {selectedGame && (
+        <GameResultsModal
+          game={selectedGame}
+          isOpen={isModalOpen}
+          onClose={closeModal}
+          calculateTotalScore={calculateTotalScore}
+          getScoreDescription={getScoreDescription}
+        />
+      )}
     </div>
   );
 };
