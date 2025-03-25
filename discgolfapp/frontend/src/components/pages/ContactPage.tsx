@@ -36,15 +36,15 @@ const ContactPage = () => {
   }
 
   return (
-    <div className='flex flex-col min-h-screen'>
-      <div className='flex-grow bg-gray-100 p-8'>
-        <h1 className='text-4xl font-semibold text-center text-[#1B365D] mb-8'>
+    <div className="flex justify-center items-center min-h-scree p-8">
+      <div className="bg-gray-200 p-8 rounded-lg shadow-lg w-full max-w-3xl">
+        <h1 className="text-4xl font-semibold text-center text-[#1B365D] mb-8">
           Kontakt oss
         </h1>
 
-        <form onSubmit={handleSubmit} className='space-y-6 max-w-4xl mx-auto'>
-          <div className='flex flex-col'>
-            <label htmlFor="name" className='text-[#1B365D] text-lg mb-2'>
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="flex flex-col">
+            <label htmlFor="name" className="text-[#1B365D] text-lg mb-2">
               Navn
             </label>
             <input
@@ -58,8 +58,8 @@ const ContactPage = () => {
             />
           </div>
 
-          <div className='flex flex-col'>
-            <label htmlFor="email" className='text-[#1B365D] text-lg mb-2'>
+          <div className="flex flex-col">
+            <label htmlFor="email" className="text-[#1B365D] text-lg mb-2">
               E-post
             </label>
             <input
@@ -73,8 +73,8 @@ const ContactPage = () => {
             />
           </div>
 
-          <div className='flex flex-col'>
-            <label htmlFor="subject" className='text-[#1B365D] text-lg mb-2'>
+          <div className="flex flex-col">
+            <label htmlFor="subject" className="text-[#1B365D] text-lg mb-2">
               Emne
             </label>
             <input
@@ -88,8 +88,8 @@ const ContactPage = () => {
             />
           </div>
 
-          <div className='flex flex-col'>
-            <label htmlFor="message" className='text-[#1B365D] text-lg mb-2'>
+          <div className="flex flex-col">
+            <label htmlFor="message" className="text-[#1B365D] text-lg mb-2">
               Meldingen din
             </label>
             <textarea
@@ -103,10 +103,10 @@ const ContactPage = () => {
             />
           </div>
 
-          <div className='text-center'>
+          <div className="text-center">
             <button
               type="submit"
-              className='bg-[#1B365D] text-white py-2 px-6 rounded-md hover:bg-[#5A8FCC] transition-colors duration-300'
+              className="bg-[#1B365D] text-white py-2 px-6 rounded-md hover:bg-[#5A8FCC] transition-colors duration-300"
               disabled={isSubmitting}
             >
               {isSubmitting ? 'Sender...' : 'Send inn'}

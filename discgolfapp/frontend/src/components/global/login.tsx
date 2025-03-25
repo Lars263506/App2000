@@ -86,6 +86,11 @@ const Login: React.FC<LoginProps> = ({ togglePopup, toggleRegisterPopup, closePo
     closePopup()
   }
 
+  const handleForgotPassword = () => {
+    setSelectedPage('ForgotpasPage');
+    closePopup();
+  };
+
   return (
     <div
       className='fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75'
@@ -136,9 +141,13 @@ const Login: React.FC<LoginProps> = ({ togglePopup, toggleRegisterPopup, closePo
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />
-                <a href='/glemt-passord' className='hover:underline mt-2 text-sm text-center'>
-                  Glemt passord?
-                </a>
+                <button
+                type="button"
+                onClick={handleForgotPassword}
+                className="hover:underline mt-2 text-sm text-center"
+              >
+                Glemt passord?
+              </button>
               </div>
               <button
                 type='submit'
