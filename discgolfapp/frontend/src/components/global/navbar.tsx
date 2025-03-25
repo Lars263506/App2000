@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 
 import UseTranslation from '../global/utils/usetranslation';
+import LanguageModal from '../global/utils/LanguageModal';
 
 interface NavBarProps {
   toggleLoginPopup: () => void;
@@ -10,6 +11,8 @@ interface NavBarProps {
 
 const Navbar: React.FC<NavBarProps> = ({ toggleLoginPopup, setSelectedPage }) => {
   const [selectedLanguage, setSelectedLanguage] = useState<string>('no');
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const availableLanguages = ['no', 'en', 'es', 'fr']; // Add your available language codes here
 
   useEffect(() => {
     const storedLanguage = localStorage.getItem('selectedLanguage');
@@ -18,6 +21,13 @@ const Navbar: React.FC<NavBarProps> = ({ toggleLoginPopup, setSelectedPage }) =>
     }
   }, []);
 
+  const handleLanguageChange = (language: string) => {
+    setSelectedLanguage(language);
+    localStorage.setItem('selectedLanguage', language);
+    setIsModalOpen(false);
+    window.location.reload();
+  };
+
   return (
     <nav className='bg-[#1B365D] text-white py-4 px-6 flex justify-center'>
       {/* Wrapper for å sentrere innholdet */}
@@ -25,7 +35,7 @@ const Navbar: React.FC<NavBarProps> = ({ toggleLoginPopup, setSelectedPage }) =>
 
         {/* Logo + Tittel (Sentrert i sin del av navbaren) */}
         <div
-          className='flex items-center cursor-pointer'
+          className='flex items-center gap-2 cursor-pointer'
           onClick={async () => setSelectedPage('Home')}
         >
           <Image
@@ -60,10 +70,11 @@ const Navbar: React.FC<NavBarProps> = ({ toggleLoginPopup, setSelectedPage }) =>
           />
           <Image
             src='/images/world-regular-24.png'
-            alt={selectedLanguage === 'no' ? 'Språk: Norsk' : 'Language: English'}
+            alt='Språk'
             width={26}
             height={26}
             className='cursor-pointer invert'
+            onClick={() => setIsModalOpen(true)}
           />
           <Image
             src='/images/adminsettings.png'
@@ -75,6 +86,15 @@ const Navbar: React.FC<NavBarProps> = ({ toggleLoginPopup, setSelectedPage }) =>
           />
         </div>
       </div>
+
+      {isModalOpen && (
+        <LanguageModal
+          availableLanguages={availableLanguages}
+          selectedLanguage={selectedLanguage}
+          onSelectLanguage={handleLanguageChange}
+          onClose={() => setIsModalOpen(false)}
+        />
+      )}
     </nav>
   );
 };
