@@ -14,12 +14,12 @@ interface PrivacyProps {
         {/* Boksen som omgir resten av innholdet */}
         <div className="bg-gray-100 p-6 rounded-2xl shadow-md">
           <p className="mb-4">
-            Din personvern er viktig for oss. Denne erklæringen forklarer hvordan vi samler inn, bruker og beskytter dine personopplysninger i samsvar med gjeldende lover og forskrifter.
+            Ditt personvern er viktig for oss. Denne erklæringen forklarer hvordan vi samler inn, bruker og beskytter dine personopplysninger i samsvar med gjeldende lover og forskrifter.
           </p>
 
           <h2 className="text-2xl font-semibold mt-6 mb-2">1. Hvilken informasjon samler vi inn?</h2>
           <p className="mb-4">
-            Vi samler inn personopplysninger du oppgir når du bruker våre tjenester, for eksempel navn, e-postadresse, telefonnummer og meldinger du sender til oss via kontaktskjemaet. I tillegg kan vi samle inn teknisk informasjon som IP-adresse, nettlesertype og enhetsinformasjon for å forbedre brukeropplevelsen.
+            Vi samler inn personopplysninger du oppgir når du bruker våre tjenester, for eksempel e-postadresse og telefonnummer eller meldinger du sender til oss via kontaktskjemaet. 
           </p>
 
           <h2 className="text-2xl font-semibold mt-6 mb-2">2. Hvordan bruker vi din informasjon?</h2>
