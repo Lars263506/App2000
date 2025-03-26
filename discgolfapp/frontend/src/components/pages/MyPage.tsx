@@ -138,15 +138,7 @@ const MyPage: React.FC<MyPageProps> = ({ setSelectedPage }) => {
     return scores.reduce((total, score) => total + score, 0);
   };
 
-  const getScoreDescription = (score: number, par: number) => {
-    if (score === 1) return "Ace";
-    if (score === par - 2) return "Eagle";
-    if (score === par - 1) return "Birdie";
-    if (score === par) return "Par";
-    if (score === par + 1) return "Bogey";
-    if (score === par + 2) return "Double Bogey";
-    return `${score} - Over Par`;
-  };
+  
 
   const openModal = (game: Game) => {
     setSelectedGame(game);
@@ -248,11 +240,15 @@ const MyPage: React.FC<MyPageProps> = ({ setSelectedPage }) => {
       </div>
       {selectedGame && (
         <GameResultsModal
-          game={selectedGame}
-          isOpen={isModalOpen}
-          onClose={closeModal}
-          calculateTotalScore={calculateTotalScore}
-          getScoreDescription={getScoreDescription}
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        calculateTotalScore={calculateTotalScore}
+        game={{
+          ...selectedGame,
+          scores: selectedGame.scores instanceof Map
+            ? Object.fromEntries(selectedGame.scores)
+            : selectedGame.scores 
+        }}
         />
       )}
     </div>
