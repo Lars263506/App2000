@@ -13,7 +13,8 @@ const Settings: React.FC = () => {
     const settingComponents: { [key: string]: React.FC } = {
         'Klubbadministrasjon': ClubAdminDetails,
         "Baneadministarjon": CourseAdminDetails,
-        'Brukeradministrasjon': UserAdminDetails
+        'Brukeradministrasjon': UserAdminDetails,
+        'Oversettelser': () => <header>Oversettelser</header>,
     };
 
     useEffect(() => {
