@@ -1,20 +1,58 @@
-import Image from 'next/image'
+import React, { useState, useEffect } from 'react';
+import Image from 'next/image';
+
+import "../../i18n"
+import { useTranslation } from 'react-i18next';
+
+import LanguageModal from '../global/utils/LanguageModal';
 
 interface NavBarProps {
-  toggleLoginPopup: () => void
-  setSelectedPage: (page: string) => void
+  toggleLoginPopup: () => void;
+  setSelectedPage: (page: string) => void;
 }
 
-const Navbar: React.FC<NavBarProps> =  ({ toggleLoginPopup, setSelectedPage }) => {
+const Navbar: React.FC<NavBarProps> = ({ toggleLoginPopup, setSelectedPage }) => {
+  const [selectedLanguage, setSelectedLanguage] = useState<string>('no');
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [availableLanguages, setAvailableLanguages] = useState<string[]>(["no", "en"]);
+  const { t, i18n } = useTranslation();
+
+  // Fetches available languages from local storage
+  useEffect(() => {
+    const translations =
+      localStorage.getItem('translations')
+        ? JSON.parse(localStorage.getItem('translations')!)
+        : null;
+
+     setAvailableLanguages(["no", "en"]);
+  }
+  , []);
+
+  // Fetches selected language from local storage
+  useEffect(() => {
+    const storedLanguage = localStorage.getItem('selectedLanguage');
+    if (storedLanguage) {
+      i18n.changeLanguage(storedLanguage);
+    }
+  }, []);
+
+  const handleLanguageChange = (language: string) => {
+    // setSelectedLanguage(language);
+    // localStorage.setItem('selectedLanguage', language);
+
+    i18n.changeLanguage(language);
+    localStorage.setItem('selectedLanguage', language);
+    setIsModalOpen(false);
+  };
+
   return (
     <nav className='bg-[#1B365D] text-white py-4 px-6 flex justify-center'>
-
       {/* Wrapper for å sentrere innholdet */}
       <div className='w-full max-w-5xl flex items-center justify-between'>
 
         {/* Logo + Tittel (Sentrert i sin del av navbaren) */}
         <div
-          className='flex items-center cursor-pointer'
+          className='flex items-center gap-2 cursor-pointer'
           onClick={async () => setSelectedPage('Home')}
         >
           <Image
@@ -24,8 +62,8 @@ const Navbar: React.FC<NavBarProps> =  ({ toggleLoginPopup, setSelectedPage }) =
             height={50}
           />
           <h1 className='text-xl font-bold leading-tight'>
-            <span className='block'>Norges</span>
-            <span className='block'>Discgolf-forbund</span>
+            <span className='block'>{t("navbar_logotext_norways")}</span>
+            <span className='block'>{t("navbar_logotext_association")}</span>
           </h1>
         </div>
 
@@ -53,6 +91,7 @@ const Navbar: React.FC<NavBarProps> =  ({ toggleLoginPopup, setSelectedPage }) =
             width={26}
             height={26}
             className='cursor-pointer invert'
+            onClick={() => setIsModalOpen(true)}
           />
           <Image
             src='/images/adminsettings.png'
@@ -63,10 +102,18 @@ const Navbar: React.FC<NavBarProps> =  ({ toggleLoginPopup, setSelectedPage }) =
             onClick={() => setSelectedPage('Admin')}
           />
         </div>
-
       </div>
+
+      {isModalOpen && (
+        <LanguageModal
+          availableLanguages={availableLanguages}
+          selectedLanguage={selectedLanguage}
+          onSelectLanguage={handleLanguageChange}
+          onClose={() => setIsModalOpen(false)}
+        />
+      )}
     </nav>
-  )
-}
+  );
+};
 
 export default Navbar;
