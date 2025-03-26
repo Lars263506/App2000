@@ -12,8 +12,20 @@ interface NavBarProps {
 const Navbar: React.FC<NavBarProps> = ({ toggleLoginPopup, setSelectedPage }) => {
   const [selectedLanguage, setSelectedLanguage] = useState<string>('no');
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const availableLanguages = ['no', 'en', 'es', 'fr']; // Add your available language codes here
+  const [availableLanguages, setAvailableLanguages] = useState<string[]>(["no", "gb"]);
 
+  // Fetches available languages from local storage
+  useEffect(() => {
+    const translations = 
+      localStorage.getItem('translations') 
+        ? JSON.parse(localStorage.getItem('translations')!) 
+        : null;
+
+     setAvailableLanguages(translations ? Object.keys(translations[0].translations) : ["no", "gb"]);
+  }
+  , []);
+
+  // Fetches selected language from local storage
   useEffect(() => {
     const storedLanguage = localStorage.getItem('selectedLanguage');
     if (storedLanguage) {
