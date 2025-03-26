@@ -1,5 +1,6 @@
 import * as userService from '../services/userService.js'
 
+
 /**
  * @author Lars263506 (Github)
  * @description This controller contains request handlers for user registration, authentication and user data management
@@ -106,6 +107,16 @@ const getUserClubs = async (req, res) => {
     res.status(200).json(clubs);  
   } catch (error) {
     res.status(500).json({ error: error.message }); 
+  }
+}
+
+const getUserGames = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const games = await userService.getUserGames(userId);
+    res.status(200).json(games);
+  } catch (error) {
+    res.status(500).json({ message: 'Failed to fetch games', error });
   }
 }
 
@@ -267,6 +278,7 @@ export {
   getUser,
   getUserByEmail,
   getUserClubs,
+  getUserGames,
   checkIfAdmin,
   registerUser,
   loginUser,

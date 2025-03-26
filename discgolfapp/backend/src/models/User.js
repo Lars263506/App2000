@@ -1,5 +1,6 @@
 import mongoose from 'mongoose'
 import Setting from './Setting.js'
+import Game from './Game.js'
 
 const schema = new mongoose.Schema(
   {
@@ -41,7 +42,11 @@ const schema = new mongoose.Schema(
     },
     settings: {
       type: [Setting.schema],
-    }
+    },
+    games: {
+      type: [Game.schema],
+      default: []
+    },
   },
   { timestamps: true }
 )

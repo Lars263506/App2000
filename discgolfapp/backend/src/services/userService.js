@@ -116,6 +116,15 @@ const getUserClubs = async (id) => {
   }
 }
 
+const getUserGames = async (userId) => {
+    console.log("Service: getUserGames called");
+    const games = await User.findById(userId).select('games');
+    if (!games) {
+        return res.status(404).json({ message: 'No games found for this user' });
+    }
+    return games
+}
+
 /**
  *
  * @param email
@@ -298,6 +307,7 @@ export {
   getUser,
   getUserByEmail,
   getUserClubs,
+  getUserGames,
   registerUser,
   loginUser,
   postProfileImage,
