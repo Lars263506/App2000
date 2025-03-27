@@ -39,6 +39,16 @@ const Navigation: React.FC<NavigationProps> = ({ setSelectedPage }) => {
           Bli en del av et discgolf-miljø i en klubb nær deg.
         </p>
       </div>
+      {/* Rediger banekart */}
+      <div
+        className='bg-[#E7EFFB] p-6 rounded-lg shadow-md w-full sm:w-[30%] cursor-pointer transition-transform duration-300 hover:scale-105 text-center'
+        onClick={() => setSelectedPage('EditCourseMap')} // Setter selectedPage til 'EditCourseMap'
+      >
+        <h2 className='text-[#1B365D] text-xl font-bold'>Rediger Banekart</h2>
+        <p className='mt-1 text-[#2A4470] text-sm'>
+          Rediger banens hull, beskrivelse og layout.
+        </p>
+      </div>
     </div>
   )
 }
