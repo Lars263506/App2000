@@ -44,7 +44,6 @@ const CourseList: React.FC<CourseListProps> = ({ courses, setCourses, setSelecte
           console.error(t("error_notanarray"), data)
         }
 
-        setCourses(data)
       } catch (error) {
         console.error(t("error_getcourses"), error)
       }
