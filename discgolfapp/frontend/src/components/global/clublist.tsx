@@ -39,7 +39,7 @@ const ClubList: React.FC<ClubListProps> = ({ selectedClub, setSelectedClub, sear
           Authorization: `Bearer ${accessToken}`,
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ 
+        body: JSON.stringify({
           name: 'Ny klubb',
           clubOwner: '',
           description: 'Beskrivelse av ny klubb',
@@ -95,8 +95,8 @@ const ClubList: React.FC<ClubListProps> = ({ selectedClub, setSelectedClub, sear
         </ul>
 
         <WithAdminAccess setSelectedPage={() => {}}>
-          <button 
-            className='p-2 mt-2 bg-blue-600 text-white rounded' 
+          <button
+            className='p-2 mt-2 bg-blue-600 text-white rounded'
             onClick={() => handleCreateClub()}
           >
             Legg til ny klubb

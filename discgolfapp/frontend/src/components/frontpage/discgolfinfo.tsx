@@ -2,12 +2,15 @@ import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
 
 import Button from '../global/button'
+import { useTranslation } from 'react-i18next'
 
 interface DiscGolfInfoProps {
   setSelectedPage: (page: string) => void;
 }
 
 const DiscgolfInfo: React.FC<DiscGolfInfoProps> = ({ setSelectedPage }) => {
+
+  const { t } = useTranslation()
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
 
@@ -44,21 +47,17 @@ const DiscgolfInfo: React.FC<DiscGolfInfoProps> = ({ setSelectedPage }) => {
 
       <div className='bg-[#E7EFFB] p-6 rounded-lg shadow-md w-full sm:w-[50%] h-[280px] flex flex-col justify-between'>
         <div>
-          <h2 className='text-[#1B365D] text-2xl font-bold text-center'>Om Discgolf</h2>
+          <h2 className='text-[#1B365D] text-2xl font-bold text-center'>{t("discgolfinfo_title")}</h2>
           <p className='mt-2 text-[#2A4470] text-sm text-center'>
-            Discgolf er en morsom og utfordrende sport som ligner på vanlig golf,
-            men i stedet for å bruke en ball og kølle, bruker du en disc (frisbee).
-            Målet er å kaste discen fra startpunktet til kurven på færrest mulig kast.
+            {t("discgolfinfo_intro")}
           </p>
           <p className='mt-2 text-[#2A4470] text-sm text-center'>
-            Discgolfbaner varierer i lengde og vanskelighetsgrad. Noen baner har
-            hindringer som trær, busker og vann som gjør spillet mer utfordrende.
-            Prøv å følge etikette på banen for en god opplevelse.
+            {t("discgolfinfo_text")}
           </p>
         </div>
 
         <div className="text-center">
-          <Button onClick={() => setSelectedPage("Play")}>Spill nå</Button>
+          <Button onClick={() => setSelectedPage("Play")}>{t("discgolfinfo_playnow")}</Button>
         </div>
       </div>
 
