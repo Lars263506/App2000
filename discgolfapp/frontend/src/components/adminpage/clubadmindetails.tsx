@@ -8,7 +8,7 @@ import CreateNewClub from './CreateNewClub';
 const ClubAdminDetails = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedClub, setSelectedClub] = useState<Club | null>(null);
-  const [selectedAction, setSelectedAction] = useState<'create' | 'update' | 'delete' | null>(null);
+  const [selectedAction, setSelectedAction] = useState<'create' | 'update' | null>(null);
 
   return (
     <div className="flex flex-col h-full justify-center gap-4">
@@ -26,12 +26,6 @@ const ClubAdminDetails = () => {
             onClick={() => setSelectedAction('update')}
           >
             Update Existing Club
-          </button>
-          <button
-            className="p-4 bg-black text-white rounded shadow hover:bg-red-600"
-            onClick={() => setSelectedAction('delete')}
-          >
-            Delete Club
           </button>
         </div>
       )}
@@ -61,13 +55,6 @@ const ClubAdminDetails = () => {
               />
             </div>
           )}
-        </div>
-      )}
-
-      {/* Render nothing for "Delete Club" (for now) */}
-      {selectedAction === 'delete' && (
-        <div className="text-center text-gray-500">
-          Delete Club functionality is not implemented yet.
         </div>
       )}
     </div>
