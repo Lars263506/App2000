@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Course } from '../../pages/coursepage'
+import { Course } from '../pages/CoursePage'
 import axios from 'axios'
 import Button from '../global/button'
 

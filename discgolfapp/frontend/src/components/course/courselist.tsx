@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { X } from 'lucide-react'
 
+import { useTranslation } from 'react-i18next'
+
 interface CourseListProps {
   courses: Course[]
   setCourses: (courses: Course[]) => void
@@ -20,6 +22,7 @@ interface Course {
 }
 
 const CourseList: React.FC<CourseListProps> = ({ courses, setCourses, setSelectedCourse }) => {
+  const { t } = useTranslation()
   const [searchTerm, setSearchTerm] = useState('')
 
   useEffect(() => {
@@ -38,12 +41,12 @@ const CourseList: React.FC<CourseListProps> = ({ courses, setCourses, setSelecte
         if (Array.isArray(data)) {
           setCourses(data)
         } else {
-          console.error('Fetched data is not an array:', data)
+          console.error(t("error_notanarray"), data)
         }
 
         setCourses(data)
       } catch (error) {
-        console.error('Feil ved henting av baner:', error)
+        console.error(t("error_getcourses"), error)
       }
     }
     fetchCourses()
@@ -60,7 +63,7 @@ const CourseList: React.FC<CourseListProps> = ({ courses, setCourses, setSelecte
         <div className='relative'>
           <input
             type='text'
-            placeholder='Søk etter bane...'
+            placeholder={t("course_search")}
             className='border p-2 rounded w-full mb-4'
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}

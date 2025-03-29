@@ -3,11 +3,15 @@
 import React from 'react'
 import Image from 'next/image'
 
+import { useTranslation } from 'react-i18next'
+
 interface FooterProps {
   setSelectedPage: (page: string) => void
 }
 
 const Footer: React.FC<FooterProps> = ({ setSelectedPage }) => {
+  const { t } = useTranslation()
+
   return (
     <footer className='text-center py-2 bg-[#1B365D] text-white'>
       <div className='max-w-6xl mx-auto flex flex-col sm:flex-row justify-between items-center'>
@@ -17,7 +21,7 @@ const Footer: React.FC<FooterProps> = ({ setSelectedPage }) => {
           onClick={() => setSelectedPage('Contact')}
           className='hover:text-[#5A8FCC] transition-colors duration-300'
         >
-          Kontakt oss
+          {t("footer_contactus")}
         </button>
 
         {/* Sosiale medier */}
@@ -41,7 +45,7 @@ const Footer: React.FC<FooterProps> = ({ setSelectedPage }) => {
           onClick={() => setSelectedPage('Privacy')}
           className='hover:text-[#5A8FCC] transition-colors duration-300'
         >
-          Personvern
+          {t("footer_privacy")}
         </button>
 
       </div>

@@ -36,7 +36,6 @@ const WithAdminAccess: React.FC<WithAdminAccessProps> = ({ children, setSelected
           if (data.isAdmin) {
             setHasAccess(true);
           } else {
-            toast.error('Du har ikke tilgang til denne siden.');
             setSelectedPage('Home');
           }
         } else {

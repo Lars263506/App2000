@@ -2,18 +2,20 @@
 
 import { useState } from 'react'
 import Image from 'next/image'
+import { useTranslation } from 'react-i18next'
 
 const GetStartedPage = () => {
+  const { t } = useTranslation()
+
   const [selectedInfo, setSelectedInfo] = useState<'beginner' | 'advanced'>('beginner')
 
   return (
     <div className="flex flex-col">
-      {/* Hovedinnhold */}
       <div className="flex-grow flex flex-col items-center justify-center pb-8">
         <div className="max-w-4xl w-full p-8 rounded-lg shadow-lg text-center bg-[#E7EFFB]">
-          <h1 className="text-2xl font-bold text-[#1B365D] mb-4">Kom i gang med Discgolf</h1>
+          <h1 className="text-2xl font-bold text-[#1B365D] mb-4">{t("getstarted_title")}</h1>
           <p className="text-[#2A4470] mb-6">
-            Velg mellom nybegynner- og avanserte tips for å forbedre ditt spill.
+            {t("getstarted_choose")}
           </p>
 
           {/* Knappene for å velge nivå */}
@@ -24,7 +26,7 @@ const GetStartedPage = () => {
                 selectedInfo === 'beginner' ? 'bg-[#1B365D]' : 'bg-gray-400'
               }`}
             >
-              Nybegynner Tips
+              {t("getstarted_beginnerbutton")}
             </button>
             <button
               onClick={() => setSelectedInfo('advanced')}
@@ -32,7 +34,7 @@ const GetStartedPage = () => {
                 selectedInfo === 'advanced' ? 'bg-[#1B365D]' : 'bg-gray-400'
               }`}
             >
-              Avansert Tips
+              {t("getstarted_advancedbutton")}
             </button>
           </div>
 
@@ -40,35 +42,30 @@ const GetStartedPage = () => {
           <div className="text-left bg-white p-6 rounded-lg shadow-md">
             {selectedInfo === 'beginner' ? (
               <div>
-                <h2 className="text-xl font-bold text-[#1B365D] mb-4">Tips for nybegynnere</h2>
+                <h2 className="text-xl font-bold text-[#1B365D] mb-4">{t("getstarted_beginner_title")}</h2>
                 <p className="text-[#2A4470] mb-4">
-                  Discgolf er en morsom og inkluderende sport som er enkel å lære, men utfordrende å mestre. Her er noen gode tips for å komme i gang:
+                  {t("getstarted_beginner_description")}
                 </p>
                 <ul className="list-disc pl-5 text-[#2A4470] space-y-2">
-                  <li><strong>1. Velg riktig disc:</strong> Start med en <strong>putter</strong> eller <strong>midrange-disc</strong>. De er enklere å kontrollere enn raske drivere.</li>
-                  <li><strong>2. Lær de grunnleggende kastene:</strong> Backhand, forehand (sidearm) og putting er de viktigste teknikkene.</li>
-                  <li><strong>3. Forstå reglene:</strong> Start fra tee-området og kast mot kurven. Etter hvert kast spiller du videre fra der discen lander.</li>
-                  <li><strong>4. Fokuser på teknikk fremfor kraft:</strong> Rolige og kontrollerte kast gir bedre resultater enn å prøve å kaste for hardt.</li>
-                  <li><strong>5. Spill med erfarne spillere:</strong> Å lære av mer erfarne spillere gir raskere progresjon.</li>
-                  <li><strong>6. Ha realistiske forventninger:</strong> Treffer du et tre? Ingen fare! Det er en del av læringsprosessen.</li>
-                  <li><strong>7. Bruk enkelt utstyr:</strong> Start med rimelige discer og oppgrader etter hvert.</li>
-                  <li><strong>8. Øv jevnlig:</strong> Jo mer du spiller, jo bedre blir du!</li>
+                  {(Array.isArray(t("getstarted_beginner_tips", { returnObjects: true }) as string[])
+                    ? (t("getstarted_beginner_tips", { returnObjects: true }) as string[])
+                    : []).map((tip, index) => (
+                    <li key={index} dangerouslySetInnerHTML={{ __html: tip }}></li>
+                  ))}
                 </ul>
               </div>
             ) : (
               <div>
-                <h2 className="text-xl font-bold text-[#1B365D] mb-4">Avansert discgolfstrategi</h2>
+                <h2 className="text-xl font-bold text-[#1B365D] mb-4">{t("getstarted_advanced_title")}</h2>
                 <p className="text-[#2A4470] mb-4">
-                  Discgolf på et mer avansert nivå krever teknikk, strategi og en dypere forståelse av spillet. Her er noen tips for erfarne spillere:
+                  {t("getstarted_advanced_description")}
                 </p>
                 <ul className="list-disc pl-5 text-[#2A4470] space-y-2">
-                  <li><strong>1. Bruk forskjellige disker:</strong> Speed 9-12 drivere for kontroll, Speed 13+ for lengde.</li>
-                  <li><strong>2. Mastere avanserte kasteteknikker:</strong> Lær hyzer, anhyzer og roller-kast for mer fleksibilitet.</li>
-                  <li><strong>3. Forstå vindens innvirkning:</strong> Trening i ulike værforhold gir bedre kontroll på kast.</li>
-                  <li><strong>4. Forbedre mental styrke:</strong> Øv på strategisk tenkning og å holde hodet kaldt under press.</li>
-                  <li><strong>5. Fysisk trening og vedlikehold:</strong> Mobilitet, styrke og utholdenhet påvirker kasteteknikken din.</li>
-                  <li><strong>6. Spill på avanserte baner:</strong> Utfordre deg selv med trange passasjer og teknisk krevende hull.</li>
-                  <li><strong>7. Øv på spesifikke situasjoner:</strong> Trening på kast fra vanskelig terreng gir bedre resultater i turneringer.</li>
+                  {(Array.isArray(t("getstarted_advanced_tips", { returnObjects: true }) as string[])
+                    ? (t("getstarted_advanced_tips", { returnObjects: true }) as string[])
+                    : []).map((tip, index) => (
+                    <li key={index} dangerouslySetInnerHTML={{ __html: tip }}></li>
+                  ))}
                 </ul>
               </div>
             )}
