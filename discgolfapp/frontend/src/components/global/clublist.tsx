@@ -93,15 +93,6 @@ const ClubList: React.FC<ClubListProps> = ({ selectedClub, setSelectedClub, sear
               </li>
             ))}
         </ul>
-
-        <WithAdminAccess setSelectedPage={() => {}}>
-          <button
-            className='p-2 mt-2 bg-blue-600 text-white rounded'
-            onClick={() => handleCreateClub()}
-          >
-            Legg til ny klubb
-          </button>
-        </WithAdminAccess>
       </div>
     </div>
   )

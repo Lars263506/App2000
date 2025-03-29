@@ -1,5 +1,4 @@
 import mongoose from 'mongoose'
-import Element from './Element.js'
 
 const schema = new mongoose.Schema(
   {
@@ -9,19 +8,11 @@ const schema = new mongoose.Schema(
       unique: true
     },
     clubOwner: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: String,
       required: true
     },
     description: {
       type: String,
-      required: true
-    },
-    nonmemberElements: {
-      type: [Element.schema],
-      required: true
-    },
-    memberElements: {
-      type: [Element.schema],
       required: true
     },
     address: {

@@ -27,8 +27,6 @@ const createNewClubPage = async (name, clubOwner, description, address, zipCode,
     name,
     clubOwner,
     description,
-    nonmemberElements: [],
-    memberElements: [],
     address,
     zipCode,
     websiteURL,
@@ -38,13 +36,16 @@ const createNewClubPage = async (name, clubOwner, description, address, zipCode,
     events: []
   }
 
-  let clubPage
   try {
-    clubPage = await ClubPage.create(newClubPage)
+    const createdClubPage = await ClubPage.create(newClubPage)
+    return createdClubPage
   } catch (error) {
-    throw new Error('Error creating club page')
+    if (error.code === 11000) {
+      throw new Error('Club page with this name already exists')
+    } else {
+      throw new Error('Error creating club page')
+    }
   }
-  return clubPage
 }
 
 const deleteClubPage = async (id) => {
