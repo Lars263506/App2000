@@ -1,8 +1,12 @@
-const UserAdminDetails = () => {
+import React from 'react';
+import UserList from './userlist';
+
+const UserAdminDetails: React.FC = () => {
   return (
-    <div className=''>
-      <div>Insert list of users here with a filter</div>
+    <div className='p-4'>
+      <UserList />
     </div>
-  )
-}
-export default UserAdminDetails
+  );
+};
+
+export default UserAdminDetails;

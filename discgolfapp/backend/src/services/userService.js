@@ -287,6 +287,14 @@ const changeRole = async (email, newRole) => {
   return { role: user.role, roleChangedAt: user.roleChangedAt }
 }
 
+const changeUser = async (displayName, email, role) => {
+  const updatedUser = { displayName, email, role };
+
+  const user = await User.findOneAndUpdate({ email }, updatedUser, { new: true });
+  if (!user) throw new Error('User not found');
+  return user;
+};
+
 /**
  * @param email
  * @returns Whether the user was deleted or not
@@ -315,5 +323,6 @@ export {
   changeEmail,
   changePassword,
   changeRole,
+  changeUser,
   deleteUser
 }
