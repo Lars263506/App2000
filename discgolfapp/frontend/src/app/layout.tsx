@@ -4,8 +4,7 @@ import { Geist, Geist_Mono } from 'next/font/google'
 import './globals.css'
 import Footer from '@/components/global/footer'
 
-// 👇 LEGG TIL:
-import '../../i18n' // Initialiser i18n tidlig
+import '../../i18n'
 import i18next from 'i18next'
 import { I18nextProvider } from 'react-i18next'
 
