@@ -33,18 +33,10 @@ export default function RootLayout ({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-<<<<<<< Updated upstream
-        <I18nextProvider i18n={i18next}>
-          <div className='min-h-screen flex flex-col'>
-            <main className='flex-grow'>{children}</main>
-          </div>
-        </I18nextProvider>
-=======
         <div className='min-h-screen flex flex-col'>
           {/* Hovedinnhold */}
           <main className='flex-grow'>{children}</main>
         </div>
->>>>>>> Stashed changes
       </body>
     </html>
   )
