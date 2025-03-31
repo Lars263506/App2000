@@ -1,5 +1,19 @@
 import * as clubpageService from '../services/clubpageService.js'
 
+/**
+ * @author Lars Andreas Strand
+ * @description This file contains the controller functions for the club page routes.
+ * It handles the requests and responses for the club page API endpoints.
+ * It uses the clubpageService to interact with the database and perform CRUD operations on club pages.
+ */
+
+/**
+ * @author Lars Andreas Strand
+ * @description This function handles the request to get all club pages.'
+ * It retrieves all club pages from the database and sends them as a response.
+ * If there is an error, it sends a 404 status code and the error message.
+ */
+
 const getAllClubPages = async (req, res) => {
   try {
     const response = await clubpageService.getAllClubPages()
@@ -8,6 +22,13 @@ const getAllClubPages = async (req, res) => {
     res.status(404).json({ error: err.message })
   }
 }
+
+/**
+ * @author Lars Andreas Strand
+ * @description This function handles the request to get a specific club page by ID.
+ * It retrieves the club page from the database and sends it as a response.
+ * If there is an error, it sends a 404 status code and the error message.
+ */
 
 const getClubPage = async (req, res) => {
   try {
@@ -20,6 +41,13 @@ const getClubPage = async (req, res) => {
   }
 }
 
+/**
+ * @author Lars Andreas Strand
+ * @description This function handles the request to get the view based on the user's role.
+ * It checks the user's role and sends the appropriate view as a response.
+ * If there is an error, it sends a 404 status code and the error message.
+ */
+
 const getView = async (req, res) => {
   try {
     const role = req.user.role
@@ -30,6 +58,14 @@ const getView = async (req, res) => {
     res.status(404).json({ error: 'No role found' })
   }
 }
+
+/**
+ * @author Lars Andreas Strand
+ * @description This function handles the request to create a new club page.
+ * It retrieves the club page data from the request body and calls the service to create a new club page.
+ * If successful, it sends a 201 status code and a success message.
+ * If there is an error, it sends a 500 status code and the error message.
+ */
 
 const createNewClubPage = async (req, res) => {
   try {
@@ -51,15 +87,32 @@ const createNewClubPage = async (req, res) => {
   }
 }
 
+/**
+ * @author Lars Andreas Strand
+ * @description This function handles the request to delete a club page by ID.
+ * It retrieves the ID from the request parameters and calls the service to delete the club page.'
+ * If successful, it sends a 200 status code and a success message.
+ * If there is an error, it sends a 404 status code and the error message.
+ */
+
 const deleteClubPage = async (req, res) => {
   try {
     const id = req.params.id
     const response = await clubpageService.deleteClubPage(id)
-    res.json({ mssg: 'Club page deleted', data: response })
+    res.status(200).json({ mssg: 'Club page deleted', data: response })
   } catch (err) {
     res.status(404).json({ error: err.message })
   }
 }
+
+/**
+ * @author Lars Andreas Strand
+ * @description This function handles the request to update a club page by ID.
+ * It retrieves the ID from the request parameters and the updated data from the request body.
+ * It calls the service to update the club page.
+ * If successful, it sends a 200 status code and a success message.
+ * If there is an error, it sends a 500 status code and the error message.
+ */
 
 const updateClubPage = async (req, res) => {
   try {
