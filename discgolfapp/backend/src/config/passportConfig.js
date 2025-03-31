@@ -3,8 +3,10 @@ import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt'
 import User from '../models/User.js'
 
 /**
- * @author Lars263506 (Github)
- * @description This file contains the configuration for the Passport JWT strategy
+ * @author Lars Andreas Strand
+ * @description This file contains the configuration for the Passport JWT strategy that is used to authenticate users in the application.
+ * It uses the JWT token from the request header to verify the user's identity and retrieve their information from the database.
+ * It exports the configured passport instance to be used in the server.js file.
  */
 
 const options = {

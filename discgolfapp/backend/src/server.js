@@ -11,8 +11,7 @@ import userRoutes from './routes/userRoutes.js'
 import gameRoutes from './routes/gameRoutes.js'
 
 /**
- * @author Lars263506 (Github)
- * @author Andreas Nilsen line 56-124
+ * @author Lars Andreas Strand and Andreas Nilsen
  * @description This is the main server file for the Discgolf app, which sets up middleware, routes and database connection, and starts the server
  */
 
@@ -51,6 +50,7 @@ app.use('/course', courseRoutes)
 app.use('/settings', settingsRoutes)
 app.use('/users', userRoutes)
 app.use('/games', gameRoutes)
+
 /**
  * @param process.env.MONGODB_URI
  * @description Connects to the MongoDB database and starts the server
