@@ -67,11 +67,8 @@ const WithAdminAccess: React.FC<WithAdminAccessProps> = ({ children, setSelected
 
   if (!hasAccess) {
     return (
-      <div className="flex flex-col items-center justify-center h-screen">
-        <h1>Ingen adgang</h1>
-        <p>Du må logge inn for å se denne siden.</p>
-      </div>
-    );
+      <></>
+    )
   }
 
   return <>{children}</>;
