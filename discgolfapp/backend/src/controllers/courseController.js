@@ -1,13 +1,34 @@
 import * as courseService from '../services/courseService.js'
 
+/**
+ * @author Lars Andreas Strand
+ * @description This file contains the controller functions for the course routes.
+ */
+
+/**
+ * @author Lars Andreas Strand
+ * @description This function handles the request to get all courses.
+ * It retrieves all courses from the database and sends them as a response.
+ * If successful, it sends a 200 status code and the courses data.
+ * If there is an error, it sends a 404 status code and the error message.
+ */
+
 const getAllCourses = async (req, res) => {
   try {
     const response = await courseService.getAllCourses()
-    res.json({ data: response })
+    res.status(200).json({ data: response })
   } catch (err) {
     res.status(404).json({ error: err.message })
   }
 }
+
+/**
+ * @author Lars Andreas Strand
+ * @description This function handles the request to get a specific course by ID.
+ * It retrieves the course from the database and sends it as a response.
+ * If successful, it sends a 200 status code and the course data.
+ * If there is an error, it sends a 404 status code and the error message.
+ */
 
 const getCourse = async (req, res) => {
   try {
@@ -18,23 +39,47 @@ const getCourse = async (req, res) => {
   }
 }
 
+/**
+ * @author Lars Andreas Strand
+ * @description This function handles the request to create a new course.
+ * It creates a new course in the database and sends it as a response.
+ * If successful, it sends a 201 status code and the course data.
+ * If there is an error, it sends a 404 status code and the error message.
+ */
+
 const createNewCourse = async (req, res) => {
   try {
     const response = await courseService.createNewCourse(req.body)
-    res.json({ data: response })
+    res.status(201).json({ data: response })
   } catch (err) {
     res.status(404).json({ error: err.message })
   }
 }
 
+/**
+ * @author Lars Andreas Strand
+ * @description This function handles the request to delete a course by ID.
+ * It deletes the course from the database and sends a success message as a response.
+ * If successful, it sends a 200 status code and a success message.
+ * If there is an error, it sends a 404 status code and the error message.
+ */
+
 const deleteCourse = async (req, res) => {
   try {
     const response = await courseService.deleteCourse(req.params.id)
-    res.json({ data: response })
+    res.status(200).json({ data: response })
   } catch (err) {
     res.status(404).json({ error: err.message })
   }
 }
+
+/**
+ * @author Lars Andreas Strand
+ * @description This function handles the request to update a course by ID.
+ * It updates the course in the database and sends it as a response.
+ * If successful, it sends a 200 status code and the updated course data.
+ * If there is an error, it sends a 404 status code and the error message.
+ */
 
 const updateCourse = async (req, res) => {
   try {

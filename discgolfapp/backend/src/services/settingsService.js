@@ -39,13 +39,13 @@ const getSettings = async (admin) => {
  * @throws Error if setting could not be granted
  */
 
-const grantSetting = async (admin, setting) => {
+const grantSetting = async (displayName, setting) => {
 
-    if (!admin) {
-        throw new Error('No admin found.')
-    }
-
-    const success = await User.findByIdAndUpdate({ admin }, { $push: { settings: setting } })
+    const success = await User.findOneAndUpdate(
+        { displayName },
+        { $addToSet: { settings: setting } },
+        { new: true }
+    )
 
     if (!success) {
         throw new Error('Could not grant setting.')
@@ -63,13 +63,13 @@ const grantSetting = async (admin, setting) => {
  * @throws Error if setting could not be revoked
  */
 
-const revokeSetting = async (admin, setting) => {
+const revokeSetting = async (displayName, setting) => {
 
-    if (!admin) {
-        throw new Error('No admin found.')
-    }
-
-    const success = await User.findByIdAndUpdate({ admin }, { $pull: { settings: setting } })
+    const success = await User.findOneAndUpdate(
+        { displayName },
+        { $pull: { settings: setting } },
+        { new: true }
+    )
 
     if (!success) {
         throw new Error('Could not revoke setting.')
