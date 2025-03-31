@@ -35,7 +35,7 @@ const createNewClubPage = async (req, res) => {
   try {
     const { name, clubOwner, description, address, zipCode, websiteURL, email, phone } = req.body
 
-    const response = await clubpageService.createNewClubPage(
+    await clubpageService.createNewClubPage(
       name,
       clubOwner,
       description,
@@ -45,7 +45,7 @@ const createNewClubPage = async (req, res) => {
       email,
       phone
     )
-    res.json({ mssg: 'Club page has been created', data: response })
+    res.status(201).json({ mssg: 'New club page created' })
   } catch (err) {
     res.status(500).json({ error: err.message })
   }
