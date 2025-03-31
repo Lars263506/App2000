@@ -287,11 +287,11 @@ const changeRole = async (email, newRole) => {
   return { role: user.role, roleChangedAt: user.roleChangedAt }
 }
 
-const changeUser = async (displayName, email, role) => {
+const changeUser = async (displayName, email, role, oldEmail) => {
   const updatedUser = { displayName, email, role };
-
-  const user = await User.findOneAndUpdate({ email }, updatedUser, { new: true });
+  const user = await User.findOneAndUpdate({ email: oldEmail }, updatedUser, { new: true });
   if (!user) throw new Error('User not found');
+  return user;
 };
 
 /**

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import User from '../../types/user';
 
 interface UserEditModalProps {
@@ -13,8 +13,14 @@ const UserEditModal: React.FC<UserEditModalProps> = ({ user, isOpen, onClose, on
   const [email, setEmail] = useState(user.email);
   const [role, setRole] = useState(user.role);
 
+  useEffect(() => {
+    setDisplayName(user.displayName);
+    setEmail(user.email);
+    setRole(user.role);
+  }, [user]);
+
   const handleSave = () => {
-    const updatedUser = { ...user, displayName, email, role };
+    const updatedUser = { ...user, displayName, email, role, oldEmail: user.email }; // Include oldEmail
     onSave(updatedUser);
     onClose();
   };
@@ -23,10 +29,16 @@ const UserEditModal: React.FC<UserEditModalProps> = ({ user, isOpen, onClose, on
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-      <div className="bg-white p-6 rounded-lg shadow-lg max-w-lg w-full">
-        <button className="absolute top-2 right-2 text-black text-2xl" onClick={onClose}>
+      <div className="bg-white p-6 rounded-lg shadow-lg max-w-lg w-full relative">
+        {/* Close Icon */}
+        <button
+          onClick={onClose}
+          className="absolute top-2 right-2 text-gray-500 hover:text-gray-800"
+          aria-label="Close"
+        >
           &times;
         </button>
+
         <h2 className="text-xl font-bold mb-4">Edit User</h2>
         <div className="mb-4">
           <label className="block text-sm font-medium text-gray-700">Display Name</label>

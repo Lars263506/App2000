@@ -45,18 +45,26 @@ const UserList: React.FC = () => {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${accessToken}`
         },
-        body: JSON.stringify(updatedUser) 
+        body: JSON.stringify(updatedUser)
       });
-      if (response.status !== 200) {
+
+      if (response.status === 200) {
+        // Update the user list in the frontend
+        setUsers((prevUsers) =>
+          prevUsers.map((user) =>
+            user.email === updatedUser.oldEmail ? updatedUser : user
+          )
+        );
+        toast.success('User details updated successfully!');
+      } else {
         const errorData = await response.json();
-        throw new Error(`Failed to update user: ${errorData.message}`);
+        toast.error('Error updating user: ' + errorData.message);
       }
-      setUsers(users.map(user => (user.email === updatedUser.email ? updatedUser : user)));
     } catch (error) {
       if (error instanceof Error) {
-        toast.error('Error updating user'); 
+        toast.error('Error updating user: ' + error.message);
       } else {
-        toast.error('Error updating user'); 
+        toast.error('Error updating user');
       }
     }
   };
@@ -80,20 +88,22 @@ const UserList: React.FC = () => {
       <div>
         {filteredUsers.length > 0 ? (
           <ul>
-            {filteredUsers.map((user, index) => (
-              <li key={index} className='mb-2 p-2 border rounded'>
+          {filteredUsers.map((user, index) => (
+            <li key={index} className='mb-2 p-4 border-2 border-gray-600 rounded-lg flex justify-between items-center shadow-md'>
+              <div>
                 <p><strong>Display Name:</strong> {user.displayName}</p>
                 <p><strong>Email:</strong> {user.email}</p>
                 <p><strong>Role:</strong> {user.role}</p>
-                <button
-                  onClick={() => handleEditUser(user)}
-                  className='mt-2 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700'
-                >
-                  Edit
-                </button>
-              </li>
-            ))}
-          </ul>
+              </div>
+              <button
+                onClick={() => handleEditUser(user)}
+                className='bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700'
+              >
+                Edit
+              </button>
+            </li>
+          ))}
+        </ul>
         ) : (
           <p>No users found.</p>
         )}
