@@ -259,7 +259,7 @@ const changeUser = async (req, res) => {
     await userService.changeUser(displayName, email, role, oldEmail);
     res.status(200).json({ message: 'User updated successfully' });
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    res.status(404).json({ message: error.message });
   }
 };
 
