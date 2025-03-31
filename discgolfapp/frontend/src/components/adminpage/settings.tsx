@@ -6,6 +6,7 @@ import CourseAdminDetails from './courseadmindetails'
 import UserAdminDetails from './useradmindetails'
 import { Setting } from '../../types/setting';
 import SelectButton from '../global/selectButton'
+import GetStartedAdminDetails from './GetStartedAdminDetails'
 
 const Settings: React.FC = () => {
     const [settings, setSettings] = useState<Setting[] | null>();
@@ -14,6 +15,7 @@ const Settings: React.FC = () => {
         'Klubbadministrasjon': ClubAdminDetails,
         "Baneadministarjon": CourseAdminDetails,
         'Brukeradministrasjon': UserAdminDetails,
+        'Kom i gang': GetStartedAdminDetails,
         'Oversettelser': () => <header>Oversettelser</header>,
     };
 
