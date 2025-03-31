@@ -5,6 +5,7 @@ import "../../i18n"
 import { useTranslation } from 'react-i18next';
 
 import LanguageModal from '../global/utils/LanguageModal';
+import WithAdminAccess from '../adminpage/withadminaccess';
 
 interface NavBarProps {
   toggleLoginPopup: () => void;
@@ -82,14 +83,16 @@ const Navbar: React.FC<NavBarProps> = ({ toggleLoginPopup, setSelectedPage }) =>
             className='cursor-pointer invert'
             onClick={() => setIsModalOpen(true)}
           />
-          <Image
-            src='/images/adminsettings.png'
-            alt='AdminPage'
-            width={26}
-            height={26}
-            className='cursor-pointer invert'
-            onClick={() => setSelectedPage('Admin')}
-          />
+          <WithAdminAccess setSelectedPage={setSelectedPage}>
+            <Image
+              src='/images/adminsettings.png'
+              alt='AdminPage'
+              width={26}
+              height={26}
+              className='cursor-pointer invert'
+              onClick={() => setSelectedPage('Admin')}
+            />
+          </WithAdminAccess>
         </div>
       </div>
 
