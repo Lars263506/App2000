@@ -292,7 +292,6 @@ const changeUser = async (displayName, email, role) => {
 
   const user = await User.findOneAndUpdate({ email }, updatedUser, { new: true });
   if (!user) throw new Error('User not found');
-  return user;
 };
 
 /**

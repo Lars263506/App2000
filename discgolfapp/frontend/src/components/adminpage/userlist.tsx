@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import User from '../../types/user';
 import UserEditModal from './usereditmodal';
+import { toast } from 'react-toastify';
 
 const UserList: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
@@ -17,8 +18,8 @@ const UserList: React.FC = () => {
             'Authorization': `Bearer ${accessToken}`
           }
         });
-        if (!response.ok) {
-          throw new Error('Failed to fetch users');
+        if (response.status !== 200) { 
+            toast.error('Failed to fetch users');
         }
         const data = await response.json();
         setUsers(data);
@@ -46,17 +47,16 @@ const UserList: React.FC = () => {
         },
         body: JSON.stringify(updatedUser) 
       });
-      if (!response.ok) {
+      if (response.status !== 200) {
         const errorData = await response.json();
         throw new Error(`Failed to update user: ${errorData.message}`);
       }
       setUsers(users.map(user => (user.email === updatedUser.email ? updatedUser : user)));
     } catch (error) {
-      console.error('Error updating user:', error);
       if (error instanceof Error) {
-        alert(`Error updating user: ${error.message}`);
+        toast.error('Error updating user'); 
       } else {
-        alert('Error updating user');
+        toast.error('Error updating user'); 
       }
     }
   };
