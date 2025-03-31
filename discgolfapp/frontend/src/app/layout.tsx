@@ -1,7 +1,12 @@
+// layout.tsx
 import type { Metadata } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
 import './globals.css'
 import Footer from '@/components/global/footer'
+
+import '../../i18n'
+import i18next from 'i18next'
+import { I18nextProvider } from 'react-i18next'
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -24,16 +29,15 @@ export default function RootLayout ({
   children: React.ReactNode
 }>) {
   return (
-    <html lang='en'>
+    <html lang='no'>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <div className='min-h-screen flex flex-col'>
-          {/* Hovedinnhold */}
-          <main className='flex-grow'>{children}</main>
-          {/* Footer */}
-          <Footer />
-        </div>
+        <I18nextProvider i18n={i18next}>
+          <div className='min-h-screen flex flex-col'>
+            <main className='flex-grow'>{children}</main>
+          </div>
+        </I18nextProvider>
       </body>
     </html>
   )
