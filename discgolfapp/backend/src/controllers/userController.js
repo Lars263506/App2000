@@ -253,6 +253,16 @@ const changeRole = async (req, res) => {
   }
 }
 
+const changeUser = async (req, res) => {
+  const { displayName, email, role, oldEmail } = req.body;
+  try {
+    await userService.changeUser(displayName, email, role, oldEmail);
+    res.status(200).json({ message: 'User updated successfully' });
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
+};
+
 /**
  * @param req
  * @param res
@@ -287,5 +297,6 @@ export {
   changeEmail,
   changePassword,
   changeRole,
+  changeUser,
   deleteUser
 }

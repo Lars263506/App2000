@@ -22,9 +22,9 @@ import {
   changeEmail,
   changePassword,
   changeRole,
+  changeUser,
   deleteUser
 } from '../controllers/userController.js'
-import { get } from 'mongoose'
 
 /**
  * @author Lars263506 (Github)
@@ -111,9 +111,15 @@ router.put('/change-password',
 )
 
 router.put('/change-role',
+passport.authenticate('jwt', { session: false }),
+authorizeAdmin,
+changeRole
+)
+
+router.put('/',
   passport.authenticate('jwt', { session: false }),
   authorizeAdmin,
-  changeRole
+  changeUser
 )
 
 router.delete('/',
@@ -121,5 +127,6 @@ router.delete('/',
   authorizeAdmin,
   deleteUser
 )
+
 
 export default router
