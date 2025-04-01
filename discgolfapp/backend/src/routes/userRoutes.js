@@ -12,6 +12,7 @@ import {
   getProfileImage,
   getUserClubs,
   getUserGames,
+  searchUsers,
   checkIfAdmin,
   getUser,
   getUserByEmail,
@@ -66,6 +67,15 @@ router.get('/admin',
   optionalAuth,
   checkIfAdmin
 )
+
+router.get('/search',
+  passport.authenticate('jwt', { session: false }),
+  (req, res, next) => {
+    console.log('Search query:', req.query);
+    next();
+  },
+  searchUsers
+);
 
 router.get('/:id',
   passport.authenticate('jwt', { session: false }),

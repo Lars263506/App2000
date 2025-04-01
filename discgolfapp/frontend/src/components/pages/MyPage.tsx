@@ -240,15 +240,10 @@ const MyPage: React.FC<MyPageProps> = ({ setSelectedPage }) => {
       </div>
       {selectedGame && (
         <GameResultsModal
-        isOpen={isModalOpen}
-        onClose={closeModal}
-        calculateTotalScore={calculateTotalScore}
-        game={{
-          ...selectedGame,
-          scores: selectedGame.scores instanceof Map
-            ? Object.fromEntries(selectedGame.scores)
-            : selectedGame.scores 
-        }}
+          game={selectedGame}
+          isOpen={isModalOpen}
+          onClose={closeModal}
+          calculateTotalScore={calculateTotalScore}
         />
       )}
     </div>

@@ -1,10 +1,9 @@
 type Game = {
-    gameId: string,
-    course: string,
-    players: string[],
-    scores: Map<string, number[]>,
-    date: Date
-    par: number
-}
- 
-export default Game
+    gameId: string;
+    course: string;
+    players: { _id: string; name: string }[]; 
+    scores: { [playerName: string]: number[] }; 
+    date: string; 
+};
+
+export default Game;

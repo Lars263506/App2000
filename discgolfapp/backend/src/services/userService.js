@@ -305,6 +305,25 @@ const deleteUser = async (email) => {
   return { success: true }
 }
 
+/**
+ * @param - Search against user display names or emails.
+ * @returns - A list of matching users with `displayName` and `email`.
+ * @description Searches for users by display name or email using a case-insensitive query.
+ */
+const searchUsers = async (query) => {
+  try {
+    const users = await User.find({
+      $or: [
+        { displayName: { $regex: query, $options: 'i' } },
+        { email: { $regex: query, $options: 'i' } },
+      ],
+    }).select('displayName email');
+    return users;
+  } catch (error) {
+    throw new Error('Error searching for users: ' + error.message);
+  }
+};
+
 export {
   getAllUsers,
   getPermissions,
@@ -322,5 +341,6 @@ export {
   changePassword,
   changeRole,
   changeUser,
-  deleteUser
+  deleteUser,
+  searchUsers
 }
