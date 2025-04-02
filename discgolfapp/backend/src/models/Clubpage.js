@@ -42,7 +42,7 @@ const schema = new mongoose.Schema(
       required: true
     },
     members: {
-      type: [mongoose.Schema.Types.ObjectId],
+      type: [String],
       required: true
     },
     events: {

@@ -6,6 +6,7 @@ import {
   getAllClubPages,
   getClubPage,
   getView,
+  getMembers,
   createNewClubPage,
   deleteClubPage,
   updateClubPage
@@ -34,6 +35,11 @@ router.get('/',
 router.get('/view/:id',
   checkMemberStatus,
   getView
+)
+
+router.get('/members/',
+  passport.authenticate('jwt', { session: false }),
+  getMembers
 )
 
 router.get('/:id',

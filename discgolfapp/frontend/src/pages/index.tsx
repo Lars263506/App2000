@@ -30,7 +30,7 @@ const Index = () => {
     'GetStarted': () => <GetStartedPage />,
     'Courses': () => <CoursePage />,
     'ClubLanding': () => <ClubLandingPage setSelectedPage={setSelectedPage} />,
-    'Club': () => <ClubPage />,
+    'Club': () => <ClubPage setSelectedPage={setSelectedPage} />,
     'MyPage': () => <MyPage setSelectedPage={setSelectedPage} />,
     'Contact': () => <ContactPage />,
     'Privacy': () => <PrivacyPage setSelectedPage={setSelectedPage} />,

@@ -1,4 +1,5 @@
 import ClubPage from '../models/Clubpage.js'
+import User from '../models/User.js'
 
 /**
  * @author Lars Andreas Strand
@@ -35,6 +36,24 @@ const getClubPage = async (id, role) => {
   const clubPage = await ClubPage.findById(id).select(`-${excludeFields.join(' -')}`)
   if (!clubPage) throw new Error('Club page not found')
   return clubPage
+}
+
+/**
+ * @author Lars Andreas Strand
+ * @description This function retrieves a specific club page from the database.
+ * @param {string} id - The ID of the user to retrieve the member list for.
+ * @return A list of members in the club page.
+ * @throws An error if the user is not found or if the club page is not found.
+ */
+
+const getMembers = async (id) => {
+  const user = await User.findById(id).select('displayName')
+  if (!user) throw new Error('User not found')
+
+  const clubPage = await ClubPage.findOne({ members: user.displayName })
+  if (!clubPage) return []
+
+  return clubPage.members
 }
 
 /**
@@ -107,4 +126,4 @@ const updateClubPage = async (id, request) => {
   if (!clubPage) throw new Error('Club page not found')
 }
 
-export { getAllClubPages, getClubPage, createNewClubPage, deleteClubPage, updateClubPage }
+export { getAllClubPages, getClubPage, getMembers, createNewClubPage, deleteClubPage, updateClubPage }

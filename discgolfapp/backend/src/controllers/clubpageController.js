@@ -61,6 +61,24 @@ const getView = async (req, res) => {
 
 /**
  * @author Lars Andreas Strand
+ * @description This function handles the request to get the members of a club page.
+ * It retrieves the members from the database and sends them as a response.
+ * If the user is not a member, it sends an empty array as a response.
+ * If there is an error, it sends a 404 status code and the error message.
+ */
+
+const getMembers = async (req, res) => {
+  try {
+    const id = req.user.id
+    const members = await clubpageService.getMembers(id)
+    res.json(members)
+  } catch (err) {
+    res.status(404).json({ error: err.message })
+  }
+}
+
+/**
+ * @author Lars Andreas Strand
  * @description This function handles the request to create a new club page.
  * It retrieves the club page data from the request body and calls the service to create a new club page.
  * If successful, it sends a 201 status code and a success message.
@@ -125,4 +143,4 @@ const updateClubPage = async (req, res) => {
   }
 }
 
-export { getAllClubPages, getClubPage, getView, createNewClubPage, deleteClubPage, updateClubPage }
+export { getAllClubPages, getClubPage, getView, getMembers, createNewClubPage, deleteClubPage, updateClubPage }

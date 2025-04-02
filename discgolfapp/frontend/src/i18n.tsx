@@ -17,6 +17,7 @@ i18next
     resources: {
       en: {
         translation: {
+          clubdetails_go_back: 'Go back',
           clublist_search: 'Search for clubs',
           clubmap_title: 'Club map',
           clubmap_prompt_action: 'Select a red pin to see more information.',
@@ -56,7 +57,8 @@ i18next
           course_search: 'Search for courses',
           error_notanarray: 'Error: The data is not an array.',
           error_getcourses: 'Error: Could not fetch courses.',
-          error_fetching_admin_status: 'Error fetching admin status.',
+          error_fetch_members: 'Error: Could not fetch members.',
+          error_fetching_admin_status: 'Error: Could not fetch admin status.',
           coursemap_alldifficulties: 'All difficulties',
           coursemap_easy: 'Easy',
           coursemap_medium: 'Medium',
@@ -70,6 +72,9 @@ i18next
             priority_booking: "<strong>Priority access to booking:</strong> Members get priority access to course reservations, especially during busy periods.",
             competitions: "<strong>Participation in competitions:</strong> Opportunity to participate in the club's own tournaments and competitions."
           },
+          memberlist_title: 'Member List',
+          memberlist_loading: 'Loading members...',
+          memberlist_nomembers: 'No members found.',
           navbar_logotext_norways: "Norway's",
           navbar_logotext_association: 'Disc Golf Association',
           navigation_getstarted_title: 'Get Started',
@@ -85,6 +90,7 @@ i18next
       },
       no: {
         translation: {
+          clubdetails_go_back: 'Gå tilbake',
           clublist_search: 'Søk etter klubber',
           clubmap_title: 'Klubbkart',
           clubmap_prompt_action: 'Velg en rød pin for å se mer informasjon.',
@@ -124,7 +130,8 @@ i18next
           course_search: 'Søk etter baner',
           error_notanarray: 'Feil: Dataen er ikke en liste.',
           error_getcourses: 'Feil: Kunne ikke hente baner.',
-          error_fetching_admin_status: 'Feil ved henting av admin-status.',
+          error_fetch_members: 'Feil: Kunne ikke hente medlemmer.',
+          error_fetching_admin_status: 'Feil: Kunne ikke hente admin-status.',
           coursemap_alldifficulties: 'Alle vanskelighetsgrader',
           coursemap_easy: 'Lett',
           coursemap_medium: 'Middels',
@@ -138,6 +145,9 @@ i18next
             priority_booking: "<strong>Prioritert tilgang til booking:</strong> Medlemmer får prioritert tilgang til banereservasjoner, spesielt i travle perioder.",
             competitions: "<strong>Deltakelse i konkurranser:</strong> Mulighet til å delta i klubbens egne turneringer og konkurranser."
           },
+          memberlist_title: 'Medlemsliste',
+          memberlist_loading: 'Laster medlemmer...',
+          memberlist_nomembers: 'Ingen medlemmer funnet.',
           navbar_logotext_norways: 'Norges',
           navbar_logotext_association: 'Diskgolf-forbund',
           navigation_getstarted_title: 'Kom i gang',
