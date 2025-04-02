@@ -16,7 +16,16 @@ import { checkMemberStatus, optionalAuth } from '../middleware/auth.js'
  * @author Lars263506 (Github)
  * @description Router for webpage requests
  */
+
 const router = express.Router()
+
+/** 
+ * @author Lars Andreas Strand
+ * @description This router handles all the requests related to club pages.
+ * It also handles middleware for authentication and authorization.
+ * It uses the passport middleware for authentication 
+ * and it uses the authorization middleware for authorization.
+ */
 
 router.get('/',
   getAllClubPages
