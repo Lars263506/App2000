@@ -1,10 +1,7 @@
 import { useState, useEffect } from "react";
-import { useRouter } from "next/router";
-import { toast } from 'react-toastify';
-import { LoadScript, GoogleMap, Marker } from '@react-google-maps/api';
+import { GoogleMap, LoadScript, Marker, OverlayView } from '@react-google-maps/api';
 
 interface Course {
-  id: string;
   name: string;
   latitude: number;
   longitude: number;
@@ -12,159 +9,185 @@ interface Course {
   par: number;
 }
 
-interface Hole {
-  holeNumber: number;
-  par: number;
-  distance: number;
-  outOfBounds: boolean;
-  description: string;
+interface Pin {
+  id: string;
+  name: string;
   latitude: number;
   longitude: number;
+  type: "kurv" | "ttbox";
 }
 
-export default function EditCourseMap() {
+export default function EditCoursePage() {
+  const [selectedCourse, setSelectedCourse] = useState("");
   const [courses, setCourses] = useState<Course[]>([]);
-  const [selectedCourseId, setSelectedCourseId] = useState<string | null>(null);
-  const [holes, setHoles] = useState<Hole[]>([]);
-  const [editRights, setEditRights] = useState(false);
-  const router = useRouter();
-  const { clubId } = router.query;
+  const [pins, setPins] = useState<Pin[]>([]);
+  const [selectedPin, setSelectedPin] = useState<Pin | null>(null);
+  const [selectedPinType, setSelectedPinType] = useState<"kurv" | "ttbox">("kurv");
+  const [newPinName, setNewPinName] = useState("");
+  const [isCourseSelected, setIsCourseSelected] = useState(false);
 
   useEffect(() => {
+    const fetchCourses = async () => {
+      const url = process.env.NEXT_PUBLIC_BACKEND_BASE_URL + '/course';
+      try {
+        const response = await fetch(url);
+        const result = await response.json();
+        setCourses(result.data);
+      } catch (error) {
+        console.error("Feil ved henting av baner:", error);
+      }
+    };
     fetchCourses();
-    checkEditRights();
   }, []);
 
-  useEffect(() => {
-    if (selectedCourseId && courses.length > 0) {
-      const selectedCourse = courses.find(course => course.id === selectedCourseId);
-      if (selectedCourse) {
-        setHoles(generateHoles(selectedCourse));
-      }
-    }
-  }, [selectedCourseId, courses]);
-
-  const fetchCourses = async () => {
-    const url = process.env.NEXT_PUBLIC_BACKEND_BASE_URL + '/course';
-    try {
-      const response = await fetch(url);
-      const result = await response.json();
-      if (result.data) {
-        setCourses(result.data);
-      } else {
-        toast.error('Ingen baner funnet');
-      }
-    } catch (error) {
-      toast.error('En feil oppstod ved henting av baner');
-    }
-  };
-
-  const checkEditRights = async () => {
-    const accessToken = localStorage.getItem('accessToken');
-    if (!accessToken) {
-      toast.error('Du er ikke logget inn.');
-      setEditRights(false);
+  const handleAddPin = (lat: number, lng: number) => {
+    if (!newPinName) {
+      alert("Vennligst skriv et navn for pinnen.");
       return;
     }
 
-    try {
-      const url = `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/users/me`;
-      const response = await fetch(url, {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
+    const newPin: Pin = {
+      id: `${lat}-${lng}`,
+      name: newPinName,
+      latitude: lat,
+      longitude: lng,
+      type: selectedPinType,
+    };
+    setPins([...pins, newPin]);
+    setNewPinName(""); 
+  };
 
-      if (!response.ok) {
-        setEditRights(false);
-        toast.error('Kunne ikke hente brukerens data');
-        return;
-      }
+  const handlePinClick = (pin: Pin) => {
+    setSelectedPin(pin);
+  };
 
-      const data = await response.json();
-      setEditRights(data.role === 'clubowner' || data.role === 'admin');
-    } catch (error) {
-      toast.error('En feil oppstod ved sjekking av rettigheter');
-      setEditRights(false);
+  const handlePinNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setNewPinName(e.target.value);
+  };
+
+  const handleGoBack = () => {
+    setIsCourseSelected(false);
+    setSelectedCourse("");
+  };
+
+  const handleCourseSelection = (courseName: string) => {
+    setSelectedCourse(courseName);
+    setIsCourseSelected(true);
+  };
+
+  const handleMapClick = (e: google.maps.MapMouseEvent) => {
+    if (e.latLng) {
+      handleAddPin(e.latLng.lat(), e.latLng.lng());
     }
-  };
-
-  const handleSelectCourse = (courseId: string) => {
-    console.log('Selected course ID:', courseId); // Debugging: sjekk hvilken bane som er valgt
-    setSelectedCourseId(courseId);
-  };
-
-  const generateHoles = (course: Course) => {
-    return Array.from({ length: 12 }, (_, index) => ({
-      holeNumber: index + 1,
-      par: 3,
-      distance: 100,
-      outOfBounds: false,
-      description: '',
-      latitude: course.latitude + Math.random() * 0.01,
-      longitude: course.longitude + Math.random() * 0.01,
-    }));
-  };
-
-  const renderCourses = () => {
-    if (courses.length === 0) {
-      return <p>Ingen baner tilgjengelig.</p>;
-    }
-
-    return courses.map((course) => {
-      return (
-        <li
-          key={course.id}
-          className={`p-4 border rounded-lg cursor-pointer ${selectedCourseId === course.id ? 'bg-gray-400 text-white' : ''}`}
-          onClick={() => handleSelectCourse(course.id)}
-        >
-          {course.name}
-        </li>
-      );
-    });
   };
 
   return (
     <div className="min-h-screen flex flex-col text-black">
-      <div className="flex-grow flex items-center justify-center">
-        <div className="max-w-5xl w-full p-10 bg-white shadow-xl rounded-2xl min-h-[600px] mb-40 relative border border-gray-300">
-          {!selectedCourseId ? (
+      <div className="flex-grow flex items-start justify-center"> {/* Plasserer innholdet øverst */}
+        <div className="max-w-5xl w-full p-10 bg-gray-100 shadow-xl rounded-3xl min-h-[600px] relative flex flex-col">
+          {!isCourseSelected && (
             <div className="grid grid-cols-3 gap-8">
               <div className="col-span-1">
                 <h1 className="text-xl font-bold text-center mb-4">Velg Bane</h1>
-                <ul className="space-y-6">
-                  {renderCourses()}
-                </ul>
-              </div>
-              <div className="col-span-2 flex flex-col items-center">
-                <h2 className="text-lg font-semibold">Velg en bane for å redigere.</h2>
+                <div className="w-full mt-6">
+                  <ul className="space-y-6">
+                    {courses.map((course) => (
+                      <li
+                        key={course.name}
+                        className={`p-4 border rounded-lg cursor-pointer ${selectedCourse === course.name ? 'bg-gray-400 text-white' : ''}`}
+                        onClick={() => handleCourseSelection(course.name)}
+                      >
+                        {course.name}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </div>
             </div>
-          ) : (
-            <div className="relative" style={{ width: '100%', height: '600px' }}>
-              {courses.length > 0 && selectedCourseId && (
-                <LoadScript googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string}>
-                  <GoogleMap
-                    center={{
-                      lat: courses.find(course => course.id === selectedCourseId)?.latitude || 59.9139,
-                      lng: courses.find(course => course.id === selectedCourseId)?.longitude || 10.7522,
-                    }}
-                    zoom={15}
-                    mapContainerStyle={{ height: "600px", width: "100%" }}
+          )}
+
+          {isCourseSelected && (
+            <div className="relative flex">
+              <div className="flex-grow">
+                {selectedCourse && (
+                  <LoadScript googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string}>
+                    <GoogleMap
+                      center={{
+                        lat: courses.find(course => course.name === selectedCourse)?.latitude || 59.9139,
+                        lng: courses.find(course => course.name === selectedCourse)?.longitude || 10.7522,
+                      }}
+                      zoom={15}
+                      mapContainerStyle={{ height: "600px", width: "100%", borderRadius: "1rem" }}
+                      onClick={handleMapClick}
+                    >
+                      {pins.map((pin) => (
+                        <Marker
+                          key={pin.id}
+                          position={{ lat: pin.latitude, lng: pin.longitude }}
+                          onClick={() => handlePinClick(pin)}
+                        />
+                      ))}
+
+                      {pins.map((pin) => (
+                        <OverlayView
+                          key={pin.id}
+                          position={{ lat: pin.latitude, lng: pin.longitude }}
+                          mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
+                        >
+                          <div
+                            style={{
+                              position: "absolute",
+                              top: "-30px",
+                              left: "-50%",
+                              transform: "translateX(-50%)",
+                              backgroundColor: "white",
+                              padding: "5px",
+                              borderRadius: "5px",
+                              fontSize: "14px",
+                              fontWeight: "bold",
+                              color: "black",
+                            }}
+                          >
+                            {pin.name}
+                          </div>
+                        </OverlayView>
+                      ))}
+                    </GoogleMap>
+                  </LoadScript>
+                )}
+              </div>
+
+              <div className="absolute top-0 right-0 w-1/4 bg-gray-100 p-4 h-full flex flex-col justify-between">
+                <h2 className="text-xl font-semibold">Rediger bane</h2>
+                <div>
+                  <label className="block mt-4">Navn:</label>
+                  <input
+                    type="text"
+                    value={newPinName}
+                    onChange={handlePinNameChange}
+                    className="w-full p-2 border rounded-lg"
+                  />
+                </div>
+                <div className="mt-4">
+                  <label className="block">Velg Pin Type:</label>
+                  <select
+                    value={selectedPinType}
+                    onChange={(e) => setSelectedPinType(e.target.value as "kurv" | "ttbox")}
+                    className="w-full p-2 border rounded-lg"
                   >
-                    {holes.map((hole) => (
-                      <Marker
-                        key={`hole-marker-${hole.holeNumber}`}
-                        position={{
-                          lat: hole.latitude,
-                          lng: hole.longitude,
-                        }}
-                      />
-                    ))}
-                  </GoogleMap>
-                </LoadScript>
-              )}
+                    <option value="kurv">Kurv</option>
+                    <option value="ttbox">TTBox</option>
+                  </select>
+                </div>
+                <div className="mt-auto">
+                  <button
+                    onClick={handleGoBack}
+                    className="bg-blue-600 text-white p-2 rounded-lg w-full ml-6"
+                  >
+                    Gå tilbake til velg bane
+                  </button>
+                </div>
+              </div>
             </div>
           )}
         </div>
