@@ -29,7 +29,7 @@ const Index = () => {
     'Play': () => <PlayPage />,
     'GetStarted': () => <GetStartedPage />,
     'Courses': () => <CoursePage />,
-    'ClubLanding': () => <ClubLandingPage />,
+    'ClubLanding': () => <ClubLandingPage setSelectedPage={setSelectedPage} />,
     'Club': () => <ClubPage />,
     'MyPage': () => <MyPage setSelectedPage={setSelectedPage} />,
     'Contact': () => <ContactPage />,
