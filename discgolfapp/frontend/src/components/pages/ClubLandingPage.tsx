@@ -12,11 +12,17 @@ const ClublandingPage = () => {
   const [searchTerm, setSearchTerm] = useState('')
 
   return (
-    <div className='min-h-screen flex flex-col'>
-      <div className='flex flex-col sm:flex-row items-start gap-4 px-4 py-4'>
-        <MemberBenefit />
-        <ClubList selectedClub={selectedClub} setSelectedClub={setSelectedClub} searchTerm={searchTerm} setSearchTerm={setSearchTerm}/>
-        <ClubMap searchTerm={searchTerm} />
+    <div className='flex flex-row justify-center items-center'>
+      <div className='flex flex-row h-full gap-4'>
+        <div className="w-2/10 rounded-md bg-[#E7EFFB] border border-solid border-black shadow">
+          <MemberBenefit />
+        </div>
+        <div className="w-3/10 rounded-md bg-[#E7EFFB] border border-solid border-black shadow">
+          <ClubList selectedClub={selectedClub} setSelectedClub={setSelectedClub} searchTerm={searchTerm} setSearchTerm={setSearchTerm}/>
+        </div>
+        <div className="w-1/2 rounded-md bg-[#E7EFFB] border border-solid border-black shadow">
+          <ClubMap searchTerm={searchTerm} />
+        </div>
       </div>
     </div>
   )

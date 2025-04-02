@@ -1,12 +1,15 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react'
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api'
+
 import { Club } from '../../types/club'
+import { useTranslation } from 'react-i18next'
 
 interface ClubmapProps {
   searchTerm: string
 }
 
 const Clubmap: React.FC<ClubmapProps> = ({ searchTerm }) => {
+  const { t } = useTranslation()
   const [clubs, setClubs] = useState<Club[]>([])
   const [markers, setMarkers] = useState<google.maps.LatLng[]>([])
   const [selectedMarker, setSelectedMarker] = useState<google.maps.LatLng | null>(null)
@@ -62,8 +65,8 @@ const Clubmap: React.FC<ClubmapProps> = ({ searchTerm }) => {
 
   return (
     <div className='flex min-h-[580px] flex-col md:flex-row gap-6 w-full h-100 max-w-5xl '>
-      <div className='w-full md:w-1/2 bg-gray-200 p-4 rounded-xl shadow'>
-        <h2 className='text-xl font-bold text-black'>Kart</h2>
+      <div className='w-full p-4 rounded-xl shadow'>
+        <h1 className='text-xl font-bold text-black'>{t("clubmap_title")}</h1>
         <LoadScript googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string}>
           <GoogleMap
             onLoad={(map) => {

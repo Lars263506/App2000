@@ -17,6 +17,7 @@ i18next
     resources: {
       en: {
         translation: {
+          clubmap_title: 'Club map',
           discgolfinfo_title: 'What is Disc Golf?',
           discgolfinfo_intro: 'Disc golf is a sport that combines elements of golf and frisbee.',
           discgolfinfo_text: 'Disc golf courses vary in length and difficulty. Some courses have obstacles such as trees, bushes and water that make the game more challenging. Try to follow course etiquette for a good experience.',
@@ -57,6 +58,15 @@ i18next
           coursemap_easy: 'Easy',
           coursemap_medium: 'Medium',
           coursemap_hard: 'Hard',
+          member_benefit_title: "Join a club",
+          member_benefit_intro: "As a member, you gain access to a variety of benefits:",
+          member_benefit_list: {
+            discounts: "<strong>Discounts on tournaments and events:</strong> Membership often provides discounts on entry fees for local and national tournaments or special events.",
+            exclusive_training: "<strong>Exclusive training:</strong> Access to organized training sessions to improve your skills.",
+            networking: "<strong>Networking opportunities:</strong> Meet other players and build friendships while learning from experienced players.",
+            priority_booking: "<strong>Priority access to booking:</strong> Members get priority access to course reservations, especially during busy periods.",
+            competitions: "<strong>Participation in competitions:</strong> Opportunity to participate in the club's own tournaments and competitions."
+          },
           navbar_logotext_norways: "Norway's",
           navbar_logotext_association: 'Disc Golf Association',
           navigation_getstarted_title: 'Get Started',
@@ -72,6 +82,7 @@ i18next
       },
       no: {
         translation: {
+          clubmap_title: 'Klubbkart',
           discgolfinfo_title: 'Hva er diskgolf?',
           discgolfinfo_intro: 'Diskgolf er en sport som kombinerer elementer fra golf og frisbee.',
           discgolfinfo_text: 'Diskgolfbaner varierer i lengde og vanskelighetsgrad. Noen baner har hindringer som trær, busker og vann som gjør spillet mer utfordrende. Prøv å følge etikette på banen for en god opplevelse.',
@@ -112,6 +123,15 @@ i18next
           coursemap_easy: 'Lett',
           coursemap_medium: 'Middels',
           coursemap_hard: 'Vanskelig',
+          member_benefit_title: "Medlemsfordeler",
+          member_benefit_intro: "Som medlem får du tilgang til en rekke fordeler:",
+          member_benefit_list: {
+            discounts: "<strong>Rabatter på turneringer og arrangementer:</strong> Medlemskap gir ofte rabatter på deltakeravgifter for lokale og nasjonale turneringer eller spesialarrangementer.",
+            exclusive_training: "<strong>Eksklusive trening:</strong> Tilgang til organiserte treningsøkter for å forbedre ferdighetene dine.",
+            networking: "<strong>Nettverksmuligheter:</strong> Møte andre spillere og bygge vennskap, samtidig som du lærer av erfarne spillere.",
+            priority_booking: "<strong>Prioritert tilgang til booking:</strong> Medlemmer får prioritert tilgang til banereservasjoner, spesielt i travle perioder.",
+            competitions: "<strong>Deltakelse i konkurranser:</strong> Mulighet til å delta i klubbens egne turneringer og konkurranser."
+          },
           navbar_logotext_norways: 'Norges',
           navbar_logotext_association: 'Diskgolf-forbund',
           navigation_getstarted_title: 'Kom i gang',
