@@ -8,8 +8,12 @@ import User from '../models/User.js'
 import ClubPage from '../models/Clubpage.js'
 
 /**
- * @author Lars263506 (Github)
- * @description This service contains functions for user registration, authentication and user data management, and handles mongoDB communication
+ * @author Lars Andreas Strand
+ * @description This is the service for user management.
+ * It handles the logic for user registration, login, and profile management.
+ * It uses the User model to interact with the database.
+ * It also uses the bcrypt package to hash passwords and the jsonwebtoken package to create tokens.
+ * It uses the GridFSBucket from mongodb to store and retrieve profile images.
  */
 
 /**
@@ -105,6 +109,7 @@ const getUserByEmail = async (email) => {
  * @description Gets all clubs a user is a member of
  * @throws Error if no clubs are found
  */
+
 const getUserClubs = async (id) => {
   try {
     const clubs = await ClubPage.find({ members: id });
@@ -115,6 +120,13 @@ const getUserClubs = async (id) => {
     throw new Error('Error fetching clubs');
   }
 }
+
+/**
+ * @param id
+ * @returns List of games the user has played 
+ * @description Gets all games a user has played
+ * @throws Error if no games are found
+ */
 
 const getUserGames = async (userId) => {
     console.log("Service: getUserGames called");
@@ -255,7 +267,6 @@ const changeEmail = async (email, newEmail) => {
 }
 
 /**
- *
  * @param email
  * @param newPassword
  * @returns Time of password change
@@ -272,7 +283,6 @@ const changePassword = async (email, newPassword) => {
 }
 
 /**
- *
  * @param email
  * @param newRole
  * @returns New user role and time of role change

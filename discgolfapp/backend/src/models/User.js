@@ -2,6 +2,12 @@ import mongoose from 'mongoose'
 import Setting from './Setting.js'
 import Game from './Game.js'
 
+/**
+ * @author Lars Andreas Strand
+ * @description This is the schema for the User model.
+ * It defines the structure of the User document in the database.
+ */
+
 const schema = new mongoose.Schema(
   {
     displayName: {
