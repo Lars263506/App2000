@@ -17,7 +17,10 @@ i18next
     resources: {
       en: {
         translation: {
+          clublist_search: 'Search for clubs',
           clubmap_title: 'Club map',
+          clubmap_prompt_action: 'Select a red pin to see more information.',
+          clubmap_visit_club: 'Visit the club page',
           discgolfinfo_title: 'What is Disc Golf?',
           discgolfinfo_intro: 'Disc golf is a sport that combines elements of golf and frisbee.',
           discgolfinfo_text: 'Disc golf courses vary in length and difficulty. Some courses have obstacles such as trees, bushes and water that make the game more challenging. Try to follow course etiquette for a good experience.',
@@ -82,7 +85,10 @@ i18next
       },
       no: {
         translation: {
+          clublist_search: 'Søk etter klubber',
           clubmap_title: 'Klubbkart',
+          clubmap_prompt_action: 'Velg en rød pin for å se mer informasjon.',
+          clubmap_visit_club: 'Besøk klubbens side',
           discgolfinfo_title: 'Hva er diskgolf?',
           discgolfinfo_intro: 'Diskgolf er en sport som kombinerer elementer fra golf og frisbee.',
           discgolfinfo_text: 'Diskgolfbaner varierer i lengde og vanskelighetsgrad. Noen baner har hindringer som trær, busker og vann som gjør spillet mer utfordrende. Prøv å følge etikette på banen for en god opplevelse.',

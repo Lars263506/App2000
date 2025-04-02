@@ -6,8 +6,11 @@ import ClubMap from '@/components/clubpage/clubmap'
 
 import { Club } from '@/types/club'
 
-const ClublandingPage = () => {
+interface ClubLandingPageProps {
+  setSelectedPage: (page: string) => void
+}
 
+const ClubLandingPage: React.FC<ClubLandingPageProps> = ({ setSelectedPage }) => {
   const [selectedClub, setSelectedClub] = useState<Club | null>(null)
   const [searchTerm, setSearchTerm] = useState('')
 
@@ -18,14 +21,19 @@ const ClublandingPage = () => {
           <MemberBenefit />
         </div>
         <div className="w-3/10 rounded-md bg-[#E7EFFB] border border-solid border-black shadow">
-          <ClubList selectedClub={selectedClub} setSelectedClub={setSelectedClub} searchTerm={searchTerm} setSearchTerm={setSearchTerm}/>
+          <ClubList
+            selectedClub={selectedClub}
+            setSelectedClub={setSelectedClub}
+            searchTerm={searchTerm}
+            setSearchTerm={setSearchTerm}
+          />
         </div>
         <div className="w-1/2 rounded-md bg-[#E7EFFB] border border-solid border-black shadow">
-          <ClubMap searchTerm={searchTerm} />
+          <ClubMap selectedClub={selectedClub} setSelectedPage={setSelectedPage} />
         </div>
       </div>
     </div>
   )
 }
 
-export default ClublandingPage
+export default ClubLandingPage

@@ -21,7 +21,7 @@ const ClubSettings: React.FC<ClubDetailsProps> = ({ selectedClub, setSelectedClu
   
       try {
         const response = await fetch(url, {
-          method: 'PATCH',
+          method: 'PUT',
           headers: {
             Authorization: 'Bearer ' + accessToken,
             'Content-Type': 'application/json',

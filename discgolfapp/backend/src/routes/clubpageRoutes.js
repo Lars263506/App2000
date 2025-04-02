@@ -44,7 +44,7 @@ router.delete('/:id',
   deleteClubPage
 )
 
-router.patch('/:id',
+router.put('/:id',
   passport.authenticate('jwt', { session: false }),
   authorizeAdmin,
   updateClubPage
