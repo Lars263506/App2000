@@ -40,19 +40,19 @@ const getSettings = async (admin) => {
  */
 
 const grantSetting = async (admin, setting) => {
-
     if (!admin) {
-        throw new Error('No admin found.')
+      throw new Error('No admin found.')
     }
-
-    const success = await User.findByIdAndUpdate({ admin }, { $push: { settings: setting } })
-
+  
+    const success = await User.findByIdAndUpdate(admin, { $push: { settings: setting } })
+  
     if (!success) {
-        throw new Error('Could not grant setting.')
+      throw new Error('Could not grant setting.')
     }
-
+  
     return success
-}
+  }
+  
 
 /**
  * @returns Whether the setting was revoked or not
