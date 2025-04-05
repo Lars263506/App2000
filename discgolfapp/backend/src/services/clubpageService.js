@@ -50,7 +50,7 @@ const getMembers = async (id) => {
   const user = await User.findById(id).select('displayName')
   if (!user) throw new Error('User not found')
 
-  const clubPage = await ClubPage.findOne({ members: user.displayName })
+  const clubPage = await ClubPage.findOne({ 'members.displayName': user.displayName })
   if (!clubPage) return []
 
   return clubPage.members

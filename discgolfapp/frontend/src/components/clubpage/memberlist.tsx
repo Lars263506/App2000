@@ -17,7 +17,7 @@ interface MemberListProps {
 
 const MemberList: React.FC<MemberListProps> = () => {
   const { t } = useTranslation()
-  const [members, setMembers] = useState<string[]>([])
+  const [members, setMembers] = useState<Member[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -53,7 +53,7 @@ const MemberList: React.FC<MemberListProps> = () => {
   }, [])
 
   return (
-    <div className='p-4 border rounded-lg shadow-md bg-white w-full'>
+    <div className='p-4 border rounded-lg shadow-md bg-white w-full h-full'>
       <h2 className='text-xl font-bold mb-2 text-black'>{t("memberlist_title")}</h2>
       {loading
         ? (
@@ -63,8 +63,11 @@ const MemberList: React.FC<MemberListProps> = () => {
           ? (
             <ul className='list-disc pl-4 text-black'>
               {members.map((member, index) => (
-                <li key={member || index.toString()}>
-                  {member || t("memberlist_unknown")}
+                <li key={member.displayName || index.toString()}>
+                  ({member.role === "Admin"
+                    ? "Admin/Member"
+                    : member.role  || t("memberlist_unknown_role")})
+                    - {member.displayName || t("memberlist_unknown")}
                 </li>
               ))}
             </ul>

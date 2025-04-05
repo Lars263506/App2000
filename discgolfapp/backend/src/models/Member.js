@@ -1,0 +1,23 @@
+import mongoose from 'mongoose';
+
+/**
+ * @author Lars Andreas Strand
+ * @description This is the schema for the Member model.
+ * It defines the structure of the Member document in the database.
+ */
+
+const memberSchema = new mongoose.Schema({
+  displayName: {
+    type: String,
+    required: true
+},
+  role: {
+    type: String,
+    required: true,
+    enum: ['member', 'clubowner', 'admin'],
+    default: 'member' },
+});
+
+const Member = mongoose.model('Member', memberSchema);
+
+export default Member;
