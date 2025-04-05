@@ -43,10 +43,14 @@ const schema = new mongoose.Schema(
       type: String,
       required: true
     },
-    members: {
-      type: [Member.schema],
-      required: true
-    },
+    members: [
+      {
+        id: { type: mongoose.Schema.Types.ObjectId, ref: 'Member' },
+        displayName: { type: String, required: true },
+        role: { type: String, required: true },
+        profilePicture: { type: String, default: '' },
+      },
+    ],
     events: {
       type: Array,
       required: true

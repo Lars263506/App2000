@@ -26,11 +26,10 @@ const getAllClubPages = async () => {
  * @author Lars Andreas Strand
  * @description This function retrieves a specific club page from the database.
  * @param {string} id - The ID of the club page to retrieve.
- * @param {string} role - The role of the user requesting the club page.
  * @return The club page object with the specified ID.
  */
 
-const getClubPage = async (id, role) => {
+const getClubPage = async (id) => {
   const excludeFields = ['__v', 'createdAt', 'updatedAt']
 
   const clubPage = await ClubPage.findById(id).select(`-${excludeFields.join(' -')}`)
@@ -50,7 +49,7 @@ const getMembers = async (id) => {
   const user = await User.findById(id).select('displayName')
   if (!user) throw new Error('User not found')
 
-  const clubPage = await ClubPage.findOne({ 'members.displayName': user.displayName })
+  const clubPage = await ClubPage.findOne({ 'members.displayName': user.displayName }).select('members')
   if (!clubPage) return []
 
   return clubPage.members
