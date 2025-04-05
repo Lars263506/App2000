@@ -97,52 +97,54 @@ const ClubMap: React.FC<ClubMapProps> = ({ selectedClub, setSelectedPage }) => {
         <h2>{t("clubmap_prompt_action")}</h2>
         <LoadScript
           googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string}
-          onLoad={() => setIsGoogleMapsLoaded(true)} // Mark API as loaded
+          onLoad={() => setIsGoogleMapsLoaded(true)}
         >
-          <GoogleMap
-            onLoad={(map) => {
-              mapRef.current = map
-              if (markers.length > 0) {
-                const bounds = new window.google.maps.LatLngBounds()
-                markers.forEach((marker) => {
-                  if (marker && marker.lat() && marker.lng()) {
-                    bounds.extend(marker)
-                  } else {
-                    console.error('Invalid marker:', marker)
-                  }
-                })
-                map.fitBounds(bounds)
-              }
-            }}
-            center={selectedMarker || (markers.length > 0 ? markers[0] : { lat: 59.9139, lng: 10.7522 })}
-            zoom={(selectedMarker != null) ? 15 : 6}
-            mapContainerStyle={{ height: '520px', width: '100%' }}
-          >
-            {markers.map((marker, index) => (
-              <Marker
-                key={index}
-                position={marker}
-                onClick={() => handleMarkerClick(clubs[index], marker)}
-              />
-            ))}
-            {activeClub && selectedMarker && (
-              <InfoWindow
-                position={selectedMarker}
-                onCloseClick={() => setActiveClub(null)}
-              >
-                <div>
-                  <h2 className="font-bold">{activeClub.name}</h2>
-                  <p>{activeClub.address}</p>
-                  <button
-                    className="mt-2 p-2 bg-blue-500 text-white rounded"
-                    onClick={handleVisitClub}
-                  >
-                    {t("clubmap_visit_club")}
-                  </button>
-                </div>
-              </InfoWindow>
-            )}
-          </GoogleMap>
+          {!isGoogleMapsLoaded ? (
+            <p>{t("clubmap_loading")}</p>
+          ) : (
+            <GoogleMap
+              onLoad={(map) => {
+                mapRef.current = map
+                if (markers.length > 0) {
+                  const bounds = new window.google.maps.LatLngBounds()
+                  markers.forEach((marker) => {
+                    if (marker && marker.lat() && marker.lng()) {
+                      bounds.extend(marker)
+                    }
+                  })
+                  map.fitBounds(bounds)
+                }
+              }}
+              center={selectedMarker || (markers.length > 0 ? markers[0] : { lat: 59.9139, lng: 10.7522 })}
+              zoom={(selectedMarker != null) ? 15 : 6}
+              mapContainerStyle={{ height: '520px', width: '100%' }}
+            >
+              {markers.map((marker, index) => (
+                <Marker
+                  key={index}
+                  position={marker}
+                  onClick={() => handleMarkerClick(clubs[index], marker)}
+                />
+              ))}
+              {activeClub && selectedMarker && (
+                <InfoWindow
+                  position={selectedMarker}
+                  onCloseClick={() => setActiveClub(null)}
+                >
+                  <div>
+                    <h2 className="font-bold">{activeClub.name}</h2>
+                    <p>{activeClub.address}</p>
+                    <button
+                      className="mt-2 p-2 bg-blue-500 text-white rounded"
+                      onClick={handleVisitClub}
+                    >
+                      {t("clubmap_visit_club")}
+                    </button>
+                  </div>
+                </InfoWindow>
+              )}
+            </GoogleMap>
+          )}
         </LoadScript>
       </div>
     </div>

@@ -19,6 +19,7 @@ i18next
         translation: {
           clubdetails_go_back: 'Go back',
           clublist_search: 'Search for clubs',
+          clubmap_loading: 'Loading map...',
           clubmap_title: 'Club map',
           clubmap_prompt_action: 'Select a red pin to see more information.',
           clubmap_visit_club: 'Visit the club page',
@@ -59,6 +60,7 @@ i18next
           error_getcourses: 'Error: Could not fetch courses.',
           error_fetch_members: 'Error: Could not fetch members.',
           error_fetching_admin_status: 'Error: Could not fetch admin status.',
+          error_generic: 'Error: Something went wrong fetching data.',
           coursemap_alldifficulties: 'All difficulties',
           coursemap_easy: 'Easy',
           coursemap_medium: 'Medium',
@@ -92,6 +94,7 @@ i18next
         translation: {
           clubdetails_go_back: 'Gå tilbake',
           clublist_search: 'Søk etter klubber',
+          clubmap_loading: 'Laster kart...',
           clubmap_title: 'Klubbkart',
           clubmap_prompt_action: 'Velg en rød pin for å se mer informasjon.',
           clubmap_visit_club: 'Besøk klubbens side',
@@ -132,6 +135,7 @@ i18next
           error_getcourses: 'Feil: Kunne ikke hente baner.',
           error_fetch_members: 'Feil: Kunne ikke hente medlemmer.',
           error_fetching_admin_status: 'Feil: Kunne ikke hente admin-status.',
+          error_generic: 'Feil: Noe gikk galt med å hente data.',
           coursemap_alldifficulties: 'Alle vanskelighetsgrader',
           coursemap_easy: 'Lett',
           coursemap_medium: 'Middels',
