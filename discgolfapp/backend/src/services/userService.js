@@ -35,9 +35,11 @@ const getAllUsers = async () => {
  */
 
 const getPermissions = async (id) => {
-  const hasPermission = await ClubPage.findOne({ clubOwner: id })
-  if (hasPermission) return { canEditClubPage: true }
-  else return { canEditClubPage: false }
+  const user = await User.findById(id).select('-hashedPassword')
+
+  const hasPermission = await ClubPage.findOne({ clubOwner: user.displayName })
+  if (hasPermission) return { editRights: true }
+  else return { editRights: false }
 }
 
 /**
@@ -59,7 +61,6 @@ const getProfile = async (id) => {
  */
 
 const getProfileImage = async (filename, res) => {
-  console.log(filename)
     try {
     const db = mongoose.connection.db;
     const bucket = new GridFSBucket(db, { bucketName: 'profileImages' });
@@ -117,7 +118,6 @@ const getUserClubs = async (id) => {
     const clubs = await ClubPage.find({ 'members.displayName': user.displayName });
 
     if (!clubs || clubs.length === 0) {
-      console.log(`No clubs found for user with ID: ${id}`);
       return [];
     }
 

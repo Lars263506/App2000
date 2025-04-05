@@ -205,7 +205,6 @@ const loginUser = async (req, res) => {
  */
 
 const postProfileImage = async (req, res) => {
-  console.log("Controller: postProfileImage called");
   try {
     const result = await userService.postProfileImage(req.user.id, req.file.buffer, req.file.mimetype);
     res.status(200).json(result);

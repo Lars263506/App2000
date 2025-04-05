@@ -57,6 +57,25 @@ const getMembers = async (id) => {
 
 /**
  * @author Lars Andreas Strand
+ * @description This function retrieves the announcements from the club page.
+ * @param {string} id - The ID of the user to retrieve the announcements for.
+ * @return A list of announcements in the club page.
+ * @throws An error if the user is not found or if the club page is not found.
+ *
+ */
+
+const getAnnouncements = async (id) => {
+  const user = await User.findById(id).select('displayName')
+  if (!user) throw new Error('User not found')
+
+  const clubPage = await ClubPage.findOne({ 'members.displayName': user.displayName }).select('announcements')
+  if (!clubPage) return []
+
+  return clubPage.announcements
+}
+
+/**
+ * @author Lars Andreas Strand
  * @description This function creates a new club page in the database.
  * @param {string} name - The name of the club page.
  * @param {string} clubOwner - The owner of the club page's display name.
@@ -97,6 +116,14 @@ const createNewClubPage = async (name, clubOwner, description, address, zipCode,
   }
 }
 
+const createNewAnnouncement = async (clubId, text) => {
+  await ClubPage.findByIdAndUpdate(
+    clubId,
+    { $push: { announcements: text } },
+    { new: true }
+  )
+}
+
 /**
  * @author Lars Andreas Strand
  * @description This function deletes a specific club page from the database.
@@ -113,6 +140,48 @@ const deleteClubPage = async (id) => {
 
 /**
  * @author Lars Andreas Strand
+ * @description This function updates a specific announcement in the club page.
+ * It checks if the text is empty and either deletes the announcement or updates it.
+ * @param {string} clubId - The ID of the club page.
+ * @param {number} index - The index of the announcement to update.
+ * @param {string} text - The new text for the announcement.
+ * @returns A message indicating the result of the update operation.
+ */
+
+const updateAnnouncement = async (clubId, index, text) => {
+  let clubPage;
+
+  if (text === '') {
+    await ClubPage.findByIdAndUpdate(
+      clubId,
+      {
+        $unset: { [`announcements.${index}`]: 1 },
+      },
+      { new: true }
+    );
+
+    await ClubPage.findByIdAndUpdate(
+      clubId,
+      {
+        $pull: { announcements: null },
+      },
+      { new: true }
+    );
+
+    return 'Announcement deleted';
+  }
+
+  await ClubPage.findByIdAndUpdate(
+    clubId,
+    { $set: { [`announcements.${index}`]: text } },
+    { new: true }
+  );
+
+  return 'Announcement updated';
+};
+
+/**
+ * @author Lars Andreas Strand
  * @description This function updates a specific club page in the database.
  * @param {string} id - The ID of the club page to update.
  * @param {object} request - The request body containing the updated club page data.
@@ -125,4 +194,14 @@ const updateClubPage = async (id, request) => {
   if (!clubPage) throw new Error('Club page not found')
 }
 
-export { getAllClubPages, getClubPage, getMembers, createNewClubPage, deleteClubPage, updateClubPage }
+export {
+  getAllClubPages,
+  getClubPage,
+  getMembers,
+  getAnnouncements,
+  createNewClubPage,
+  createNewAnnouncement,
+  deleteClubPage,
+  updateAnnouncement,
+  updateClubPage
+}

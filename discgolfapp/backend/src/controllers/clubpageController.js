@@ -79,6 +79,24 @@ const getMembers = async (req, res) => {
 
 /**
  * @author Lars Andreas Strand
+ * @description This function handles the request to get the announcements of a club page.
+ * It retrieves the announcements from the database and sends them as a response.
+ * If successful, it sends a 200 status code and the announcements.
+ * If there is an error, it sends a 404 status code and the error message.
+ */
+
+const getAnnouncements = async (req, res) => {
+  try {
+    const userId = req.user.id
+    const announcements = await clubpageService.getAnnouncements(userId)
+    res.json(announcements)
+  } catch (err) {
+    res.status(404).json({ error: err.message })
+  }
+}
+
+/**
+ * @author Lars Andreas Strand
  * @description This function handles the request to create a new club page.
  * It retrieves the club page data from the request body and calls the service to create a new club page.
  * If successful, it sends a 201 status code and a success message.
@@ -107,6 +125,27 @@ const createNewClubPage = async (req, res) => {
 
 /**
  * @author Lars Andreas Strand
+ * @description This function handles the request to create a new announcement for a club page.
+ * It retrieves the club ID from the request parameters and the announcement data from the request body.
+ * It calls the service to create a new announcement.
+ * If successful, it sends a 201 status code and a success message.
+ * If there is an error, it sends a 500 status code and the error message.
+ */
+
+const createNewAnnouncement = async (req, res) => {
+  try {
+    const { clubId } = req.params
+    const { text } = req.body
+
+    await clubpageService.createNewAnnouncement(clubId, text)
+    res.status(201).json({ mssg: 'New announcement created' })
+  } catch (err) {
+    res.status(500).json({ error: err.message })
+  }
+}
+
+/**
+ * @author Lars Andreas Strand
  * @description This function handles the request to delete a club page by ID.
  * It retrieves the ID from the request parameters and calls the service to delete the club page.'
  * If successful, it sends a 200 status code and a success message.
@@ -120,6 +159,27 @@ const deleteClubPage = async (req, res) => {
     res.status(200).json({ mssg: 'Club page deleted', data: response })
   } catch (err) {
     res.status(404).json({ error: err.message })
+  }
+}
+
+/**
+ * @author Lars Andreas Strand
+ * @description This function handles the request to update an announcement for a club page.
+ * It retrieves the club ID and index from the request parameters and the updated text from the request body.
+ * It calls the service to update the announcement.
+ * If successful, it sends a 200 status code and a success message.
+ * If there is an error, it sends a 500 status code and the error message.
+ */
+
+const updateAnnouncement = async (req, res) => {
+  try {
+    const clubId = req.params.clubId
+    const index = req.params.index
+    const { text } = req.body
+    const response = await clubpageService.updateAnnouncement(clubId, index, text)
+    res.status(200).json({ mssg: response })
+  } catch (err) {
+    res.status(500).json({ error: err.message })
   }
 }
 
@@ -143,4 +203,15 @@ const updateClubPage = async (req, res) => {
   }
 }
 
-export { getAllClubPages, getClubPage, getView, getMembers, createNewClubPage, deleteClubPage, updateClubPage }
+export {
+  getAllClubPages,
+  getClubPage,
+  getView,
+  getMembers,
+  getAnnouncements,
+  createNewClubPage,
+  createNewAnnouncement,
+  deleteClubPage,
+  updateAnnouncement,
+  updateClubPage
+}

@@ -51,6 +51,10 @@ const schema = new mongoose.Schema(
         profilePicture: { type: String, default: '' },
       },
     ],
+    announcements: {
+      type: Array,
+      required: true
+    },
     events: {
       type: Array,
       required: true
