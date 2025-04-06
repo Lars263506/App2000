@@ -58,6 +58,23 @@ const schema = new mongoose.Schema(
     events: {
       type: Array,
       required: true
+    },
+    applications: {
+      type: [
+        {
+          displayName: { type: String, required: true },
+          email: { type: String, required: true },
+          reason: { type: String, required: true },
+          status: {
+            type: String,
+            required: true,
+            default: 'pending',
+            enum: ['pending', 'accepted', 'rejected']
+          },
+          date: { type: Date, default: Date.now() }
+        }
+      ],
+      required: true
     }
   },
   { timestamps: true }

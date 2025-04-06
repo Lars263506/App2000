@@ -36,14 +36,19 @@ const checkMemberStatus = (req, res, next) => {
     }
 
     try {
-      const member = await User.findById({ _id: user.id })
+      const member = await User.findById({ _id: user.id }).select('-hashedPassword')
 
       if (!member) {
         req.user = { ...user, role: 'user' }
         return next()
       }
 
-      const isMember = await ClubPage.findOne({ _id: req.params.id, members: member._id })
+      console.log('Member:', member)
+
+      const isMember = await ClubPage.findOne(
+        { _id: req.params.clubId, "members.displayName": member.displayName }
+      )
+
       req.user = { ...user, role: isMember ? 'member' : 'user' }
       return next()
     } catch (err) {

@@ -6,8 +6,10 @@ import {
   getAllClubPages,
   getClubPage,
   getView,
+  isMember,
   getMembers,
   getAnnouncements,
+  createNewMember,
   createNewClubPage,
   createNewAnnouncement,
   deleteClubPage,
@@ -40,6 +42,11 @@ router.get('/view/:id',
   getView
 )
 
+router.get('/is-member/:clubId',
+  checkMemberStatus,
+  isMember
+)
+
 router.get('/members/',
   passport.authenticate('jwt', { session: false }),
   getMembers
@@ -53,6 +60,11 @@ router.get('/announcements/',
 router.get('/:id',
   optionalAuth,
   getClubPage
+)
+
+router.post('/join/:clubId',
+  passport.authenticate('jwt', { session: false }),
+  createNewMember
 )
 
 router.post('/',

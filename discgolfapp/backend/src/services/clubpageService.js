@@ -74,6 +74,51 @@ const getAnnouncements = async (id) => {
   return clubPage.announcements
 }
 
+const createNewApplication = async (userId, clubId, reason) => {
+  const user = await User.findById(userId).select('displayName email')
+  if (!user) throw new Error('User not found')
+
+  const application = {
+    displayName: user.displayName,
+    email: user.email,
+    reason,
+    status: 'pending',
+    date: new Date()
+  }
+
+  await ClubPage.findByIdAndUpdate(
+    clubId,
+    { $push: { applications: application } },
+    { new: true }
+  )
+}
+
+/**
+ * @author Lars Andreas Strand
+ * @description This function creates a new member in the club page.
+ * @param {string} clubId - The ID of the club page to add the member to.
+ * @param {string} userId - The ID of the user to add as a member.
+ * @return The updated club page object.
+ * @throws An error if the user is not found
+ */
+
+const createNewMember = async (userId, clubId) => {
+  const user = await User.findById(userId).select('displayName profilePicture')
+  if (!user) throw new Error('User not found when creating new member')
+
+  const member = {
+    displayName: user.displayName,
+    role: 'member',
+    profilePicture: user.profilePicture
+  }
+
+  await ClubPage.findByIdAndUpdate(
+    clubId,
+    { $push: { members: member } },
+    { new: true }
+  )
+}
+
 /**
  * @author Lars Andreas Strand
  * @description This function creates a new club page in the database.
@@ -199,6 +244,8 @@ export {
   getClubPage,
   getMembers,
   getAnnouncements,
+  createNewApplication,
+  createNewMember,
   createNewClubPage,
   createNewAnnouncement,
   deleteClubPage,

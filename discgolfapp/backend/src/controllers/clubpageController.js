@@ -59,6 +59,14 @@ const getView = async (req, res) => {
   }
 }
 
+const isMember = async (req, res) => {
+  try {
+    res.json({ isMember: req.user.role === "member" })
+  } catch (err) {
+    res.status(404).json({ error: err.message })
+  }
+}
+
 /**
  * @author Lars Andreas Strand
  * @description This function handles the request to get the members of a club page.
@@ -92,6 +100,39 @@ const getAnnouncements = async (req, res) => {
     res.json(announcements)
   } catch (err) {
     res.status(404).json({ error: err.message })
+  }
+}
+
+/**
+ * @author Lars Andreas Strand
+ * @description This function handles the request to create a new member for a club page.
+ * It retrieves the user ID and club ID from the request parameters and the reason from the request body.
+ * It first calls the service to add a new application for the member.
+ * It then calls the service to create a new member.
+ * If successful, it sends a 200 status code and a success message.
+ * If there is an error, it sends a 500 status code and the error message.
+ */
+
+const createNewMember = async (req, res) => {
+  try {
+    const userId = req.user.id
+    const clubId = req.params.clubId
+    const { reason } = req.body
+
+    await clubpageService.createNewApplication(
+      userId,
+      clubId,
+      reason
+    )
+
+    await clubpageService.createNewMember(
+      userId,
+      clubId
+    )
+
+    res.status(200).json({ mssg: 'New member created' })
+  } catch (err) {
+    res.status(500).json({ error: err.message })
   }
 }
 
@@ -207,8 +248,10 @@ export {
   getAllClubPages,
   getClubPage,
   getView,
+  isMember,
   getMembers,
   getAnnouncements,
+  createNewMember,
   createNewClubPage,
   createNewAnnouncement,
   deleteClubPage,
