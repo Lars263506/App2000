@@ -30,11 +30,6 @@ const checkMemberStatus = (req, res, next) => {
       return next()
     }
 
-    if (user.role === 'clubowner' || user.role === 'admin') {
-      req.user = user
-      return next()
-    }
-
     try {
       const member = await User.findById({ _id: user.id }).select('-hashedPassword')
 
