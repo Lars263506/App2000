@@ -4,6 +4,7 @@ import { PencilIcon } from '@heroicons/react/20/solid'
 
 import User from "../../types/user";
 import Game from "../../types/game";
+import { Club } from "../../types/club";
 import GameResultsModal from '../myprofile/GameResultsModal';
 
 interface MyPageProps {
@@ -17,7 +18,7 @@ const MyPage: React.FC<MyPageProps> = ({ setSelectedPage }) => {
   const [games, setGames] = useState<Game[] | null>([]);
   const [selectedGame, setSelectedGame] = useState<Game | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  
+
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -81,7 +82,7 @@ const MyPage: React.FC<MyPageProps> = ({ setSelectedPage }) => {
         const data = await result.json();
         const gamesData: Game[] = data.games;
         gamesData.sort((b, a) => new Date(a.date).getTime() - new Date(b.date).getTime());
-      
+
         setGames(gamesData);
       } catch (error) {
         console.error("Error fetching games:", error);
@@ -129,16 +130,16 @@ const MyPage: React.FC<MyPageProps> = ({ setSelectedPage }) => {
     }
   };
 
-  const handleClubClick = (clubId: string) => {
-    localStorage.setItem("selectedClub", clubId);
-    setSelectedPage("ClubPage");
+  const handleClubClick = (club: Club | null) => {
+    localStorage.setItem("selectedClub", JSON.stringify(club));
+    setSelectedPage("Club");
   };
 
   const calculateTotalScore = (scores: number[]) => {
     return scores.reduce((total, score) => total + score, 0);
   };
 
-  
+
 
   const openModal = (game: Game) => {
     setSelectedGame(game);
@@ -169,7 +170,7 @@ const MyPage: React.FC<MyPageProps> = ({ setSelectedPage }) => {
       <div className="flex-grow bg-gray-100 p-8 flex flex-col items-center">
         <h1 className="text-4xl font-extrabold mt-6 text-gray-800">Min Side</h1>
         <h2 className="text-2xl text-gray-700 mb-8">Velkommen, {user.displayName ?? "Ukjent"}!</h2>
-        
+
         <div className="relative">
           {profileImage ? (
             <img src={profileImage} alt="Profilbilde" className="w-52 h-52 rounded-full object-cover mb-4" />
@@ -224,8 +225,8 @@ const MyPage: React.FC<MyPageProps> = ({ setSelectedPage }) => {
               <ul>
                 {clubs.map((club) => (
                   <li key={club._id} className="mb-2">
-                    <button 
-                      onClick={() => handleClubClick(club._id)} 
+                    <button
+                      onClick={() => handleClubClick(club)}
                       className="text-blue-500 hover:underline">
                       {club.name}
                     </button>
@@ -247,7 +248,7 @@ const MyPage: React.FC<MyPageProps> = ({ setSelectedPage }) => {
           ...selectedGame,
           scores: selectedGame.scores instanceof Map
             ? Object.fromEntries(selectedGame.scores)
-            : selectedGame.scores 
+            : selectedGame.scores
         }}
         />
       )}

@@ -9,9 +9,10 @@ interface ClubListProps {
   setSelectedClub: (club: Club | null) => void
   searchTerm: string
   setSearchTerm: (searchTerm: string) => void
+  setSelectedPage: (page: string) => void
 }
 
-const ClubList: React.FC<ClubListProps> = ({ selectedClub, setSelectedClub, searchTerm, setSearchTerm }) => {
+const ClubList: React.FC<ClubListProps> = ({ selectedClub, setSelectedClub, searchTerm, setSearchTerm, setSelectedPage }) => {
   const { t } = useTranslation()
   const [clubs, setClubs] = useState<Club[]>([])
 
@@ -32,7 +33,7 @@ const ClubList: React.FC<ClubListProps> = ({ selectedClub, setSelectedClub, sear
   return (
     <div className='flex p-4 text-black'>
       <div className='flex-grow'>
-        <div className="flex flex-row gap-2">
+        <div className="flex flex-row gap-2 mb-4">
           <input
             type='text'
             placeholder={t("clublist_search")}
@@ -49,10 +50,21 @@ const ClubList: React.FC<ClubListProps> = ({ selectedClub, setSelectedClub, sear
           {clubs
             .filter((club) => club.name.toLowerCase().includes(searchTerm.toLowerCase()))
             .map((club) => (
-              <li key={club._id} className='p-1 border-b last:border-none'>
-                <button onClick={() => setSelectedClub(club)} className='text-blue-600 hover:text-blue-800'>
-                  {club.name}
-                </button>
+              <li key={club._id} className='p-1 shadow shadow-black rounded-md mb-2'>
+                <div className='flex justify-between items-center'>
+                  <button onClick={() => setSelectedClub(club)} className='hover:text-blue-800'>
+                    {club.name}
+                  </button>
+                  <button
+                    onClick={() => {
+                      localStorage.setItem("selectedClub", JSON.stringify(club));
+                      setSelectedClub(club);
+                      setSelectedPage('Club');
+                    }}
+                    className='bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-700'>
+                    {t('clublist_visit')}
+                  </button>
+                </div>
               </li>
             ))}
         </ul>

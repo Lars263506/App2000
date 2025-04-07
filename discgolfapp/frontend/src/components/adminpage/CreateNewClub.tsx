@@ -42,7 +42,7 @@ const CreateNewClub: React.FC<CreateNewClubProps> = ({ onClose }) => {
     }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {    
+  const handleSubmit = async (e: React.FormEvent) => {
 
     const url = `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/clubpage/`;
     const accessToken = localStorage.getItem('accessToken');
