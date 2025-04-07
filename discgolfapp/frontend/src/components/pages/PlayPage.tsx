@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
+import { toast } from "react-toastify";
 
 interface Course {
   name: string;
@@ -155,14 +156,18 @@ export default function StartGame() {
             'Authorization': `Bearer ${accessToken}`,
           },
         });
-        if (response.ok) {
-          const users = await response.json();
-          setSearchResults(users);
-        } else {
+
+        if (response.status !== 200) { 
+          toast.error('Failed to fetch users');
           setSearchResults([]);
+          return;
         }
+
+        const users = await response.json();
+        setSearchResults(users);
       } catch (error) {
         console.error('Error fetching users:', error);
+        toast.error('An error occurred while fetching users.');
         setSearchResults([]);
       }
     } else {
