@@ -57,6 +57,7 @@ const ClubList: React.FC<ClubListProps> = ({ selectedClub, setSelectedClub, sear
                   </button>
                   <button
                     onClick={() => {
+                      localStorage.setItem("selectedClub", JSON.stringify(club));
                       setSelectedClub(club);
                       setSelectedPage('Club');
                     }}
