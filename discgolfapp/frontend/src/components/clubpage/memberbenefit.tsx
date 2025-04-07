@@ -1,30 +1,50 @@
-import React from 'react'
+import React from 'react';
+import { useTranslation, Trans } from 'react-i18next';
+
+/**
+ * @author Lars Andreas Strand and Ibrahim Queeum
+ * @description This component displays the member benefits of a club.
+ * It includes a title, an introduction, and a list of benefits.
+ * The component uses the `useTranslation` hook from `react-i18next` for internationalization.
+ * The Trans component from react-i18next is used to handle translations to maintain the structure of the text.
+ */
 
 const MemberBenefit = () => {
-  return (
-    <div className='flex-1 min-h-[580px]  bg-gray-200 p-4 rounded-xl shadow'>
-      <h2 className='text-xl font-bold'>Fordeler ved å bli medlem</h2>
-      <p>Her er de viktigste punktene om fordelene ved å være medlem i et discgolf-forbund:</p>
-      <ul className='mt-2 list-disc pl-5 space-y-2'>
-        <li><strong>Rabatter på turneringer og arrangementer:</strong>
-          <p>Medlemskap gir ofte rabatter på deltakeravgifter for lokale og nasjonale turneringer eller spesialarrangementer. </p>
-        </li>
-        <li><strong>Eksklusive trening:</strong>
-          <p>Tilgang til organiserte treningsøkter for å forbedre ferdighetene dine.</p>
-        </li>
-        <li><strong>Nettverksmuligheter:</strong>
-          <p>Møte andre spillere og bygge vennskap, samtidig som du lærer av erfarne spillere.</p>
-        </li>
-        <li><strong>Prioritert tilgang til booking:</strong>
-          <p>Medlemmer får prioritert tilgang til banereservasjoner, spesielt i travle perioder.</p>
-        </li>
-        <li><strong>Deltakelse i konkurranser:</strong>
-          <p> Mulighet til å delta i klubbens egne turneringer og konkurranser.</p>
-        </li>
+  const { t } = useTranslation();
 
+  return (
+    <div className="flex-1 p-4 rounded-xl">
+      <h1 className="text-4xl font-bold mb-4">{t('member_benefit_title')}</h1>
+      <h2>{t('member_benefit_intro')}</h2>
+      <ul className="mt-2 list-disc pl-5 space-y-2">
+        <li>
+          <Trans i18nKey="member_benefit_list.discounts">
+            <strong>Placeholder:</strong> Description text.
+          </Trans>
+        </li>
+        <li>
+          <Trans i18nKey="member_benefit_list.exclusive_training">
+            <strong>Placeholder:</strong> Description text.
+          </Trans>
+        </li>
+        <li>
+          <Trans i18nKey="member_benefit_list.networking">
+            <strong>Placeholder:</strong> Description text.
+          </Trans>
+        </li>
+        <li>
+          <Trans i18nKey="member_benefit_list.priority_booking">
+            <strong>Placeholder:</strong> Description text.
+          </Trans>
+        </li>
+        <li>
+          <Trans i18nKey="member_benefit_list.competitions">
+            <strong>Placeholder:</strong> Description text.
+          </Trans>
+        </li>
       </ul>
     </div>
-  )
-}
+  );
+};
 
-export default MemberBenefit
+export default MemberBenefit;

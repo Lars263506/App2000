@@ -8,8 +8,12 @@ import User from '../models/User.js'
 import ClubPage from '../models/Clubpage.js'
 
 /**
- * @author Lars263506 (Github)
- * @description This service contains functions for user registration, authentication and user data management, and handles mongoDB communication
+ * @author Lars Andreas Strand
+ * @description This is the service for user management.
+ * It handles the logic for user registration, login, and profile management.
+ * It uses the User model to interact with the database.
+ * It also uses the bcrypt package to hash passwords and the jsonwebtoken package to create tokens.
+ * It uses the GridFSBucket from mongodb to store and retrieve profile images.
  */
 
 /**
@@ -31,9 +35,11 @@ const getAllUsers = async () => {
  */
 
 const getPermissions = async (id) => {
-  const hasPermission = await ClubPage.findOne({ clubOwner: id })
-  if (hasPermission) return { canEditClubPage: true }
-  else return { canEditClubPage: false }
+  const user = await User.findById(id).select('-hashedPassword')
+
+  const hasPermission = await ClubPage.findOne({ clubOwner: user.displayName })
+  if (hasPermission) return { editRights: true }
+  else return { editRights: false }
 }
 
 /**
@@ -55,7 +61,6 @@ const getProfile = async (id) => {
  */
 
 const getProfileImage = async (filename, res) => {
-  console.log(filename)
     try {
     const db = mongoose.connection.db;
     const bucket = new GridFSBucket(db, { bucketName: 'profileImages' });
@@ -105,19 +110,32 @@ const getUserByEmail = async (email) => {
  * @description Gets all clubs a user is a member of
  * @throws Error if no clubs are found
  */
+
 const getUserClubs = async (id) => {
   try {
-    const clubs = await ClubPage.find({ members: id });
-    if (!clubs) throw new Error('No clubs found for the user');
+    const user = await User.findById(id).select('displayName');
+
+    const clubs = await ClubPage.find({ 'members.displayName': user.displayName });
+
+    if (!clubs || clubs.length === 0) {
+      return [];
+    }
+
     return clubs;
   } catch (error) {
     console.error("Error fetching user's clubs:", error);
     throw new Error('Error fetching clubs');
   }
-}
+};
+
+/**
+ * @param id
+ * @returns List of games the user has played
+ * @description Gets all games a user has played
+ * @throws Error if no games are found
+ */
 
 const getUserGames = async (userId) => {
-    console.log("Service: getUserGames called");
     const games = await User.findById(userId).select('games');
     if (!games) {
         return res.status(404).json({ message: 'No games found for this user' });
@@ -182,20 +200,21 @@ const loginUser = async (email, password) => {
 }
 
 /**
- * @param email
- * @param password
- * @returns accessToken and refreshToken
- * @description Logs in a user and tokens are created for the user
- * @throws Error if the email or password is incorrect
+ * @param id
+ * @param buffer
+ * @param mimetype
+ * @returns { message: 'Profile image updated!', profileImage: filename }
+ * @description Uploads a profile image to the database and updates the user's profile image
+ * @throws Error if there was an error uploading the image or updating the user's profile image
+ * @throws Error if the user was not found
+ * @throws Error if there was an error updating the club member profile image
+ * @throws Error if there was an error updating the user's profile image
  */
 
 const postProfileImage = async (id, buffer, mimetype) => {
-  console.log("Service: postProfileImage called");
   try {
-    const user = await User.findById(id);
-    if (!user) {
-      throw new Error('User not found');
-    }
+    const user = await User.findById(id).select('displayName');
+    if (!user) throw new Error('User not found')
 
     const db = mongoose.connection.db;
     const bucket = new GridFSBucket(db, { bucketName: 'profileImages' });
@@ -203,16 +222,27 @@ const postProfileImage = async (id, buffer, mimetype) => {
     const filename = `${id}-${uuid4()}`;
 
     const uploadStream = bucket.openUploadStream(filename, {
-      contentType: mimetype
+      contentType: mimetype,
     });
 
     uploadStream.end(buffer);
 
     return new Promise((resolve, reject) => {
       uploadStream.on('finish', async () => {
-        user.profileImage = filename;
-        await user.save();
-        resolve({ message: 'Profile image updated!', profileImage: filename });
+        try {
+
+          await User.updateOne({ _id: id }, { $set: { profileImage: filename } });
+
+          await ClubPage.updateMany(
+            { 'members.displayName': user.displayName },
+            { $set: { 'members.$.profilePicture': filename } }
+          );
+
+          resolve({ message: 'Profile image updated!', profileImage: filename });
+        } catch (error) {
+          console.error('Error updating club member profile image:', error);
+          reject(new Error('Internal server error'));
+        }
       });
 
       uploadStream.on('error', (err) => {
@@ -255,7 +285,6 @@ const changeEmail = async (email, newEmail) => {
 }
 
 /**
- *
  * @param email
  * @param newPassword
  * @returns Time of password change
@@ -272,7 +301,6 @@ const changePassword = async (email, newPassword) => {
 }
 
 /**
- *
  * @param email
  * @param newRole
  * @returns New user role and time of role change

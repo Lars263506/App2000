@@ -5,9 +5,10 @@ import User from '../models/User.js'
  * @description Service for settings
 
 /**
- * @returns List of settings for the user
- * @param admin
+ * @author Lars Andreas Strand
  * @description Gets all settings available to logged in admin user.
+ * @param admin
+ * @returns Array of settings for the user
  * @throws Error if no settings
  */
 
@@ -31,10 +32,11 @@ const getSettings = async (admin) => {
 }
 
 /**
- * @returns Whether the setting was granted or not
+ * @author Lars Andreas Strand
+ * @description Grants a setting to the admin user
  * @param admin
  * @param setting
- * @description Grants a setting to the admin user
+ * @returns Whether the setting was granted or not
  * @throws Error if no admin found
  * @throws Error if setting could not be granted
  */
@@ -55,10 +57,11 @@ const grantSetting = async (displayName, setting) => {
 }
 
 /**
- * @returns Whether the setting was revoked or not
+ * @author Lars Andreas Strand
+ * @description Revokes a setting from the admin user
  * @param admin
  * @param setting
- * @description Revokes a setting from the admin user
+ * @returns Whether the setting was revoked or not
  * @throws Error if no admin found
  * @throws Error if setting could not be revoked
  */

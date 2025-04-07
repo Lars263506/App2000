@@ -28,9 +28,14 @@ import {
 } from '../controllers/userController.js'
 
 /**
- * @author Lars263506 (Github)
+ * @author Lars Andreas Strand
  * @description Router for user requests
+ * This router handles all the requests related to users.
+ * It also handles middleware for authentication and authorization.
+ * It uses the passport middleware for authentication
+ * and it uses the authorization middleware for authorization.
  */
+
 const router = express.Router()
 
 router.get('/',
