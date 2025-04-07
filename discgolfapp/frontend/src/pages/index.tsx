@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { I18nextProvider } from 'react-i18next';
 import i18next from '@/i18n';
-import { ToastContainer } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 
 import Home from '@/components/pages/Home';
 import AdminPage from '@/components/pages/AdminPage';
@@ -36,12 +36,44 @@ const Index = () => {
     'Privacy': () => <PrivacyPage setSelectedPage={setSelectedPage} />,
   };
 
-  // Load selected page from local storage on page load
+  // Load selected page and translations from local storage on page load
   useEffect(() => {
+    const url = process.env.NEXT_PUBLIC_BACKEND_BASE_URL + '/translations/';
+      const fetchTranslations = async () => {
+        try {
+          const url = process.env.NEXT_PUBLIC_BACKEND_BASE_URL + '/translations/';
+          const response = await fetch(url);
+          if (response.status !== 200) throw new Error('Failed to fetch translations');
+          const data = await response.json();
+
+          // Transform the list into the correct format for i18next
+          const translations = data.reduce((acc: any, item: any) => {
+            if (!acc[item.language]) {
+              acc[item.language] = { translation: {} };
+            }
+            acc[item.language].translation[item.key] = item.translation;
+            return acc;
+          }, {});
+
+          // Add the translations to i18next
+          Object.keys(translations).forEach((language) => {
+            i18next.addResources(language, 'translation', translations[language].translation);
+          });
+        } catch (error) {
+          if (error instanceof Error) {
+            toast.error(error.message);
+          } else {
+            toast.error('Failed to fetch translations');
+          }
+        }
+    };
+
     const selectedPage = localStorage.getItem('selectedPage');
     if (selectedPage) {
       setSelectedPage(selectedPage);
     }
+
+    fetchTranslations()
   }, []);
 
   // Save selected page to local storage on change

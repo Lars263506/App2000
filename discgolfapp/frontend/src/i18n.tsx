@@ -25,7 +25,6 @@ i18next
           discgolfinfo_intro: 'Disc golf is a sport that combines elements of golf and frisbee.',
           discgolfinfo_text: 'Disc golf courses vary in length and difficulty. Some courses have obstacles such as trees, bushes and water that make the game more challenging. Try to follow course etiquette for a good experience.',
           discgolfinfo_playnow: 'Play Now',
-          getstarted_title: 'Getting Started with Disc Golf',
           getstarted_description: 'Disc golf is a fun and accessible sport for everyone. Here are some tips to help you get started.',
           getstarted_choose: 'Choose between beginnner or advanced tips.',
           getstarted_beginnerbutton: 'Beginner Tips',
