@@ -56,6 +56,16 @@ i18next
             "<strong>6. Play on advanced courses:</strong> Challenge yourself with narrow passages and technically demanding holes.",
             "<strong>7. Practice specific situations:</strong> Training throws from difficult terrain leads to better results in tournaments."
           ],
+          getstarted_rulesbutton: "Rules",
+          getstarted_rules_title: "Disc Golf Rules",
+          getstarted_rules_description: "Here are the most important rules to know before you play.",
+          getstarted_rules_list: [
+            "<strong>1. Throw from the tee:</strong> The first throw is made from a designated tee area.",
+            "<strong>2. Play from where the disc lands:</strong> Each subsequent throw is taken from where the previous one landed.",
+            "<strong>3. Finish in the basket:</strong> A hole is completed when the disc rests in the basket or chains.",
+            "<strong>4. Fewest throws wins:</strong> Just like traditional golf.",
+            "<strong>5. Respect others:</strong> Wait your turn and be considerate of players and nature."
+          ],
           course_search: 'Search for courses',
           error_notanarray: 'Error: The data is not an array.',
           error_getcourses: 'Error: Could not fetch courses.',
@@ -131,6 +141,16 @@ i18next
             '<strong>5. Fysisk trening og vedlikehold:</strong> Mobilitet, styrke og utholdenhet påvirker kasteteknikken din.',
             '<strong>6. Spill på avanserte baner:</strong> Utfordre deg selv med trange passasjer og teknisk krevende hull.',
             '<strong>7. Øv på spesifikke situasjoner:</strong> Trening på kast fra vanskelig terreng gir bedre resultater i turneringer.'
+          ],
+          getstarted_rulesbutton: "Regler",
+          getstarted_rules_title: "Reglene i diskgolf",
+          getstarted_rules_description: "Her finner du de viktigste reglene du må kjenne til før du spiller.",
+          getstarted_rules_list: [
+            "<strong>1. Kast fra tee:</strong> Første kast tas fra et fast område.",
+            "<strong>2. Spill der discen lander:</strong> Fortsett kast fra der discen ligger.",
+            "<strong>3. Fullfør i kurven:</strong> Når discen er i kurven, er hullet fullført.",
+            "<strong>4. Antall kast:</strong> Lavest mulig antall kast vinner.",
+            "<strong>5. Respekt:</strong> Vis hensyn til andre spillere og naturen."
           ],
           course_search: 'Søk etter baner',
           error_notanarray: 'Feil: Dataen er ikke en liste.',
