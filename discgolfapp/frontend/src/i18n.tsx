@@ -19,6 +19,7 @@ i18next
         translation: {
           clubdetails_go_back: 'Go back',
           clublist_search: 'Search for clubs',
+          clublist_visit: 'Visit',
           clubmap_loading: 'Loading map...',
           clubmap_title: 'Club map',
           clubmap_prompt_action: 'Select a red pin to see more information.',
@@ -94,6 +95,7 @@ i18next
         translation: {
           clubdetails_go_back: 'Gå tilbake',
           clublist_search: 'Søk etter klubber',
+          clublist_visit: 'Besøk',
           clubmap_loading: 'Laster kart...',
           clubmap_title: 'Klubbkart',
           clubmap_prompt_action: 'Velg en rød pin for å se mer informasjon.',

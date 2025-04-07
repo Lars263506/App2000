@@ -128,7 +128,7 @@ const ClubDetails: React.FC<ClubDetailsProps> = ({ clubData, setSelectedPage }) 
         <div className="flex flex-col items-center min-h-screen">
           <p className="text-lg">Du er ikke logget inn. Vennligst logg inn for å se klubbsiden.</p>
           <button
-            className="px-6 py-3 bg-gray-500 text-white text-lg font-semibold rounded hover:bg-gray-700"
+            className="px-6 py-3 mt-4 bg-gray-500 text-white text-lg font-semibold rounded hover:bg-gray-700"
             onClick={() => setSelectedPage('ClubLanding')}
           >
             Gå tilbake
