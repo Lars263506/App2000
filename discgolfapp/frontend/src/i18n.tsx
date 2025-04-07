@@ -17,7 +17,10 @@ i18next
     resources: {
       en: {
         translation: {
+          clubdetails_go_back: 'Go back',
           clublist_search: 'Search for clubs',
+          clublist_visit: 'Visit',
+          clubmap_loading: 'Loading map...',
           clubmap_title: 'Club map',
           clubmap_prompt_action: 'Select a red pin to see more information.',
           clubmap_visit_club: 'Visit the club page',
@@ -52,10 +55,22 @@ i18next
             "<strong>6. Play on advanced courses:</strong> Challenge yourself with narrow passages and technically demanding holes.",
             "<strong>7. Practice specific situations:</strong> Training throws from difficult terrain leads to better results in tournaments."
           ],
+          getstarted_rulesbutton: "Rules",
+          getstarted_rules_title: "Disc Golf Rules",
+          getstarted_rules_description: "Here are the most important rules to know before you play.",
+          getstarted_rules_list: [
+            "<strong>1. Throw from the tee:</strong> The first throw is made from a designated tee area.",
+            "<strong>2. Play from where the disc lands:</strong> Each subsequent throw is taken from where the previous one landed.",
+            "<strong>3. Finish in the basket:</strong> A hole is completed when the disc rests in the basket or chains.",
+            "<strong>4. Fewest throws wins:</strong> Just like traditional golf.",
+            "<strong>5. Respect others:</strong> Wait your turn and be considerate of players and nature."
+          ],
           course_search: 'Search for courses',
           error_notanarray: 'Error: The data is not an array.',
           error_getcourses: 'Error: Could not fetch courses.',
-          error_fetching_admin_status: 'Error fetching admin status.',
+          error_fetch_members: 'Error: Could not fetch members.',
+          error_fetching_admin_status: 'Error: Could not fetch admin status.',
+          error_generic: 'Error: Something went wrong fetching data.',
           coursemap_alldifficulties: 'All difficulties',
           coursemap_easy: 'Easy',
           coursemap_medium: 'Medium',
@@ -69,6 +84,9 @@ i18next
             priority_booking: "<strong>Priority access to booking:</strong> Members get priority access to course reservations, especially during busy periods.",
             competitions: "<strong>Participation in competitions:</strong> Opportunity to participate in the club's own tournaments and competitions."
           },
+          memberlist_title: 'Member List',
+          memberlist_loading: 'Loading members...',
+          memberlist_nomembers: 'No members found.',
           navbar_logotext_norways: "Norway's",
           navbar_logotext_association: 'Disc Golf Association',
           navigation_getstarted_title: 'Get Started',
@@ -84,7 +102,10 @@ i18next
       },
       no: {
         translation: {
+          clubdetails_go_back: 'Gå tilbake',
           clublist_search: 'Søk etter klubber',
+          clublist_visit: 'Besøk',
+          clubmap_loading: 'Laster kart...',
           clubmap_title: 'Klubbkart',
           clubmap_prompt_action: 'Velg en rød pin for å se mer informasjon.',
           clubmap_visit_club: 'Besøk klubbens side',
@@ -120,10 +141,22 @@ i18next
             '<strong>6. Spill på avanserte baner:</strong> Utfordre deg selv med trange passasjer og teknisk krevende hull.',
             '<strong>7. Øv på spesifikke situasjoner:</strong> Trening på kast fra vanskelig terreng gir bedre resultater i turneringer.'
           ],
+          getstarted_rulesbutton: "Regler",
+          getstarted_rules_title: "Reglene i diskgolf",
+          getstarted_rules_description: "Her finner du de viktigste reglene du må kjenne til før du spiller.",
+          getstarted_rules_list: [
+            "<strong>1. Kast fra tee:</strong> Første kast tas fra et fast område.",
+            "<strong>2. Spill der discen lander:</strong> Fortsett kast fra der discen ligger.",
+            "<strong>3. Fullfør i kurven:</strong> Når discen er i kurven, er hullet fullført.",
+            "<strong>4. Antall kast:</strong> Lavest mulig antall kast vinner.",
+            "<strong>5. Respekt:</strong> Vis hensyn til andre spillere og naturen."
+          ],
           course_search: 'Søk etter baner',
           error_notanarray: 'Feil: Dataen er ikke en liste.',
           error_getcourses: 'Feil: Kunne ikke hente baner.',
-          error_fetching_admin_status: 'Feil ved henting av admin-status.',
+          error_fetch_members: 'Feil: Kunne ikke hente medlemmer.',
+          error_fetching_admin_status: 'Feil: Kunne ikke hente admin-status.',
+          error_generic: 'Feil: Noe gikk galt med å hente data.',
           coursemap_alldifficulties: 'Alle vanskelighetsgrader',
           coursemap_easy: 'Lett',
           coursemap_medium: 'Middels',
@@ -137,6 +170,9 @@ i18next
             priority_booking: "<strong>Prioritert tilgang til booking:</strong> Medlemmer får prioritert tilgang til banereservasjoner, spesielt i travle perioder.",
             competitions: "<strong>Deltakelse i konkurranser:</strong> Mulighet til å delta i klubbens egne turneringer og konkurranser."
           },
+          memberlist_title: 'Medlemsliste',
+          memberlist_loading: 'Laster medlemmer...',
+          memberlist_nomembers: 'Ingen medlemmer funnet.',
           navbar_logotext_norways: 'Norges',
           navbar_logotext_association: 'Diskgolf-forbund',
           navigation_getstarted_title: 'Kom i gang',

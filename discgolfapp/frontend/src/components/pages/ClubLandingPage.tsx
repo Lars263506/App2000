@@ -26,6 +26,7 @@ const ClubLandingPage: React.FC<ClubLandingPageProps> = ({ setSelectedPage }) =>
             setSelectedClub={setSelectedClub}
             searchTerm={searchTerm}
             setSearchTerm={setSearchTerm}
+            setSelectedPage={setSelectedPage}
           />
         </div>
         <div className="w-1/2 rounded-md bg-[#E7EFFB] border border-solid border-black shadow">

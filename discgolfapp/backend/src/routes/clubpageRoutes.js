@@ -1,13 +1,19 @@
 import express from 'express'
 
 import passport from '../config/passportConfig.js'
-import { authorizeAdmin } from '../middleware/authorization.js'
+import { authorizeAdmin, authorizeClubowner } from '../middleware/authorization.js'
 import {
   getAllClubPages,
   getClubPage,
   getView,
+  isMember,
+  getMembers,
+  getAnnouncements,
+  createNewMember,
   createNewClubPage,
+  createNewAnnouncement,
   deleteClubPage,
+  updateAnnouncement,
   updateClubPage
 } from '../controllers/clubpageController.js'
 import { checkMemberStatus, optionalAuth } from '../middleware/auth.js'
@@ -19,11 +25,11 @@ import { checkMemberStatus, optionalAuth } from '../middleware/auth.js'
 
 const router = express.Router()
 
-/** 
+/**
  * @author Lars Andreas Strand
  * @description This router handles all the requests related to club pages.
  * It also handles middleware for authentication and authorization.
- * It uses the passport middleware for authentication 
+ * It uses the passport middleware for authentication
  * and it uses the authorization middleware for authorization.
  */
 
@@ -36,9 +42,29 @@ router.get('/view/:id',
   getView
 )
 
+router.get('/is-member/:clubId',
+  checkMemberStatus,
+  isMember
+)
+
+router.get('/members/',
+  passport.authenticate('jwt', { session: false }),
+  getMembers
+)
+
+router.get('/announcements/',
+  passport.authenticate('jwt', { session: false }),
+  getAnnouncements
+)
+
 router.get('/:id',
   optionalAuth,
   getClubPage
+)
+
+router.post('/join/:clubId',
+  passport.authenticate('jwt', { session: false }),
+  createNewMember
 )
 
 router.post('/',
@@ -47,10 +73,22 @@ router.post('/',
   createNewClubPage
 )
 
+router.post('/announcements/:clubId',
+  passport.authenticate('jwt', { session: false }),
+  authorizeClubowner,
+  createNewAnnouncement
+)
+
 router.delete('/:id',
   passport.authenticate('jwt', { session: false }),
   authorizeAdmin,
   deleteClubPage
+)
+
+router.put('/announcements/:clubId/:index',
+  passport.authenticate('jwt', { session: false }),
+  authorizeClubowner,
+  updateAnnouncement
 )
 
 router.put('/:id',
