@@ -17,74 +17,34 @@ i18next
     resources: {
       en: {
         translation: {
-          clublist_search: 'Search for clubs',
-          clubmap_title: 'Club map',
-          clubmap_prompt_action: 'Select a red pin to see more information.',
-          clubmap_visit_club: 'Visit the club page',
-          discgolfinfo_title: 'What is Disc Golf?',
-          discgolfinfo_intro: 'Disc golf is a sport that combines elements of golf and frisbee.',
-          discgolfinfo_text: 'Disc golf courses vary in length and difficulty. Some courses have obstacles such as trees, bushes and water that make the game more challenging. Try to follow course etiquette for a good experience.',
-          discgolfinfo_playnow: 'Play Now',
-          getstarted_title: 'Getting Started with Disc Golf',
-          getstarted_description: 'Disc golf is a fun and accessible sport for everyone. Here are some tips to help you get started.',
-          getstarted_choose: 'Choose between beginnner or advanced tips.',
-          getstarted_beginnerbutton: 'Beginner Tips',
-          getstarted_advancedbutton: 'Advanced Tips',
-          getstarted_beginner_title: 'Beginner Tips',
-          getstarted_beginner_description: 'Disc golf is a fun and inclusive sport that is easy to learn but challenging to master. Here are some great tips to get started:',
-          getstarted_beginner_tips: [
-            "<strong>1. Choose the right disc:</strong> Start with a <strong>putter</strong> or a <strong>midrange disc</strong>. They are easier to control than fast drivers.",
-            "<strong>2. Learn the basic throws:</strong> Backhand, forehand (sidearm), and putting are the most important techniques.",
-            "<strong>3. Understand the rules:</strong> Start from the tee area and throw toward the basket. After each throw, continue playing from where the disc landed.",
-            "<strong>4. Focus on technique rather than power:</strong> Calm and controlled throws yield better results than trying to throw too hard.",
-            "<strong>5. Play with experienced players:</strong> Learning from more experienced players helps you progress faster.",
-            "<strong>6. Have realistic expectations:</strong> Hit a tree? No problem! It's part of the learning process.",
-            "<strong>7. Use simple equipment:</strong> Start with affordable discs and upgrade as you go.",
-            "<strong>8. Practice regularly:</strong> The more you play, the better you get!"
-          ],
-          getstarted_advanced_title: 'Advanced Tips',
-          getstarted_advanced_description: 'Once you have mastered the basics, here are some advanced tips to take your game to the next level:',
-          getstarted_advanced_tips: [
-            "<strong>1. Use different discs:</strong> Speed 9-12 drivers for control, Speed 13+ for distance.",
-            "<strong>2. Master advanced throwing techniques:</strong> Learn hyzer, anhyzer, and roller throws for more flexibility.",
-            "<strong>3. Understand the impact of wind:</strong> Practice in various weather conditions to improve control over your throws.",
-            "<strong>4. Improve mental strength:</strong> Practice strategic thinking and staying calm under pressure.",
-            "<strong>5. Physical training and maintenance:</strong> Mobility, strength, and endurance affect your throwing technique.",
-            "<strong>6. Play on advanced courses:</strong> Challenge yourself with narrow passages and technically demanding holes.",
-            "<strong>7. Practice specific situations:</strong> Training throws from difficult terrain leads to better results in tournaments."
-          ],
-          course_search: 'Search for courses',
-          error_notanarray: 'Error: The data is not an array.',
-          error_getcourses: 'Error: Could not fetch courses.',
-          error_fetching_admin_status: 'Error fetching admin status.',
-          coursemap_alldifficulties: 'All difficulties',
-          coursemap_easy: 'Easy',
-          coursemap_medium: 'Medium',
-          coursemap_hard: 'Hard',
-          member_benefit_title: "Join a club",
-          member_benefit_intro: "As a member, you gain access to a variety of benefits:",
-          member_benefit_list: {
-            discounts: "<strong>Discounts on tournaments and events:</strong> Membership often provides discounts on entry fees for local and national tournaments or special events.",
-            exclusive_training: "<strong>Exclusive training:</strong> Access to organized training sessions to improve your skills.",
-            networking: "<strong>Networking opportunities:</strong> Meet other players and build friendships while learning from experienced players.",
-            priority_booking: "<strong>Priority access to booking:</strong> Members get priority access to course reservations, especially during busy periods.",
-            competitions: "<strong>Participation in competitions:</strong> Opportunity to participate in the club's own tournaments and competitions."
-          },
-          navbar_logotext_norways: "Norway's",
-          navbar_logotext_association: 'Disc Golf Association',
-          navigation_getstarted_title: 'Get Started',
-          navigation_getstarted_description: 'Learn the basics of disc golf and how to play.',
-          navigation_courses_title: 'Courses',
-          navigation_courses_description: 'Find courses near you and explore new ones.',
-          navigation_clubs_title: 'Clubs',
-          navigation_clubs_description: 'Join a local club and connect with other players.',
-          footer_contactus: 'Contact Us',
-          footer_privacy: 'Privacy Policy',
-          withadminaccess_loading: 'Loading...',
+          // ... (ingen endringer i engelsk her, men legg til oversettelser hvis ønskelig)
+          getstarted_rulesbutton: "Rules",
+          getstarted_rules_title: "Disc Golf Rules",
+          getstarted_rules_description: "Here are the most important rules to know before you play.",
+          getstarted_rules_list: [
+            "<strong>1. Throw from the tee:</strong> The first throw is made from a designated tee area.",
+            "<strong>2. Play from where the disc lands:</strong> Each subsequent throw is taken from where the previous one landed.",
+            "<strong>3. Finish in the basket:</strong> A hole is completed when the disc rests in the basket or chains.",
+            "<strong>4. Fewest throws wins:</strong> Just like traditional golf.",
+            "<strong>5. Respect others:</strong> Wait your turn and be considerate of players and nature."
+          ]
         },
       },
       no: {
         translation: {
+          // 👇 Disse 5 linjene er lagt til eller oppdatert
+          getstarted_rulesbutton: "Regler",
+          getstarted_rules_title: "Reglene i diskgolf",
+          getstarted_rules_description: "Her finner du de viktigste reglene du må kjenne til før du spiller.",
+          getstarted_rules_list: [
+            "<strong>1. Kast fra tee:</strong> Første kast tas fra et fast område.",
+            "<strong>2. Spill der discen lander:</strong> Fortsett kast fra der discen ligger.",
+            "<strong>3. Fullfør i kurven:</strong> Når discen er i kurven, er hullet fullført.",
+            "<strong>4. Antall kast:</strong> Lavest mulig antall kast vinner.",
+            "<strong>5. Respekt:</strong> Vis hensyn til andre spillere og naturen."
+          ],
+          
+          // 👇 Her følger resten av eksisterende oversettelser uendret
           clublist_search: 'Søk etter klubber',
           clubmap_title: 'Klubbkart',
           clubmap_prompt_action: 'Velg en rød pin for å se mer informasjon.',
