@@ -194,8 +194,6 @@ const deleteClubPage = async (id) => {
  */
 
 const updateAnnouncement = async (clubId, index, text) => {
-  let clubPage;
-
   if (text === '') {
     await ClubPage.findByIdAndUpdate(
       clubId,

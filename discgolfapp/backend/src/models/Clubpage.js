@@ -6,8 +6,6 @@ import mongoose from 'mongoose'
  * It defines the structure of the ClubPage document in the database.
  */
 
-import Member from './Member.js'
-
 const schema = new mongoose.Schema(
   {
     name: {
