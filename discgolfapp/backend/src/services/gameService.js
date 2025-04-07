@@ -12,18 +12,41 @@ const saveGameResult = async (userId, game) => {
     throw new Error('Game data is required');
   }
 
-  const newGame = {
+  const players = await Promise.all(
+    game.players.map(async (player) => {
+      const foundPlayer = await User.findOne({ displayName: player.name });
+      return {
+        name: player.name,
+        id: foundPlayer ? foundPlayer._id : null,
+        email: foundPlayer ? foundPlayer.email : null,
+      };
+    })
+  );
+
+  const newGame = await Game.create({
     gameId: `${game.course}-${uuid4()}`,
     course: game.course,
-    players: game.players, 
+    players,
     scores: game.scores,
-    date: new Date(),
-  };
+    date: game.date,
+  });
 
-  
-  await User.findByIdAndUpdate(userId, { $push: { games: newGame } });
+  user.games.push(newGame._id);
+  await user.save();
 
-  return await Game.create(newGame);
+  await Promise.all(
+    players
+      .filter((player) => player.id)
+      .map(async (player) => {
+        const playerUser = await User.findById(player.id);
+        if (playerUser) {
+          playerUser.games.push(newGame._id);
+          await playerUser.save();
+        }
+      })
+  );
+
+  return newGame;
 };
 
 export { saveGameResult };

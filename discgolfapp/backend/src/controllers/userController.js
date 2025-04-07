@@ -1,4 +1,5 @@
 import * as userService from '../services/userService.js'
+import User from '../models/User.js'; // Legg til denne linjen
 
 
 /**
@@ -136,12 +137,16 @@ const getUserClubs = async (req, res) => {
 const getUserGames = async (req, res) => {
   try {
     const userId = req.user.id;
-    const games = await userService.getUserGames(userId);
-    res.status(200).json(games);
+    const user = await User.findById(userId).populate('games');
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    res.status(200).json({ games: user.games });
   } catch (error) {
-    res.status(500).json({ message: 'Failed to fetch games', error });
+    console.error('Error fetching user games:', error);
+    res.status(500).json({ message: 'Failed to fetch user games', error: error.message });
   }
-}
+};
 
 /**
  * @author Lars Andreas Strand

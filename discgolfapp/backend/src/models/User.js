@@ -43,10 +43,10 @@ const schema = new mongoose.Schema(
     settings: {
       type: [Setting.schema],
     },
-    games: {
-      type: [Game.schema],
-      default: []
-    },
+    games: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Game',
+    }],
   },
   { timestamps: true }
 )

@@ -79,10 +79,15 @@ const MyPage: React.FC<MyPageProps> = ({ setSelectedPage }) => {
           }
         });
         const data = await result.json();
-        const gamesData: Game[] = data.games;
-        gamesData.sort((b, a) => new Date(a.date).getTime() - new Date(b.date).getTime());
-      
-        setGames(gamesData);
+
+        if (Array.isArray(data.games)) {
+          const gamesData: Game[] = data.games;
+          gamesData.sort((b, a) => new Date(a.date).getTime() - new Date(b.date).getTime());
+          setGames(gamesData);
+        } else {
+          console.warn("Games data is not an array or is undefined:", data.games);
+          setGames([]);
+        }
       } catch (error) {
         console.error("Error fetching games:", error);
       }
@@ -137,8 +142,6 @@ const MyPage: React.FC<MyPageProps> = ({ setSelectedPage }) => {
   const calculateTotalScore = (scores: number[]) => {
     return scores.reduce((total, score) => total + score, 0);
   };
-
-  
 
   const openModal = (game: Game) => {
     setSelectedGame(game);

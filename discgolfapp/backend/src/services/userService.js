@@ -315,9 +315,9 @@ const searchUsers = async (query) => {
     const users = await User.find({
       $or: [
         { displayName: { $regex: query, $options: 'i' } },
-        { email: { $regex: query, $options: 'i' } },
-      ],
-    }).select('displayName email');
+        { email: { $regex: query, $options: 'i' } }
+      ]
+    }).select('displayName email _id');
     return users;
   } catch (error) {
     throw new Error('Error searching for users: ' + error.message);
