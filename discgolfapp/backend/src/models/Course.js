@@ -37,8 +37,20 @@ const schema = new mongoose.Schema(
     },
     holes: {
       type: Number,
-      resquired: true,
-    }, 
+      required: true,
+    },
+    pins: [
+      {
+        id: String,
+        name: String,
+        latitude: Number,
+        longitude: Number,
+        type: String,
+        distance: Number,
+        par: Number,
+        outOfBounds: String,
+      },
+    ],
   },
   { timestamps: true }
 )

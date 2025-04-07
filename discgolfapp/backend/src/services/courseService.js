@@ -20,6 +20,14 @@ const getCourse = async (id) => {
   return course
 }
 
+const getCoursePins = async (id) => {
+  const course = await Course.findById(id).select('pins');
+  if (!course) {
+    throw new Error('Course not found');
+  }
+  return course.pins;
+};
+
 const createNewCourse = async (course) => {
   const newCourse = new Course(course)
   await newCourse.save()
@@ -41,4 +49,16 @@ const updateCourse = async (id, request) => {
   await Course.findByIdAndUpdate(id, request, { new: true })
 }
 
-export { getAllCourses, getCourse, createNewCourse, deleteCourse, updateCourse }
+const updateCoursePins = async (id, pins) => {
+  const course = await Course.findByIdAndUpdate(
+    id,
+    { pins },
+    { new: true }
+  );
+  if (!course) {
+    throw new Error('Course not found');
+  }
+  return course.pins;
+};
+
+export { getAllCourses, getCourse, getCoursePins, createNewCourse, deleteCourse, updateCourse, updateCoursePins }

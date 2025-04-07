@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { GoogleMap, LoadScript, Marker, OverlayView } from "@react-google-maps/api";
 
 interface Course {
+  id: string;
   name: string;
   latitude: number;
   longitude: number;
@@ -38,25 +39,78 @@ export default function EditCoursePage() {
   const [tempLng, setTempLng] = useState<number | null>(null);
   const [isDragging, setIsDragging] = useState(false);
 
-  // Ny state for kartets senter
   const [mapCenter, setMapCenter] = useState<{ lat: number; lng: number }>({
-    lat: 59.9139, // Standard senter (Oslo)
+    lat: 59.9139, 
     lng: 10.7522,
   });
 
   useEffect(() => {
     const fetchCourses = async () => {
       const url = process.env.NEXT_PUBLIC_BACKEND_BASE_URL + "/course";
+      const token = localStorage.getItem("accessToken"); // Hent token fra localStorage
+  
       try {
-        const response = await fetch(url);
+        const response = await fetch(url, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`, // Legg til token i Authorization-headeren
+          },
+        });
+  
+        if (!response.ok) {
+          throw new Error("Kunne ikke hente baner. Sjekk autentisering.");
+        }
+  
         const result = await response.json();
-        setCourses(result.data);
+  
+        // Map _id to id for frontend usage
+        const mappedCourses = result.data.map((course: any) => ({
+          ...course,
+          id: course._id, // Map _id to id
+        }));
+  
+        setCourses(mappedCourses);
       } catch (error) {
         console.error("Feil ved henting av baner:", error);
       }
     };
     fetchCourses();
   }, []);
+
+  const savePinsToDatabase = async () => {
+    if (!selectedCourse) return;
+  
+    const course = courses.find((c) => c.name === selectedCourse);
+    if (!course) return;
+  
+    const url = `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/course/${course.id}/pins`;
+    const token = localStorage.getItem("accessToken");
+  
+    try {
+      const response = await fetch(`/api/course/${course.id}/pins`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ pins }) // ← viktig
+      });
+  
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error("Backend error response:", errorText);
+        throw new Error("Failed to save pins to database");
+      }
+  
+      const updatedPins = await response.json();
+      setPins(updatedPins); // Oppdater pins i state
+      alert("Pins lagret i databasen!");
+    } catch (error) {
+      console.error("Error saving pins:", error);
+      alert("Kunne ikke lagre pins. Vennligst prøv igjen senere.");
+    }
+  };
 
   const handleAddPin = (lat: number, lng: number) => {
     if (!newPinName) {
@@ -84,7 +138,6 @@ export default function EditCoursePage() {
     setEditPinPar(pin.par || null);
     setEditPinOutOfBounds(pin.outOfBounds || "");
 
-    // Oppdater kartets senter til pinnen som ble klikket
     setMapCenter({ lat: pin.latitude, lng: pin.longitude });
   };
 
@@ -96,8 +149,8 @@ export default function EditCoursePage() {
         ? {
             ...pin,
             name: editPinName,
-            latitude: tempLat !== null ? tempLat : pin.latitude, // Bruk eksisterende latitude hvis ikke endret
-            longitude: tempLng !== null ? tempLng : pin.longitude, // Bruk eksisterende longitude hvis ikke endret
+            latitude: tempLat !== null ? tempLat : pin.latitude,
+            longitude: tempLng !== null ? tempLng : pin.longitude,
             distance: editPinDistance ?? undefined,
             par: editPinPar ?? undefined,
             outOfBounds: editPinOutOfBounds || undefined,
@@ -106,6 +159,7 @@ export default function EditCoursePage() {
     );
 
     setPins(updatedPins as Pin[]);
+    savePinsToDatabase();
     setSelectedPin(null);
     setEditPinName("");
     setEditPinDistance(null);
@@ -135,14 +189,36 @@ export default function EditCoursePage() {
     setSelectedCourse("");
   };
 
-  const handleCourseSelection = (courseName: string) => {
+  const handleCourseSelection = async (courseName: string) => {
     setSelectedCourse(courseName);
     setIsCourseSelected(true);
-
-    // Oppdater kartets senter til banens posisjon
+  
     const course = courses.find((c) => c.name === courseName);
     if (course) {
       setMapCenter({ lat: course.latitude, lng: course.longitude });
+  
+      const url = `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/course/${course.id}`;
+      const token = localStorage.getItem("accessToken"); 
+  
+      try {
+        const response = await fetch(url, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+  
+        if (!response.ok) {
+          throw new Error("Kunne ikke hente pins for banen. Sjekk autentisering.");
+        }
+  
+        const result = await response.json();
+        setPins(result.pins || []); 
+      } catch (error) {
+        console.error("Error fetching pins:", error);
+        alert("Kunne ikke hente pins for banen. Vennligst prøv igjen senere.");
+      }
     }
   };
 
@@ -185,22 +261,44 @@ export default function EditCoursePage() {
                 {selectedCourse && (
                   <LoadScript googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string}>
                     <GoogleMap
-                      center={mapCenter} // Bruk mapCenter som senter
+                      center={mapCenter} 
                       zoom={15}
                       mapContainerStyle={{ height: "750px", width: "75%", borderRadius: "1rem" }}
                       onClick={handleMapClick}
                     >
                       {pins.map((pin) => (
-                        <Marker
-                          key={pin.id}
-                          position={{ lat: pin.latitude, lng: pin.longitude }}
-                          draggable={isDragging && selectedPin?.id === pin.id}
-                          onDragStart={handleDragStart}
-                          onDragEnd={handleDragEnd}
-                          onClick={() => handlePinClick(pin)}
-                        />
+                        <>
+                          <Marker
+                            key={pin.id}
+                            position={{ lat: pin.latitude, lng: pin.longitude }}
+                            draggable={isDragging && selectedPin?.id === pin.id}
+                            onDragStart={handleDragStart}
+                            onDragEnd={handleDragEnd}
+                            onClick={() => handlePinClick(pin)}
+                          />
+                          <OverlayView
+                            position={{ lat: pin.latitude, lng: pin.longitude }}
+                            mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
+                          >
+                            <div
+                              style={{
+                                position: "absolute",
+                                transform: "translate(-50%, -300%)",
+                                backgroundColor: "white",
+                                padding: "2px 6px",
+                                borderRadius: "4px",
+                                fontSize: "12px",
+                                fontWeight: "bold",
+                                color: "black",
+                                boxShadow: "0 1px 3px rgba(0,0,0,0.3)",
+                                whiteSpace: "nowrap",
+                              }}
+                            >
+                              {pin.name}
+                            </div>
+                          </OverlayView>
+                        </>
                       ))}
-
                       {tempLat !== null && tempLng !== null && (
                         <Marker
                           position={{ lat: tempLat, lng: tempLng }}
@@ -212,33 +310,30 @@ export default function EditCoursePage() {
 
                       {selectedPin && (
                         <OverlayView
-                          position={{ lat: selectedPin.latitude, lng: selectedPin.longitude }}
-                          mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
+                        position={{ lat: selectedPin.latitude, lng: selectedPin.longitude }}
+                        mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
+                      >
+                        <div
+                        style={{
+                          position: "absolute",
+                          transform: "translate(30px, -75%)", 
+                          backgroundColor: "white",
+                          padding: "15px",
+                          borderRadius: "8px",
+                          boxShadow: "0 2px 6px rgba(0,0,0,0.3)",
+                          fontSize: "14px",
+                          fontWeight: "bold",
+                          color: "black",
+                          textAlign: "left",
+                          zIndex: 1000,
+                          width: "160px",
+                        }}
                         >
-                          <div
-                            style={{
-                              position: "absolute",
-                              top: "-150px",
-                              left: "-50%",
-                              transform: "translateX(-50%)",
-                              backgroundColor: "white",
-                              padding: "15px",
-                              borderRadius: "8px",
-                              boxShadow: "0 2px 6px rgba(0,0,0,0.3)",
-                              fontSize: "14px",
-                              fontWeight: "bold",
-                              color: "black",
-                              textAlign: "left",
-                              zIndex: 1000,
-                              width: "150px",
-                            }}
-                          >
-                            <div>Navn: {selectedPin.name}</div>
-                            {selectedPin.distance && <div>Distanse: {selectedPin.distance} meter</div>}
-                            {selectedPin.par && <div>Par: {selectedPin.par}</div>}
-                            {selectedPin.outOfBounds && <div>OB: {selectedPin.outOfBounds}</div>}
-                          </div>
-                        </OverlayView>
+                          {selectedPin.distance && <div>Distanse: {selectedPin.distance} meter</div>}
+                          {selectedPin.par && <div>Par: {selectedPin.par}</div>}
+                          {selectedPin.outOfBounds && <div>OB: {selectedPin.outOfBounds}</div>}
+                        </div>
+                      </OverlayView>
                       )}
                     </GoogleMap>
                   </LoadScript>
