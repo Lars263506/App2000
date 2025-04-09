@@ -23,6 +23,8 @@ const CourseDetails: React.FC<CourseDetailsProps> = ({ selectedCourse, setSelect
   const [username, setUsername] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
 
+  const isLoggedIn = !!localStorage.getItem('accessToken')
+
   useEffect(() => {
     if (selectedCourse != null) {
       const fetchWeather = async () => {
@@ -72,7 +74,11 @@ const CourseDetails: React.FC<CourseDetailsProps> = ({ selectedCourse, setSelect
         comment,
       }
 
-      await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/reviews`, newReview)
+      await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/reviews`, newReview, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('accessToken')}`, 
+        },
+      })
       setReviews((prev) => [...prev, newReview])
       setRating(0)
       setComment('')
@@ -179,44 +185,50 @@ const CourseDetails: React.FC<CourseDetailsProps> = ({ selectedCourse, setSelect
                   )}
                 </div>
 
-                <div className='mt-4'>
-                  <h3 className='text-lg font-semibold mb-2'>Legg til din anmeldelse</h3>
-                  <input
-                    type='text'
-                    placeholder='Ditt navn (valgfritt)'
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                    className='w-full p-2 border rounded mb-2'
-                  />
-                  <textarea
-                    className='w-full p-2 border rounded mb-2'
-                    rows={3}
-                    placeholder='Skriv din anmeldelse...'
-                    value={comment}
-                    onChange={(e) => setComment(e.target.value)}
-                  />
-                  <div className='flex items-center mb-2'>
-                    <span className='mr-2'>Rating:</span>
-                    <div className='flex'>
-                      {Array.from({ length: 5 }).map((_, i) => (
-                        <span
-                          key={i}
-                          className={`cursor-pointer ${i < rating ? 'text-yellow-500' : 'text-gray-400'}`}
-                          onClick={() => setRating(i + 1)}
-                        >
-                          ★
-                        </span>
-                      ))}
+                {isLoggedIn ? (
+                  <div className='mt-4'>
+                    <h3 className='text-lg font-semibold mb-2'>Legg til din anmeldelse</h3>
+                    <input
+                      type='text'
+                      placeholder='Ditt navn (valgfritt)'
+                      value={username}
+                      onChange={(e) => setUsername(e.target.value)}
+                      className='w-full p-2 border rounded mb-2'
+                    />
+                    <textarea
+                      className='w-full p-2 border rounded mb-2'
+                      rows={3}
+                      placeholder='Skriv din anmeldelse...'
+                      value={comment}
+                      onChange={(e) => setComment(e.target.value)}
+                    />
+                    <div className='flex items-center mb-2'>
+                      <span className='mr-2'>Rating:</span>
+                      <div className='flex'>
+                        {Array.from({ length: 5 }).map((_, i) => (
+                          <span
+                            key={i}
+                            className={`cursor-pointer ${i < rating ? 'text-yellow-500' : 'text-gray-400'}`}
+                            onClick={() => setRating(i + 1)}
+                          >
+                            ★
+                          </span>
+                        ))}
+                      </div>
                     </div>
+                    <button
+                      onClick={handleSubmitReview}
+                      className='bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 disabled:opacity-50'
+                      disabled={isSubmitting || rating === 0 || comment.trim() === ''}
+                    >
+                      {isSubmitting ? 'Sender...' : 'Send anmeldelse'}
+                    </button>
                   </div>
-                  <button
-                    onClick={handleSubmitReview}
-                    className='bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 disabled:opacity-50'
-                    disabled={isSubmitting || rating === 0 || comment.trim() === ''}
-                  >
-                    {isSubmitting ? 'Sender...' : 'Send anmeldelse'}
-                  </button>
-                </div>
+                ) : (
+                  <p className='text-gray-600 mt-4'>
+                    Logg inn for å skrive en anmeldelse.
+                  </p>
+                )}
               </div>
             )}
           </div>
