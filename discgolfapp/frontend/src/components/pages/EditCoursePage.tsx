@@ -293,7 +293,7 @@ export default function EditCoursePage() {
                       mapContainerStyle={{ height: "750px", width: "75%", borderRadius: "1rem" }}
                       onClick={handleMapClick}
                     >
-                      {pins.map((pin) => (
+                        {Array.isArray(pins) && pins.map((pin) => (
                           <>
                             <Marker
                               key={pin.id}
