@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { X, ChevronDown } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { FaStar } from 'react-icons/fa';
+import { Course, Review } from '@/types/course';
 
 interface CourseListProps {
   courses: Course[];
@@ -9,24 +10,7 @@ interface CourseListProps {
   setSelectedCourse: (course: Course | null) => void;
 }
 
-interface Course {
-  _id: string;
-  name: string;
-  town: string;
-  location: string;
-  url: string;
-  postCode: string;
-  latitude: number;
-  longitude: number;
-  difficulty: string;
-  familyFriendly: boolean;
-  holes: number;
-  reviews: Review[]; // Add reviews to the Course interface
-}
 
-interface Review {
-  rating: number;
-}
 
 const CourseList: React.FC<CourseListProps> = ({ courses, setCourses, setSelectedCourse }) => {
   const { t } = useTranslation();

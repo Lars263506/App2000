@@ -2,14 +2,8 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 import { toast } from "react-toastify";
+import { Course } from '@/types/course'
 
-interface Course {
-  name: string;
-  latitude: number;
-  longitude: number;
-  difficulty: string;
-  holes: number;
-}
 
 export default function StartGame() {
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);

@@ -1,13 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import { Course } from '../pages/CoursePage'
+import { Course, Review } from '@/types/course'
 import axios from 'axios'
 import Button from '../global/button'
-
-interface Review {
-  username: string
-  rating: number
-  comment: string
-}
 
 interface CourseDetailsProps {
   selectedCourse: Course | null
