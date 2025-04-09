@@ -155,28 +155,51 @@ export default function EditCoursePage() {
     setNewPinName("");
   };
 
-  const handlePinClick = (pin: Pin) => {
-    setSelectedPin(pin);
-    setEditPinName(pin.name);
-    setEditPinLat(pin.latitude);
-    setEditPinLng(pin.longitude);
-    setEditPinDistance(pin.distance || null);
-    setEditPinPar(pin.par || null);
-    setEditPinOutOfBounds(pin.outOfBounds || "");
-
+  const handlePinClick = async (pin: Pin) => {
+    try {
+      const course = courses.find((c) => c.name === selectedCourse);
+      if (!course) return;
+  
+      const url = `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/course/${course.id}/pins`;
+      const token = localStorage.getItem("accessToken");
+  
+      const response = await fetch(url, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+  
+      if (!response.ok) {
+        throw new Error("Failed to fetch pins from database");
+      }
+  
+      const updatedPins = await response.json();
+      setPins(updatedPins);
+  
+      const selectedPinData = updatedPins.find((p: Pin) => p.id === pin.id);
+      if (selectedPinData) {
+        setSelectedPin(selectedPinData);
+        setEditPinDistance(selectedPinData.distance || null);
+        setEditPinPar(selectedPinData.par || null);
+        setEditPinOutOfBounds(selectedPinData.outOfBounds || "");
+      }
+    } catch (error) {
+      console.error("Error fetching pin data:", error);
+      alert("Kunne ikke hente pin-data. Prøv igjen senere.");
+    }
+  
     setMapCenter({ lat: pin.latitude, lng: pin.longitude });
   };
 
-    const handleSavePinChanges = () => {
+    const handleSavePinChanges = async () => {
     if (!selectedPin) return;
   
     const updatedPins = pins.map((pin) =>
       pin.id === selectedPin.id
         ? {
             ...pin,
-            name: editPinName,
-            latitude: tempLat !== null ? tempLat : pin.latitude,
-            longitude: tempLng !== null ? tempLng : pin.longitude,
             distance: editPinDistance ?? undefined,
             par: editPinPar ?? undefined,
             outOfBounds: editPinOutOfBounds || undefined,
@@ -185,15 +208,44 @@ export default function EditCoursePage() {
     );
   
     setPins(updatedPins as Pin[]);
-    savePinsToDatabase();
-    setSelectedPin(null);
-    setEditPinName("");
+  
+    // Oppdater selectedPin med de nye verdiene
+    const updatedPin = updatedPins.find((pin) => pin.id === selectedPin.id);
+    if (updatedPin) {
+      setSelectedPin(updatedPin);
+    }
+  
+    // Lagre oppdaterte pins i backend
+    try {
+      const course = courses.find((c) => c.name === selectedCourse);
+      if (!course) return;
+  
+      const url = `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/course/${course.id}/pins`;
+      const token = localStorage.getItem("accessToken");
+  
+      const response = await fetch(url, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ pins: updatedPins }),
+      });
+  
+      if (!response.ok) {
+        throw new Error("Failed to save pins to database");
+      }
+  
+      alert("Endringer lagret!");
+    } catch (error) {
+      console.error("Error saving pins:", error);
+      alert("Kunne ikke lagre endringer. Prøv igjen senere.");
+    }
+  
+    // Nullstill redigeringsfeltene
     setEditPinDistance(null);
     setEditPinPar(null);
     setEditPinOutOfBounds("");
-    setTempLat(null);
-    setTempLng(null);
-    setIsDragging(false);
   };
 
   const handleDragStart = () => {
@@ -345,30 +397,30 @@ export default function EditCoursePage() {
                         ))}
                       {selectedPin && (
                         <OverlayView
-                        position={{ lat: selectedPin.latitude, lng: selectedPin.longitude }}
-                        mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
-                      >
-                        <div
-                        style={{
-                          position: "absolute",
-                          transform: "translate(30px, -75%)", 
-                          backgroundColor: "white",
-                          padding: "15px",
-                          borderRadius: "8px",
-                          boxShadow: "0 2px 6px rgba(0,0,0,0.3)",
-                          fontSize: "14px",
-                          fontWeight: "bold",
-                          color: "black",
-                          textAlign: "left",
-                          zIndex: 1000,
-                          width: "160px",
-                        }}
+                          position={{ lat: selectedPin.latitude, lng: selectedPin.longitude }}
+                          mapPaneName={"floatPane"}
                         >
-                          {selectedPin.distance && <div>Distanse: {selectedPin.distance} meter</div>}
-                          {selectedPin.par && <div>Par: {selectedPin.par}</div>}
-                          {selectedPin.outOfBounds && <div>OB: {selectedPin.outOfBounds}</div>}
-                        </div>
-                      </OverlayView>
+                          <div
+                            style={{
+                              position: "absolute",
+                              transform: "translate(30px, -75%)",
+                              backgroundColor: "white",
+                              padding: "15px",
+                              borderRadius: "8px",
+                              boxShadow: "0 2px 6px rgba(0,0,0,0.3)",
+                              fontSize: "14px",
+                              fontWeight: "bold",
+                              color: "black",
+                              textAlign: "left",
+                              zIndex: 1000,
+                              width: "200px",
+                            }}
+                          >
+                            {selectedPin.distance && <div><strong>Distanse:</strong> {selectedPin.distance} meter</div>}
+                            {selectedPin.par && <div><strong>Par:</strong> {selectedPin.par}</div>}
+                            {selectedPin.outOfBounds && <div><strong>OB:</strong> {selectedPin.outOfBounds}</div>}
+                          </div>
+                        </OverlayView>
                       )}
                     </GoogleMap>
                   </LoadScript>
