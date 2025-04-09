@@ -5,8 +5,7 @@ import {
     getAllTranslations,
     addNewTranslation,
     updateTranslation,
-    updateTranslationsBatch,
-    removeTranslation
+    updateTranslationsBatch
 } from '../controllers/translationsController.js';
 import { authorizeAdmin } from '../middleware/authorization.js';
 
@@ -42,11 +41,5 @@ router.put('/batch',
     authorizeAdmin,
     updateTranslationsBatch
 );
-
-router.delete('/',
-    passport.authenticate('jwt', { session: false }),
-    authorizeAdmin,
-    removeTranslation
-)
 
 export default router;

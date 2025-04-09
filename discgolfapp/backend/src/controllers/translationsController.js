@@ -43,32 +43,9 @@ const updateTranslationsBatch = async (req, res) => {
     }
 };
 
-const removeTranslation = async (req, res) => {
-    try {
-        const { language, key, index } = req.body;
-
-        const translation = await Translation.findOne({ language, key });
-        if (!translation) {
-            return res.status(404).json({ error: 'Translation not found' });
-        }
-
-        // Fjern elementet fra arrayen
-        translation.translation.splice(index, 1);
-
-        // Lagre oppdateringen
-        await translation.save();
-
-        res.status(200).json({ message: 'Translation removed successfully' });
-    } catch (error) {
-        console.error('Error removing translation:', error);
-        res.status(500).json({ error: 'Failed to remove translation' });
-    }
-};
-
 export {
     getAllTranslations,
     addNewTranslation,
     updateTranslation,
-    updateTranslationsBatch,
-    removeTranslation
+    updateTranslationsBatch
 };
