@@ -1,5 +1,7 @@
 import mongoose from 'mongoose'
 
+import Member from './Member.js'
+
 /**
  * @author Lars Andreas Strand
  * @description This is the schema for the ClubPage model.
@@ -42,12 +44,7 @@ const schema = new mongoose.Schema(
       required: true
     },
     members: [
-      {
-        id: { type: mongoose.Schema.Types.ObjectId, ref: 'Member' },
-        displayName: { type: String, required: true },
-        role: { type: String, required: true },
-        profilePicture: { type: String, default: '' },
-      },
+      Member.schema
     ],
     announcements: {
       type: Array,

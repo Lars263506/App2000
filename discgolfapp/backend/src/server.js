@@ -9,6 +9,7 @@ import courseRoutes from './routes/courseRoutes.js'
 import settingsRoutes from './routes/settingsRoutes.js'
 import userRoutes from './routes/userRoutes.js'
 import gameRoutes from './routes/gameRoutes.js'
+import translationsRoutes from './routes/translationsRoutes.js'
 import reviewRoutes from './routes/reviewRoutes.js'
 
 /**
@@ -51,6 +52,7 @@ app.use('/course', courseRoutes)
 app.use('/settings', settingsRoutes)
 app.use('/users', userRoutes)
 app.use('/games', gameRoutes)
+app.use('/translations', translationsRoutes)
 app.use('/reviews', reviewRoutes)
 
 /**
