@@ -4,7 +4,9 @@ import passport from '../config/passportConfig.js';
 import {
     getAllTranslations,
     addNewTranslation,
-    updateTranslation
+    updateTranslation,
+    updateTranslationsBatch,
+    removeTranslation
 } from '../controllers/translationsController.js';
 import { authorizeAdmin } from '../middleware/authorization.js';
 
@@ -35,5 +37,16 @@ router.put('/',
     updateTranslation
 );
 
+router.put('/batch',
+    passport.authenticate('jwt', { session: false }),
+    authorizeAdmin,
+    updateTranslationsBatch
+);
+
+router.delete('/',
+    passport.authenticate('jwt', { session: false }),
+    authorizeAdmin,
+    removeTranslation
+)
 
 export default router;

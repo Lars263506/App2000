@@ -22,6 +22,7 @@ import { usePopup } from '@/components/global/usepopup';
 const Index = () => {
   const { popupType, toggleLoginPopup, toggleRegisterPopup, closePopup } = usePopup();
   const [selectedPage, setSelectedPage] = useState('Home');
+  const [loading, setLoading] = useState(true);
 
   const currentPage: { [key: string]: React.FC } = {
     'Home': () => <Home setSelectedPage={setSelectedPage} />,
@@ -36,36 +37,40 @@ const Index = () => {
     'Privacy': () => <PrivacyPage setSelectedPage={setSelectedPage} />,
   };
 
-  // Load selected page and translations from local storage on page load
   useEffect(() => {
-    const url = process.env.NEXT_PUBLIC_BACKEND_BASE_URL + '/translations/';
-      const fetchTranslations = async () => {
-        try {
-          const url = process.env.NEXT_PUBLIC_BACKEND_BASE_URL + '/translations/';
-          const response = await fetch(url);
-          if (response.status !== 200) throw new Error('Failed to fetch translations');
-          const data = await response.json();
+    const fetchTranslations = async () => {
+      try {
+        const url = process.env.NEXT_PUBLIC_BACKEND_BASE_URL + '/translations/';
+        const response = await fetch(url);
+        if (response.status !== 200) throw new Error('Failed to fetch translations');
+        const data = await response.json();
 
-          // Transform the list into the correct format for i18next
-          const translations = data.reduce((acc: any, item: any) => {
-            if (!acc[item.language]) {
-              acc[item.language] = { translation: {} };
-            }
-            acc[item.language].translation[item.key] = item.translation;
-            return acc;
-          }, {});
-
-          // Add the translations to i18next
-          Object.keys(translations).forEach((language) => {
-            i18next.addResources(language, 'translation', translations[language].translation);
-          });
-        } catch (error) {
-          if (error instanceof Error) {
-            toast.error(error.message);
-          } else {
-            toast.error('Failed to fetch translations');
+        // Transform the list into the correct format for i18next
+        const translations = data.reduce((acc: any, item: any) => {
+          if (!acc[item.language]) {
+            acc[item.language] = { translation: {} };
           }
+
+          // Add the translation directly, preserving array structure
+          acc[item.language].translation[item.key] = item.translation;
+
+          return acc;
+        }, {});
+
+        // Add the translations to i18next
+        Object.keys(translations).forEach((language) => {
+          i18next.addResources(language, 'translation', translations[language].translation);
+        });
+
+        setLoading(false); // Mark translations as loaded
+      } catch (error) {
+        if (error instanceof Error) {
+          toast.error(error.message);
+        } else {
+          toast.error('Failed to fetch translations');
         }
+        setLoading(false); // Ensure loading is stopped even if there's an error
+      }
     };
 
     const selectedPage = localStorage.getItem('selectedPage');
@@ -73,13 +78,20 @@ const Index = () => {
       setSelectedPage(selectedPage);
     }
 
-    fetchTranslations()
+    fetchTranslations();
   }, []);
 
-  // Save selected page to local storage on change
   useEffect(() => {
     localStorage.setItem('selectedPage', selectedPage);
   }, [selectedPage]);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <p>Loading translations...</p>
+      </div>
+    );
+  }
 
   return (
     <I18nextProvider i18n={i18next}>

@@ -23,6 +23,7 @@ const addNewTranslation = async (language, key, translationText) => {
 };
 
 const updateTranslation = async (language, key, newTranslation) => {
+    console.log('Updating translation:', language, key, newTranslation);
     const translation = await Translation.findOneAndUpdate(
         { language, key },
         { translation: newTranslation },
@@ -34,4 +35,35 @@ const updateTranslation = async (language, key, newTranslation) => {
     }
 };
 
-export { getAllTranslations, addNewTranslation, updateTranslation };
+const updateTranslationsBatch = async (updates) => {
+    try {
+        // Valider oppdateringene
+        const validUpdates = updates.filter(({ language, key, index, translation }) => {
+            return (
+                typeof language === 'string' &&
+                typeof key === 'string' &&
+                typeof index === 'number' &&
+                typeof translation === 'string'
+            );
+        });
+
+        if (validUpdates.length === 0) {
+            throw new Error('Ingen gyldige oppdateringer funnet.');
+        }
+
+        const bulkOperations = validUpdates.map(({ language, key, index, translation }) => ({
+            updateOne: {
+                filter: { language, key },
+                update: { $set: { [`translation.${index}`]: translation } },
+            },
+        }));
+
+        const result = await Translation.bulkWrite(bulkOperations);
+        return result;
+    } catch (error) {
+        console.error('Error in batch update:', error);
+        throw new Error('Failed to update translations in batch');
+    }
+};
+
+export { getAllTranslations, addNewTranslation, updateTranslation, updateTranslationsBatch };

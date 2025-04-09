@@ -18,17 +18,8 @@ const Navbar: React.FC<NavBarProps> = ({ toggleLoginPopup, setSelectedPage }) =>
   const [availableLanguages, setAvailableLanguages] = useState<string[]>(["no", "en"]);
   const { t, i18n } = useTranslation();
 
-  // Fetches selected language from local storage
-  useEffect(() => {
-    const storedLanguage = localStorage.getItem('selectedLanguage');
-    if (storedLanguage) {
-      i18n.changeLanguage(storedLanguage);
-    }
-  }, []);
-
   const handleLanguageChange = (language: string) => {
-    // setSelectedLanguage(language);
-    // localStorage.setItem('selectedLanguage', language);
+    setSelectedLanguage(language);
 
     i18n.changeLanguage(language);
     localStorage.setItem('selectedLanguage', language);
