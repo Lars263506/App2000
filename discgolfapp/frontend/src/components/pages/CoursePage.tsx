@@ -7,6 +7,7 @@ import CourseMap from '@/components/course/coursemap'
 export interface Course {
   _id: string; // Add this field
   name: string;
+  town: string;
   location: string;
   url: string;
   postCode: string;
