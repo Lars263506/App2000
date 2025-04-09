@@ -11,14 +11,12 @@ interface CourseListProps {
   setSelectedCourse: (course: Course | null) => void;
 }
 
-
-
 const CourseList: React.FC<CourseListProps> = ({ courses, setCourses, setSelectedCourse }) => {
   const { t } = useTranslation();
   const [searchTerm, setSearchTerm] = useState('');
   const [showDropdownBox, setShowDropdownBox] = useState(false);
   const [uniqueTowns, setUniqueTowns] = useState<string[]>([]);
-  const [selectedTown, setSelectedTown] = useState<string | null>(null);
+  const [selectedTowns, setSelectedTowns] = useState<string[]>([]); // Changed to an array
   const [selectedRating, setSelectedRating] = useState<number | null>(null);
 
   useEffect(() => {
@@ -57,17 +55,21 @@ const CourseList: React.FC<CourseListProps> = ({ courses, setCourses, setSelecte
 
   const filteredCourses = courses.filter((course) => {
     const averageRating = calculateAverageRating(course.reviews);
+    const matchesTown = selectedTowns.length === 0 || selectedTowns.includes(course.town);
     return (
-      (selectedTown ? course.town === selectedTown : true) &&
+      matchesTown &&
       (selectedRating ? averageRating === selectedRating : true) &&
       (course.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-       course.town.toLowerCase().includes(searchTerm.toLowerCase()))
+        course.town.toLowerCase().includes(searchTerm.toLowerCase()))
     );
   });
 
   const handleTownSelect = (town: string) => {
-    setSelectedTown(town);
-    setShowDropdownBox(false);
+    if (selectedTowns.includes(town)) {
+      setSelectedTowns(selectedTowns.filter((t) => t !== town)); 
+    } else {
+      setSelectedTowns([...selectedTowns, town]);
+    }
   };
 
   const handleRatingSelect = (rating: number) => {
@@ -90,7 +92,7 @@ const CourseList: React.FC<CourseListProps> = ({ courses, setCourses, setSelecte
             className="absolute right-3 top-2.5"
             onClick={() => {
               setSearchTerm(''); // Clear the search term
-              setSelectedTown(null); // Clear the selected town filter
+              setSelectedTowns([]); // Clear the selected towns
               setSelectedRating(null); // Clear the selected rating filter
             }}
           >
@@ -104,27 +106,28 @@ const CourseList: React.FC<CourseListProps> = ({ courses, setCourses, setSelecte
           </button>
 
           {showDropdownBox && (
-            <div className="absolute top-12 right-0 bg-white border rounded shadow-lg w-full z-10 p-4">
+            <div className="absolute top-12 right-0 bg-white border rounded shadow-lg w-full z-10 p-4 bg-opacity-90 ">
               {/* Town Filter */}
               <div className="mb-4">
-                <label className="block text-gray-700 font-semibold mb-2">By</label>
-                <select
-                  className="w-full border p-2 rounded"
-                  value={selectedTown || ''}
-                  onChange={(e) => handleTownSelect(e.target.value)}
-                >
-                  <option value="">Velg en by</option>
+                <label className="block text-gray-700 font-semibold mb-2">{t("courselist_town")}</label>
+                <div className="flex flex-col gap-2">
                   {uniqueTowns.map((town) => (
-                    <option key={town} value={town}>
-                      {town}
-                    </option>
+                    <label key={town} className="flex items-center gap-2">
+                      <input
+                        type="checkbox"
+                        checked={selectedTowns.includes(town)}
+                        onChange={() => handleTownSelect(town)}
+                        className="form-checkbox"
+                      />
+                      <span>{town}</span>
+                    </label>
                   ))}
-                </select>
+                </div>
               </div>
 
               {/* Rating Filter */}
               <div>
-                <label className="block text-gray-700 font-semibold mb-2">Popularitet</label>
+                <label className="block text-gray-700 font-semibold mb-2">{t("courselist_popularity")}</label>
                 <div className="flex space-x-2">
                   {[1, 2, 3, 4, 5].map((star) => (
                     <FaStar
