@@ -215,7 +215,7 @@ export default function EditCoursePage() {
     setSelectedCourse("");
   };
 
-  const handleCourseSelection = async (courseName: string) => {
+    const handleCourseSelection = async (courseName: string) => {
     setSelectedCourse(courseName);
     setIsCourseSelected(true);
   
@@ -223,7 +223,7 @@ export default function EditCoursePage() {
     if (course) {
       setMapCenter({ lat: course.latitude, lng: course.longitude });
   
-      const url = `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/course/${course.id}`;
+      const url = `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/course/${course.id}/pins`;
       const token = localStorage.getItem("accessToken");
   
       try {
@@ -240,14 +240,15 @@ export default function EditCoursePage() {
         }
   
         const result = await response.json();
-        setPins(result.pins || []); // Oppdater pins i state
+        console.log("Pins fetched from backend:", result);
+        setPins(result || []); // Oppdater pins i state
       } catch (error) {
         console.error("Error fetching pins:", error);
         alert("Kunne ikke hente pins for banen. Vennligst prøv igjen senere.");
       }
     }
   };
-
+  
   const handleMapClick = (e: google.maps.MapMouseEvent) => {
     if (e.latLng) {
       handleAddPin(e.latLng.lat(), e.latLng.lng());
