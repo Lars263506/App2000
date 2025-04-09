@@ -16,7 +16,7 @@ const CourseList: React.FC<CourseListProps> = ({ courses, setCourses, setSelecte
   const [searchTerm, setSearchTerm] = useState('');
   const [showDropdownBox, setShowDropdownBox] = useState(false);
   const [uniqueTowns, setUniqueTowns] = useState<string[]>([]);
-  const [selectedTowns, setSelectedTowns] = useState<string[]>([]); // Changed to an array
+  const [selectedTowns, setSelectedTowns] = useState<string[]>([]); 
   const [selectedRating, setSelectedRating] = useState<number | null>(null);
 
   useEffect(() => {
@@ -33,8 +33,6 @@ const CourseList: React.FC<CourseListProps> = ({ courses, setCourses, setSelecte
 
         if (Array.isArray(data)) {
           setCourses(data);
-
-          // Extract unique towns
           const towns = Array.from(new Set(data.map((course: Course) => course.town)));
           setUniqueTowns(towns);
         } else {
@@ -50,7 +48,7 @@ const CourseList: React.FC<CourseListProps> = ({ courses, setCourses, setSelecte
   const calculateAverageRating = (reviews: Review[]) => {
     if (!reviews || reviews.length === 0) return 0;
     const totalRating = reviews.reduce((sum, review) => sum + review.rating, 0);
-    return Math.round(totalRating / reviews.length); // Round to the nearest integer
+    return Math.round(totalRating / reviews.length); 
   };
 
   const filteredCourses = courses.filter((course) => {
@@ -91,9 +89,9 @@ const CourseList: React.FC<CourseListProps> = ({ courses, setCourses, setSelecte
           <button
             className="absolute right-3 top-2.5"
             onClick={() => {
-              setSearchTerm(''); // Clear the search term
-              setSelectedTowns([]); // Clear the selected towns
-              setSelectedRating(null); // Clear the selected rating filter
+              setSearchTerm(''); 
+              setSelectedTowns([]); 
+              setSelectedRating(null);
             }}
           >
             <X size={20} />
@@ -107,7 +105,6 @@ const CourseList: React.FC<CourseListProps> = ({ courses, setCourses, setSelecte
 
           {showDropdownBox && (
             <div className="absolute top-12 right-0 bg-white border rounded shadow-lg w-full z-10 p-4 bg-opacity-90 ">
-              {/* Town Filter */}
               <div className="mb-4">
                 <label className="block text-gray-700 font-semibold mb-2">{t("courselist_town")}</label>
                 <div className="flex flex-col gap-2">
@@ -125,7 +122,6 @@ const CourseList: React.FC<CourseListProps> = ({ courses, setCourses, setSelecte
                 </div>
               </div>
 
-              {/* Rating Filter */}
               <div>
                 <label className="block text-gray-700 font-semibold mb-2">{t("courselist_popularity")}</label>
                 <div className="flex space-x-2">
@@ -149,7 +145,7 @@ const CourseList: React.FC<CourseListProps> = ({ courses, setCourses, setSelecte
           {filteredCourses.map((course) => (
             <li key={course._id}>
               <button onClick={() => setSelectedCourse(course)}>
-                {course.name} {/* Only display the course name */}
+                {course.name} {}
               </button>
             </li>
           ))}
