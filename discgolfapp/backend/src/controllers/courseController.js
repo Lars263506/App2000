@@ -55,6 +55,7 @@ const getCoursePins = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
 /**
  * @author Lars Andreas Strand
  * @description This function handles the request to create a new course.

@@ -62,16 +62,13 @@ const schema = new mongoose.Schema(
         // Konverterer arrayet til en streng når vi lagrer i databasen
         return JSON.stringify(value);
       },
-    },
-      resquired: true,
-    }, 
+      },
     reviews: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Review'
       }
-    ],
-    
+    ]
   },
   { timestamps: true, toJSON: { getters: true }, toObject: { getters: true } }
 );
