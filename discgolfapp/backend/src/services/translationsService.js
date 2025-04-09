@@ -4,7 +4,7 @@ const getAllTranslations = async (req, res) => {
     const translations = await Translation.find();
 
     if (translations && translations.length === 0) {
-        throw new Error('No translations found');
+        return [];
     }
 
     return translations;
