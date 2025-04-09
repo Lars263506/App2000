@@ -94,7 +94,7 @@ export default function EditCoursePage() {
   
     const url = `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/course/${course.id}/pins`;
     const token = localStorage.getItem("accessToken");
-
+  
     console.log("Saving pins to database:", pins);
   
     try {
@@ -113,12 +113,28 @@ export default function EditCoursePage() {
         throw new Error("Failed to save pins to database");
       }
   
+      // Hent oppdaterte pins fra backend
+      const updatedPinsResponse = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+      });
+  
+      if (!updatedPinsResponse.ok) {
+        throw new Error("Failed to fetch updated pins from database");
+      }
+
       const updatedPins = await response.json();
-      setPins(updatedPins); // Oppdater pins i state
+      console.log("Updated pins from backend:", updatedPins);
+  
+      // Konverter responsen til et array hvis nødvendig
+      const parsedPins = Array.isArray(updatedPins) ? updatedPins : JSON.parse(updatedPins);
+      setPins(parsedPins); // Oppdater pins i state
       alert("Pins lagret i databasen!");
     } catch (error) {
       console.error("Error saving pins:", error);
-      alert("Kunne ikke lagre pins. Vennligst prøv igjen senere.");
     }
   };
 
@@ -208,7 +224,7 @@ export default function EditCoursePage() {
       setMapCenter({ lat: course.latitude, lng: course.longitude });
   
       const url = `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/course/${course.id}`;
-      const token = localStorage.getItem("accessToken"); 
+      const token = localStorage.getItem("accessToken");
   
       try {
         const response = await fetch(url, {
@@ -224,7 +240,7 @@ export default function EditCoursePage() {
         }
   
         const result = await response.json();
-        setPins(result.pins || []); 
+        setPins(result.pins || []); // Oppdater pins i state
       } catch (error) {
         console.error("Error fetching pins:", error);
         alert("Kunne ikke hente pins for banen. Vennligst prøv igjen senere.");
@@ -277,38 +293,38 @@ export default function EditCoursePage() {
                       onClick={handleMapClick}
                     >
                       {pins.map((pin) => (
-                        <>
-                          <Marker
-                            key={pin.id}
-                            position={{ lat: pin.latitude, lng: pin.longitude }}
-                            draggable={isDragging && selectedPin?.id === pin.id}
-                            onDragStart={handleDragStart}
-                            onDragEnd={handleDragEnd}
-                            onClick={() => handlePinClick(pin)}
-                          />
-                          <OverlayView
-                            position={{ lat: pin.latitude, lng: pin.longitude }}
-                            mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
-                          >
-                            <div
-                              style={{
-                                position: "absolute",
-                                transform: "translate(-50%, -300%)",
-                                backgroundColor: "white",
-                                padding: "2px 6px",
-                                borderRadius: "4px",
-                                fontSize: "12px",
-                                fontWeight: "bold",
-                                color: "black",
-                                boxShadow: "0 1px 3px rgba(0,0,0,0.3)",
-                                whiteSpace: "nowrap",
-                              }}
+                          <>
+                            <Marker
+                              key={pin.id}
+                              position={{ lat: pin.latitude, lng: pin.longitude }}
+                              draggable={isDragging && selectedPin?.id === pin.id}
+                              onDragStart={handleDragStart}
+                              onDragEnd={handleDragEnd}
+                              onClick={() => handlePinClick(pin)}
+                            />
+                            <OverlayView
+                              position={{ lat: pin.latitude, lng: pin.longitude }}
+                              mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
                             >
-                              {pin.name}
-                            </div>
-                          </OverlayView>
-                        </>
-                      ))}
+                              <div
+                                style={{
+                                  position: "absolute",
+                                  transform: "translate(-50%, -300%)",
+                                  backgroundColor: "white",
+                                  padding: "2px 6px",
+                                  borderRadius: "4px",
+                                  fontSize: "12px",
+                                  fontWeight: "bold",
+                                  color: "black",
+                                  boxShadow: "0 1px 3px rgba(0,0,0,0.3)",
+                                  whiteSpace: "nowrap",
+                                }}
+                              >
+                                {pin.name}
+                              </div>
+                            </OverlayView>
+                          </>
+                        ))}
                       {tempLat !== null && tempLng !== null && (
                         <Marker
                           position={{ lat: tempLat, lng: tempLng }}

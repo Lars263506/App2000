@@ -46,13 +46,13 @@ const getCoursePins = async (req, res) => {
     const course = await Course.findById(id).select('pins');
 
     if (!course) {
-      return res.status(404).json({ message: 'Course not found' });
+      return res.status(404).json({ message: "Course not found" });
     }
 
-    res.status(200).json(course.pins);
+    res.status(200).json(course.pins); // Returner pins som et array
   } catch (error) {
-    console.error('Error fetching course pins:', error);
-    res.status(500).json({ message: error.message });
+    console.error("Error fetching course pins:", error);
+    res.status(500).json({ message: "Internal server error" });
   }
 };
 
@@ -126,7 +126,7 @@ const updateCoursePins = async (req, res) => {
       return res.status(404).json({ message: "Course not found" });
     }
 
-    res.status(200).json({ data: updatedCourse.pins });
+    res.status(200).json(updatedCourse.pins);
   } catch (error) {
     console.error("Error updating pins:", error);
     res.status(500).json({ message: error.message });
