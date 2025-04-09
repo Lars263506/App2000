@@ -36,6 +36,8 @@ const updateTranslation = async (language, key, newTranslation) => {
 };
 
 const updateTranslationsBatch = async (updates) => {
+    console.log('Batch updating translations:', updates);
+
     try {
         // Valider oppdateringene
         const validUpdates = updates.filter(({ language, key, index, translation }) => {

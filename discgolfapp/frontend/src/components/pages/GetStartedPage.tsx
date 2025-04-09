@@ -82,7 +82,7 @@ const GetStartedPage = () => {
       const updates = Object.entries(editableTips).flatMap(([category, tips]) =>
         tips.map((tip, index) => ({
           language: i18n.language,
-          key: `getstarted_${category}_tips`,
+          key: category === "rules" ? `getstarted_rules_list` : `getstarted_${category}_tips`,
           index, // Bruk indeksen fra map
           translation: tip,
         }))
