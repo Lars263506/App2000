@@ -413,7 +413,7 @@ export default function EditCoursePage() {
                               color: "black",
                               textAlign: "left",
                               zIndex: 1000,
-                              width: "200px",
+                              width: "150px",
                             }}
                           >
                             {selectedPin.distance && <div><strong>Distanse:</strong> {selectedPin.distance} meter</div>}
