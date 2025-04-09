@@ -167,9 +167,9 @@ export default function EditCoursePage() {
     setMapCenter({ lat: pin.latitude, lng: pin.longitude });
   };
 
-  const handleSavePinChanges = () => {
+    const handleSavePinChanges = () => {
     if (!selectedPin) return;
-
+  
     const updatedPins = pins.map((pin) =>
       pin.id === selectedPin.id
         ? {
@@ -183,7 +183,7 @@ export default function EditCoursePage() {
           }
         : pin
     );
-
+  
     setPins(updatedPins as Pin[]);
     savePinsToDatabase();
     setSelectedPin(null);
@@ -202,12 +202,21 @@ export default function EditCoursePage() {
 
   const handleDragEnd = (e: google.maps.MapMouseEvent) => {
     if (!e.latLng) return;
+  
+    if (!selectedPin || !e.latLng) return;
 
     const newLat = e.latLng.lat();
     const newLng = e.latLng.lng();
 
     setTempLat(newLat);
     setTempLng(newLng);
+
+    // Oppdater pinnen med ny posisjon i state
+    const updatedPins = pins.map((p) =>
+      p.id === selectedPin.id ? { ...p, latitude: newLat, longitude: newLng } : p
+    );
+
+    setPins(updatedPins);
   };
 
   const handleGoBack = () => {
@@ -215,7 +224,7 @@ export default function EditCoursePage() {
     setSelectedCourse("");
   };
 
-    const handleCourseSelection = async (courseName: string) => {
+  const handleCourseSelection = async (courseName: string) => {
     setSelectedCourse(courseName);
     setIsCourseSelected(true);
   
@@ -241,7 +250,14 @@ export default function EditCoursePage() {
   
         const result = await response.json();
         console.log("Pins fetched from backend:", result);
-        setPins(result || []); // Oppdater pins i state
+  
+        // Valider at result er et array
+        if (Array.isArray(result)) {
+          setPins(result);
+        } else {
+          console.error("Backend returned an unexpected format:", result);
+          setPins([]); // Sett pins til et tomt array hvis responsen er ugyldig
+        }
       } catch (error) {
         console.error("Error fetching pins:", error);
         alert("Kunne ikke hente pins for banen. Vennligst prøv igjen senere.");
@@ -305,20 +321,21 @@ export default function EditCoursePage() {
                             />
                             <OverlayView
                               position={{ lat: pin.latitude, lng: pin.longitude }}
-                              mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
+                              mapPaneName={"floatPane"} // Beholder riktig mapPaneName for korrekt plassering
                             >
                               <div
                                 style={{
                                   position: "absolute",
-                                  transform: "translate(-50%, -300%)",
-                                  backgroundColor: "white",
-                                  padding: "2px 6px",
-                                  borderRadius: "4px",
-                                  fontSize: "12px",
+                                  transform: "translate(-50%, -250%)", // Flytt boksen oppover
+                                  backgroundColor: "rgba(255, 255, 255, 1)", // Gjennomsiktig hvit bakgrunn
+                                  padding: "4px 8px", // Gjør boksen tydelig
+                                  borderRadius: "4px", // Myke hjørner
+                                  border: "1px solid black", // Tydelig kantlinje
+                                  fontSize: "14px",
                                   fontWeight: "bold",
                                   color: "black",
-                                  boxShadow: "0 1px 3px rgba(0,0,0,0.3)",
                                   whiteSpace: "nowrap",
+                                  boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2)", // Lett skygge for dybde
                                 }}
                               >
                                 {pin.name}
@@ -326,15 +343,6 @@ export default function EditCoursePage() {
                             </OverlayView>
                           </>
                         ))}
-                      {tempLat !== null && tempLng !== null && (
-                        <Marker
-                          position={{ lat: tempLat, lng: tempLng }}
-                          icon={{
-                            url: "http://maps.google.com/mapfiles/ms/icons/red-dot.png",
-                          }}
-                        />
-                      )}
-
                       {selectedPin && (
                         <OverlayView
                         position={{ lat: selectedPin.latitude, lng: selectedPin.longitude }}
