@@ -51,8 +51,16 @@ const Index = () => {
             acc[item.language] = { translation: {} };
           }
 
-          // Add the translation directly, preserving array structure
-          acc[item.language].translation[item.key] = item.translation;
+          // Check if the translation is an object
+          if (typeof item.translation === 'object' && !Array.isArray(item.translation)) {
+            // Flatten the object into individual keys
+            Object.keys(item.translation).forEach((subKey) => {
+              acc[item.language].translation[`${item.key}.${subKey}`] = item.translation[subKey];
+            });
+          } else {
+            // Add the translation directly
+            acc[item.language].translation[item.key] = item.translation;
+          }
 
           return acc;
         }, {});
