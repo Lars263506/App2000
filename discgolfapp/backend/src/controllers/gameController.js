@@ -15,12 +15,20 @@ import * as gameService from '../services/gameService.js';
 
 const saveGameResult = async (req, res) => {
   try {
+    const { course, players, scores, date } = req.body;
+
+    // Valider at nødvendige felter er til stede
+    if (!course || !Array.isArray(players) || players.length === 0 || !scores || !date) {
+      return res.status(400).json({ message: 'Invalid game data' });
+    }
+
     const userId = req.user.id;
-    const game = req.body;
-    const result =  await gameService.saveGameResult(userId, game);
+    const result = await gameService.saveGameResult(userId, req.body);
     res.status(201).json(result);
   } catch (error) {
-    res.status(500).json({ message: 'Failed to save game result', error });
+    console.error('Error saving game result:', error);
+    res.status(500).json({ message: 'Failed to save game result', error: error.message });
   }
 };
+
 export { saveGameResult };

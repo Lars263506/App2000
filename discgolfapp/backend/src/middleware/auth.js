@@ -38,8 +38,6 @@ const checkMemberStatus = (req, res, next) => {
         return next()
       }
 
-      console.log('Member:', member)
-
       const isMember = await ClubPage.findOne(
         { _id: req.params.clubId, "members.displayName": member.displayName }
       )

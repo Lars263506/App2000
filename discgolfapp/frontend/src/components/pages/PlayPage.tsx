@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
+import { toast } from "react-toastify";
 
 interface Course {
   name: string;
   latitude: number;
   longitude: number;
   difficulty: string;
-  par: number;
   holes: number;
 }
 
@@ -19,6 +19,8 @@ export default function StartGame() {
   const [gameStarted, setGameStarted] = useState(false);
   const [gameEnded, setGameEnded] = useState(false);
   const [courses, setCourses] = useState<Course[]>([]);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchResults, setSearchResults] = useState<{ displayName: string; email: string }[]>([]);
   const router = useRouter();
 
   const baskets = 12;
@@ -48,7 +50,7 @@ export default function StartGame() {
     if (selectedCourse) {
       setGameStarted(true);
       const initialScores = players.reduce<{ [key: string]: number[] }>((acc, player) => {
-        acc[player] = Array(selectedCourse.holes).fill(0);
+        acc[player] = Array(selectedCourse.holes).fill(0); // Use selectedCourse.holes
         return acc;
       }, {});
       setScores(initialScores);
@@ -74,7 +76,7 @@ export default function StartGame() {
   };
 
   const handleNextBasket = () => {
-    if (currentBasket < (selectedCourse?.holes || baskets)) {
+    if (currentBasket < (selectedCourse?.holes || 12)) {
       setCurrentBasket(currentBasket + 1);
     }
   };
@@ -90,10 +92,18 @@ export default function StartGame() {
 
     const gameResult = {
       course: selectedCourse?.name,
-      players: players,
+      players: players.map((player) => {
+        const registeredUser = searchResults.find((user) => user.displayName === player);
+        return {
+          name: player,
+          email: registeredUser ? registeredUser.email : null,
+        };
+      }),
       scores: scores,
       date: new Date().toISOString(),
     };
+
+    console.log('Game result payload:', gameResult);
 
     const accessToken = localStorage.getItem('accessToken');
 
@@ -107,15 +117,22 @@ export default function StartGame() {
           },
           body: JSON.stringify(gameResult),
         });
-  
-      if (response.status !== 201) {
-        throw new Error('Failed to save game result');
-      }
 
-    } catch (error) {
-      console.error('Error saving game result:', error);
-    } 
-  }
+        console.log('Response status:', response.status);
+        console.log('Response body:', await response.text());
+
+        if (response.status !== 201) {
+          throw new Error('Failed to save game result');
+        }
+      } catch (error) {
+        console.error('Error saving game result:', error);
+        if (error instanceof Error) {
+          alert(`Error: ${error.message}`);
+        } else {
+          alert('An unknown error occurred');
+        }
+      }
+    }
   };
 
   const calculateTotalScore = (player: string) => {
@@ -124,22 +141,51 @@ export default function StartGame() {
 
   const getScoreDescription = (player: string, basketIndex: number) => {
     const score = scores[player]?.[basketIndex];
-    const coursePar = courses.find(course => course.name === selectedCourse?.name)?.par || 4;
+    if (score === undefined) return '-';
+    return `${score || '-'} `;
+  };
 
-    if (score === 1) return "Ace";
-    if (score === coursePar - 2) return "Eagle ";
-    if (score === coursePar - 1) return "Birdie ";
-    if (score === coursePar) return "Par ";
-    if (score === coursePar + 1) return "Bogey ";
-    if (score === coursePar + 2) return "Double Bogey ";
-    return `${score} - Over Par`;
+  const handleSearchChange = async (query: string) => {
+    setSearchQuery(query);
+
+    if (query.length > 2) { 
+      try {
+        const accessToken = localStorage.getItem('accessToken');
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/users/search?query=${query}`, {
+          headers: {
+            'Authorization': `Bearer ${accessToken}`,
+          },
+        });
+
+        if (response.status !== 200) { 
+          toast.error('Failed to fetch users');
+          setSearchResults([]);
+          return;
+        }
+
+        const users = await response.json();
+        setSearchResults(users);
+      } catch (error) {
+        console.error('Error fetching users:', error);
+        toast.error('An error occurred while fetching users.');
+        setSearchResults([]);
+      }
+    } else {
+      setSearchResults([]);
+    }
+  };
+
+  const handleAddPlayer = (player: { displayName: string; email: string }) => {
+    setPlayers([...players, player.displayName]); 
+    setSearchQuery('');
+    setSearchResults([]);
   };
 
   return (
     <div className="min-h-screen flex flex-col text-black">
       <div className="flex-grow flex items-center justify-center bg-gray-100">
-        <div className="max-w-5xl w-full p-10 bg-white shadow-xl rounded-3xl min-h-[600px] relative">
-          {/* Plasseringen av knappen */}
+        <div className="max-w-5xl w-full p-10 bg-white shadow-xl rounded-3xl min-h-[600px] max-h-[600px] overflow-y-auto relative">
+         
           {gameStarted && !gameEnded && (
             <button
               className="absolute top-4 right-4 bg-red-600 text-white p-3 rounded-lg"
@@ -150,7 +196,7 @@ export default function StartGame() {
           )}
 
           {!gameStarted ? (
-            <div className=" grid grid-cols-3 gap-10">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
               <div className="col-span-1">
                 <h1 className="text-xl font-bold text-center mb-4">Velg Bane</h1>
                 <div className="w-full mt-10">
@@ -177,7 +223,7 @@ export default function StartGame() {
                         lng: courses.find(course => course.name === selectedCourse.name)?.longitude || 10.7522
                       }}
                       zoom={15}
-                      mapContainerStyle={{ height: "600px", width: "100%", borderRadius: "1rem" }}
+                      mapContainerStyle={{ height: "500px", width: "300px", borderRadius: "1rem" }}
                     >
                       {courses.map((course) => (
                         course.name === selectedCourse.name && (
@@ -203,47 +249,77 @@ export default function StartGame() {
                     <h2 className="text-lg font-semibold mb-3">Antall hull: </h2>
                     <p>{selectedCourse.holes}</p>
 
-                    <h2 className="text-base font-semibold mt-8 mb-3">Legg til spillere</h2>
-                    <div className="overflow-y-auto max-h-80">
-                      {players.map((player, index) => (
-                        <div key={index} className="flex items-center mb-4">
-                          <input
-                            type="text"
-                            className="w-full p-2 border rounded-lg text-base"
-                            value={player}
-                            onChange={(e) => handlePlayerNameChange(index, e.target.value)}
-                            placeholder={`Spiller ${index + 1}`}
-                          />
+                    <div className="mt-4">
+                      <h2 className="text-base font-semibold mb-3">Legg til spillere</h2>
+
+                      <div className="flex justify-center mt-3">
+                        <input
+                          type="text"
+                          className="w-full p-2 border rounded-lg text-base"
+                          placeholder="Søk etter registrerte brukere"
+                          value={searchQuery}
+                          onChange={(e) => handleSearchChange(e.target.value)}
+                        />
+                        {searchResults.length > 0 && (
+                          <ul className="absolute bg-white border rounded-lg mt-2 w-30 max-h-40 overflow-y-auto">
+                            {searchResults.map((user) => (
+                              <li
+                                key={user.email}
+                                className="p-2 cursor-pointer hover:bg-gray-200"
+                                onClick={() => handleAddPlayer(user)}
+                              >
+                                {user.displayName} ({user.email})
+                              </li>
+                            ))}
+                          </ul>
+                        )}
+                      </div>
+
+                      <div className="flex flex-col h-full">
+                        <div className="overflow-y-auto max-h-40 mt-4">
+                          {players.map((player, index) => (
+                            <div key={index} className="flex items-center mb-4">
+                              <input
+                                type="text"
+                                className="w-full p-2 border rounded-lg text-base"
+                                value={player}
+                                onChange={(e) => handlePlayerNameChange(index, e.target.value)}
+                                placeholder={`Spiller ${index + 1}`}
+                              />
+                              <button
+                                className="ml-3 bg-red-600 text-white p-2 rounded"
+                                onClick={() => {
+                                  const updatedPlayers = [...players];
+                                  updatedPlayers.splice(index, 1);
+                                  setPlayers(updatedPlayers);
+                                }}
+                                disabled={players.length <= 1}
+                              >
+                                -
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+                        <div className="mt-1">
+                          <div className="flex justify-center mt-3">
+                            <button
+                              className="bg-green-600 text-white p-2 rounded-xl text-base"
+                              onClick={() => setPlayers([...players, `Spiller ${players.length + 1}`])}
+                            >
+                              Legg til spiller
+                            </button>
+                          </div>
+                        </div>
+                        <div className="mt-2">
                           <button
-                            className="ml-3 bg-red-600 text-white p-2 rounded"
-                            onClick={() => {
-                              const updatedPlayers = [...players];
-                              updatedPlayers.splice(index, 1);
-                              setPlayers(updatedPlayers);
-                            }}
-                            disabled={players.length <= 1}
+                            className="w-full bg-blue-600 text-white p-2 rounded-lg text-base hover:bg-blue-700"
+                            onClick={startGame}
+                            disabled={!selectedCourse || players.some(player => !player)}
                           >
-                            -
+                            Start spill
                           </button>
                         </div>
-                      ))}
-                    </div>
-                    <div className="flex justify-center mt-3">
-                      <button
-                        className="bg-green-600 text-white p-2 rounded-xl text-base mt-4"
-                        onClick={() => setPlayers([...players, `Spiller ${players.length + 1}`])}
-                      >
-                        Legg til spiller
-                      </button>
-                    </div>
-                    <div className="mt-auto">
-                      <button
-                        className="w-full bg-blue-600 text-white p-2 rounded-lg text-base hover:bg-blue-700"
-                        onClick={startGame}
-                        disabled={!selectedCourse || players.some(player => !player)}
-                      >
-                        Start spill
-                      </button>
+                      </div>
                     </div>
                   </>
                 )}
@@ -260,37 +336,33 @@ export default function StartGame() {
                       {players.map((player, index) => (
                         <th key={index} className="p-4 text-xl">{player}</th>
                       ))}
-                      <th className="p-3 text-base"></th>
-                      <th className="p-3 text-base">Par</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {Array.from({ length: baskets }, (_, index) => (
+                    {Array.from({ length: selectedCourse?.holes || 12 }, (_, index) => (
                       <tr key={index} className="text-center border-b text-base">
                         <td className="p-3">Kurv {index + 1}:</td>
                         {players.map((player) => (
                           <td key={player} className="p-3">
-                            {scores[player] ? scores[player][index] : 0}
+                            {index + 1 > currentBasket
+                              ? '-'
+                              : scores[player]?.[index] || '-'}
                           </td>
                         ))}
-                        <td className="p-3">
-                          {courses.find(course => course.name === selectedCourse?.name)?.par}
-                        </td>
-                        <td className="p-3">
-                          {players.map((player) => (
-                            <span key={player}>
-                              {getScoreDescription(player, index)}
-                            </span>
-                          ))}
-                        </td>
                       </tr>
                     ))}
                     {players.map((player) => (
-                      <tr key={player} className="text-center border-b text-base">
-                        <td colSpan={baskets + 1} className="p-3 text-left">
+                      <tr key={player} className="text-center border-t font-semibold">
+                        <td colSpan={players.length + 1} className="p-3 text-left">
                           <div className="flex justify-between">
                             <span>Totalt score for {player}:</span>
-                            <span className="mr-6">{calculateTotalScore(player)}</span>
+                            <span className="mr-6">
+                              {scores[player]
+                                ? scores[player]
+                                    .slice(0, currentBasket)
+                                    .reduce((total, score) => total + score, 0)
+                                : '-'}
+                            </span>
                           </div>
                         </td>
                       </tr>
@@ -302,7 +374,6 @@ export default function StartGame() {
           ) : (
             <div>
               <h2 className="text-lg font-semibold text-center mb-4">Kurv {currentBasket}</h2>
-              {/* Kart for hver kurv */}
               {selectedCourse && (
                 <LoadScript googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string}>
                   <GoogleMap
@@ -311,7 +382,7 @@ export default function StartGame() {
                       lng: courses.find(course => course.name === selectedCourse?.name)?.longitude || 10.7522
                     }}
                     zoom={15}
-                    mapContainerStyle={{ height: "300px", width: "100%" }}
+                    mapContainerStyle={{ height: "200px", width: "100%", borderRadius: "1rem" }} 
                   >
                     {courses.map((course) => (
                       course.name === selectedCourse?.name && (
@@ -334,7 +405,7 @@ export default function StartGame() {
                     <tr className="bg-gray-300">
                       <th className="p-2 text-base">Navn</th>
                       <th className="p-2 text-base">Score</th>
-                      <th className="p-2 text-base">Resultat</th>
+                      
                     </tr>
                   </thead>
                   <tbody>
@@ -380,7 +451,7 @@ export default function StartGame() {
                 <button
                   className="bg-gray-300 p-1 rounded-lg"
                   onClick={handleNextBasket}
-                  disabled={currentBasket === baskets}
+                  disabled={currentBasket === (selectedCourse?.holes || 12)}
                 >
                   ▶
                 </button>

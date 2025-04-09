@@ -1,4 +1,5 @@
 import * as userService from '../services/userService.js'
+import User from '../models/User.js'; // Legg til denne linjen
 
 
 /**
@@ -136,12 +137,16 @@ const getUserClubs = async (req, res) => {
 const getUserGames = async (req, res) => {
   try {
     const userId = req.user.id;
-    const games = await userService.getUserGames(userId);
-    res.status(200).json(games);
+    const user = await User.findById(userId).populate('games');
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    res.status(200).json({ games: user.games });
   } catch (error) {
-    res.status(500).json({ message: 'Failed to fetch games', error });
+    console.error('Error fetching user games:', error);
+    res.status(500).json({ message: 'Failed to fetch user games', error: error.message });
   }
-}
+};
 
 /**
  * @author Lars Andreas Strand
@@ -320,6 +325,30 @@ const changeUser = async (req, res) => {
 };
 
 /**
+ * @author Ibrahim Queeum
+ * @description This function handles the request to search for users based on a query string.
+ * It retrieves the search query from the request parameters and calls the user service to find matching users.
+ * If the query parameter is missing, it sends a 400 status code with an error message.
+ * If successful, it sends a 200 status code and the list of matching users.
+ * If there is an error during the search, it sends a 500 status code with an error message.
+ */
+
+const searchUsers = async (req, res) => {
+  const { query } = req.query;
+
+  if (!query) {
+    return res.status(400).json({ message: 'Query parameter is required' });
+  }
+
+  try {
+    const users = await userService.searchUsers(query); 
+    res.status(200).json(users);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching users', error });
+  }
+};
+
+/**
  * @author Lars Andreas Strand
  * @description This function handles the request to delete a user.
  * It retrieves the email from the request body and calls the service to delete the user.
@@ -352,6 +381,7 @@ export {
   getUserByEmail,
   getUserClubs,
   getUserGames,
+  searchUsers,
   checkIfAdmin,
   registerUser,
   loginUser,

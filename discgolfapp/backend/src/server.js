@@ -10,6 +10,7 @@ import settingsRoutes from './routes/settingsRoutes.js'
 import userRoutes from './routes/userRoutes.js'
 import gameRoutes from './routes/gameRoutes.js'
 import translationsRoutes from './routes/translationsRoutes.js'
+import reviewRoutes from './routes/reviewRoutes.js'
 
 /**
  * @author Lars Andreas Strand and Andreas Nilsen
@@ -52,6 +53,7 @@ app.use('/settings', settingsRoutes)
 app.use('/users', userRoutes)
 app.use('/games', gameRoutes)
 app.use('/translations', translationsRoutes)
+app.use('/reviews', reviewRoutes)
 
 /**
  * @param process.env.MONGODB_URI
