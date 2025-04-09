@@ -51,10 +51,21 @@ const updateTranslationsBatch = async (updates) => {
             throw new Error('Ingen gyldige oppdateringer funnet.');
         }
 
-        const bulkOperations = validUpdates.map(({ language, key, index, translation }) => ({
+        // Grupper oppdateringene etter språk og nøkkel
+        const groupedUpdates = validUpdates.reduce((acc, { language, key, index, translation }) => {
+            const groupKey = `${language}:${key}`;
+            if (!acc[groupKey]) {
+                acc[groupKey] = { language, key, translations: [] };
+            }
+            acc[groupKey].translations[index] = translation;
+            return acc;
+        }, {});
+
+        // Utfør bulk-operasjoner for å erstatte hele translation-arrayen
+        const bulkOperations = Object.values(groupedUpdates).map(({ language, key, translations }) => ({
             updateOne: {
                 filter: { language, key },
-                update: { $set: { [`translation.${index}`]: translation } },
+                update: { $set: { translation: translations.filter(Boolean) } }, // Fjern eventuelle tomme verdier
             },
         }));
 

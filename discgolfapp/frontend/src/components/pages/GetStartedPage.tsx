@@ -70,24 +70,6 @@ const GetStartedPage = () => {
       });
       setHasChanges(true);
 
-      // Send forespørsel til backenden for å fjerne listepunktet
-      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/translations/`, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-        },
-        body: JSON.stringify({
-          language: i18n.language,
-          key: `getstarted_${category}_tips`,
-          index,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Kunne ikke fjerne listepunkt fra backenden.');
-      }
-
       toast.success('Listepunkt fjernet!');
     } catch (error) {
       toast.error('Kunne ikke fjerne listepunkt.');
