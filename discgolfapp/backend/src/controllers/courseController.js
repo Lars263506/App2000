@@ -18,6 +18,22 @@ const getCourse = async (req, res) => {
   }
 }
 
+export const getCoursePins = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const course = await Course.findById(id).select('pins');
+
+    if (!course) {
+      return res.status(404).json({ message: 'Course not found' });
+    }
+
+    res.status(200).json(course.pins);
+  } catch (error) {
+    console.error('Error fetching course pins:', error);
+    res.status(500).json({ message: error.message });
+  }
+};
+
 const createNewCourse = async (req, res) => {
   try {
     const response = await courseService.createNewCourse(req.body)
@@ -45,4 +61,30 @@ const updateCourse = async (req, res) => {
   }
 }
 
-export { getAllCourses, getCourse, createNewCourse, deleteCourse, updateCourse }
+export const updateCoursePins = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { pins } = req.body;
+
+    if (!Array.isArray(pins)) {
+      return res.status(400).json({ message: "Pins must be an array" });
+    }
+
+    const updatedCourse = await Course.findByIdAndUpdate(
+      id,
+      { $set: { pins } },
+      { new: true, runValidators: true }
+    );
+
+    if (!updatedCourse) {
+      return res.status(404).json({ message: "Course not found" });
+    }
+
+    res.status(200).json({ data: updatedCourse.pins });
+  } catch (error) {
+    console.error("Error updating pins:", error);
+    res.status(500).json({ message: error.message });
+  }
+};
+
+export { getAllCourses, getCourse, getCoursePins, createNewCourse, deleteCourse, updateCourse, updateCoursePins }

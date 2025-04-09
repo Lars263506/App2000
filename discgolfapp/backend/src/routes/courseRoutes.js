@@ -5,11 +5,12 @@ import { authorizeClubowner } from '../middleware/authorization.js'
 import {
   getAllCourses,
   getCourse,
+  getCoursePins,
   createNewCourse,
   deleteCourse,
-  updateCourse
+  updateCourse,
+  updateCoursePins
 } from '../controllers/courseController.js'
-import { updateCoursePins } from '../services/courseService.js';
 
 /**
  * @author Ibrahim Queeum and Lars Andreas Strand
@@ -29,15 +30,7 @@ router.get('/:id',
 
 router.get('/:id/pins',
   passport.authenticate('jwt', { session: false }),
-  async (req, res) => {
-    try {
-      const { id } = req.params;
-      const pins = await getCoursePins(id);
-      res.status(200).json(pins);
-    } catch (error) {
-      res.status(500).json({ message: error.message });
-    }
-  }
+  getCoursePins // Bruk funksjonen fra controller
 );
 
 router.post('/',
@@ -58,22 +51,9 @@ router.patch('/:id',
   updateCourse
 )
 
-router.put('/:id/pins',
-  passport.authenticate('jwt', { session: false }),
-  async (req, res) => {
-    try {
-      console.log("Request params:", req.params);
-      console.log("Request body:", req.body);
-
-      const { id } = req.params;
-      const { pins } = req.body;
-      const updatedPins = await updateCoursePins(id, pins);
-      res.status(200).json(updatedPins);
-    } catch (error) {
-      console.error("Error updating pins:", error);
-      res.status(500).json({ message: error.message });
-    }
-  }
+router.put('/:id/pins', 
+  passport.authenticate('jwt', { session: false }), 
+  updateCoursePins
 );
 
 export default router

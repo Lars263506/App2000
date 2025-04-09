@@ -49,16 +49,7 @@ const updateCourse = async (id, request) => {
   await Course.findByIdAndUpdate(id, request, { new: true })
 }
 
-const updateCoursePins = async (id, pins) => {
-  const course = await Course.findByIdAndUpdate(
-    id,
-    { pins },
-    { new: true }
-  );
-  if (!course) {
-    throw new Error('Course not found');
-  }
-  return course.pins;
-};
+const updateCoursePins = async (id, pins) =>
+  await Course.findByIdAndUpdate(id, { $set: { pins } }, { new: true });
 
 export { getAllCourses, getCourse, getCoursePins, createNewCourse, deleteCourse, updateCourse, updateCoursePins }
