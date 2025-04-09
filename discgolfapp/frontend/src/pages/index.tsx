@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { ToastContainer } from 'react-toastify';
+import { I18nextProvider } from 'react-i18next';
+import i18next from '@/i18n';
+import { toast, ToastContainer } from 'react-toastify';
 
 import Home from '@/components/pages/Home';
 import AdminPage from '@/components/pages/AdminPage';
@@ -18,18 +20,10 @@ import Footer from '@/components/global/footer';
 import PopupWrapper from '@/components/global/popupwrapper';
 import { usePopup } from '@/components/global/usepopup';
 
-/**
- * @description The main page of the website.
- * This page contains the navbar, main content and footer.
- * The main content is determined by the selected page.
- * The selected page is changed by passing setSelectedPage to subcomponents.
- * The page also contains a popup for login, register and my page.
- * All toasts are displayed in the toast container on this page.
- */
-
 const Index = () => {
   const { popupType, toggleLoginPopup, toggleRegisterPopup, closePopup } = usePopup();
   const [selectedPage, setSelectedPage] = useState('Home');
+  const [loading, setLoading] = useState(true);
 
   const currentPage: { [key: string]: React.FC } = {
     'Home': () => <Home setSelectedPage={setSelectedPage} />,
@@ -37,54 +31,108 @@ const Index = () => {
     'Play': () => <PlayPage />,
     'GetStarted': () => <GetStartedPage />,
     'Courses': () => <CoursePage />,
-    'ClubLanding': () => <ClubLandingPage />,
-    'Club': () => <ClubPage />,
-    'MyPage': () => <MyPage setSelectedPage={setSelectedPage}/>,
+    'ClubLanding': () => <ClubLandingPage setSelectedPage={setSelectedPage} />,
+    'Club': () => <ClubPage setSelectedPage={setSelectedPage} />,
+    'MyPage': () => <MyPage setSelectedPage={setSelectedPage} />,
     'Contact': () => <ContactPage />,
     'Privacy': () => <PrivacyPage setSelectedPage={setSelectedPage} />,
     'EditCourseMap': () => <EditCoursePage />
   };
 
-  // Load selected page from local storage on page load
   useEffect(() => {
+    const fetchTranslations = async () => {
+      try {
+        const url = process.env.NEXT_PUBLIC_BACKEND_BASE_URL + '/translations/';
+        const response = await fetch(url);
+        if (response.status !== 200) throw new Error('Failed to fetch translations');
+        const data = await response.json();
+
+        // Transform the list into the correct format for i18next
+        const translations = data.reduce((acc: any, item: any) => {
+          if (!acc[item.language]) {
+            acc[item.language] = { translation: {} };
+          }
+
+          // Check if the translation is an object
+          if (typeof item.translation === 'object' && !Array.isArray(item.translation)) {
+            // Flatten the object into individual keys
+            Object.keys(item.translation).forEach((subKey) => {
+              acc[item.language].translation[`${item.key}.${subKey}`] = item.translation[subKey];
+            });
+          } else {
+            // Add the translation directly
+            acc[item.language].translation[item.key] = item.translation;
+          }
+
+          return acc;
+        }, {});
+
+        // Add the translations to i18next
+        Object.keys(translations).forEach((language) => {
+          i18next.addResources(language, 'translation', translations[language].translation);
+        });
+
+        setLoading(false); // Mark translations as loaded
+      } catch (error) {
+        if (error instanceof Error) {
+          toast.error(error.message);
+        } else {
+          toast.error('Failed to fetch translations');
+        }
+        setLoading(false); // Ensure loading is stopped even if there's an error
+      }
+    };
+
     const selectedPage = localStorage.getItem('selectedPage');
     if (selectedPage) {
       setSelectedPage(selectedPage);
     }
+
+    fetchTranslations();
   }, []);
 
-  // Save selected page to local storage on change
   useEffect(() => {
     localStorage.setItem('selectedPage', selectedPage);
   }, [selectedPage]);
 
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <p>Loading translations...</p>
+      </div>
+    );
+  }
+
   return (
-    <div aria-label="Index root" className="flex flex-col min-h-screen">
-      <div aria-label="Navbar container" className="h-[15vh]">
-        <Navbar toggleLoginPopup={toggleLoginPopup} setSelectedPage={setSelectedPage} />
+    <I18nextProvider i18n={i18next}>
+      <div aria-label="Index root" className="flex flex-col min-h-screen"
+        onLoad={() => setSelectedPage(localStorage.getItem('selectedPage') || 'Home')}>
+        <div aria-label="Navbar container" className="h-[15vh]">
+          <Navbar toggleLoginPopup={toggleLoginPopup} setSelectedPage={setSelectedPage} />
+        </div>
+
+        <div aria-label="Main content container" className="flex-grow">
+          {currentPage[selectedPage] ? (
+            React.createElement(currentPage[selectedPage])
+          ) : (
+            <Home setSelectedPage={setSelectedPage} />
+          )}
+        </div>
+
+        <div aria-label="Footer container" className="mt-auto">
+          <Footer setSelectedPage={setSelectedPage} />
+        </div>
+
+        <PopupWrapper
+          popupType={popupType}
+          closePopup={closePopup}
+          toggleRegisterPopup={toggleRegisterPopup}
+          setSelectedPage={setSelectedPage}
+        />
+
+        <ToastContainer />
       </div>
-
-      <div aria-label="Main content container" className="flex-grow">
-        {currentPage[selectedPage] ? (
-          React.createElement(currentPage[selectedPage])
-        ) : (
-          <Home setSelectedPage={setSelectedPage} />
-        )}
-      </div>
-
-      <div aria-label="Footer container" className="mt-auto">
-        <Footer setSelectedPage={setSelectedPage} />
-      </div>
-
-      <PopupWrapper
-        popupType={popupType}
-        closePopup={closePopup}
-        toggleRegisterPopup={toggleRegisterPopup}
-        setSelectedPage={setSelectedPage}
-      />
-
-      <ToastContainer />
-    </div>
+    </I18nextProvider>
   );
 };
 

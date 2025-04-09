@@ -6,13 +6,14 @@ import { rateLimit } from 'express-rate-limit'
 import passport from './config/passportConfig.js'
 import clubpageRoutes from './routes/clubpageRoutes.js'
 import courseRoutes from './routes/courseRoutes.js'
-import elementRoutes from './routes/elementRoutes.js'
 import settingsRoutes from './routes/settingsRoutes.js'
 import userRoutes from './routes/userRoutes.js'
+import gameRoutes from './routes/gameRoutes.js'
+import translationsRoutes from './routes/translationsRoutes.js'
+import reviewRoutes from './routes/reviewRoutes.js'
 
 /**
- * @author Lars263506 (Github)
- * @author Andreas Nilsen line 56-124
+ * @author Lars Andreas Strand and Andreas Nilsen
  * @description This is the main server file for the Discgolf app, which sets up middleware, routes and database connection, and starts the server
  */
 
@@ -48,9 +49,11 @@ app.use(rateLimit({
 // Routes for handling requests
 app.use('/clubpage', clubpageRoutes)
 app.use('/course', courseRoutes)
-app.use('/element', elementRoutes)
 app.use('/settings', settingsRoutes)
 app.use('/users', userRoutes)
+app.use('/games', gameRoutes)
+app.use('/translations', translationsRoutes)
+app.use('/reviews', reviewRoutes)
 
 /**
  * @param process.env.MONGODB_URI

@@ -5,15 +5,17 @@ import CourseDetails from '@/components/course/coursedetails'
 import CourseMap from '@/components/course/coursemap'
 
 export interface Course {
-  name: string
-  location: string
-  url: string
-  postCode: string
-  latitude: number
-  longitude: number
-  difficulty: string
-  familyFriendly: boolean
-  holes: number
+  _id: string; // Add this field
+  name: string;
+  town: string;
+  location: string;
+  url: string;
+  postCode: string;
+  latitude: number;
+  longitude: number;
+  difficulty: string;
+  familyFriendly: boolean;
+  holes: number;
 }
 
 const CoursePage = () => {
@@ -23,15 +25,26 @@ const CoursePage = () => {
   return (
     <div className='flex flex-row flex-wrap gap-4 p-4'>
         <div className="w-3/10 h-full">
-            <CourseList courses={courses} setCourses={setCourses} setSelectedCourse={setSelectedCourse} />
+            <CourseList 
+              courses={courses} 
+              setCourses={setCourses} 
+              setSelectedCourse={setSelectedCourse} 
+            />
         </div>
 
         <div className="w-3/10">
-            <CourseDetails selectedCourse={selectedCourse} setSelectedCourse={setSelectedCourse} />
+          <CourseDetails
+            selectedCourse={selectedCourse}
+            setSelectedCourse={setSelectedCourse}
+          />
         </div>
 
         <div className="w-5/10 flex-grow">
-            <CourseMap selectedCourse={selectedCourse} courses={courses} setSelectedCourse={setSelectedCourse} />
+            <CourseMap 
+              selectedCourse={selectedCourse} 
+              courses={courses} 
+              setSelectedCourse={setSelectedCourse} 
+            />
         </div>
     </div>
   )

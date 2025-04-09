@@ -1,20 +1,121 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import Image from 'next/image'
+import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 
 const GetStartedPage = () => {
-  const [selectedInfo, setSelectedInfo] = useState<'beginner' | 'advanced'>('beginner')
+  const { t, i18n } = useTranslation();
+
+  const [selectedInfo, setSelectedInfo] = useState<'beginner' | 'advanced' | 'rules'>('beginner');
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [editableTips, setEditableTips] = useState<{ [key: string]: string[] }>({});
+  const [hasChanges, setHasChanges] = useState(false);
+
+  // Sjekk om brukeren er admin
+  useEffect(() => {
+    const checkAdminStatus = async () => {
+      try {
+        const response = await fetch(process.env.NEXT_PUBLIC_BACKEND_BASE_URL + '/users/admin', {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+          },
+        });
+        const data = await response.json();
+        setIsAdmin(data.isAdmin);
+      } catch (error) {
+        toast.error('Kunne ikke sjekke admin-status.');
+      }
+    };
+
+    checkAdminStatus();
+  }, []);
+
+  // Initialiser redigerbare tips
+  useEffect(() => {
+    setEditableTips({
+      beginner: t('getstarted_beginner_tips', { returnObjects: true }) as string[],
+      advanced: t('getstarted_advanced_tips', { returnObjects: true }) as string[],
+      rules: t('getstarted_rules_list', { returnObjects: true }) as string[],
+    });
+  }, [t]);
+
+  // Håndter endringer i listepunkter
+  const handleTipChange = (category: string, index: number, value: string) => {
+    setEditableTips((prev) => {
+      const updated = { ...prev };
+      updated[category][index] = value;
+      return updated;
+    });
+    setHasChanges(true);
+  };
+
+  // Legg til et nytt listepunkt
+  const addTip = (category: string) => {
+    setEditableTips((prev) => {
+      const updated = { ...prev };
+      updated[category] = [...(updated[category] || []), ''];
+      return updated;
+    });
+    setHasChanges(true);
+  };
+
+  const removeTip = async (category: string, index: number) => {
+    try {
+      // Oppdater frontend først
+      setEditableTips((prev) => {
+        const updated = { ...prev };
+        updated[category] = updated[category].filter((_, i) => i !== index);
+        return updated;
+      });
+      setHasChanges(true);
+    } catch (error) {
+      toast.error('Kunne ikke fjerne listepunkt.');
+      console.error(error);
+    }
+  };
+
+  // Lagre endringer til backenden
+  const saveChanges = async () => {
+    try {
+      // Generer oppdateringer med riktig index
+      const updates = Object.entries(editableTips).flatMap(([category, tips]) =>
+        tips.map((tip, index) => ({
+          language: i18n.language,
+          key: category === "rules" ? `getstarted_rules_list` : `getstarted_${category}_tips`,
+          index, // Bruk indeksen fra map
+          translation: tip,
+        }))
+      );
+
+      const response = await fetch(process.env.NEXT_PUBLIC_BACKEND_BASE_URL + '/translations/batch', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+        },
+        body: JSON.stringify(updates),
+      });
+
+      if (response.status !== 200)
+        throw new Error('Kunne ikke lagre endringer.');
+
+      toast.success('Endringer lagret!');
+      setHasChanges(false);
+    } catch (error) {
+      if (error instanceof Error)
+        toast.error(error.message);
+      else
+        toast.error('Kunne ikke lagre endringer.');
+    }
+  };
 
   return (
     <div className="flex flex-col">
-      {/* Hovedinnhold */}
       <div className="flex-grow flex flex-col items-center justify-center pb-8">
         <div className="max-w-4xl w-full p-8 rounded-lg shadow-lg text-center bg-[#E7EFFB]">
-          <h1 className="text-2xl font-bold text-[#1B365D] mb-4">Kom i gang med Discgolf</h1>
-          <p className="text-[#2A4470] mb-6">
-            Velg mellom nybegynner- og avanserte tips for å forbedre ditt spill.
-          </p>
+          <h1 className="text-2xl font-bold text-[#1B365D] mb-4">{t('getstarted_title')}</h1>
+          <p className="text-[#2A4470] mb-6">{t('getstarted_choose')}</p>
 
           {/* Knappene for å velge nivå */}
           <div className="flex justify-center space-x-4 mb-6">
@@ -24,7 +125,7 @@ const GetStartedPage = () => {
                 selectedInfo === 'beginner' ? 'bg-[#1B365D]' : 'bg-gray-400'
               }`}
             >
-              Nybegynner Tips
+              {t('getstarted_beginnerbutton')}
             </button>
             <button
               onClick={() => setSelectedInfo('advanced')}
@@ -32,59 +133,148 @@ const GetStartedPage = () => {
                 selectedInfo === 'advanced' ? 'bg-[#1B365D]' : 'bg-gray-400'
               }`}
             >
-              Avansert Tips
+              {t('getstarted_advancedbutton')}
+            </button>
+            <button
+              onClick={() => setSelectedInfo('rules')}
+              className={`px-6 py-2 rounded-lg text-white font-semibold transition-all ${
+                selectedInfo === 'rules' ? 'bg-[#1B365D]' : 'bg-gray-400'
+              }`}
+            >
+              {t('getstarted_rulesbutton')}
             </button>
           </div>
 
           {/* Innholdet som skifter basert på valg */}
           <div className="text-left bg-white p-6 rounded-lg shadow-md">
-            {selectedInfo === 'beginner' ? (
+            {selectedInfo === 'beginner' && (
               <div>
-                <h2 className="text-xl font-bold text-[#1B365D] mb-4">Tips for nybegynnere</h2>
-                <p className="text-[#2A4470] mb-4">
-                  Discgolf er en morsom og inkluderende sport som er enkel å lære, men utfordrende å mestre. Her er noen gode tips for å komme i gang:
-                </p>
+                <h2 className="text-xl font-bold text-[#1B365D] mb-4">{t('getstarted_beginner_title')}</h2>
+                <p className="text-[#2A4470] mb-4">{t('getstarted_beginner_description')}</p>
                 <ul className="list-disc pl-5 text-[#2A4470] space-y-2">
-                  <li><strong>1. Velg riktig disc:</strong> Start med en <strong>putter</strong> eller <strong>midrange-disc</strong>. De er enklere å kontrollere enn raske drivere.</li>
-                  <li><strong>2. Lær de grunnleggende kastene:</strong> Backhand, forehand (sidearm) og putting er de viktigste teknikkene.</li>
-                  <li><strong>3. Forstå reglene:</strong> Start fra tee-området og kast mot kurven. Etter hvert kast spiller du videre fra der discen lander.</li>
-                  <li><strong>4. Fokuser på teknikk fremfor kraft:</strong> Rolige og kontrollerte kast gir bedre resultater enn å prøve å kaste for hardt.</li>
-                  <li><strong>5. Spill med erfarne spillere:</strong> Å lære av mer erfarne spillere gir raskere progresjon.</li>
-                  <li><strong>6. Ha realistiske forventninger:</strong> Treffer du et tre? Ingen fare! Det er en del av læringsprosessen.</li>
-                  <li><strong>7. Bruk enkelt utstyr:</strong> Start med rimelige discer og oppgrader etter hvert.</li>
-                  <li><strong>8. Øv jevnlig:</strong> Jo mer du spiller, jo bedre blir du!</li>
+                  {editableTips.beginner?.map((tip, index) => (
+                    <li key={index} className="flex items-center space-x-2">
+                      {isAdmin ? (
+                        <>
+                          <textarea
+                            className="w-full p-2 border rounded"
+                            value={tip}
+                            onChange={(e) => handleTipChange('beginner', index, e.target.value)}
+                          />
+                          <button
+                            onClick={() => removeTip('beginner', index)}
+                            className="text-red-500 hover:text-red-700"
+                          >
+                            Fjern
+                          </button>
+                        </>
+                      ) : (
+                        <span dangerouslySetInnerHTML={{ __html: tip }}></span>
+                      )}
+                    </li>
+                  ))}
                 </ul>
+                {isAdmin && (
+                  <button
+                    onClick={() => addTip('beginner')}
+                    className="mt-4 bg-[#1B365D] text-white px-4 py-2 rounded-lg shadow-md"
+                  >
+                    Legg til punkt
+                  </button>
+                )}
               </div>
-            ) : (
+            )}
+
+            {selectedInfo === 'advanced' && (
               <div>
-                <h2 className="text-xl font-bold text-[#1B365D] mb-4">Avansert discgolfstrategi</h2>
-                <p className="text-[#2A4470] mb-4">
-                  Discgolf på et mer avansert nivå krever teknikk, strategi og en dypere forståelse av spillet. Her er noen tips for erfarne spillere:
-                </p>
+                <h2 className="text-xl font-bold text-[#1B365D] mb-4">{t('getstarted_advanced_title')}</h2>
+                <p className="text-[#2A4470] mb-4">{t('getstarted_advanced_description')}</p>
                 <ul className="list-disc pl-5 text-[#2A4470] space-y-2">
-                  <li><strong>1. Bruk forskjellige disker:</strong> Speed 9-12 drivere for kontroll, Speed 13+ for lengde.</li>
-                  <li><strong>2. Mastere avanserte kasteteknikker:</strong> Lær hyzer, anhyzer og roller-kast for mer fleksibilitet.</li>
-                  <li><strong>3. Forstå vindens innvirkning:</strong> Trening i ulike værforhold gir bedre kontroll på kast.</li>
-                  <li><strong>4. Forbedre mental styrke:</strong> Øv på strategisk tenkning og å holde hodet kaldt under press.</li>
-                  <li><strong>5. Fysisk trening og vedlikehold:</strong> Mobilitet, styrke og utholdenhet påvirker kasteteknikken din.</li>
-                  <li><strong>6. Spill på avanserte baner:</strong> Utfordre deg selv med trange passasjer og teknisk krevende hull.</li>
-                  <li><strong>7. Øv på spesifikke situasjoner:</strong> Trening på kast fra vanskelig terreng gir bedre resultater i turneringer.</li>
+                  {editableTips.advanced?.map((tip, index) => (
+                    <li key={index} className="flex items-center space-x-2">
+                      {isAdmin ? (
+                        <>
+                          <textarea
+                            className="w-full p-2 border rounded"
+                            value={tip}
+                            onChange={(e) => handleTipChange('advanced', index, e.target.value)}
+                          />
+                          <button
+                            onClick={() => removeTip('advanced', index)}
+                            className="text-red-500 hover:text-red-700"
+                          >
+                            Fjern
+                          </button>
+                        </>
+                      ) : (
+                        <span dangerouslySetInnerHTML={{ __html: tip }}></span>
+                      )}
+                    </li>
+                  ))}
                 </ul>
+                {isAdmin && (
+                  <button
+                    onClick={() => addTip('advanced')}
+                    className="mt-4 bg-[#1B365D] text-white px-4 py-2 rounded-lg shadow-md"
+                  >
+                    Legg til punkt
+                  </button>
+                )}
+              </div>
+            )}
+
+            {selectedInfo === 'rules' && (
+              <div>
+                <h2 className="text-xl font-bold text-[#1B365D] mb-4">{t('getstarted_rules_title')}</h2>
+                <p className="text-[#2A4470] mb-4">{t('getstarted_rules_description')}</p>
+                <ul className="list-disc pl-5 text-[#2A4470] space-y-2">
+                  {editableTips.rules?.map((rule, index) => (
+                    <li key={index} className="flex items-center space-x-2">
+                      {isAdmin ? (
+                        <>
+                          <textarea
+                            className="w-full p-2 border rounded"
+                            value={rule}
+                            onChange={(e) => handleTipChange('rules', index, e.target.value)}
+                          />
+                          <button
+                            onClick={() => removeTip('rules', index)}
+                            className="text-red-500 hover:text-red-700"
+                          >
+                            Fjern
+                          </button>
+                        </>
+                      ) : (
+                        <span dangerouslySetInnerHTML={{ __html: rule }}></span>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+                {isAdmin && (
+                  <button
+                    onClick={() => addTip('rules')}
+                    className="mt-4 bg-[#1B365D] text-white px-4 py-2 rounded-lg shadow-md"
+                  >
+                    Legg til punkt
+                  </button>
+                )}
               </div>
             )}
           </div>
         </div>
-
-        {/* Bildekarusell - Matcher frontpage design */}
-        <div className="flex justify-center mt-8 space-x-4">
-          <Image src="/images/post.png" alt="Discgolf Image 1" width={200} height={200} className="rounded-lg shadow-md" />
-          <Image src="/images/disc.png" alt="Discgolf Image 2" width={200} height={200} className="rounded-lg shadow-md" />
-          <Image src="/images/discs.png" alt="Discgolf Image 3" width={200} height={200} className="rounded-lg shadow-md" />
-          <Image src="/images/kaste.png" alt="Discgolf Image 4" width={200} height={200} className="rounded-lg shadow-md" />
-        </div>
       </div>
-    </div>
-  )
-}
 
-export default GetStartedPage
+      {/* Lagre-knapp */}
+      {isAdmin && hasChanges && (
+        <button
+          onClick={saveChanges}
+          className="fixed bottom-4 right-4 bg-[#1B365D] text-white px-6 py-2 rounded-lg shadow-lg"
+        >
+          Lagre endringer
+        </button>
+      )}
+    </div>
+  );
+};
+
+export default GetStartedPage;

@@ -15,7 +15,12 @@ import {
 /**
  * @author Ibrahim Queeum and Lars Andreas Strand
  * @description Router for course requests
+ * This router handles all the requests related to courses.
+ * It also handles middleware for authentication and authorization.
+ * It uses the passport middleware for authentication
+ * and it uses the authorization middleware for authorization.
  */
+
 const router = express.Router()
 
 router.get('/',

@@ -1,13 +1,17 @@
 /**
- * @author Lars263506 (Github)
- * @description This file contains middleware functions for authorizing users with different roles
+ * @author Lars Andreas Strand
+ * @description Middleware for authorizing users with different roles
+ * Protects routes based on user roles, implementing role-based access control.
+ * It uses the Passport JWT strategy to authenticate users and check their roles.
  */
 
 /**
- * @param req
- * @param res
- * @param next
- * @description Authorizes a user as an admin
+ * @author Lars Andreas Strand
+ * @description This middleware function checks if the user is authenticated and is an admin.
+ * It uses the Passport JWT strategy to authenticate the user and checks their role.
+ * If the user is authenticated and is an admin, it allows access to the next middleware or route handler.
+ * If the user is not authenticated or not an admin, it sends a 403 Forbidden response.
+ * It is used to protect routes that require admin access.
  */
 
 const authorizeAdmin = (req, res, next) => {
@@ -19,10 +23,12 @@ const authorizeAdmin = (req, res, next) => {
 }
 
 /**
- * @param req
- * @param res
- * @param next
- * @description Authorizes a user as a clubowner
+ * @author Lars Andreas Strand
+ * @description This middleware function checks if the user is authenticated and is a club owner.
+ * It uses the Passport JWT strategy to authenticate the user and checks their role.
+ * If the user is authenticated and is a club owner, it allows access to the next middleware or route handler.
+ * If the user is not authenticated or not a club owner, it sends a 403 Forbidden response.
+ * It is used to protect routes that require club owner access or higher privileges.
  */
 
 const authorizeClubowner = (req, res, next) => {

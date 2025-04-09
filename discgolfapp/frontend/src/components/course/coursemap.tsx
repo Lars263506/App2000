@@ -1,6 +1,9 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { GoogleMap, LoadScript, Marker, InfoWindow } from '@react-google-maps/api';
-import { Course } from '../../pages/coursepage';
+import { Course } from '../pages/CoursePage';
+
+import { useTranslation } from 'react-i18next';
+import i18next from 'i18next';
 
 interface CourseMapProps {
   selectedCourse: Course | null;
@@ -9,6 +12,7 @@ interface CourseMapProps {
 }
 
 const CourseMap: React.FC<CourseMapProps> = ({ selectedCourse, courses, setSelectedCourse }) => {
+  const { t } = useTranslation();
   const mapRef = useRef<google.maps.Map | null>(null);
   const [selectedMarker, setSelectedMarker] = useState<Course | null>(null);
   const [difficultyFilter, setDifficultyFilter] = useState('');
@@ -26,25 +30,27 @@ const CourseMap: React.FC<CourseMapProps> = ({ selectedCourse, courses, setSelec
   );
 
   return (
-    <div className="flex flex-col gap-2 p-4 rounded-xl shadow bg-gray-200 ">
-      {/* Filter with difficulty level */}
+    <div className={`flex flex-col gap-2 p-4 rounded-xl shadow bg-gray-200 ${selectedCourse ? 'w-7/10' : 'w-full'} h-[100vh]`}>
       <select
         className="p-2 border rounded"
         value={difficultyFilter}
         onChange={(e) => setDifficultyFilter(e.target.value)}
       >
-        <option value="">Alle vanskelighetsgrader</option>
-        <option value="Easy">Lett</option>
-        <option value="Medium">Middels</option>
-        <option value="Difficult">Vanskelig</option>
+        <option value="">{t("coursemap_alldifficulties")}</option>
+        <option value="Easy">{t("coursemap_easy")}</option>
+        <option value="Medium">{t("coursemap_medium")}</option>
+        <option value="Difficult">{t("coursemap_hard")}</option>
       </select>
 
-      <LoadScript googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string}>
+      <LoadScript
+        googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string}
+        language={i18next.language}
+      >
         <GoogleMap
           onLoad={(map) => { mapRef.current = map; }}
           center={selectedCourse ? { lat: selectedCourse.latitude, lng: selectedCourse.longitude } : { lat: 59.9139, lng: 10.7522 }}
           zoom={selectedCourse ? 15 : 6}
-          mapContainerStyle={{ height: '570px', width: '100%' }}
+          mapContainerStyle={{ height: '100%', width: '100%' }}
         >
           {filteredCourses.map((course) => (
             <Marker
@@ -62,9 +68,12 @@ const CourseMap: React.FC<CourseMapProps> = ({ selectedCourse, courses, setSelec
               <div className="p-2">
                 <h3 className="font-bold">{selectedMarker.name}</h3>
                 <p>{selectedMarker.location}</p>
-                <p>Vanskelighetsgrad: {selectedMarker.difficulty}</p>
-                <p>Antall hull: {selectedMarker.holes}</p>
-                <p>Familievennlig: {selectedMarker.familyFriendly ? 'Ja' : 'Nei'}</p>
+                <p>{t("coursemap_difficulty")} {selectedMarker.difficulty}</p>
+                <p>{t("coursemap_amountofholes")} {selectedMarker.holes}</p>
+                <p>{t("coursemap_familyfriendly")} {selectedMarker.familyFriendly
+                  ? t("coursemap_familyfriendly_yes")
+                  : t("coursemap_familyfriendly_no")}
+                </p>
 
                 <a
                   href={`https://www.google.com/maps?q=${selectedMarker.latitude},${selectedMarker.longitude}`}
@@ -72,7 +81,7 @@ const CourseMap: React.FC<CourseMapProps> = ({ selectedCourse, courses, setSelec
                   rel="noopener noreferrer"
                   className="text-blue-500 block mt-2"
                 >
-                  Naviger hit
+                  {t("coursemap_navigatehere")}
                 </a>
               </div>
             </InfoWindow>

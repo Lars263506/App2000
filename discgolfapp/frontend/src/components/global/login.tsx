@@ -55,9 +55,10 @@ const Login: React.FC<LoginProps> = ({ togglePopup, toggleRegisterPopup, closePo
         localStorage.setItem('refreshToken', data.refreshToken)
         localStorage.setItem('displayName', data.displayName)
         setIsLoggedIn(true)
-        toast.success('Logget inn med bruker: ' + data.displayName)
+        toast.success('Logget inn med bruker: ' + data.displayName);
         setLoggedInUser(data.displayName)
         closePopup()
+        window.location.reload()
       }
     } catch (error: unknown) {
       if (error instanceof Error) {

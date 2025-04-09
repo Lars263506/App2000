@@ -1,5 +1,12 @@
 import mongoose from 'mongoose'
-import Element from './Element.js'
+
+import Member from './Member.js'
+
+/**
+ * @author Lars Andreas Strand
+ * @description This is the schema for the ClubPage model.
+ * It defines the structure of the ClubPage document in the database.
+ */
 
 const schema = new mongoose.Schema(
   {
@@ -9,19 +16,11 @@ const schema = new mongoose.Schema(
       unique: true
     },
     clubOwner: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: String,
       required: true
     },
     description: {
       type: String,
-      required: true
-    },
-    nonmemberElements: {
-      type: [Element.schema],
-      required: true
-    },
-    memberElements: {
-      type: [Element.schema],
       required: true
     },
     address: {
@@ -44,12 +43,32 @@ const schema = new mongoose.Schema(
       type: String,
       required: true
     },
-    members: {
-      type: [mongoose.Schema.Types.ObjectId],
+    members: [
+      Member.schema
+    ],
+    announcements: {
+      type: Array,
       required: true
     },
     events: {
       type: Array,
+      required: true
+    },
+    applications: {
+      type: [
+        {
+          displayName: { type: String, required: true },
+          email: { type: String, required: true },
+          reason: { type: String, required: true },
+          status: {
+            type: String,
+            required: true,
+            default: 'pending',
+            enum: ['pending', 'accepted', 'rejected']
+          },
+          date: { type: Date, default: Date.now() }
+        }
+      ],
       required: true
     }
   },

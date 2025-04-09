@@ -11,6 +11,8 @@ import {
   getProfile,
   getProfileImage,
   getUserClubs,
+  getUserGames,
+  searchUsers,
   checkIfAdmin,
   getUser,
   getUserByEmail,
@@ -21,14 +23,19 @@ import {
   changeEmail,
   changePassword,
   changeRole,
+  changeUser,
   deleteUser
 } from '../controllers/userController.js'
-import { get } from 'mongoose'
 
 /**
- * @author Lars263506 (Github)
+ * @author Lars Andreas Strand
  * @description Router for user requests
+ * This router handles all the requests related to users.
+ * It also handles middleware for authentication and authorization.
+ * It uses the passport middleware for authentication
+ * and it uses the authorization middleware for authorization.
  */
+
 const router = express.Router()
 
 router.get('/',
@@ -56,10 +63,23 @@ router.get('/my-clubs',
   getUserClubs
 )
 
+router.get('/my-games', 
+  passport.authenticate('jwt', { session: false }),
+  getUserGames
+)
+
 router.get('/admin',
   optionalAuth,
   checkIfAdmin
 )
+
+router.get('/search',
+  passport.authenticate('jwt', { session: false }),
+  (req, res, next) => {
+    next();
+  },
+  searchUsers
+);
 
 router.get('/:id',
   passport.authenticate('jwt', { session: false }),
@@ -105,9 +125,15 @@ router.put('/change-password',
 )
 
 router.put('/change-role',
+passport.authenticate('jwt', { session: false }),
+authorizeAdmin,
+changeRole
+)
+
+router.put('/',
   passport.authenticate('jwt', { session: false }),
   authorizeAdmin,
-  changeRole
+  changeUser
 )
 
 router.delete('/',
@@ -115,5 +141,6 @@ router.delete('/',
   authorizeAdmin,
   deleteUser
 )
+
 
 export default router

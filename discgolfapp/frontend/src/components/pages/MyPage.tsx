@@ -3,6 +3,9 @@ import { toast } from "react-toastify";
 import { PencilIcon } from '@heroicons/react/20/solid'
 
 import User from "../../types/user";
+import Game from "../../types/game";
+import { Club } from "../../types/club";
+import GameResultsModal from '../myprofile/GameResultsModal';
 
 interface MyPageProps {
     setSelectedPage: (page: string) => void;
@@ -12,8 +15,10 @@ const MyPage: React.FC<MyPageProps> = ({ setSelectedPage }) => {
   const [user, setUser] = useState<User | null>(null);
   const [profileImage, setProfileImage] = useState<string | null>(null);
   const [clubs, setClubs] = useState<any[]>([]);
+  const [games, setGames] = useState<Game[] | null>([]);
+  const [selectedGame, setSelectedGame] = useState<Game | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // Henter brukerdata
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -39,7 +44,6 @@ const MyPage: React.FC<MyPageProps> = ({ setSelectedPage }) => {
     fetchUser();
   }, []);
 
-  // Henter klubbene som brukeren er medlem av
   useEffect(() => {
     const fetchClubs = async () => {
       if (!user) return;
@@ -61,6 +65,36 @@ const MyPage: React.FC<MyPageProps> = ({ setSelectedPage }) => {
     };
 
     fetchClubs();
+  }, [user]);
+
+  useEffect(() => {
+    const fetchGames = async () => {
+      if (!user) return;
+
+      try {
+        const accessToken = localStorage.getItem('accessToken');
+        const gamesUrl = process.env.NEXT_PUBLIC_BACKEND_BASE_URL + "/users/my-games";
+        const result = await fetch(gamesUrl, {
+          headers: {
+            "Authorization": `Bearer ${accessToken}`
+          }
+        });
+        const data = await result.json();
+
+        if (Array.isArray(data.games)) {
+          const gamesData: Game[] = data.games;
+          gamesData.sort((b, a) => new Date(a.date).getTime() - new Date(b.date).getTime());
+          setGames(gamesData);
+        } else {
+          console.warn("Games data is not an array or is undefined:", data.games);
+          setGames([]);
+        }
+      } catch (error) {
+        console.error("Error fetching games:", error);
+      }
+    };
+
+    fetchGames();
   }, [user]);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -101,11 +135,24 @@ const MyPage: React.FC<MyPageProps> = ({ setSelectedPage }) => {
     }
   };
 
-  const handleClubClick = (clubId: string) => {
-    localStorage.setItem("selectedClub", clubId);
-    setSelectedPage("ClubPage");
+  const handleClubClick = (club: Club | null) => {
+    localStorage.setItem("selectedClub", JSON.stringify(club));
+    setSelectedPage("Club");
   };
 
+  const calculateTotalScore = (scores: number[]) => {
+    return scores.reduce((total, score) => total + score, 0);
+  };
+
+  const openModal = (game: Game) => {
+    setSelectedGame(game);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setSelectedGame(null);
+    setIsModalOpen(false);
+  };
 
   if (!user) {
     return (
@@ -127,7 +174,6 @@ const MyPage: React.FC<MyPageProps> = ({ setSelectedPage }) => {
         <h1 className="text-4xl font-extrabold mt-6 text-gray-800">Min Side</h1>
         <h2 className="text-2xl text-gray-700 mb-8">Velkommen, {user.displayName ?? "Ukjent"}!</h2>
 
-        {/* Profilbilde med redigeringsikon */}
         <div className="relative">
           {profileImage ? (
             <img src={profileImage} alt="Profilbilde" className="w-52 h-52 rounded-full object-cover mb-4" />
@@ -137,7 +183,6 @@ const MyPage: React.FC<MyPageProps> = ({ setSelectedPage }) => {
             </div>
           )}
 
-          {/* Skjult input for bildeopplasting */}
           <input
             type="file"
             accept="image/*"
@@ -146,7 +191,6 @@ const MyPage: React.FC<MyPageProps> = ({ setSelectedPage }) => {
             id="fileInput"
           />
 
-          {/* Redigeringsikon - klikker på dette åpner filvelger */}
           <button
             onClick={() => document.getElementById("fileInput")?.click()}
             className="absolute bottom-3 right-4 bg-gray-800 p-2 rounded-full hover:bg-gray-600"
@@ -155,37 +199,57 @@ const MyPage: React.FC<MyPageProps> = ({ setSelectedPage }) => {
           </button>
         </div>
 
-        {/* Tre bokser */}
         <div className="grid grid-cols-1 md:grid-cols-3 text-black gap-4 mt-8 w-full max-w-4xl">
-          {/* Brukerinformasjon */}
           <div className="bg-white p-6 rounded-lg shadow-lg max-h-80 overflow-y-auto">
             <h3 className="text-lg text-black mb-6 font-semibold">Brukerinformasjon:</h3>
             <p><strong>Brukernavn:</strong> {user.displayName ?? "Ukjent"}</p>
             <p><strong>E-post:</strong> {user.email ?? "Ukjent"}</p>
             <p><strong>Rolle:</strong> {user.role ?? "Ukjent"}</p>
           </div>
-          {/* Tomme bokser */}
-          <div className="text-lg bg-white p-6 rounded-lg shadow-lg font-semibold max-h-80 overflow-y-auto">Mine spill:</div>
+          <div className="text-lg bg-white p-6 rounded-lg shadow-lg max-h-80 overflow-y-auto">
+            <h3 className="text-lg text-black mb-6 font-semibold">Mine spill:</h3>
+            {games !== null && games.length > 0 ? (
+              <ul>
+                {games.map((game) => (
+                  <li key={game.gameId} className="mb-2">
+                    <button onClick={() => openModal(game)} className="cursor-pointer hover:underline">
+                      {game.course} - {new Date(game.date).toLocaleDateString("no-NO")}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p>Du har ingen spill.</p>
+            )}
+          </div>
           <div className="bg-white p-6 rounded-lg shadow-lg">
-              <h3 className="text-lg text-black mb-6 font-semibold max-h-80 overflow-y-auto">Mine klubber:</h3>
-              {clubs.length > 0 ? (
-                <ul>
-                  {clubs.map((club) => (
-                    <li key={club._id} className="mb-2">
-                      <button
-                        onClick={() => handleClubClick(club._id)}
-                        className="text-blue-500 hover:underline">
-                        {club.name}
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <p>Du er ikke medlem av noen klubber.</p>
-              )}
-            </div>
+            <h3 className="text-lg text-black mb-6 font-semibold max-h-80 overflow-y-auto">Mine klubber:</h3>
+            {clubs.length > 0 ? (
+              <ul>
+                {clubs.map((club) => (
+                  <li key={club._id} className="mb-2">
+                    <button
+                      onClick={() => handleClubClick(club)}
+                      className="text-blue-500 hover:underline">
+                      {club.name}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p>Du er ikke medlem av noen klubber.</p>
+            )}
+          </div>
         </div>
       </div>
+      {selectedGame && (
+        <GameResultsModal
+          game={selectedGame}
+          isOpen={isModalOpen}
+          onClose={closeModal}
+          calculateTotalScore={calculateTotalScore}
+        />
+      )}
     </div>
   );
 };
