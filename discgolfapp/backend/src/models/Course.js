@@ -17,7 +17,7 @@ const schema = new mongoose.Schema(
       type: String,
       required: true
     },
-    town: { 
+    town: {
       type: String,
       required: true
     },
@@ -43,19 +43,19 @@ const schema = new mongoose.Schema(
     },
     familyFriendly: {
       type: Boolean,
-      
+
     },
     holes: {
       type: Number,
-      resquired: true,
-    }, 
+      required: true,
+    },
     reviews: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Review'
       }
     ],
-    
+
   },
   { timestamps: true }
 )

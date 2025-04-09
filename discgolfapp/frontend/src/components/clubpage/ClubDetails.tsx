@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import 'react-toastify/dist/ReactToastify.css';
 import { Club } from '../../types/club';
 import { toast } from 'react-toastify';
 
 import { useTranslation } from 'react-i18next';
 import MemberList from './memberlist';
 import Announcements from './announcements';
+import Meetings from './Meetings';
 import JoinClubModal from './JoinClubModal';
 
 interface ClubDetailsProps {
@@ -60,7 +60,7 @@ const ClubDetails: React.FC<ClubDetailsProps> = ({ clubData, setSelectedPage }) 
       toast.error('Du må logge inn før du kan bli medlem av klubben.');
       return;
     }
-    setIsModalOpen(true); // Open the modal if logged in
+    setIsModalOpen(true);
   };
 
   return (
@@ -86,6 +86,13 @@ const ClubDetails: React.FC<ClubDetailsProps> = ({ clubData, setSelectedPage }) 
               className="flex flex-col w-1/3 h-full bg-[#E7EFFB] shadow-md rounded-lg p-4"
             >
               <Announcements />
+            </div>
+
+            <div
+              aria-label="Announcements Section"
+              className="flex flex-col w-1/3 h-full bg-[#E7EFFB] shadow-md rounded-lg p-4"
+            >
+              <Meetings />
             </div>
           </div>
         ) : (
