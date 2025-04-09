@@ -17,6 +17,10 @@ const schema = new mongoose.Schema(
       type: String,
       required: true
     },
+    town: { 
+      type: String,
+      required: true
+    },
     postCode: {
       type: String,
       required: true
@@ -51,6 +55,7 @@ const schema = new mongoose.Schema(
         ref: 'Review'
       }
     ],
+    
   },
   { timestamps: true }
 )

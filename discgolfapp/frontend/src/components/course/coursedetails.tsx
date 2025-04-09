@@ -122,6 +122,7 @@ const CourseDetails: React.FC<CourseDetailsProps> = ({ selectedCourse, setSelect
           <div className='space-y-6 text-gray-700 flex-grow mt-4 overflow-y-auto'>
             {activeTab === 'details' && (
               <>
+                <p><span className='font-medium'>🏡 By:</span> {selectedCourse.town}</p>
                 <p><span className='font-medium'>📍 Lokasjon:</span> {selectedCourse.location}</p>
                 <p><span className='font-medium'>🏙️ Post Kode:</span> {selectedCourse.postCode}</p>
                 <p><span className='font-medium'>🌍 Breddegrad:</span> {selectedCourse.latitude}</p>
