@@ -30,8 +30,7 @@ const CourseMap: React.FC<CourseMapProps> = ({ selectedCourse, courses, setSelec
   );
 
   return (
-    <div className="flex flex-col gap-2 p-4 rounded-xl shadow bg-gray-200 ">
-      {/* Filter with difficulty level */}
+    <div className={`flex flex-col gap-2 p-4 rounded-xl shadow bg-gray-200 ${selectedCourse ? 'w-7/10' : 'w-full'} h-[100vh]`}>
       <select
         className="p-2 border rounded"
         value={difficultyFilter}
@@ -46,12 +45,12 @@ const CourseMap: React.FC<CourseMapProps> = ({ selectedCourse, courses, setSelec
       <LoadScript
         googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string}
         language={i18next.language}
-        >
+      >
         <GoogleMap
           onLoad={(map) => { mapRef.current = map; }}
           center={selectedCourse ? { lat: selectedCourse.latitude, lng: selectedCourse.longitude } : { lat: 59.9139, lng: 10.7522 }}
           zoom={selectedCourse ? 15 : 6}
-          mapContainerStyle={{ height: '570px', width: '100%' }}
+          mapContainerStyle={{ height: '100%', width: '100%' }}
         >
           {filteredCourses.map((course) => (
             <Marker

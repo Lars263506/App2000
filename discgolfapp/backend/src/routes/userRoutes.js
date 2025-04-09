@@ -76,7 +76,6 @@ router.get('/admin',
 router.get('/search',
   passport.authenticate('jwt', { session: false }),
   (req, res, next) => {
-    console.log('Search query:', req.query);
     next();
   },
   searchUsers

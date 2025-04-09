@@ -10,6 +10,7 @@ interface CourseListProps {
 }
 
 interface Course {
+  _id: string
   name: string
   location: string
   url: string
