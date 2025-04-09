@@ -16,6 +16,12 @@ export interface Course {
   difficulty: string;
   familyFriendly: boolean;
   holes: number;
+  reviews: Review[]; // Add reviews to the Course interface
+}
+
+interface Review {
+  rating: number;
+
 }
 
 const CoursePage = () => {
