@@ -1,4 +1,6 @@
-export interface Course {
+import Review from './review';
+
+type Course = {
     _id: string;
     name: string;
     town: string;
@@ -12,9 +14,4 @@ export interface Course {
     holes: number;
     reviews: Review[];
   }
-  
-  export interface Review {
-    username: string
-    rating: number
-    comment: string
-  }
+  export default Course;

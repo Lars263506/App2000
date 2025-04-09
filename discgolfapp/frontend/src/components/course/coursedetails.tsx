@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import { Course, Review } from '@/types/course'
+import Course from '@/types/course'
+import Review from '@/types/review'
 import axios from 'axios'
 import Button from '../global/button'
 

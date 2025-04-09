@@ -3,7 +3,7 @@ import { useState } from 'react'
 import CourseList from '@/components/course/courselist'
 import CourseDetails from '@/components/course/coursedetails'
 import CourseMap from '@/components/course/coursemap'
-import { Course } from '@/types/course'
+import Course from '@/types/course'
 
 const CoursePage = () => {
   const [courses, setCourses] = useState<Course[]>([])

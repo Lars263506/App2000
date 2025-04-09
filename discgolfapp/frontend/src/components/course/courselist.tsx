@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { X, ChevronDown } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { FaStar } from 'react-icons/fa';
-import { Course, Review } from '@/types/course';
+import Course from '@/types/course';
+import Review from '@/types/review';
 
 interface CourseListProps {
   courses: Course[];
