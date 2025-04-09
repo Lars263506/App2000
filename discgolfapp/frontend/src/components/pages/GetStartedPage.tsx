@@ -69,8 +69,6 @@ const GetStartedPage = () => {
         return updated;
       });
       setHasChanges(true);
-
-      toast.success('Listepunkt fjernet!');
     } catch (error) {
       toast.error('Kunne ikke fjerne listepunkt.');
       console.error(error);
