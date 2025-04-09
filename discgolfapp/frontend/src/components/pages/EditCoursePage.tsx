@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { GoogleMap, LoadScript, Marker, OverlayView } from "@react-google-maps/api";
 
-interface Course {
+type Course = {
   id: string;
   name: string;
   latitude: number;
@@ -10,7 +10,7 @@ interface Course {
   par: number;
 }
 
-interface Pin {
+type Pin = {
   id: string;
   name: string;
   latitude: number;
@@ -43,6 +43,14 @@ export default function EditCoursePage() {
     lat: 59.9139, 
     lng: 10.7522,
   });
+
+  const handlePinTypeChange = (value: string) => {
+    if (value === "kurv" || value === "Utslagspunkt") {
+      setSelectedPinType(value);
+    } else {
+      console.warn("Ugyldig pin type valgt:", value);
+    }
+  };
 
   useEffect(() => {
     const fetchCourses = async () => {
@@ -86,15 +94,17 @@ export default function EditCoursePage() {
   
     const url = `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/course/${course.id}/pins`;
     const token = localStorage.getItem("accessToken");
+
+    console.log("Saving pins to database:", pins);
   
     try {
-      const response = await fetch(`/api/course/${course.id}/pins`, {
+      const response = await fetch(url, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify({ pins }) // ← viktig
+        body: JSON.stringify({ pins }),
       });
   
       if (!response.ok) {
@@ -354,13 +364,13 @@ export default function EditCoursePage() {
                 <div className="mt-4">
                   <label className="block">Velg Pin Type:</label>
                   <select
-                    value={selectedPinType}
-                    onChange={(e) => setSelectedPinType(e.target.value as "kurv" | "Utslagspunkt")}
-                    className="w-full p-2 border rounded-lg"
-                  >
-                    <option value="kurv">Kurv</option>
-                    <option value="Utslagspunkt">Utslagspunkt</option>
-                  </select>
+                  value={selectedPinType}
+                  onChange={(e) => handlePinTypeChange(e.target.value)}
+                  className="w-full p-2 border rounded-lg"
+                >
+                  <option value="kurv">Kurv</option>
+                  <option value="Utslagspunkt">Utslagspunkt</option>
+                </select>
                 </div>
 
                 {selectedPin && (

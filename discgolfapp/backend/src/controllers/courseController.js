@@ -1,4 +1,5 @@
 import * as courseService from '../services/courseService.js'
+import Course from '../models/Course.js';
 
 const getAllCourses = async (req, res) => {
   try {
@@ -18,7 +19,7 @@ const getCourse = async (req, res) => {
   }
 }
 
-export const getCoursePins = async (req, res) => {
+const getCoursePins = async (req, res) => {
   try {
     const { id } = req.params;
     const course = await Course.findById(id).select('pins');
@@ -61,7 +62,7 @@ const updateCourse = async (req, res) => {
   }
 }
 
-export const updateCoursePins = async (req, res) => {
+const updateCoursePins = async (req, res) => {
   try {
     const { id } = req.params;
     const { pins } = req.body;
