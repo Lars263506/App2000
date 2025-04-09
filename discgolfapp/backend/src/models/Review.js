@@ -8,7 +8,7 @@ import mongoose from 'mongoose';
 
 const reviewSchema = new mongoose.Schema({
   courseId: {
-    type: mongoose.Schema.Types.ObjectId, // Reference the Course model
+    type: mongoose.Schema.Types.ObjectId, 
     ref: 'Course',
     required: true,
   },

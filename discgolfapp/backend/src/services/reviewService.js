@@ -29,10 +29,9 @@ const getAllReviews = async () => {
  * @returns An array of reviews for the course.
  */
 const getReviewsByCourseId = async (courseId) => {
-  console.log('Querying reviews for courseId:', courseId); // Debugging log
 
   const reviews = await Review.find({ courseId: new mongoose.Types.ObjectId(courseId) }).populate('userId', 'displayName');
-  return reviews; // Return an empty array if no reviews are found
+  return reviews; 
 };
 
 /**

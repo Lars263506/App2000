@@ -49,9 +49,6 @@ const addReview = async (req, res) => {
   try {
     const { courseId, username, rating, comment } = req.body;
 
-    console.log('Request body:', req.body); // Debugging log
-
-    // Create the new review
     const newReview = await reviewService.addReview({
       courseId,
       username: username || 'Anonymous',
@@ -59,12 +56,9 @@ const addReview = async (req, res) => {
       comment,
     });
 
-    console.log('New review created:', newReview); // Debugging log
-
-    // Add the review to the course's reviews array
     await Course.findByIdAndUpdate(
       courseId,
-      { $push: { reviews: newReview._id } }, // Push the review's ID to the reviews array
+      { $push: { reviews: newReview._id } }, 
       { new: true }
     );
 
