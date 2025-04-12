@@ -45,7 +45,6 @@ export default function EditCoursePage() {
   const [isDragging, setIsDragging] = useState(false);
   const [isDrawingLine, setIsDrawingLine] = useState(false);
   const [linePins, setLinePins] = useState<Pin[]>([]);
-  // Ny state for lagrede linjer
   const [lines, setLines] = useState<Line[]>([]);
 
   const [mapCenter, setMapCenter] = useState<{ lat: number; lng: number }>({
@@ -134,7 +133,6 @@ export default function EditCoursePage() {
 
   const handleAddPin = (lat: number, lng: number) => {
     if (!newPinName) {
-      alert("Vennligst skriv et navn for pinnen.");
       return;
     }
 
@@ -147,6 +145,7 @@ export default function EditCoursePage() {
     };
     setPins([...pins, newPin]);
     setNewPinName("");
+    setSelectedPin(null); // Lukker redigeringsmenyen etter å ha lagt til ny pin
   };
 
   const handlePinClick = async (pin: Pin) => {
@@ -260,6 +259,7 @@ export default function EditCoursePage() {
     setEditPinDistance(null);
     setEditPinPar(null);
     setEditPinOutOfBounds("");
+    setSelectedPin(null); // Lukker redigeringsmenyen etter lagring
   };
 
   const handleDragStart = () => {
@@ -329,6 +329,18 @@ export default function EditCoursePage() {
     if (e.latLng) {
       handleAddPin(e.latLng.lat(), e.latLng.lng());
     }
+    setSelectedPin(null); 
+    setIsDrawingLine(false);
+    setLinePins([]); 
+  };
+
+  const handleContainerClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    // Lukker redigeringsmenyen hvis klikket er utenfor redigeringspanelet
+    if (e.target instanceof HTMLElement && !e.target.closest('.edit-panel')) {
+      setSelectedPin(null);
+      setIsDrawingLine(false);
+      setLinePins([]);
+    }
   };
 
   const toggleDrawLine = () => {
@@ -336,12 +348,16 @@ export default function EditCoursePage() {
     if (!isDrawingLine) {
       setLinePins([]);
     }
+    setSelectedPin(null); // Lukker redigeringsmenyen når tegne-modus veksles
   };
 
   return (
     <div className="min-h-screen flex flex-col text-black">
       <div className="flex-grow flex items-start justify-center">
-        <div className="max-w-5xl w-full p-10 bg-gray-100 shadow-xl rounded-3xl min-h-[700px] relative flex flex-col">
+        <div
+          className="max-w-5xl w-full p-10 bg-gray-100 shadow-xl rounded-3xl min-h-[900px] relative flex flex-col"
+          onClick={handleContainerClick}
+        >
           {!isCourseSelected && (
             <div className="grid grid-cols-3 gap-8">
               <div className="col-span-1">
@@ -373,7 +389,7 @@ export default function EditCoursePage() {
                     <GoogleMap
                       center={mapCenter}
                       zoom={15}
-                      mapContainerStyle={{ height: "750px", width: "75%", borderRadius: "1rem" }}
+                      mapContainerStyle={{ height: "850px", width: "75%", borderRadius: "1rem" }}
                       onClick={handleMapClick}
                     >
                       {Array.isArray(pins) && pins.map((pin) => (
@@ -490,7 +506,7 @@ export default function EditCoursePage() {
                 )}
               </div>
 
-              <div className="absolute top-0 right-0 w-1/4 bg-gray-100 p-4 h-auto flex flex-col justify-between">
+              <div className="edit-panel absolute top-0 right-0 w-1/4 bg-gray-100 p-4 h-[850px] flex flex-col justify-between">
                 <h2 className="text-xl font-semibold">Rediger bane</h2>
                 <div>
                   <label className="block mt-4">Navn:</label>
