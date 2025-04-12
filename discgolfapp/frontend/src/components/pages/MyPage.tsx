@@ -29,7 +29,7 @@ const MyPage: React.FC<MyPageProps> = ({ setSelectedPage }) => {
             "Authorization": `Bearer ${accessToken}`
           }
         });
-        if (!res.ok) throw new Error("Could not find user");
+        if (res.status !== 200) throw new Error("Could not find user");
         const data = await res.json();
         setUser(data);
 
@@ -38,7 +38,7 @@ const MyPage: React.FC<MyPageProps> = ({ setSelectedPage }) => {
           setProfileImage(imageUrl);
         }
       } catch (error) {
-        console.error("Error fetching user data:", error);
+        toast.error("Error fetching user data: " + error);
       }
     };
     fetchUser();

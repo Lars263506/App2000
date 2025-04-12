@@ -44,6 +44,7 @@ const ClubAdminDetails = () => {
               setSelectedClub={setSelectedClub}
               searchTerm={searchTerm}
               setSearchTerm={setSearchTerm}
+              setSelectedPage={() => {}}
             />
           </div>
 

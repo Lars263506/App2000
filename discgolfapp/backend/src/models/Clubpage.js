@@ -46,6 +46,7 @@ const schema = new mongoose.Schema(
         id: { type: mongoose.Schema.Types.ObjectId, ref: 'Member' },
         displayName: { type: String, required: true },
         role: { type: String, required: true },
+        position: { type: String, default: '' },
         profilePicture: { type: String, default: '' },
       },
     ],

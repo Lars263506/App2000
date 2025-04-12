@@ -242,7 +242,19 @@ const updateClubPage = async (req, res) => {
   } catch (err) {
     res.status(500).json({ error: err.message })
   }
-}
+};
+
+const updatePosition = async (req, res) => {
+  try {
+    const { displayName, position } = req.body;
+    const updatedMembers = await clubpageService.updatePosition(displayName, position);
+    res.status(200).json(updatedMembers);
+  } catch (err) {
+    console.error("Feil i updatePosition:", err); // 👈 Tydelig logging her
+    res.status(500).json({ error: err.message });
+  }
+};
+
 
 export {
   getAllClubPages,
@@ -256,5 +268,6 @@ export {
   createNewAnnouncement,
   deleteClubPage,
   updateAnnouncement,
-  updateClubPage
+  updateClubPage,
+  updatePosition,
 }

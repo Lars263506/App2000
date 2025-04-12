@@ -14,7 +14,8 @@ import {
   createNewAnnouncement,
   deleteClubPage,
   updateAnnouncement,
-  updateClubPage
+  updateClubPage,
+  updatePosition
 } from '../controllers/clubpageController.js'
 import { checkMemberStatus, optionalAuth } from '../middleware/auth.js'
 
@@ -96,5 +97,11 @@ router.put('/:id',
   authorizeAdmin,
   updateClubPage
 )
+
+router.patch('/members/position', 
+  passport.authenticate('jwt', { session: false }),
+  authorizeClubowner,
+  updatePosition
+);
 
 export default router

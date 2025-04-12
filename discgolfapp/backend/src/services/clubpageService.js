@@ -46,14 +46,22 @@ const getClubPage = async (id) => {
  */
 
 const getMembers = async (id) => {
-  const user = await User.findById(id).select('displayName')
-  if (!user) throw new Error('User not found')
+  const user = await User.findById(id).select('displayName');
+  if (!user) throw new Error('User not found');
 
-  const clubPage = await ClubPage.findOne({ 'members.displayName': user.displayName }).select('members')
-  if (!clubPage) return []
+  const clubPage = await ClubPage.findOne({ 'members.displayName': user.displayName }).select('members');
+  if (!clubPage) return [];
 
-  return clubPage.members
-}
+  return clubPage.members.map(member => {
+    return {
+      displayName: member.displayName,
+      role: member.role,
+      profilePicture: member.profilePicture,
+      position: member.position
+    };
+  });
+  
+};
 
 /**
  * @author Lars Andreas Strand
@@ -237,6 +245,15 @@ const updateClubPage = async (id, request) => {
   if (!clubPage) throw new Error('Club page not found')
 }
 
+const updatePosition = async (displayName, position) => {
+  return await ClubPage.findOneAndUpdate(
+    { "members.displayName": displayName },
+    { $set: { "members.$.position": position } },
+    { new: true }
+  );
+};
+
+
 export {
   getAllClubPages,
   getClubPage,
@@ -248,5 +265,6 @@ export {
   createNewAnnouncement,
   deleteClubPage,
   updateAnnouncement,
-  updateClubPage
+  updateClubPage,
+  updatePosition,
 }
