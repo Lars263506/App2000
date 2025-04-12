@@ -66,7 +66,7 @@ export default function EditCoursePage() {
           },
         });
   
-        if (!response.ok) {
+        if (response.status !== 200) {
           throw new Error("Kunne ikke hente baner. Sjekk autentisering.");
         }
   
@@ -107,7 +107,7 @@ export default function EditCoursePage() {
         body: JSON.stringify({ pins }),
       });
   
-      if (!response.ok) {
+      if (response.status !== 200) {
         const errorText = await response.text();
         console.error("Backend error response:", errorText);
         throw new Error("Failed to save pins to database");
@@ -171,7 +171,7 @@ export default function EditCoursePage() {
         },
       });
   
-      if (!response.ok) {
+      if (response.status !== 200) {
         throw new Error("Failed to fetch pins from database");
       }
   
@@ -232,7 +232,7 @@ export default function EditCoursePage() {
         body: JSON.stringify({ pins: updatedPins }),
       });
   
-      if (!response.ok) {
+      if (response.status !== 200) {
         throw new Error("Failed to save pins to database");
       }
   
@@ -296,7 +296,7 @@ export default function EditCoursePage() {
           },
         });
   
-        if (!response.ok) {
+        if (response.status !== 200) {
           throw new Error("Kunne ikke hente pins for banen. Sjekk autentisering.");
         }
   
@@ -448,7 +448,14 @@ export default function EditCoursePage() {
                   <option value="kurv">Kurv</option>
                   <option value="Utslagspunkt">Utslagspunkt</option>
                 </select>
-                </div>
+                {/* Legg til knappen for å lagre pins */}
+                <button
+                  onClick={savePinsToDatabase}
+                  className="bg-green-600 text-white px-4 py-2 rounded-lg mt-4"
+                >
+                  Lagre alle pins
+                </button>
+              </div>
 
                 {selectedPin && (
                   <div className="mt-4 p-4 border rounded-lg bg-gray-200">
