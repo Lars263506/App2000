@@ -46,6 +46,7 @@ export default function EditCoursePage() {
   const [isDrawingLine, setIsDrawingLine] = useState(false);
   const [linePins, setLinePins] = useState<Pin[]>([]);
   const [lines, setLines] = useState<Line[]>([]);
+  const [isDeleteMode, setIsDeleteMode] = useState(false);
 
   const [mapCenter, setMapCenter] = useState<{ lat: number; lng: number }>({
     lat: 59.9139,
@@ -101,8 +102,6 @@ export default function EditCoursePage() {
     const url = `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/course/${course.id}/pins`;
     const token = localStorage.getItem("accessToken");
 
-    console.log("Saving to database:", { pins, lines });
-
     try {
       const response = await fetch(url, {
         method: 'PUT',
@@ -115,19 +114,15 @@ export default function EditCoursePage() {
 
       if (response.status !== 200) {
         const errorText = await response.text();
-        console.error("Backend error response:", errorText);
-        throw new Error("Failed to save pins and lines to database");
+        throw new Error(`Failed to save pins and lines: ${errorText}`);
       }
 
       const updatedData = await response.json();
-      console.log("Updated data from backend:", updatedData);
-
-      setPins(updatedData.pins);
+      setPins(updatedData.pins || []);
       setLines(updatedData.lines || []);
       alert("Pins og linjer lagret i databasen!");
     } catch (error) {
       console.error("Error saving pins and lines:", error);
-      alert("Kunne ikke lagre data. Prøv igjen senere.");
     }
   };
 
@@ -145,10 +140,51 @@ export default function EditCoursePage() {
     };
     setPins([...pins, newPin]);
     setNewPinName("");
-    setSelectedPin(null); // Lukker redigeringsmenyen etter å ha lagt til ny pin
+    setSelectedPin(null);
   };
 
   const handlePinClick = async (pin: Pin) => {
+    if (isDeleteMode) {
+      const pinName = pin.name || "Ukjent pin";
+      if (window.confirm(`Er du sikker på at du vil slette pinnen "${pinName}"?`)) {
+        const updatedPins = pins.filter((p) => p.id !== pin.id);
+        const updatedLines = lines.filter(
+          (line) => line.pinId1 !== pin.id && line.pinId2 !== pin.id
+        );
+        setPins(updatedPins);
+        setLines(updatedLines);
+        setSelectedPin(null);
+
+        // Lagre sletting til databasen umiddelbart
+        const course = courses.find((c) => c.name === selectedCourse);
+        if (course) {
+          const url = `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/course/${course.id}/pins`;
+          const token = localStorage.getItem("accessToken");
+          try {
+            const response = await fetch(url, {
+              method: "PUT",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              },
+              body: JSON.stringify({ pins: updatedPins, lines: updatedLines }),
+            });
+            if (response.status !== 200) {
+              const errorText = await response.text();
+              throw new Error(`Failed to save pin deletion: ${errorText}`);
+            }
+            console.log(`Pin "${pinName}" deleted permanently`);
+          } catch (error) {
+            console.error("Error saving pin deletion:", error);
+            // Gjenopprett pinnen lokalt hvis sletting feiler
+            setPins(pins);
+            setLines(lines);
+          }
+        }
+      }
+      return;
+    }
+
     if (isDrawingLine) {
       setLinePins((prev) => {
         if (prev.length < 2) {
@@ -192,7 +228,7 @@ export default function EditCoursePage() {
       }
 
       const updatedData = await response.json();
-      setPins(updatedData.pins);
+      setPins(updatedData.pins || []);
       setLines(updatedData.lines || []);
 
       const selectedPinData = updatedData.pins.find((p: Pin) => p.id === pin.id);
@@ -208,6 +244,44 @@ export default function EditCoursePage() {
     }
 
     setMapCenter({ lat: pin.latitude, lng: pin.longitude });
+  };
+
+  const handleLineClick = async (line: Line, index: number) => {
+    if (isDeleteMode) {
+      const pin1 = pins.find((p) => p.id === line.pinId1);
+      const pin2 = pins.find((p) => p.id === line.pinId2);
+      const lineName = `linje mellom "${pin1?.name || "Ukjent"}" og "${pin2?.name || "Ukjent"}"`;
+      if (window.confirm(`Er du sikker på at du vil slette ${lineName}?`)) {
+        const updatedLines = lines.filter((_, i) => i !== index);
+        setLines(updatedLines);
+
+        // Lagre sletting til databasen umiddelbart
+        const course = courses.find((c) => c.name === selectedCourse);
+        if (course) {
+          const url = `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/course/${course.id}/pins`;
+          const token = localStorage.getItem("accessToken");
+          try {
+            const response = await fetch(url, {
+              method: "PUT",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              },
+              body: JSON.stringify({ pins, lines: updatedLines }),
+            });
+            if (response.status !== 200) {
+              const errorText = await response.text();
+              throw new Error(`Failed to save line deletion: ${errorText}`);
+            }
+            console.log(`Line "${lineName}" deleted permanently`);
+          } catch (error) {
+            console.error("Error saving line deletion:", error);
+            // Gjenopprett linjen lokalt hvis sletting feiler
+            setLines(lines);
+          }
+        }
+      }
+    }
   };
 
   const handleSavePinChanges = async () => {
@@ -259,7 +333,7 @@ export default function EditCoursePage() {
     setEditPinDistance(null);
     setEditPinPar(null);
     setEditPinOutOfBounds("");
-    setSelectedPin(null); // Lukker redigeringsmenyen etter lagring
+    setSelectedPin(null);
   };
 
   const handleDragStart = () => {
@@ -314,8 +388,6 @@ export default function EditCoursePage() {
         }
 
         const result = await response.json();
-        console.log("Data fetched from backend:", result);
-
         setPins(Array.isArray(result.pins) ? result.pins : []);
         setLines(Array.isArray(result.lines) ? result.lines : []);
       } catch (error) {
@@ -326,20 +398,23 @@ export default function EditCoursePage() {
   };
 
   const handleMapClick = (e: google.maps.MapMouseEvent) => {
+    if (isDeleteMode) {
+      return;
+    }
     if (e.latLng) {
       handleAddPin(e.latLng.lat(), e.latLng.lng());
     }
-    setSelectedPin(null); 
+    setSelectedPin(null);
     setIsDrawingLine(false);
-    setLinePins([]); 
+    setLinePins([]);
   };
 
   const handleContainerClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    // Lukker redigeringsmenyen hvis klikket er utenfor redigeringspanelet
-    if (e.target instanceof HTMLElement && !e.target.closest('.edit-panel')) {
+    if (e.target instanceof HTMLElement && !e.target.closest(".edit-panel")) {
       setSelectedPin(null);
       setIsDrawingLine(false);
       setLinePins([]);
+      setIsDeleteMode(false);
     }
   };
 
@@ -348,7 +423,15 @@ export default function EditCoursePage() {
     if (!isDrawingLine) {
       setLinePins([]);
     }
-    setSelectedPin(null); // Lukker redigeringsmenyen når tegne-modus veksles
+    setSelectedPin(null);
+    setIsDeleteMode(false);
+  };
+
+  const toggleDeleteMode = () => {
+    setIsDeleteMode(!isDeleteMode);
+    setSelectedPin(null);
+    setIsDrawingLine(false);
+    setLinePins([]);
   };
 
   return (
@@ -447,9 +530,21 @@ export default function EditCoursePage() {
                               width: "150px",
                             }}
                           >
-                            {selectedPin.distance && <div><strong>Distanse:</strong> {selectedPin.distance} meter</div>}
-                            {selectedPin.par && <div><strong>Par:</strong> {selectedPin.par}</div>}
-                            {selectedPin.outOfBounds && <div><strong>OB:</strong> {selectedPin.outOfBounds}</div>}
+                            {selectedPin.distance && (
+                              <div>
+                                <strong>Distanse:</strong> {selectedPin.distance} meter
+                              </div>
+                            )}
+                            {selectedPin.par && (
+                              <div>
+                                <strong>Par:</strong> {selectedPin.par}
+                              </div>
+                            )}
+                            {selectedPin.outOfBounds && (
+                              <div>
+                                <strong>OB:</strong> {selectedPin.outOfBounds}
+                              </div>
+                            )}
                           </div>
                         </OverlayView>
                       )}
@@ -498,6 +593,7 @@ export default function EditCoursePage() {
                                 },
                               ],
                             }}
+                            onClick={() => handleLineClick(line, index)}
                           />
                         );
                       })}
@@ -540,6 +636,14 @@ export default function EditCoursePage() {
                     }`}
                   >
                     {isDrawingLine ? "Avslutt tegne linje" : "Tegn linje"}
+                  </button>
+                  <button
+                    onClick={toggleDeleteMode}
+                    className={`px-4 py-2 rounded-lg mt-2 ${
+                      isDeleteMode ? "bg-gray-400 text-black" : "bg-red-600 text-white"
+                    }`}
+                  >
+                    {isDeleteMode ? "Avslutt slettemodus" : "Slettemodus"}
                   </button>
                 </div>
 

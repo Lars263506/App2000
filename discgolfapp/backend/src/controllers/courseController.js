@@ -71,11 +71,24 @@ const updateCoursePins = async (req, res) => {
       return res.status(400).json({ message: 'Pins must be an array' });
     }
 
-    const updateData = { pins };
+    // Valider linjer
     if (lines !== undefined) {
       if (!Array.isArray(lines)) {
         return res.status(400).json({ message: 'Lines must be an array' });
       }
+      // Sjekk at linjer kun refererer til eksisterende pins
+      const pinIds = pins.map((pin) => pin.id);
+      for (const line of lines) {
+        if (!pinIds.includes(line.pinId1) || !pinIds.includes(line.pinId2)) {
+          return res.status(400).json({
+            message: 'Line refers to non-existent pin ID',
+          });
+        }
+      }
+    }
+
+    const updateData = { pins };
+    if (lines !== undefined) {
       updateData.lines = lines;
     }
 
