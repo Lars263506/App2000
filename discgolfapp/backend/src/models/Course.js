@@ -1,11 +1,5 @@
 import mongoose from 'mongoose';
 
-/**
- * @author Lars Andreas Strand
- * @description This is the schema for the Course model.
- * It defines the structure of the Course document in the database.
- */
-
 const schema = new mongoose.Schema(
   {
     name: {
@@ -17,9 +11,9 @@ const schema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    town: { 
+    town: {
       type: String,
-      required: true
+      required: true,
     },
     postCode: {
       type: String,
@@ -49,9 +43,8 @@ const schema = new mongoose.Schema(
       required: true,
     },
     pins: {
-      type: String, // Lagres som en streng i databasen
+      type: String,
       get: (value) => {
-        // Konverterer strengen til et array når vi leser fra databasen
         try {
           return JSON.parse(value);
         } catch (error) {
@@ -59,16 +52,28 @@ const schema = new mongoose.Schema(
         }
       },
       set: (value) => {
-        // Konverterer arrayet til en streng når vi lagrer i databasen
         return JSON.stringify(value);
       },
+    },
+    lines: {
+      type: String, // Lagres som en streng i databasen
+      get: (value) => {
+        try {
+          return JSON.parse(value);
+        } catch (error) {
+          return [];
+        }
       },
+      set: (value) => {
+        return JSON.stringify(value);
+      },
+    },
     reviews: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Review'
-      }
-    ]
+        ref: 'Review',
+      },
+    ],
   },
   { timestamps: true, toJSON: { getters: true }, toObject: { getters: true } }
 );

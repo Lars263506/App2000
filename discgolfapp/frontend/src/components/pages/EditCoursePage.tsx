@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { GoogleMap, LoadScript, Marker, OverlayView } from "@react-google-maps/api";
+import { GoogleMap, LoadScript, Marker, OverlayView, Polyline } from "@react-google-maps/api";
 
 type Course = {
   id: string;
@@ -21,6 +21,11 @@ type Pin = {
   outOfBounds?: string;
 }
 
+type Line = {
+  pinId1: string;
+  pinId2: string;
+}
+
 export default function EditCoursePage() {
   const [selectedCourse, setSelectedCourse] = useState("");
   const [courses, setCourses] = useState<Course[]>([]);
@@ -38,9 +43,13 @@ export default function EditCoursePage() {
   const [tempLat, setTempLat] = useState<number | null>(null);
   const [tempLng, setTempLng] = useState<number | null>(null);
   const [isDragging, setIsDragging] = useState(false);
+  const [isDrawingLine, setIsDrawingLine] = useState(false);
+  const [linePins, setLinePins] = useState<Pin[]>([]);
+  // Ny state for lagrede linjer
+  const [lines, setLines] = useState<Line[]>([]);
 
   const [mapCenter, setMapCenter] = useState<{ lat: number; lng: number }>({
-    lat: 59.9139, 
+    lat: 59.9139,
     lng: 10.7522,
   });
 
@@ -55,29 +64,27 @@ export default function EditCoursePage() {
   useEffect(() => {
     const fetchCourses = async () => {
       const url = process.env.NEXT_PUBLIC_BACKEND_BASE_URL + "/course";
-      const token = localStorage.getItem("accessToken"); // Hent token fra localStorage
-  
+      const token = localStorage.getItem("accessToken");
+
       try {
         const response = await fetch(url, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`, // Legg til token i Authorization-headeren
+            Authorization: `Bearer ${token}`,
           },
         });
-  
+
         if (response.status !== 200) {
           throw new Error("Kunne ikke hente baner. Sjekk autentisering.");
         }
-  
+
         const result = await response.json();
-  
-        // Map _id to id for frontend usage
         const mappedCourses = result.data.map((course: any) => ({
           ...course,
-          id: course._id, // Map _id to id
+          id: course._id,
         }));
-  
+
         setCourses(mappedCourses);
       } catch (error) {
         console.error("Feil ved henting av baner:", error);
@@ -88,53 +95,40 @@ export default function EditCoursePage() {
 
   const savePinsToDatabase = async () => {
     if (!selectedCourse) return;
-  
+
     const course = courses.find((c) => c.name === selectedCourse);
     if (!course) return;
-  
+
     const url = `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/course/${course.id}/pins`;
     const token = localStorage.getItem("accessToken");
-  
-    console.log("Saving pins to database:", pins);
-  
+
+    console.log("Saving to database:", { pins, lines });
+
     try {
       const response = await fetch(url, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
+          'Authorization': `Bearer ${token}`,
         },
-        body: JSON.stringify({ pins }),
+        body: JSON.stringify({ pins, lines }),
       });
-  
+
       if (response.status !== 200) {
         const errorText = await response.text();
         console.error("Backend error response:", errorText);
-        throw new Error("Failed to save pins to database");
-      }
-  
-      // Hent oppdaterte pins fra backend
-      const updatedPinsResponse = await fetch(url, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-      });
-  
-      if (!updatedPinsResponse.ok) {
-        throw new Error("Failed to fetch updated pins from database");
+        throw new Error("Failed to save pins and lines to database");
       }
 
-      const updatedPins = await response.json();
-      console.log("Updated pins from backend:", updatedPins);
-  
-      // Konverter responsen til et array hvis nødvendig
-      const parsedPins = Array.isArray(updatedPins) ? updatedPins : JSON.parse(updatedPins);
-      setPins(parsedPins); // Oppdater pins i state
-      alert("Pins lagret i databasen!");
+      const updatedData = await response.json();
+      console.log("Updated data from backend:", updatedData);
+
+      setPins(updatedData.pins);
+      setLines(updatedData.lines || []);
+      alert("Pins og linjer lagret i databasen!");
     } catch (error) {
-      console.error("Error saving pins:", error);
+      console.error("Error saving pins and lines:", error);
+      alert("Kunne ikke lagre data. Prøv igjen senere.");
     }
   };
 
@@ -156,13 +150,36 @@ export default function EditCoursePage() {
   };
 
   const handlePinClick = async (pin: Pin) => {
+    if (isDrawingLine) {
+      setLinePins((prev) => {
+        if (prev.length < 2) {
+          const newLinePins = [...prev, pin];
+          if (newLinePins.length === 2) {
+            setLines((prevLines) => [
+              ...prevLines,
+              { pinId1: newLinePins[0].id, pinId2: newLinePins[1].id },
+            ]);
+          }
+          return newLinePins;
+        } else {
+          const newLinePins = [prev[1], pin];
+          setLines((prevLines) => [
+            ...prevLines,
+            { pinId1: newLinePins[0].id, pinId2: newLinePins[1].id },
+          ]);
+          return newLinePins;
+        }
+      });
+      return;
+    }
+
     try {
       const course = courses.find((c) => c.name === selectedCourse);
       if (!course) return;
-  
+
       const url = `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/course/${course.id}/pins`;
       const token = localStorage.getItem("accessToken");
-  
+
       const response = await fetch(url, {
         method: "GET",
         headers: {
@@ -170,15 +187,16 @@ export default function EditCoursePage() {
           Authorization: `Bearer ${token}`,
         },
       });
-  
+
       if (response.status !== 200) {
         throw new Error("Failed to fetch pins from database");
       }
-  
-      const updatedPins = await response.json();
-      setPins(updatedPins);
-  
-      const selectedPinData = updatedPins.find((p: Pin) => p.id === pin.id);
+
+      const updatedData = await response.json();
+      setPins(updatedData.pins);
+      setLines(updatedData.lines || []);
+
+      const selectedPinData = updatedData.pins.find((p: Pin) => p.id === pin.id);
       if (selectedPinData) {
         setSelectedPin(selectedPinData);
         setEditPinDistance(selectedPinData.distance || null);
@@ -189,13 +207,13 @@ export default function EditCoursePage() {
       console.error("Error fetching pin data:", error);
       alert("Kunne ikke hente pin-data. Prøv igjen senere.");
     }
-  
+
     setMapCenter({ lat: pin.latitude, lng: pin.longitude });
   };
 
-    const handleSavePinChanges = async () => {
+  const handleSavePinChanges = async () => {
     if (!selectedPin) return;
-  
+
     const updatedPins = pins.map((pin) =>
       pin.id === selectedPin.id
         ? {
@@ -206,43 +224,39 @@ export default function EditCoursePage() {
           }
         : pin
     );
-  
+
     setPins(updatedPins as Pin[]);
-  
-    // Oppdater selectedPin med de nye verdiene
     const updatedPin = updatedPins.find((pin) => pin.id === selectedPin.id);
     if (updatedPin) {
       setSelectedPin(updatedPin);
     }
-  
-    // Lagre oppdaterte pins i backend
+
     try {
       const course = courses.find((c) => c.name === selectedCourse);
       if (!course) return;
-  
+
       const url = `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/course/${course.id}/pins`;
       const token = localStorage.getItem("accessToken");
-  
+
       const response = await fetch(url, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ pins: updatedPins }),
+        body: JSON.stringify({ pins: updatedPins, lines }),
       });
-  
+
       if (response.status !== 200) {
         throw new Error("Failed to save pins to database");
       }
-  
+
       alert("Endringer lagret!");
     } catch (error) {
       console.error("Error saving pins:", error);
       alert("Kunne ikke lagre endringer. Prøv igjen senere.");
     }
-  
-    // Nullstill redigeringsfeltene
+
     setEditPinDistance(null);
     setEditPinPar(null);
     setEditPinOutOfBounds("");
@@ -254,7 +268,7 @@ export default function EditCoursePage() {
 
   const handleDragEnd = (e: google.maps.MapMouseEvent) => {
     if (!e.latLng) return;
-  
+
     if (!selectedPin || !e.latLng) return;
 
     const newLat = e.latLng.lat();
@@ -263,7 +277,6 @@ export default function EditCoursePage() {
     setTempLat(newLat);
     setTempLng(newLng);
 
-    // Oppdater pinnen med ny posisjon i state
     const updatedPins = pins.map((p) =>
       p.id === selectedPin.id ? { ...p, latitude: newLat, longitude: newLng } : p
     );
@@ -279,14 +292,14 @@ export default function EditCoursePage() {
   const handleCourseSelection = async (courseName: string) => {
     setSelectedCourse(courseName);
     setIsCourseSelected(true);
-  
+
     const course = courses.find((c) => c.name === courseName);
     if (course) {
       setMapCenter({ lat: course.latitude, lng: course.longitude });
-  
+
       const url = `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/course/${course.id}/pins`;
       const token = localStorage.getItem("accessToken");
-  
+
       try {
         const response = await fetch(url, {
           method: "GET",
@@ -295,31 +308,33 @@ export default function EditCoursePage() {
             Authorization: `Bearer ${token}`,
           },
         });
-  
+
         if (response.status !== 200) {
           throw new Error("Kunne ikke hente pins for banen. Sjekk autentisering.");
         }
-  
+
         const result = await response.json();
-        console.log("Pins fetched from backend:", result);
-  
-        // Valider at result er et array
-        if (Array.isArray(result)) {
-          setPins(result);
-        } else {
-          console.error("Backend returned an unexpected format:", result);
-          setPins([]); // Sett pins til et tomt array hvis responsen er ugyldig
-        }
+        console.log("Data fetched from backend:", result);
+
+        setPins(Array.isArray(result.pins) ? result.pins : []);
+        setLines(Array.isArray(result.lines) ? result.lines : []);
       } catch (error) {
         console.error("Error fetching pins:", error);
         alert("Kunne ikke hente pins for banen. Vennligst prøv igjen senere.");
       }
     }
   };
-  
+
   const handleMapClick = (e: google.maps.MapMouseEvent) => {
     if (e.latLng) {
       handleAddPin(e.latLng.lat(), e.latLng.lng());
+    }
+  };
+
+  const toggleDrawLine = () => {
+    setIsDrawingLine(!isDrawingLine);
+    if (!isDrawingLine) {
+      setLinePins([]);
     }
   };
 
@@ -356,45 +371,45 @@ export default function EditCoursePage() {
                 {selectedCourse && (
                   <LoadScript googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string}>
                     <GoogleMap
-                      center={mapCenter} 
+                      center={mapCenter}
                       zoom={15}
                       mapContainerStyle={{ height: "750px", width: "75%", borderRadius: "1rem" }}
                       onClick={handleMapClick}
                     >
-                        {Array.isArray(pins) && pins.map((pin) => (
-                          <>
-                            <Marker
-                              key={pin.id}
-                              position={{ lat: pin.latitude, lng: pin.longitude }}
-                              draggable={isDragging && selectedPin?.id === pin.id}
-                              onDragStart={handleDragStart}
-                              onDragEnd={handleDragEnd}
-                              onClick={() => handlePinClick(pin)}
-                            />
-                            <OverlayView
-                              position={{ lat: pin.latitude, lng: pin.longitude }}
-                              mapPaneName={"floatPane"} // Beholder riktig mapPaneName for korrekt plassering
+                      {Array.isArray(pins) && pins.map((pin) => (
+                        <>
+                          <Marker
+                            key={pin.id}
+                            position={{ lat: pin.latitude, lng: pin.longitude }}
+                            draggable={isDragging && selectedPin?.id === pin.id}
+                            onDragStart={handleDragStart}
+                            onDragEnd={handleDragEnd}
+                            onClick={() => handlePinClick(pin)}
+                          />
+                          <OverlayView
+                            position={{ lat: pin.latitude, lng: pin.longitude }}
+                            mapPaneName={"floatPane"}
+                          >
+                            <div
+                              style={{
+                                position: "absolute",
+                                transform: "translate(-50%, -250%)",
+                                backgroundColor: "rgba(255, 255, 255, 1)",
+                                padding: "4px 8px",
+                                borderRadius: "4px",
+                                border: "1px solid black",
+                                fontSize: "14px",
+                                fontWeight: "bold",
+                                color: "black",
+                                whiteSpace: "nowrap",
+                                boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2)",
+                              }}
                             >
-                              <div
-                                style={{
-                                  position: "absolute",
-                                  transform: "translate(-50%, -250%)", // Flytt boksen oppover
-                                  backgroundColor: "rgba(255, 255, 255, 1)", // Gjennomsiktig hvit bakgrunn
-                                  padding: "4px 8px", // Gjør boksen tydelig
-                                  borderRadius: "4px", // Myke hjørner
-                                  border: "1px solid black", // Tydelig kantlinje
-                                  fontSize: "14px",
-                                  fontWeight: "bold",
-                                  color: "black",
-                                  whiteSpace: "nowrap",
-                                  boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2)", // Lett skygge for dybde
-                                }}
-                              >
-                                {pin.name}
-                              </div>
-                            </OverlayView>
-                          </>
-                        ))}
+                              {pin.name}
+                            </div>
+                          </OverlayView>
+                        </>
+                      ))}
                       {selectedPin && (
                         <OverlayView
                           position={{ lat: selectedPin.latitude, lng: selectedPin.longitude }}
@@ -422,6 +437,54 @@ export default function EditCoursePage() {
                           </div>
                         </OverlayView>
                       )}
+                      {linePins.length === 2 && (
+                        <Polyline
+                          path={[
+                            { lat: linePins[0].latitude, lng: linePins[0].longitude },
+                            { lat: linePins[1].latitude, lng: linePins[1].longitude },
+                          ]}
+                          options={{
+                            strokeColor: "#808080",
+                            strokeOpacity: 0.8,
+                            strokeWeight: 2,
+                            geodesic: true,
+                            icons: [
+                              {
+                                icon: { path: "M 0,-1 0,1", strokeOpacity: 1, scale: 4 },
+                                offset: "0",
+                                repeat: "20px",
+                              },
+                            ],
+                          }}
+                        />
+                      )}
+                      {lines.map((line, index) => {
+                        const pin1 = pins.find((p) => p.id === line.pinId1);
+                        const pin2 = pins.find((p) => p.id === line.pinId2);
+                        if (!pin1 || !pin2) return null;
+                        return (
+                          <Polyline
+                            key={`line-${index}`}
+                            path={[
+                              { lat: pin1.latitude, lng: pin1.longitude },
+                              { lat: pin2.latitude, lng: pin2.longitude },
+                            ]}
+                            options={{
+                              strokeColor: "#808080",
+                              strokeOpacity: 0.8,
+                              strokeWeight: 2,
+                              geodesic: true,
+                              icons: [
+                                {
+                                  icon: { path: "M 0,-1 0,1", strokeOpacity: 1, scale: 4 },
+                                  offset: "0",
+                                  repeat: "20px",
+                                },
+                              ],
+                            }}
+                          />
+                        );
+                      })}
                     </GoogleMap>
                   </LoadScript>
                 )}
@@ -441,21 +504,28 @@ export default function EditCoursePage() {
                 <div className="mt-4">
                   <label className="block">Velg Pin Type:</label>
                   <select
-                  value={selectedPinType}
-                  onChange={(e) => handlePinTypeChange(e.target.value)}
-                  className="w-full p-2 border rounded-lg"
-                >
-                  <option value="kurv">Kurv</option>
-                  <option value="Utslagspunkt">Utslagspunkt</option>
-                </select>
-                {/* Legg til knappen for å lagre pins */}
-                <button
-                  onClick={savePinsToDatabase}
-                  className="bg-green-600 text-white px-4 py-2 rounded-lg mt-4"
-                >
-                  Lagre alle pins
-                </button>
-              </div>
+                    value={selectedPinType}
+                    onChange={(e) => handlePinTypeChange(e.target.value)}
+                    className="w-full p-2 border rounded-lg"
+                  >
+                    <option value="kurv">Kurv</option>
+                    <option value="Utslagspunkt">Utslagspunkt</option>
+                  </select>
+                  <button
+                    onClick={savePinsToDatabase}
+                    className="bg-green-600 text-white px-4 py-2 rounded-lg mt-4"
+                  >
+                    Lagre alle pins
+                  </button>
+                  <button
+                    onClick={toggleDrawLine}
+                    className={`px-4 py-2 rounded-lg mt-2 ${
+                      isDrawingLine ? "bg-gray-400 text-black" : "bg-blue-600 text-white"
+                    }`}
+                  >
+                    {isDrawingLine ? "Avslutt tegne linje" : "Tegn linje"}
+                  </button>
+                </div>
 
                 {selectedPin && (
                   <div className="mt-4 p-4 border rounded-lg bg-gray-200">
