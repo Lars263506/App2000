@@ -89,7 +89,7 @@ const ClubDetails: React.FC<ClubDetailsProps> = ({ clubData, setSelectedPage }) 
             </div>
 
             <div
-              aria-label="Announcements Section"
+              aria-label="Meetings Section"
               className="flex flex-col w-1/3 h-full bg-[#E7EFFB] shadow-md rounded-lg p-4"
             >
               <Meetings />
