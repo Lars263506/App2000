@@ -34,8 +34,6 @@ app.use(express.json())
 // Middleware to log request method and path
 app.use((req, res, next) => {
   console.log(`Request method: ${req.method}\nRequest path: ${req.path}`)
-  console.log(`Authorization header: ${JSON.stringify(req.headers.authorization? req.headers.authorization : '')}`)
-  console.log(`Request body: ${JSON.stringify(req.body)}`)
   next()
 })
 
