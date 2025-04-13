@@ -8,14 +8,21 @@ import {
   getView,
   isMember,
   getMembers,
+  getInvitations,
   getAnnouncements,
+  addInvitation,
   createNewMember,
   createNewClubPage,
   createNewAnnouncement,
+  deleteInvitation,
   deleteClubPage,
+  updateInvitation,
   updateAnnouncement,
   updateClubPage
 } from '../controllers/clubpageController.js'
+import {
+
+} from '../controllers/invitationsController.js'
 import { checkMemberStatus, optionalAuth } from '../middleware/auth.js'
 
 /**
@@ -52,6 +59,12 @@ router.get('/members/',
   getMembers
 )
 
+router.get('/invitations',
+  passport.authenticate('jwt', { session: false }),
+  checkMemberStatus,
+  getInvitations
+);
+
 router.get('/announcements/',
   passport.authenticate('jwt', { session: false }),
   getAnnouncements
@@ -67,6 +80,12 @@ router.post('/join/:clubId',
   createNewMember
 )
 
+router.post('/invitations',
+  passport.authenticate('jwt', { session: false }),
+  authorizeClubowner,
+  addInvitation
+);
+
 router.post('/',
   passport.authenticate('jwt', { session: false }),
   authorizeAdmin,
@@ -79,6 +98,12 @@ router.post('/announcements/:clubId',
   createNewAnnouncement
 )
 
+router.delete('/invitations/:invitationId',
+  passport.authenticate('jwt', { session: false }),
+  authorizeClubowner,
+  deleteInvitation
+);
+
 router.delete('/:id',
   passport.authenticate('jwt', { session: false }),
   authorizeAdmin,
@@ -90,6 +115,12 @@ router.put('/announcements/:clubId/:index',
   authorizeClubowner,
   updateAnnouncement
 )
+
+router.put('/invitations',
+  passport.authenticate('jwt', { session: false }),
+  authorizeClubowner,
+  updateInvitation
+);
 
 router.put('/:id',
   passport.authenticate('jwt', { session: false }),
