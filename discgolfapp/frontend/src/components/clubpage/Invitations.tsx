@@ -1,25 +1,30 @@
 import React, { useState, useEffect } from 'react';
 import jsPDF from 'jspdf';
+import { toast } from 'react-toastify';
 
-interface Invitation {
-  id: number;
-  title: string;
-  description: string;
-  text: string;
-}
+import Invitation from '../../types/invitation';
+import { Club } from '../../types/club';
 
 const backendUrl = `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/invitations/`;
 
 const Invitations: React.FC = () => {
   const [invitations, setInvitations] = useState<Invitation[]>([]);
+  const [selectedClub, setSelectedClub] = useState<Club | null>(null);
   const [isClubOwner, setIsClubOwner] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [currentInvitation, setCurrentInvitation] = useState<Invitation | null>(null);
 
   useEffect(() => {
     const fetchInvitations = async () => {
+      const accessToken = localStorage.getItem('accessToken');
+      if (!accessToken) return;
       try {
-        const response = await fetch(backendUrl);
+        const response = await fetch(backendUrl, {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
         if (response.status !== 200) throw new Error('Failed to fetch invitations');
         const data: Invitation[] = await response.json();
         setInvitations(data);
@@ -28,6 +33,7 @@ const Invitations: React.FC = () => {
       }
     };
 
+    setSelectedClub(JSON.parse(localStorage.getItem('selectedClub') || ''));
     fetchInvitations();
   }, []);
 
@@ -49,7 +55,10 @@ const Invitations: React.FC = () => {
   };
 
   const handleAddInvitation = () => {
-    setCurrentInvitation({ id: 0, title: '', description: '', text: '' });
+    const maxId = invitations && invitations.length > 0
+      ? Math.max(...invitations.map((inv) => inv.id))
+      : 0;
+    setCurrentInvitation({ id: maxId + 1, title: '', description: '', text: '' });
     setShowModal(true);
   };
 
@@ -60,8 +69,15 @@ const Invitations: React.FC = () => {
 
   const handleDeleteInvitation = async (id: number) => {
     try {
-      const response = await fetch(`${backendUrl}/${id}`, {
+      const accessToken = localStorage.getItem('accessToken');
+      if (!accessToken) return;
+
+      const response = await fetch(backendUrl, {
         method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        },
       });
       if (response.status !== 200) throw new Error('Failed to delete invitation');
       setInvitations((prev) => prev.filter((invitation) => invitation.id !== id));
@@ -73,33 +89,49 @@ const Invitations: React.FC = () => {
   const handleSaveInvitation = async () => {
     if (currentInvitation) {
       try {
-        if (currentInvitation.id === 0) {
-          // Add new invitation
+        const accessToken = localStorage.getItem('accessToken');
+        if (!accessToken) return;
+
+        const existingInvitation = invitations.find((invitation) => invitation.id === currentInvitation.id);
+
+        if (!existingInvitation) {
           const response = await fetch(backendUrl, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${accessToken}`,
+            },
             body: JSON.stringify(currentInvitation),
           });
-          if (response.status !== 200) throw new Error('Failed to add invitation');
-          const newInvitation: Invitation = await response.json();
-          setInvitations((prev) => [...prev, newInvitation]);
+          if (response.status !== 201) throw new Error('Failed to create invitation');;
+          setInvitations((prev) => [...prev, currentInvitation]);
         } else {
-          // Update existing invitation
-          const response = await fetch(`${backendUrl}/${currentInvitation.id}`, {
+          const response = await fetch(backendUrl, {
             method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(currentInvitation),
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${accessToken}`,
+            },
+            body: JSON.stringify({
+              invitationId: currentInvitation.id,
+              clubId: selectedClub?._id || 0,
+              request: currentInvitation
+            }),
           });
           if (response.status !== 200) throw new Error('Failed to update invitation');
-          const updatedInvitation: Invitation = await response.json();
           setInvitations((prev) =>
             prev.map((invitation) =>
-              invitation.id === updatedInvitation.id ? updatedInvitation : invitation
+              invitation.id === currentInvitation.id ? currentInvitation : invitation
             )
           );
         }
       } catch (error) {
-        console.error(error);
+        if (error instanceof Error) {
+          toast.error(error.message);
+        }
+        else {
+          toast.error('Det oppstod en feil med å lagre møteinnkallingen.');
+        }
       }
     }
     setShowModal(false);
@@ -119,36 +151,40 @@ const Invitations: React.FC = () => {
         </div>
       )}
 
-      {invitations.map((invitation) => (
-        <div key={invitation.id} className="p-4 border rounded-lg shadow-md bg-gray-100">
-          <h3 className="text-lg font-bold">{invitation.title}</h3>
-          <p className="text-sm text-gray-700">{invitation.description}</p>
-          <div className="flex gap-2 mt-2">
-            <button
-              onClick={() => handleDownloadPDF(invitation)}
-              className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-            >
-              Last ned som PDF
-            </button>
-            {isClubOwner && (
-              <>
-                <button
-                  onClick={() => handleEditInvitation(invitation)}
-                  className="px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600"
-                >
-                  Rediger
-                </button>
-                <button
-                  onClick={() => handleDeleteInvitation(invitation.id)}
-                  className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
-                >
-                  Slett
-                </button>
-              </>
-            )}
+      {invitations && invitations.length > 0 ? (
+        invitations.map((invitation) => (
+          <div key={invitation.id} className="p-4 border rounded-lg shadow-md bg-gray-100">
+            <h3 className="text-lg font-bold">{invitation.title}</h3>
+            <p className="text-sm text-gray-700">{invitation.description}</p>
+            <div className="flex gap-2 mt-2">
+              <button
+                onClick={() => handleDownloadPDF(invitation)}
+                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+              >
+                Last ned som PDF
+              </button>
+              {isClubOwner && (
+                <>
+                  <button
+                    onClick={() => handleEditInvitation(invitation)}
+                    className="px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600"
+                  >
+                    Rediger
+                  </button>
+                  <button
+                    onClick={() => handleDeleteInvitation(invitation.id)}
+                    className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+                  >
+                    Slett
+                  </button>
+                </>
+              )}
+            </div>
           </div>
-        </div>
-      ))}
+        ))
+      ) : (
+        <p className="text-gray-500">Ingen møteinnkallinger funnet.</p>
+      )}
 
       {showModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">

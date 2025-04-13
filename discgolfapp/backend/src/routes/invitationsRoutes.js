@@ -22,23 +22,22 @@ import {
 
 const router = express.Router();
 
-router.get('/invitations',
+router.get('/',
     passport.authenticate('jwt', { session: false }),
-    checkMemberStatus,
     getInvitations
 );
 
-router.post('/invitations',
+router.post('/',
     passport.authenticate('jwt', { session: false }),
     authorizeClubowner,
     addInvitation
 );
-router.delete('/invitations/:invitationId',
+router.delete('/',
     passport.authenticate('jwt', { session: false }),
     authorizeClubowner,
     deleteInvitation
 );
-router.put('/invitations',
+router.put('/',
     passport.authenticate('jwt', { session: false }),
     authorizeClubowner,
     updateInvitation

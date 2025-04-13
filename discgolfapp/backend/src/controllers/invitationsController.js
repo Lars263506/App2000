@@ -1,6 +1,8 @@
+import * as invitationsService from '../services/invitationsService.js';
+
 const getInvitations = async (req, res) => {
     try {
-        const { userId } = req.user;
+        const userId = req.user.id;
         const invitations = await invitationsService.getInvitations(userId);
         res.status(200).json(invitations);
     } catch (error) {
@@ -11,9 +13,9 @@ const getInvitations = async (req, res) => {
 
 const addInvitation = async (req, res) => {
     try {
-        const { userId } = req.user;
-        const { email, clubId } = req.body;
-        const invitation = await invitationsService.addInvitation(userId, email, clubId);
+        const clubownerId = req.user.id;
+        const { id, title, description, text } = req.body;
+        const invitation = await invitationsService.addInvitation(clubownerId, id, title, description, text);
         res.status(201).json(invitation);
     } catch (error) {
         console.error('Error adding invitation:', error);
@@ -23,9 +25,9 @@ const addInvitation = async (req, res) => {
 
 const deleteInvitation = async (req, res) => {
     try {
-        const { userId } = req.user;
-        const { invitationId } = req.body;
-        await invitationsService.deleteInvitation(userId, invitationId);
+        const clubownerId = req.user.id;
+        const { invitationId, clubId } = req.body;
+        await invitationsService.deleteInvitation(clubownerId, invitationId, clubId);
         res.status(200).send();
     } catch (error) {
         console.error('Error deleting invitation:', error);
@@ -35,9 +37,9 @@ const deleteInvitation = async (req, res) => {
 
 const updateInvitation = async (req, res) => {
     try {
-        const { userId } = req.user;
-        const { invitationId, status } = req.body;
-        const updatedInvitation = await invitationsService.updateInvitation(userId, invitationId, status);
+        const clubownerId = req.user.id;
+        const { invitationId, clubId, request } = req.body;
+        const updatedInvitation = await invitationsService.updateInvitation(clubownerId, invitationId, clubId, request);
         res.status(200).json(updatedInvitation);
     } catch (error) {
         console.error('Error updating invitation:', error);

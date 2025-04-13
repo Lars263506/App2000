@@ -6,11 +6,12 @@ import { rateLimit } from 'express-rate-limit'
 import passport from './config/passportConfig.js'
 import clubpageRoutes from './routes/clubpageRoutes.js'
 import courseRoutes from './routes/courseRoutes.js'
-import settingsRoutes from './routes/settingsRoutes.js'
-import userRoutes from './routes/userRoutes.js'
 import gameRoutes from './routes/gameRoutes.js'
-import translationsRoutes from './routes/translationsRoutes.js'
+import invitationsRoutes from './routes/invitationsRoutes.js'
 import reviewRoutes from './routes/reviewRoutes.js'
+import settingsRoutes from './routes/settingsRoutes.js'
+import translationsRoutes from './routes/translationsRoutes.js'
+import userRoutes from './routes/userRoutes.js'
 
 /**
  * @author Lars Andreas Strand and Andreas Nilsen
@@ -33,6 +34,8 @@ app.use(express.json())
 // Middleware to log request method and path
 app.use((req, res, next) => {
   console.log(`Request method: ${req.method}\nRequest path: ${req.path}`)
+  console.log(`Authorization header: ${JSON.stringify(req.headers.authorization? req.headers.authorization : '')}`)
+  console.log(`Request body: ${JSON.stringify(req.body)}`)
   next()
 })
 
@@ -49,11 +52,12 @@ app.use(rateLimit({
 // Routes for handling requests
 app.use('/clubpage', clubpageRoutes)
 app.use('/course', courseRoutes)
-app.use('/settings', settingsRoutes)
-app.use('/users', userRoutes)
 app.use('/games', gameRoutes)
-app.use('/translations', translationsRoutes)
+app.use('/invitations', invitationsRoutes)
 app.use('/reviews', reviewRoutes)
+app.use('/settings', settingsRoutes)
+app.use('/translations', translationsRoutes)
+app.use('/users', userRoutes)
 
 /**
  * @param process.env.MONGODB_URI
