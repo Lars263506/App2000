@@ -118,9 +118,9 @@ export default function StartGame() {
       } catch (error) {
         toast.error('Error saving game result: ' + error);
         if (error instanceof Error) {
-          alert(`Error: ${error.message}`);
+          toast.error(`Error: ${error.message}`);
         } else {
-          alert('An unknown error occurred');
+          toast.error('An unknown error occurred');
         }
       }
     }

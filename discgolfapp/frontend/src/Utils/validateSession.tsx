@@ -28,7 +28,6 @@ const validateSession = async () => {
         });
         const data = await response.json();
         if (response.status === 200 && data.newAccessToken && data.newRefreshToken) {
-            alert('Session refreshed successfully!');
             localStorage.setItem('accessToken', data.newAccessToken);
             localStorage.setItem('refreshToken', data.newRefreshToken);
         } else {
