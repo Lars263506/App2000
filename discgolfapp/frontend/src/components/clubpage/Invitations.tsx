@@ -10,7 +10,7 @@ const backendUrl = `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/invitations/`;
 const Invitations: React.FC = () => {
   const [invitations, setInvitations] = useState<Invitation[]>([]);
   const [selectedClub, setSelectedClub] = useState<Club | null>(null);
-  const [isClubOwner, setIsClubOwner] = useState(true);
+  const [isClubOwner, setIsClubOwner] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [currentInvitation, setCurrentInvitation] = useState<Invitation | null>(null);
 
@@ -36,6 +36,39 @@ const Invitations: React.FC = () => {
     setSelectedClub(JSON.parse(localStorage.getItem('selectedClub') || ''));
     fetchInvitations();
   }, []);
+
+  useEffect(() => {
+    if (selectedClub) {
+      const checkClubOwner = async () => {
+        const accessToken = localStorage.getItem('accessToken');
+        if (!accessToken || !selectedClub) return;
+        try {
+          const url = `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/clubpage/is-owner/${selectedClub._id}`;
+          const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${accessToken}`,
+            }
+          });
+          if (response.status === 200) {
+            const { isOwner } = await response.json();
+            setIsClubOwner(isOwner);
+          } else {
+            setIsClubOwner(false);
+          }
+        } catch (error) {
+          if (error instanceof Error) {
+            toast.error(error.message);
+          } else {
+            toast.error('Det oppstod en feil med å sjekke klubbens eierskap.');
+            setIsClubOwner(false);
+          }
+        }
+      };
+      checkClubOwner();
+    }
+  }, [selectedClub]);
 
   const handleDownloadPDF = (invitation: Invitation) => {
     const doc = new jsPDF();
@@ -78,6 +111,10 @@ const Invitations: React.FC = () => {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${accessToken}`,
         },
+        body: JSON.stringify({
+          invitationId: id,
+          clubId: selectedClub?._id || 0
+        }),
       });
       if (response.status !== 200) throw new Error('Failed to delete invitation');
       setInvitations((prev) => prev.filter((invitation) => invitation.id !== id));
@@ -153,13 +190,13 @@ const Invitations: React.FC = () => {
 
       {invitations && invitations.length > 0 ? (
         invitations.map((invitation) => (
-          <div key={invitation.id} className="p-4 border rounded-lg shadow-md bg-gray-100">
+          <div key={invitation.id} className="p-4 border rounded-lg shadow-md bg-[#E7EFFB]">
             <h3 className="text-lg font-bold">{invitation.title}</h3>
-            <p className="text-sm text-gray-700">{invitation.description}</p>
+            <p className="text-sm text-black">{invitation.description}</p>
             <div className="flex gap-2 mt-2">
               <button
                 onClick={() => handleDownloadPDF(invitation)}
-                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
               >
                 Last ned som PDF
               </button>
@@ -167,13 +204,13 @@ const Invitations: React.FC = () => {
                 <>
                   <button
                     onClick={() => handleEditInvitation(invitation)}
-                    className="px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600"
+                    className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
                   >
                     Rediger
                   </button>
                   <button
                     onClick={() => handleDeleteInvitation(invitation.id)}
-                    className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+                    className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
                   >
                     Slett
                   </button>

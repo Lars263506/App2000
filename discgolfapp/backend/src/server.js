@@ -45,7 +45,7 @@ app.use(passport.initialize())
 // Rate limiter middleware for all requests
 app.use(rateLimit({
   windowMs: 10 * 60 * 1000,
-  max: 100,
+  max: process.env.RATE_LIMIT_MAX || 100,
   message: 'Too many requests. Please try again in 15 minutes.'
 }))
 

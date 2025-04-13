@@ -67,6 +67,17 @@ const isMember = async (req, res) => {
   }
 }
 
+const isOwner = async (req, res) => {
+  try {
+    const clubId = req.params.clubId
+    const userId = req.user.id
+    const isOwner = await clubpageService.isOwner(clubId, userId)
+    res.json({ isOwner })
+  } catch (err) {
+    res.status(404).json({ error: err.message })
+  }
+}
+
 /**
  * @author Lars Andreas Strand
  * @description This function handles the request to get the members of a club page.
@@ -296,6 +307,7 @@ export {
   getClubPage,
   getView,
   isMember,
+  isOwner,
   getMembers,
   getInvitations,
   getAnnouncements,

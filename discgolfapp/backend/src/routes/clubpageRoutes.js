@@ -7,6 +7,7 @@ import {
   getClubPage,
   getView,
   isMember,
+  isOwner,
   getMembers,
   getInvitations,
   getAnnouncements,
@@ -52,6 +53,12 @@ router.get('/view/:id',
 router.get('/is-member/:clubId',
   checkMemberStatus,
   isMember
+)
+
+router.get('/is-owner/:clubId',
+  passport.authenticate('jwt', { session: false }),
+  authorizeClubowner,
+  isOwner
 )
 
 router.get('/members/',

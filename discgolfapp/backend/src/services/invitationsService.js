@@ -54,13 +54,15 @@ const deleteInvitation = async (clubownerId, invitationId, clubId) => {
 
         const club = await ClubPage.findOneAndUpdate(
             { clubOwner: user.displayName, _id: clubId },
-            { $pull: { invitations: { id: invitationId } } }
+            { $pull: { invitations: { id: invitationId } } },
+            { new: true }
         );
 
         if (!club) {
             throw new Error('Club not found or user is not the club owner.');
         }
 
+        return club.invitations;
     } catch (error) {
         console.error('Error deleting invitation:', error);
         throw new Error(error.message);
