@@ -158,7 +158,6 @@ export default function StartGame() {
         setSearchResults(users);
       } catch (error) {
         toast.error('Error fetching users: ' + error);
-        toast.error('An error occurred while fetching users.');
         setSearchResults([]);
       }
     } else {
