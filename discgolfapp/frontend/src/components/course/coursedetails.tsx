@@ -51,8 +51,7 @@ const CourseDetails: React.FC<CourseDetailsProps> = ({ selectedCourse, setSelect
           )
           setReviews(response.data)
         } catch (error) {
-          toast.error('Error fetching reviews:' + error)
-        }
+          toast.error('Error fetching reviews: ' + error)
       }
 
       fetchReviews()
