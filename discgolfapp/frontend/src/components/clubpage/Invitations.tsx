@@ -140,7 +140,7 @@ const Invitations: React.FC = () => {
             },
             body: JSON.stringify(currentInvitation),
           });
-          if (response.status !== 201) throw new Error('Failed to create invitation');;
+          if (response.status !== 201) throw new Error('Failed to create invitation');
           setInvitations((prev) => [...prev, currentInvitation]);
         } else {
           const response = await fetch(backendUrl, {
