@@ -4,7 +4,7 @@ import User from '../models/User.js'
 
 const refreshSession = async (userId) => {
     try {
-        const user = User.findById(userId).select('-hashedPassword')
+        const user = await User.findById(userId).select('-hashedPassword')
 
         const payload = { id: user._id, role: user.role }
 
