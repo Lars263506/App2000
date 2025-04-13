@@ -55,6 +55,7 @@ const CourseDetails: React.FC<CourseDetailsProps> = ({ selectedCourse, setSelect
       }
 
       fetchReviews()
+      }
     }
   }, [selectedCourse, activeTab])
 
