@@ -7,11 +7,12 @@ import passport from './config/passportConfig.js'
 import authRoutes from './routes/authRoutes.js'
 import clubpageRoutes from './routes/clubpageRoutes.js'
 import courseRoutes from './routes/courseRoutes.js'
-import settingsRoutes from './routes/settingsRoutes.js'
-import userRoutes from './routes/userRoutes.js'
 import gameRoutes from './routes/gameRoutes.js'
-import translationsRoutes from './routes/translationsRoutes.js'
+import invitationsRoutes from './routes/invitationsRoutes.js'
 import reviewRoutes from './routes/reviewRoutes.js'
+import settingsRoutes from './routes/settingsRoutes.js'
+import translationsRoutes from './routes/translationsRoutes.js'
+import userRoutes from './routes/userRoutes.js'
 
 /**
  * @author Lars Andreas Strand and Andreas Nilsen
@@ -44,7 +45,7 @@ app.use(passport.initialize())
 // Rate limiter middleware for all requests
 app.use(rateLimit({
   windowMs: 10 * 60 * 1000,
-  max: 100,
+  max: process.env.RATE_LIMIT_MAX || 100,
   message: 'Too many requests. Please try again in 15 minutes.'
 }))
 
@@ -52,11 +53,12 @@ app.use(rateLimit({
 app.use('/auth', authRoutes)
 app.use('/clubpage', clubpageRoutes)
 app.use('/course', courseRoutes)
-app.use('/settings', settingsRoutes)
-app.use('/users', userRoutes)
 app.use('/games', gameRoutes)
-app.use('/translations', translationsRoutes)
+app.use('/invitations', invitationsRoutes)
 app.use('/reviews', reviewRoutes)
+app.use('/settings', settingsRoutes)
+app.use('/translations', translationsRoutes)
+app.use('/users', userRoutes)
 
 /**
  * @param process.env.MONGODB_URI

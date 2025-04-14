@@ -44,6 +44,7 @@ const checkMemberStatus = (req, res, next) => {
       )
 
       req.user = { ...user, role: isMember ? 'member' : 'user' }
+
       return next()
     } catch (err) {
       return next(err)

@@ -37,6 +37,16 @@ const getClubPage = async (id) => {
   return clubPage
 }
 
+const isOwner = async (clubId, userId) => {
+  const user = await User.findById(userId).select('displayName')
+  if (!user) throw new Error('User not found')
+
+  const clubPage = await ClubPage.findOne({ _id: clubId, clubOwner: user.displayName }).select('clubOwner')
+  if (clubPage) return true
+
+  return false
+}
+
 /**
  * @author Lars Andreas Strand
  * @description This function retrieves a specific club page from the database.
@@ -240,6 +250,7 @@ const updateClubPage = async (id, request) => {
 export {
   getAllClubPages,
   getClubPage,
+  isOwner,
   getMembers,
   getAnnouncements,
   createNewApplication,
