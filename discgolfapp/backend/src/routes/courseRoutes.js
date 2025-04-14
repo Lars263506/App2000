@@ -34,7 +34,7 @@ router.get('/:id',
   getCourse
 )
 
-router.get('/owner/:clubOwner',
+router.get('/owner/:courseOwner',
   passport.authenticate('jwt', { session: false }),
   authorizeClubowner,
   getCoursesForOwner
