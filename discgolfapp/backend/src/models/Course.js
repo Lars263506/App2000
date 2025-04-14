@@ -48,6 +48,7 @@ const schema = new mongoose.Schema(
     },
     pins: {
       type: String,
+      default: '[]',
       get: (value) => {
         try {
           return JSON.parse(value);
