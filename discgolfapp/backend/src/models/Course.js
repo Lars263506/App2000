@@ -36,7 +36,7 @@ const schema = new mongoose.Schema(
     difficulty: {
       type: String,
       required: true,
-      enum: ['Easy', 'Medium', 'Difficult'],
+      enum: ['Easy', 'Medium', 'Hard'],
       default: 'Medium',
     },
     familyFriendly: {
