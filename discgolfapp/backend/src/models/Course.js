@@ -7,6 +7,10 @@ const schema = new mongoose.Schema(
       required: true,
       unique: true,
     },
+    clubOwner: {
+      type: String,
+      required: true,
+    },
     location: {
       type: String,
       required: true,

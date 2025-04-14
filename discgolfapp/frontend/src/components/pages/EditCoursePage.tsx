@@ -29,14 +29,13 @@ type Line = {
 export default function EditCoursePage() {
   const [selectedCourse, setSelectedCourse] = useState("");
   const [courses, setCourses] = useState<Course[]>([]);
+  const [filteredCourses, setFilteredCourses] = useState<Course[]>([]);
   const [pins, setPins] = useState<Pin[]>([]);
   const [selectedPin, setSelectedPin] = useState<Pin | null>(null);
   const [selectedPinType, setSelectedPinType] = useState<"kurv" | "Utslagspunkt">("kurv");
   const [newPinName, setNewPinName] = useState("");
   const [isCourseSelected, setIsCourseSelected] = useState(false);
   const [editPinName, setEditPinName] = useState("");
-  const [editPinLat, setEditPinLat] = useState<number | null>(null);
-  const [editPinLng, setEditPinLng] = useState<number | null>(null);
   const [editPinDistance, setEditPinDistance] = useState<number | null>(null);
   const [editPinPar, setEditPinPar] = useState<number | null>(null);
   const [editPinOutOfBounds, setEditPinOutOfBounds] = useState<string>("");
@@ -92,6 +91,41 @@ export default function EditCoursePage() {
     };
     fetchCourses();
   }, []);
+
+  useEffect(() => {
+    const fetchFilteredCourses = async () => {
+      const clubOwnerId = localStorage.getItem("clubOwnerId"); 
+      alert("Club Owner ID: " + clubOwnerId); // Debugging line
+      if (!clubOwnerId) return;
+
+      const url = `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/clubs/${clubOwnerId}`;
+      const token = localStorage.getItem("accessToken");
+
+      try {
+        const response = await fetch(url, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (response.status !== 200) {
+          throw new Error("Kunne ikke hente klubber for klubb-eieren.");
+        }
+
+        const result = await response.json();
+        const clubIds = result.data.map((club: any) => club._id);
+
+        const filtered = courses.filter((course) => clubIds.includes(course.id));
+        setFilteredCourses(filtered);
+      } catch (error) {
+        console.error("Feil ved henting av klubber:", error);
+      }
+    };
+
+    fetchFilteredCourses();
+  }, [courses]);
 
   const savePinsToDatabase = async () => {
     if (!selectedCourse) return;
@@ -155,7 +189,6 @@ export default function EditCoursePage() {
         setLines(updatedLines);
         setSelectedPin(null);
 
-        // Lagre sletting til databasen umiddelbart
         const course = courses.find((c) => c.name === selectedCourse);
         if (course) {
           const url = `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/course/${course.id}/pins`;
@@ -438,7 +471,7 @@ export default function EditCoursePage() {
     <div className="min-h-screen flex flex-col text-black">
       <div className="flex-grow flex items-start justify-center">
         <div
-          className="max-w-5xl w-full p-10 bg-gray-100 shadow-xl rounded-3xl min-h-[900px] relative flex flex-col"
+          className="max-w-5xl w-full p-10 top-[-50px] bg-gray-100 shadow-xl rounded-3xl min-h-[950px] relative flex flex-col"
           onClick={handleContainerClick}
         >
           {!isCourseSelected && (
@@ -472,7 +505,7 @@ export default function EditCoursePage() {
                     <GoogleMap
                       center={mapCenter}
                       zoom={15}
-                      mapContainerStyle={{ height: "850px", width: "75%", borderRadius: "1rem" }}
+                      mapContainerStyle={{ height: "900px", width: "75%", borderRadius: "1rem" }}
                       onClick={handleMapClick}
                     >
                       {Array.isArray(pins) && pins.map((pin) => (
@@ -635,7 +668,7 @@ export default function EditCoursePage() {
                       isDrawingLine ? "bg-gray-400 text-black" : "bg-blue-600 text-white"
                     }`}
                   >
-                    {isDrawingLine ? "Avslutt tegne linje" : "Tegn linje"}
+                    {isDrawingLine ? "Avslutt tegne linje" : "Tegn linje mellom pins"}
                   </button>
                   <button
                     onClick={toggleDeleteMode}
@@ -705,7 +738,7 @@ export default function EditCoursePage() {
                 <div className="mt-auto">
                   <button
                     onClick={handleGoBack}
-                    className="bg-blue-600 text-white p-2 rounded-lg w-full mt-8"
+                    className="bg-blue-600 text-white p-2 rounded-lg w-full mt-4"
                   >
                     Gå tilbake til velg bane
                   </button>

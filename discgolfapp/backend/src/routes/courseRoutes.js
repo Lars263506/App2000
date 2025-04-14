@@ -5,6 +5,7 @@ import { authorizeClubowner } from '../middleware/authorization.js'
 import {
   getAllCourses,
   getCourse,
+  getCoursesForOwner,
   getCoursePins,
   createNewCourse,
   deleteCourse,
@@ -32,6 +33,12 @@ router.get('/:id',
   authorizeClubowner,
   getCourse
 )
+
+router.get('/:getCoursesForOwner',
+  passport.authenticate('jwt', { session: false }),
+  authorizeClubowner,
+  getCoursesForOwner
+);
 
 router.get('/:id/pins',
   passport.authenticate('jwt', { session: false }),

@@ -35,6 +35,17 @@ const getCoursePins = async (req, res) => {
   }
 };
 
+const getClubsForOwner = async (req, res) => {
+  try {
+    const { clubOwnerId } = req.params;
+    const clubs = await courseService.getClubsForClubOwner(clubOwnerId);
+    res.status(200).json({ data: clubs });
+  } catch (error) {
+    console.error('Error fetching clubs for club owner:', error);
+    res.status(500).json({ message: error.message });
+  }
+};
+
 const createNewCourse = async (req, res) => {
   try {
     const response = await courseService.createNewCourse(req.body);
@@ -109,4 +120,4 @@ const updateCoursePins = async (req, res) => {
   }
 };
 
-export { getAllCourses, getCourse, getCoursePins, createNewCourse, deleteCourse, updateCourse, updateCoursePins };
+export { getAllCourses, getCourse, getCoursePins, getClubsForOwner, createNewCourse, deleteCourse, updateCourse, updateCoursePins };
