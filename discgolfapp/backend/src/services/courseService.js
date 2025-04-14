@@ -63,4 +63,12 @@ const updateCourse = async (id, request) => {
   await Course.findByIdAndUpdate(id, request, { new: true })
 }
 
-export { getAllCourses, getCourse, getCoursePins, getCoursesForOwner, createNewCourse, deleteCourse, updateCourse }
+const updateCoursePins = async (id, pins) => {
+  return await Course.findByIdAndUpdate(
+    id,
+    { $set: updateData },
+    { new: true, runValidators: true }
+  );
+}
+
+export { getAllCourses, getCourse, getCoursePins, getCoursesForOwner, createNewCourse, deleteCourse, updateCourse, updateCoursePins }

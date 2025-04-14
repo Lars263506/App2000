@@ -1,5 +1,8 @@
 import mongoose from 'mongoose';
 
+import Pin from './Pin.js';
+import Line from './Line.js';
+
 const schema = new mongoose.Schema(
   {
     name: {
@@ -47,31 +50,12 @@ const schema = new mongoose.Schema(
       required: true,
     },
     pins: {
-      type: String,
-      default: '[]',
-      get: (value) => {
-        try {
-          return JSON.parse(value);
-        } catch (error) {
-          return [];
-        }
-      },
-      set: (value) => {
-        return JSON.stringify(value);
-      },
+      type: [Pin.schema],
+      default: [],
     },
     lines: {
-      type: String, // Lagres som en streng i databasen
-      get: (value) => {
-        try {
-          return JSON.parse(value);
-        } catch (error) {
-          return [];
-        }
-      },
-      set: (value) => {
-        return JSON.stringify(value);
-      },
+      type: [Line.schema],
+      default: [],
     },
     reviews: [
       {

@@ -257,7 +257,10 @@ export default function EditCoursePage() {
       setPins(updatedData.pins || []);
       setLines(updatedData.lines || []);
 
-      const selectedPinData = updatedData.pins.find((p: Pin) => p.id === pin.id);
+      const selectedPinData = Array.isArray(updatedData.pins)
+        ? updatedData.pins.find((p: Pin) => p.id === pin.id)
+        : null;
+
       if (selectedPinData) {
         setSelectedPin(selectedPinData);
         setEditPinDistance(selectedPinData.distance || null);
@@ -501,40 +504,48 @@ export default function EditCoursePage() {
                       mapContainerStyle={{ height: "900px", width: "75%", borderRadius: "1rem" }}
                       onClick={handleMapClick}
                     >
-                      {Array.isArray(pins) && pins.map((pin) => (
-                        <>
-                          <Marker
-                            key={pin.id}
-                            position={{ lat: pin.latitude, lng: pin.longitude }}
-                            draggable={isDragging && selectedPin?.id === pin.id}
-                            onDragStart={handleDragStart}
-                            onDragEnd={handleDragEnd}
-                            onClick={() => handlePinClick(pin)}
-                          />
-                          <OverlayView
-                            position={{ lat: pin.latitude, lng: pin.longitude }}
-                            mapPaneName={"floatPane"}
-                          >
-                            <div
-                              style={{
-                                position: "absolute",
-                                transform: "translate(-50%, -250%)",
-                                backgroundColor: "rgba(255, 255, 255, 1)",
-                                padding: "4px 8px",
-                                borderRadius: "4px",
-                                border: "1px solid black",
-                                fontSize: "14px",
-                                fontWeight: "bold",
-                                color: "black",
-                                whiteSpace: "nowrap",
-                                boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2)",
-                              }}
-                            >
-                              {pin.name}
-                            </div>
-                          </OverlayView>
-                        </>
-                      ))}
+                      {Array.isArray(pins) &&
+                        pins.map((pin) => {
+                          if (!pin.latitude || !pin.longitude) {
+                            console.warn(`Pin "${pin.name || "Ukjent"}" mangler gyldige koordinater.`);
+                            return null; // Hopp over pins uten gyldige koordinater
+                          }
+
+                          return (
+                            <>
+                              <Marker
+                                key={pin.id}
+                                position={{ lat: pin.latitude, lng: pin.longitude }}
+                                draggable={isDragging && selectedPin?.id === pin.id}
+                                onDragStart={handleDragStart}
+                                onDragEnd={handleDragEnd}
+                                onClick={() => handlePinClick(pin)}
+                              />
+                              <OverlayView
+                                position={{ lat: pin.latitude, lng: pin.longitude }}
+                                mapPaneName={"floatPane"}
+                              >
+                                <div
+                                  style={{
+                                    position: "absolute",
+                                    transform: "translate(-50%, -250%)",
+                                    backgroundColor: "rgba(255, 255, 255, 1)",
+                                    padding: "4px 8px",
+                                    borderRadius: "4px",
+                                    border: "1px solid black",
+                                    fontSize: "14px",
+                                    fontWeight: "bold",
+                                    color: "black",
+                                    whiteSpace: "nowrap",
+                                    boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2)",
+                                  }}
+                                >
+                                  {pin.name}
+                                </div>
+                              </OverlayView>
+                            </>
+                          );
+                        })}
                       {selectedPin && (
                         <OverlayView
                           position={{ lat: selectedPin.latitude, lng: selectedPin.longitude }}

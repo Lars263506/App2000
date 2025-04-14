@@ -1,5 +1,4 @@
 import * as courseService from '../services/courseService.js';
-import Course from '../models/Course.js';
 
 /**
  * @author Lars Andreas Strand
@@ -41,7 +40,7 @@ const getCourse = async (req, res) => {
 const getCoursePins = async (req, res) => {
   try {
     const { id } = req.params;
-    const course = await Course.findById(id).select('pins lines');
+    const course = await courseService.getCoursePins(id);
 
     if (!course) {
       return res.status(404).json({ message: 'Course not found' });
@@ -145,11 +144,7 @@ const updateCoursePins = async (req, res) => {
       updateData.lines = lines;
     }
 
-    const updatedCourse = await Course.findByIdAndUpdate(
-      id,
-      { $set: updateData },
-      { new: true, runValidators: true }
-    );
+    const updatedCourse = await courseService.updateCoursePins(id, updateData);
 
     if (!updatedCourse) {
       return res.status(404).json({ message: 'Course not found' });
