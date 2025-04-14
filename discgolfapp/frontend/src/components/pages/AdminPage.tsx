@@ -15,7 +15,7 @@ interface AdminPageProps {
 const AdminPage: React.FC<AdminPageProps> = ({ setSelectedPage }) => {
     return (
         <WithAdminAccess setSelectedPage={setSelectedPage}>
-            <Settings />
+            <Settings setSelectedPage={setSelectedPage} />
         </WithAdminAccess>
     );
 };

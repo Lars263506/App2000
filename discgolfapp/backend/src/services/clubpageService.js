@@ -247,6 +247,15 @@ const updateClubPage = async (id, request) => {
   if (!clubPage) throw new Error('Club page not found')
 }
 
+const updatePosition = async (displayName, position) => {
+  return await ClubPage.findOneAndUpdate(
+    { "members.displayName": displayName },
+    { $set: { "members.$.position": position } },
+    { new: true }
+  );
+};
+
+
 export {
   getAllClubPages,
   getClubPage,
@@ -259,5 +268,6 @@ export {
   createNewAnnouncement,
   deleteClubPage,
   updateAnnouncement,
-  updateClubPage
+  updateClubPage,
+  updatePosition,
 }

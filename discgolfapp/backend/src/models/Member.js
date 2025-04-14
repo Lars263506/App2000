@@ -15,12 +15,20 @@ const memberSchema = new mongoose.Schema({
     type: String,
     required: true,
     enum: ['member', 'clubowner', 'admin'],
-    default: 'member' },
-    profilePicture: {
-        type: String,
-        default: ''
-    }
+    default: 'member'
+  },
+  profilePicture: {
+    type: String,
+    default: ''
+  },
+  position: {
+    type: String,
+    default: ''
+    
+  }
+
 });
+
 
 const Member = mongoose.model('Member', memberSchema);
 
