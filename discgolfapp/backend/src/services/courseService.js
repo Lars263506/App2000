@@ -1,4 +1,6 @@
 import Course from '../models/Course.js'
+import ClubPage from '../models/ClubPage.js'
+import User from '../models/User.js'
 
 const getAllCourses = async () => {
   const courses = await Course.find().populate('reviews');
