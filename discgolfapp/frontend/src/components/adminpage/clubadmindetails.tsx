@@ -5,7 +5,11 @@ import ClubList from '../global/clublist';
 import ClubSettings from '../global/clubsettings';
 import CreateNewClub from './CreateNewClub';
 
-const ClubAdminDetails = () => {
+interface ClubAdminDetailsProps {
+  setSelectedPage: (page: string) => void;
+}
+
+const ClubAdminDetails: React.FC<ClubAdminDetailsProps> = ({ setSelectedPage }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedClub, setSelectedClub] = useState<Club | null>(null);
   const [selectedAction, setSelectedAction] = useState<'create' | 'update' | null>(null);
@@ -44,7 +48,7 @@ const ClubAdminDetails = () => {
               setSelectedClub={setSelectedClub}
               searchTerm={searchTerm}
               setSearchTerm={setSearchTerm}
-              setSelectedPage={() => {}}
+              setSelectedPage={setSelectedPage}
             />
           </div>
 

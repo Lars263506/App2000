@@ -24,11 +24,9 @@ const memberSchema = new mongoose.Schema({
   position: {
     type: String,
     default: ''
-  },
-  verv: {
-    type: String,
-    default: ''
+    
   }
+
 });
 
 

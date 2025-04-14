@@ -56,22 +56,14 @@ const isOwner = async (clubId, userId) => {
  */
 
 const getMembers = async (id) => {
-  const user = await User.findById(id).select('displayName');
-  if (!user) throw new Error('User not found');
+  const user = await User.findById(id).select('displayName')
+  if (!user) throw new Error('User not found')
 
-  const clubPage = await ClubPage.findOne({ 'members.displayName': user.displayName }).select('members');
-  if (!clubPage) return [];
+  const clubPage = await ClubPage.findOne({ 'members.displayName': user.displayName }).select('members')
+  if (!clubPage) return []
 
-  return clubPage.members.map(member => {
-    return {
-      displayName: member.displayName,
-      role: member.role,
-      profilePicture: member.profilePicture,
-      position: member.position
-    };
-  });
-  
-};
+  return clubPage.members
+}
 
 /**
  * @author Lars Andreas Strand

@@ -7,11 +7,15 @@ import UserAdminDetails from './useradmindetails'
 import { Setting } from '../../types/setting';
 import SelectButton from '../global/selectButton'
 
-const Settings: React.FC = () => {
+interface SettingsProps {
+    setSelectedPage: (page: string) => void;
+}
+
+const Settings: React.FC<SettingsProps> = ({ setSelectedPage }) => {
     const [settings, setSettings] = useState<Setting[] | null>();
     const [selectedSetting, setSelectedSetting] = useState<Setting | null>(null);
     const settingComponents: { [key: string]: React.FC } = {
-        'Klubbadministrasjon': ClubAdminDetails,
+        'Klubbadministrasjon': () => <ClubAdminDetails setSelectedPage={setSelectedPage} />,
         "Baneadministarjon": CourseAdminDetails,
         'Brukeradministrasjon': UserAdminDetails,
         'Oversettelser': () => <header>Oversettelser</header>,
