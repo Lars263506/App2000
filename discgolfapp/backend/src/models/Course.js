@@ -17,6 +17,10 @@ const schema = new mongoose.Schema(
       type: String,
       required: true
     },
+    town: {
+      type: String,
+      required: true
+    },
     postCode: {
       type: String,
       required: true
@@ -39,12 +43,19 @@ const schema = new mongoose.Schema(
     },
     familyFriendly: {
       type: Boolean,
-      
+
     },
     holes: {
       type: Number,
-      resquired: true,
-    }, 
+      required: true,
+    },
+    reviews: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Review'
+      }
+    ],
+
   },
   { timestamps: true }
 )

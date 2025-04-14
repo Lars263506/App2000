@@ -193,9 +193,19 @@ const loginUser = async (email, password) => {
   if (!passwordIsValidated) throw new Error('Incorrect email or password')
 
   const payload = { id: user._id, role: user.role }
+  const accessExpiration = process.env.JWT_ACCESS_EXPIRATION
+  const refreshExpiration = process.env.JWT_REFRESH_EXPIRATION
 
-  const accessToken = jwt.sign(payload, process.env.JWT_ACCESS_SECRET, { expiresIn: '7h' })
-  const refreshToken = jwt.sign(payload, process.env.JWT_REFRESH_SECRET, { expiresIn: '7d' })
+  const accessToken = jwt.sign(
+    payload,
+    process.env.JWT_ACCESS_SECRET,
+    { expiresIn: accessExpiration || '1h' }
+  )
+  const refreshToken = jwt.sign(
+    payload,
+    process.env.JWT_REFRESH_SECRET,
+    { expiresIn: refreshExpiration || '1d' }
+  )
   return { accessToken, refreshToken, displayName: user.displayName }
 }
 

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react'
 import { GoogleMap, LoadScript, Marker, InfoWindow } from '@react-google-maps/api'
+import { toast } from 'react-toastify'
 
 import { Club } from '../../types/club'
 import { useTranslation } from 'react-i18next'
@@ -25,7 +26,7 @@ const ClubMap: React.FC<ClubMapProps> = ({ selectedClub, setSelectedPage }) => {
         const data = await response.json()
         if (Array.isArray(data.data)) setClubs(data.data)
       } catch (error) {
-        console.error('Feil ved henting av klubber:', error)
+        toast.error('Feil ved henting av klubber: ' + error)
       }
     }
     fetchClubs()
@@ -37,7 +38,7 @@ const ClubMap: React.FC<ClubMapProps> = ({ selectedClub, setSelectedPage }) => {
         if (status === 'OK' && results && results[0]) {
           resolve(results[0].geometry.location)
         } else {
-          console.error(`Geocoding failed for address: ${address}, status: ${status}`)
+          toast.error(`Geocoding failed for address: ${address}, status: ${status}`)
           reject('Geocoding failed')
         }
       })
@@ -79,7 +80,7 @@ const ClubMap: React.FC<ClubMapProps> = ({ selectedClub, setSelectedPage }) => {
   }, [selectedClub, geocodeAddress])
 
   const handleMarkerClick = (club: Club, marker: google.maps.LatLng) => {
-    setActiveClub(club) 
+    setActiveClub(club)
     setSelectedMarker(marker)
   }
 

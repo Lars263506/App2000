@@ -6,14 +6,12 @@ import Course from '../models/Course.js'
  * It handles the business logic for the Course model.
  */
 const getAllCourses = async () => {
-  const courses = await Course.find()
-
+  const courses = await Course.find().populate('reviews'); // Populate the reviews field
   if (!courses) {
-    throw new Error('No courses found')
+    throw new Error('No courses found');
   }
-
-  return courses
-}
+  return courses;
+};
 
 /**
  * @author Lars Andreas Strand

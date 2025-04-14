@@ -1,6 +1,7 @@
 import passport from '../config/passportConfig.js'
 import User from '../models/User.js'
 import ClubPage from '../models/Clubpage.js'
+import jwt from 'jsonwebtoken';
 
 /**
  * @author Lars Andreas Strand
@@ -38,13 +39,12 @@ const checkMemberStatus = (req, res, next) => {
         return next()
       }
 
-      console.log('Member:', member)
-
       const isMember = await ClubPage.findOne(
         { _id: req.params.clubId, "members.displayName": member.displayName }
       )
 
       req.user = { ...user, role: isMember ? 'member' : 'user' }
+
       return next()
     } catch (err) {
       return next(err)
@@ -75,4 +75,27 @@ const optionalAuth = (req, res, next) => {
   }
 }
 
-export { checkMemberStatus, optionalAuth }
+const validateSession = (req, res) => {
+  if (req.user) {
+    return res.status(200).json({ message: 'Session is valid' })
+  }
+  return res.status(401).json({ message: 'Session is invalid' })
+}
+
+const validateRefreshToken = (req, res, next) => {
+  const authHeader = req.headers.authorization;
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
+
+  const token = authHeader.split(' ')[1];
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_REFRESH_SECRET);
+    req.user = { id: decoded.id };
+    next();
+  } catch (err) {
+    return res.status(401).json({ error: 'Invalid refresh token' });
+  }
+};
+
+export { checkMemberStatus, optionalAuth, validateSession, validateRefreshToken }

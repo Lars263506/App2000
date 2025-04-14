@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
+import { toast } from 'react-toastify'
 
 import { Club } from '../../types/club'
-
 import { useTranslation } from 'react-i18next'
 
 interface ClubListProps {
@@ -22,7 +22,7 @@ const ClubList: React.FC<ClubListProps> = ({ selectedClub, setSelectedClub, sear
       const data = await response.json()
       if (Array.isArray(data.data)) setClubs(data.data)
     } catch (error) {
-      console.error('Feil ved henting av klubber:', error)
+      toast.error('Feil ved henting av klubber: ' + error)
     }
   }
 

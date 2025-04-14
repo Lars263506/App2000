@@ -60,7 +60,7 @@ const MyPage: React.FC<MyPageProps> = ({ setSelectedPage }) => {
         const clubsData = await clubsRes.json();
         setClubs(clubsData);
       } catch (error) {
-        console.error("Error fetching clubs:", error);
+        toast.error("Error fetching clubs: " + error);
       }
     };
 
@@ -86,11 +86,10 @@ const MyPage: React.FC<MyPageProps> = ({ setSelectedPage }) => {
           gamesData.sort((b, a) => new Date(a.date).getTime() - new Date(b.date).getTime());
           setGames(gamesData);
         } else {
-          console.warn("Games data is not an array or is undefined:", data.games);
           setGames([]);
         }
       } catch (error) {
-        console.error("Error fetching games:", error);
+        toast.error("Error fetching games: " + error);
       }
     };
 
@@ -131,7 +130,7 @@ const MyPage: React.FC<MyPageProps> = ({ setSelectedPage }) => {
       toast.success("Bilde er lagret!");
       setProfileImage(`${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/users/profile-image/${data.profileImage}`);
     } catch (error) {
-      console.error("Error updating profile image:", error);
+      toast.error("Error updating profile image: " + error);
     }
   };
 
