@@ -20,6 +20,9 @@ import userRoutes from './routes/userRoutes.js'
  * which sets up middleware, routes and database connection, and starts the server
  */
 
+const app = express();
+
+// Middleware to allow cross-origin requests
 app.use(cors({
   origin: process.env.CORS_ORIGIN,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
