@@ -55,13 +55,10 @@ const getCoursePins = async (req, res) => {
 };
 
 const getCoursesForOwner = async (req, res) => {
-  const { clubOwner } = req.params;
+  const { id } = req.user;
 
   try {
-    const courses = await Course.find({ clubOwner });
-    if (!courses || courses.length === 0) {
-      return res.status(404).json({ message: "Ingen baner funnet for denne klubbeieren." });
-    }
+    const courses = await courseService.getCoursesForOwner(id);
 
     res.status(200).json({ data: courses });
   } catch (error) {

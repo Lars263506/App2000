@@ -27,14 +27,19 @@ const getCoursePins = async (id) => {
   return { pins: course.pins, lines: course.lines };
 };
 
-const getClubsForClubOwner = async (clubOwnerId) => {
+const getCoursesForOwner = async (clubOwnerId) => {
   const user = await User.findById(clubOwnerId).select('displayName');
   if (!user) {
     throw new Error('User not found');
   }
 
-  const clubs = await ClubPage.find({ 'members.displayName': user.displayName }).select('-__v -createdAt -updatedAt');
-  return clubs;
+  const courses = await Course.find({ courseOwner: user.displayName });
+
+  if (!courses) {
+    return [];
+  }
+
+  return courses;
 };
 
 const createNewCourse = async (course) => {
@@ -58,4 +63,4 @@ const updateCourse = async (id, request) => {
   await Course.findByIdAndUpdate(id, request, { new: true })
 }
 
-export { getAllCourses, getCourse, getCoursePins, getClubsForClubOwner, createNewCourse, deleteCourse, updateCourse }
+export { getAllCourses, getCourse, getCoursePins, getCoursesForOwner, createNewCourse, deleteCourse, updateCourse }

@@ -28,21 +28,21 @@ router.get('/',
   getAllCourses
 )
 
+router.get('/owner',
+  passport.authenticate('jwt', { session: false }),
+  authorizeClubowner,
+  getCoursesForOwner
+);
+
 router.get('/:id',
   passport.authenticate('jwt', { session: false }),
   authorizeClubowner,
   getCourse
 )
 
-router.get('/owner/:courseOwner',
-  passport.authenticate('jwt', { session: false }),
-  authorizeClubowner,
-  getCoursesForOwner
-);
-
 router.get('/:id/pins',
   passport.authenticate('jwt', { session: false }),
-  getCoursePins 
+  getCoursePins
 );
 
 router.post('/',
@@ -63,8 +63,8 @@ router.patch('/:id',
   updateCourse
 )
 
-router.put('/:id/pins', 
-  passport.authenticate('jwt', { session: false }), 
+router.put('/:id/pins',
+  passport.authenticate('jwt', { session: false }),
   updateCoursePins
 );
 

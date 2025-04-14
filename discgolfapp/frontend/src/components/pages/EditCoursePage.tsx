@@ -94,13 +94,9 @@ export default function EditCoursePage() {
 
   useEffect(() => {
     const fetchCoursesForOwner = async () => {
-      const clubOwner = localStorage.getItem("clubOwner"); // Hent klubbeier fra lagring
-      alert(`Club Owner fra localStorage: ${clubOwner}`);
-      if (!clubOwner) return;
-  
-      const url = `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/courses/owner/${clubOwner}`;
+      const url = `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/course/owner`;
       const token = localStorage.getItem("accessToken");
-  
+
       try {
         const response = await fetch(url, {
           method: "GET",
@@ -109,18 +105,18 @@ export default function EditCoursePage() {
             Authorization: `Bearer ${token}`,
           },
         });
-  
+
         if (response.status !== 200) {
           throw new Error("Kunne ikke hente baner for klubbeieren.");
         }
-  
+
         const result = await response.json();
         setFilteredCourses(result.data);
       } catch (error) {
         console.error("Feil ved henting av baner for klubbeier:", error);
       }
     };
-  
+
     fetchCoursesForOwner();
   }, []);
 
