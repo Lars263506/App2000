@@ -2,6 +2,7 @@ import mongoose from 'mongoose'
 
 import Member from './Member.js'
 import Invitation from './Invitation.js'
+import Minute from './Minute.js'
 
 /**
  * @author Lars Andreas Strand
@@ -74,6 +75,10 @@ const schema = new mongoose.Schema(
     },
     invitations: {
       type: [Invitation.schema],
+      required: true
+    },
+    minutes: {
+      type: [Minute.schema],
       required: true
     },
   },
