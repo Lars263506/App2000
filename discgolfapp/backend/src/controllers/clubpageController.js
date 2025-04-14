@@ -261,7 +261,7 @@ const updatePosition = async (req, res) => {
     const updatedMembers = await clubpageService.updatePosition(displayName, position);
     res.status(200).json(updatedMembers);
   } catch (err) {
-    console.error("Feil i updatePosition:", err); // 👈 Tydelig logging her
+    console.error("Feil i updatePosition:", err);
     res.status(500).json({ error: err.message });
   }
 };

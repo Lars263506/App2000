@@ -124,7 +124,7 @@ const MemberList: React.FC<MemberListProps> = () => {
                     : member.role || t('memberlist_unknown_role')}
                 </p>
 
-                {/* Redigerbart position hvis Clubowner */}
+                {/* Editable position if club owner */}
                 {userRole === 'Clubowner' ? (
                   <input
                     type="text"
