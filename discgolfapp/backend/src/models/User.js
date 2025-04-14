@@ -1,6 +1,5 @@
 import mongoose from 'mongoose'
 import Setting from './Setting.js'
-import Game from './Game.js'
 
 /**
  * @author Lars Andreas Strand

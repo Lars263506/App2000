@@ -22,7 +22,6 @@ const WithAdminAccess: React.FC<WithAdminAccessProps> = ({ children, setSelected
     const fetchData = async () => {
       const accessToken = localStorage.getItem('accessToken');
       if (!accessToken) {
-        setSelectedPage('Home');
         setIsLoading(false);
         return;
       }
@@ -38,12 +37,9 @@ const WithAdminAccess: React.FC<WithAdminAccessProps> = ({ children, setSelected
           const data: { isAdmin: boolean } = await response.json();
           if (data.isAdmin) {
             setHasAccess(true);
-          } else {
-            setSelectedPage('Home');
           }
         } else {
           toast.error(t("error_fetching_admin_status"));
-          setSelectedPage('Home');
         }
       } catch (error: unknown) {
         if (error instanceof Error) {
@@ -51,7 +47,6 @@ const WithAdminAccess: React.FC<WithAdminAccessProps> = ({ children, setSelected
         } else {
           toast.error(t("error_fetching_admin_status"));
         }
-        setSelectedPage('Home');
       } finally {
         setIsLoading(false);
       }

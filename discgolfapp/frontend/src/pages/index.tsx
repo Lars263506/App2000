@@ -20,6 +20,8 @@ import Footer from '@/components/global/footer';
 import PopupWrapper from '@/components/global/popupwrapper';
 import { usePopup } from '@/components/global/usepopup';
 
+import validateSession from '@/Utils/validateSession';
+
 const Index = () => {
   const { popupType, toggleLoginPopup, toggleRegisterPopup, closePopup } = usePopup();
   const [selectedPage, setSelectedPage] = useState('Home');
@@ -38,6 +40,10 @@ const Index = () => {
     'Privacy': () => <PrivacyPage setSelectedPage={setSelectedPage} />,
     'EditCourseMap': () => <EditCoursePage />
   };
+
+  useEffect(() => {
+    validateSession()
+  }, []);
 
   useEffect(() => {
     const fetchTranslations = async () => {
@@ -79,7 +85,7 @@ const Index = () => {
         } else {
           toast.error('Failed to fetch translations');
         }
-        setLoading(false); // Ensure loading is stopped even if there's an error
+        setLoading(false);
       }
     };
 

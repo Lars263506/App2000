@@ -78,6 +78,7 @@ const schema = new mongoose.Schema(
         ref: 'Review',
       },
     ],
+
   },
   { timestamps: true, toJSON: { getters: true }, toObject: { getters: true } }
 );

@@ -3,20 +3,7 @@ import { useState } from 'react'
 import CourseList from '@/components/course/courselist'
 import CourseDetails from '@/components/course/coursedetails'
 import CourseMap from '@/components/course/coursemap'
-
-export interface Course {
-  _id: string; // Add this field
-  name: string;
-  town: string;
-  location: string;
-  url: string;
-  postCode: string;
-  latitude: number;
-  longitude: number;
-  difficulty: string;
-  familyFriendly: boolean;
-  holes: number;
-}
+import Course from '@/types/course'
 
 const CoursePage = () => {
   const [courses, setCourses] = useState<Course[]>([])

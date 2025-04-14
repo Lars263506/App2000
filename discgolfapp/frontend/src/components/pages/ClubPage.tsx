@@ -38,7 +38,7 @@ const Clubpage: React.FC<ClubpageProps> = ({ setSelectedPage }) => {
 
   return (
     <div aria-label="Clubpage root" className="flex flex-row">
-      <div className="flex flex-col relative w-full min-h-[80vh] mx-4 bg-[#E7EFFB] border border-solid border-black rounded-md shadow">
+      <div className="flex flex-col relative w-full min-h-[80vh] mx-4">
         <ClubHeader clubData={clubData} />
         <ClubDetails clubData={clubData} setSelectedPage={setSelectedPage} />
       </div>
