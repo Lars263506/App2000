@@ -227,7 +227,7 @@ const Invitations: React.FC = () => {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
           <div className="bg-white p-6 rounded-lg shadow-lg w-96">
             <h2 className="text-lg font-bold mb-4">
-              {currentInvitation?.id === 0 ? 'Ny møteinnkalling' : 'Rediger møteinnkalling'}
+              Alle felter er påkrevd
             </h2>
             <div className="mb-4">
               <label className="block text-sm font-medium mb-1">Tittel</label>
