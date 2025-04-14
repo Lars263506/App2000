@@ -1,65 +1,89 @@
-import mongoose from 'mongoose'
-
-/**
- * @author Lars Andreas Strand
- * @description This is the schema for the Course model.
- * It defines the structure of the Course document in the database.
- */
+import mongoose from 'mongoose';
 
 const schema = new mongoose.Schema(
   {
     name: {
       type: String,
       required: true,
-      unique: true
+      unique: true,
+    },
+    courseOwner: {
+      type: String,
+      required: true,
     },
     location: {
       type: String,
-      required: true
+      required: true,
     },
     town: {
       type: String,
-      required: true
+      required: true,
     },
     postCode: {
       type: String,
-      required: true
+      required: true,
     },
     url: {
       type: String,
-      required: true
+      required: true,
     },
     latitude: {
-      type: Number
+      type: Number,
     },
     longitude: {
-      type: Number
+      type: Number,
     },
     difficulty: {
       type: String,
       required: true,
-      enum: ['Easy', 'Medium', 'Difficult'],
-      default: 'Medium'
+      enum: ['Easy', 'Medium', 'Hard'],
+      default: 'Medium',
     },
     familyFriendly: {
       type: Boolean,
-
     },
     holes: {
       type: Number,
       required: true,
     },
+    pins: {
+      type: String,
+      default: '[]',
+      get: (value) => {
+        try {
+          return JSON.parse(value);
+        } catch (error) {
+          return [];
+        }
+      },
+      set: (value) => {
+        return JSON.stringify(value);
+      },
+    },
+    lines: {
+      type: String, // Lagres som en streng i databasen
+      get: (value) => {
+        try {
+          return JSON.parse(value);
+        } catch (error) {
+          return [];
+        }
+      },
+      set: (value) => {
+        return JSON.stringify(value);
+      },
+    },
     reviews: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Review'
-      }
+        ref: 'Review',
+      },
     ],
 
   },
-  { timestamps: true }
-)
+  { timestamps: true, toJSON: { getters: true }, toObject: { getters: true } }
+);
 
-const Course = mongoose.model('Course', schema)
+const Course = mongoose.model('Course', schema);
 
-export default Course
+export default Course;

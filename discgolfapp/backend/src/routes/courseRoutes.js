@@ -5,9 +5,12 @@ import { authorizeClubowner } from '../middleware/authorization.js'
 import {
   getAllCourses,
   getCourse,
+  getCoursesForOwner,
+  getCoursePins,
   createNewCourse,
   deleteCourse,
-  updateCourse
+  updateCourse,
+  updateCoursePins
 } from '../controllers/courseController.js'
 
 /**
@@ -25,11 +28,22 @@ router.get('/',
   getAllCourses
 )
 
+router.get('/owner',
+  passport.authenticate('jwt', { session: false }),
+  authorizeClubowner,
+  getCoursesForOwner
+);
+
 router.get('/:id',
   passport.authenticate('jwt', { session: false }),
   authorizeClubowner,
   getCourse
 )
+
+router.get('/:id/pins',
+  passport.authenticate('jwt', { session: false }),
+  getCoursePins
+);
 
 router.post('/',
   passport.authenticate('jwt', { session: false }),
@@ -48,5 +62,10 @@ router.patch('/:id',
   authorizeClubowner,
   updateCourse
 )
+
+router.put('/:id/pins',
+  passport.authenticate('jwt', { session: false }),
+  updateCoursePins
+);
 
 export default router
