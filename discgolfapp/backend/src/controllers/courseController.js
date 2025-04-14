@@ -35,14 +35,19 @@ const getCoursePins = async (req, res) => {
   }
 };
 
-const getClubsForOwner = async (req, res) => {
+const getCoursesForOwner = async (req, res) => {
+  const { clubOwner } = req.params;
+
   try {
-    const { clubOwnerId } = req.params;
-    const clubs = await courseService.getClubsForClubOwner(clubOwnerId);
-    res.status(200).json({ data: clubs });
+    const courses = await Course.find({ clubOwner });
+    if (!courses || courses.length === 0) {
+      return res.status(404).json({ message: "Ingen baner funnet for denne klubbeieren." });
+    }
+
+    res.status(200).json({ data: courses });
   } catch (error) {
-    console.error('Error fetching clubs for club owner:', error);
-    res.status(500).json({ message: error.message });
+    console.error("Feil ved henting av baner for klubbeier:", error);
+    res.status(500).json({ message: "En feil oppstod under henting av baner." });
   }
 };
 
@@ -120,4 +125,4 @@ const updateCoursePins = async (req, res) => {
   }
 };
 
-export { getAllCourses, getCourse, getCoursePins, getClubsForOwner, createNewCourse, deleteCourse, updateCourse, updateCoursePins };
+export { getAllCourses, getCourse, getCoursePins, getCoursesForOwner, createNewCourse, deleteCourse, updateCourse, updateCoursePins };

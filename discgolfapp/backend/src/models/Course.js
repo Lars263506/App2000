@@ -7,7 +7,7 @@ const schema = new mongoose.Schema(
       required: true,
       unique: true,
     },
-    clubOwner: {
+    courseOwner: {
       type: String,
       required: true,
     },

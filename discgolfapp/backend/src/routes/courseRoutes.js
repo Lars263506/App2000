@@ -34,7 +34,7 @@ router.get('/:id',
   getCourse
 )
 
-router.get('/:getCoursesForOwner',
+router.get('/owner/:clubOwner',
   passport.authenticate('jwt', { session: false }),
   authorizeClubowner,
   getCoursesForOwner
@@ -42,7 +42,7 @@ router.get('/:getCoursesForOwner',
 
 router.get('/:id/pins',
   passport.authenticate('jwt', { session: false }),
-  getCoursePins // Bruk funksjonen fra controller
+  getCoursePins 
 );
 
 router.post('/',

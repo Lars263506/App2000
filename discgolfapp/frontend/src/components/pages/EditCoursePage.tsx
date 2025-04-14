@@ -93,14 +93,14 @@ export default function EditCoursePage() {
   }, []);
 
   useEffect(() => {
-    const fetchFilteredCourses = async () => {
-      const clubOwnerId = localStorage.getItem("clubOwnerId"); 
-      alert("Club Owner ID: " + clubOwnerId); // Debugging line
-      if (!clubOwnerId) return;
-
-      const url = `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/clubs/${clubOwnerId}`;
+    const fetchCoursesForOwner = async () => {
+      const clubOwner = localStorage.getItem("clubOwner"); // Hent klubbeier fra lagring
+      alert(`Club Owner fra localStorage: ${clubOwner}`);
+      if (!clubOwner) return;
+  
+      const url = `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/courses/owner/${clubOwner}`;
       const token = localStorage.getItem("accessToken");
-
+  
       try {
         const response = await fetch(url, {
           method: "GET",
@@ -109,23 +109,20 @@ export default function EditCoursePage() {
             Authorization: `Bearer ${token}`,
           },
         });
-
+  
         if (response.status !== 200) {
-          throw new Error("Kunne ikke hente klubber for klubb-eieren.");
+          throw new Error("Kunne ikke hente baner for klubbeieren.");
         }
-
+  
         const result = await response.json();
-        const clubIds = result.data.map((club: any) => club._id);
-
-        const filtered = courses.filter((course) => clubIds.includes(course.id));
-        setFilteredCourses(filtered);
+        setFilteredCourses(result.data);
       } catch (error) {
-        console.error("Feil ved henting av klubber:", error);
+        console.error("Feil ved henting av baner for klubbeier:", error);
       }
     };
-
-    fetchFilteredCourses();
-  }, [courses]);
+  
+    fetchCoursesForOwner();
+  }, []);
 
   const savePinsToDatabase = async () => {
     if (!selectedCourse) return;
@@ -480,7 +477,7 @@ export default function EditCoursePage() {
                 <h1 className="text-xl font-bold text-center mb-4">Velg Bane</h1>
                 <div className="w-full mt-6">
                   <ul className="space-y-6">
-                    {courses.map((course) => (
+                  {filteredCourses.map((course) => (
                       <li
                         key={course.name}
                         className={`p-4 border rounded-lg cursor-pointer ${
