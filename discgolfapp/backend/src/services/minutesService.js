@@ -1,7 +1,7 @@
 import ClubPage from '../models/Clubpage.js';
 import User from '../models/User.js';
 
-const getInvitations = async (userId) => {
+const getMinutes = async (userId) => {
     try {
         const user = await User.findById(userId).select('displayName');
 
@@ -11,49 +11,52 @@ const getInvitations = async (userId) => {
                     displayName: user.displayName
                 }
             }
-        }).select('invitations');
+        }).select('minutes');
 
         if (!club) {
-            return []
+            return [];
         }
-        return club.invitations;
+        return club.minutes;
     } catch (error) {
-        console.error('Error fetching invitations:', error);
+        console.error('Error fetching minutes:', error);
         throw new Error(error.message);
     }
-}
+};
 
-const addInvitation = async (clubownerId, id, title, description, text) => {
+const addMinute = async (clubownerId, id, title, description, text) => {
     try {
         const clubOwner = await User.findById(clubownerId).select('displayName');
 
         if (!clubOwner) {
-            throw new Error('User must be the club owner to add invitations.');
+            throw new Error('User must be the club owner to add minutes.');
         }
 
-        await ClubPage.findOneAndUpdate({ clubOwner: clubOwner.displayName },
-            { $push: {
-                invitations: {
-                    id,
-                    title,
-                    description,
-                    text
+        await ClubPage.findOneAndUpdate(
+            { clubOwner: clubOwner.displayName },
+            {
+                $push: {
+                    minutes: {
+                        id,
+                        title,
+                        description,
+                        text
+                    }
                 }
-            } }
+            }
         );
     } catch (error) {
-        console.error('Error adding invitation:', error);
+        console.error('Error adding minute:', error);
         throw new Error(error.message);
     }
-}
+};
 
-const deleteInvitation = async (clubownerId, invitationId, clubId) => {
+const deleteMinute = async (clubownerId, minuteId, clubId) => {
     try {
         const user = await User.findById(clubownerId).select('displayName');
 
         const club = await ClubPage.findOneAndUpdate(
             { clubOwner: user.displayName, _id: clubId },
-            { $pull: { invitations: { id: invitationId } } },
+            { $pull: { minutes: { id: minuteId } } },
             { new: true }
         );
 
@@ -61,14 +64,14 @@ const deleteInvitation = async (clubownerId, invitationId, clubId) => {
             throw new Error('Club not found or user is not the club owner.');
         }
 
-        return club.invitations;
+        return club.minutes;
     } catch (error) {
-        console.error('Error deleting invitation:', error);
+        console.error('Error deleting minute:', error);
         throw new Error(error.message);
     }
-}
+};
 
-const updateInvitation = async (userId, invitationId, clubId, request) => {
+const updateMinute = async (userId, minuteId, clubId, request) => {
     try {
         if (!request) {
             throw new Error('Request object is undefined.');
@@ -77,25 +80,25 @@ const updateInvitation = async (userId, invitationId, clubId, request) => {
         const user = await User.findById(userId).select('displayName');
 
         const updateFields = {};
-        if (request.title) updateFields['invitations.$[elem].title'] = request.title;
-        if (request.description) updateFields['invitations.$[elem].description'] = request.description;
-        if (request.text) updateFields['invitations.$[elem].text'] = request.text;
+        if (request.title) updateFields['minutes.$[elem].title'] = request.title;
+        if (request.description) updateFields['minutes.$[elem].description'] = request.description;
+        if (request.text) updateFields['minutes.$[elem].text'] = request.text;
 
         const club = await ClubPage.findOneAndUpdate(
             { clubOwner: user.displayName, _id: clubId },
             { $set: updateFields },
-            { arrayFilters: [{ 'elem.id': invitationId }], new: true }
+            { arrayFilters: [{ 'elem.id': minuteId }], new: true }
         );
 
         if (!club) {
             throw new Error('Club not found or user is not the club owner.');
         }
 
-        return club.invitations;
+        return club.minutes;
     } catch (error) {
-        console.error('Error updating invitation:', error);
+        console.error('Error updating minute:', error);
         throw new Error(error.message);
     }
-}
+};
 
-export { getInvitations, addInvitation, deleteInvitation, updateInvitation };
+export { getMinutes, addMinute, deleteMinute, updateMinute };
