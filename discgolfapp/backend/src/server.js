@@ -4,6 +4,7 @@ import cors from 'cors'
 import { rateLimit } from 'express-rate-limit'
 
 import passport from './config/passportConfig.js'
+import authRoutes from './routes/authRoutes.js'
 import clubpageRoutes from './routes/clubpageRoutes.js'
 import courseRoutes from './routes/courseRoutes.js'
 import settingsRoutes from './routes/settingsRoutes.js'
@@ -14,7 +15,8 @@ import reviewRoutes from './routes/reviewRoutes.js'
 
 /**
  * @author Lars Andreas Strand and Andreas Nilsen
- * @description This is the main server file for the Discgolf app, which sets up middleware, routes and database connection, and starts the server
+ * @description This is the main server file for the Discgolf app,
+ * which sets up middleware, routes and database connection, and starts the server
  */
 
 const app = express()
@@ -47,6 +49,7 @@ app.use(rateLimit({
 }))
 
 // Routes for handling requests
+app.use('/auth', authRoutes)
 app.use('/clubpage', clubpageRoutes)
 app.use('/course', courseRoutes)
 app.use('/settings', settingsRoutes)

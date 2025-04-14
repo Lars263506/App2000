@@ -27,7 +27,7 @@ export default function StartGame() {
         const result = await response.json();
         setCourses(result.data);
       } catch (error) {
-        console.error("Feil ved henting av baner:", error);
+        toast.error("Feil ved henting av baner: " + error);
       }
     };
     fetchCourses();
@@ -112,18 +112,15 @@ export default function StartGame() {
           body: JSON.stringify(gameResult),
         });
 
-        console.log('Response status:', response.status);
-        console.log('Response body:', await response.text());
-
         if (response.status !== 201) {
           throw new Error('Failed to save game result');
         }
       } catch (error) {
-        console.error('Error saving game result:', error);
+        toast.error('Error saving game result: ' + error);
         if (error instanceof Error) {
-          alert(`Error: ${error.message}`);
+          toast.error(`Error: ${error.message}`);
         } else {
-          alert('An unknown error occurred');
+          toast.error('An unknown error occurred');
         }
       }
     }
@@ -142,7 +139,7 @@ export default function StartGame() {
   const handleSearchChange = async (query: string) => {
     setSearchQuery(query);
 
-    if (query.length > 2) { 
+    if (query.length > 2) {
       try {
         const accessToken = localStorage.getItem('accessToken');
         const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/users/search?query=${query}`, {
@@ -151,7 +148,7 @@ export default function StartGame() {
           },
         });
 
-        if (response.status !== 200) { 
+        if (response.status !== 200) {
           toast.error('Failed to fetch users');
           setSearchResults([]);
           return;
@@ -160,8 +157,7 @@ export default function StartGame() {
         const users = await response.json();
         setSearchResults(users);
       } catch (error) {
-        console.error('Error fetching users:', error);
-        toast.error('An error occurred while fetching users.');
+        toast.error('Error fetching users: ' + error);
         setSearchResults([]);
       }
     } else {
@@ -170,7 +166,7 @@ export default function StartGame() {
   };
 
   const handleAddPlayer = (player: { displayName: string; email: string }) => {
-    setPlayers([...players, player.displayName]); 
+    setPlayers([...players, player.displayName]);
     setSearchQuery('');
     setSearchResults([]);
   };
@@ -179,7 +175,7 @@ export default function StartGame() {
     <div className="min-h-screen flex flex-col text-black">
       <div className="flex-grow flex items-center justify-center bg-gray-100">
         <div className="max-w-5xl w-full p-10 bg-white shadow-xl rounded-3xl min-h-[600px] max-h-[600px] overflow-y-auto relative">
-         
+
           {gameStarted && !gameEnded && (
             <button
               className="absolute top-4 right-4 bg-red-600 text-white p-3 rounded-lg"
@@ -376,7 +372,7 @@ export default function StartGame() {
                       lng: courses.find(course => course.name === selectedCourse?.name)?.longitude || 10.7522
                     }}
                     zoom={15}
-                    mapContainerStyle={{ height: "200px", width: "100%", borderRadius: "1rem" }} 
+                    mapContainerStyle={{ height: "200px", width: "100%", borderRadius: "1rem" }}
                   >
                     {courses.map((course) => (
                       course.name === selectedCourse?.name && (
@@ -399,7 +395,7 @@ export default function StartGame() {
                     <tr className="bg-gray-300">
                       <th className="p-2 text-base">Navn</th>
                       <th className="p-2 text-base">Score</th>
-                      
+
                     </tr>
                   </thead>
                   <tbody>

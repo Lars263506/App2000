@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react'
+import { toast } from 'react-toastify'
+
 import Course from '@/types/course'
 import Review from '@/types/review'
 import axios from 'axios'
@@ -32,7 +34,7 @@ const CourseDetails: React.FC<CourseDetailsProps> = ({ selectedCourse, setSelect
           const response = await axios.get(url)
           setWeatherData(response.data)
         } catch (error) {
-          console.error('Error fetching weather data:', error)
+          toast.error('Error fetching weather data: ' + error)
         }
       }
 
@@ -49,11 +51,11 @@ const CourseDetails: React.FC<CourseDetailsProps> = ({ selectedCourse, setSelect
           )
           setReviews(response.data)
         } catch (error) {
-          console.error('Error fetching reviews:', error)
-        }
+          toast.error('Error fetching reviews: ' + error)
       }
 
       fetchReviews()
+      }
     }
   }, [selectedCourse, activeTab])
 
@@ -71,7 +73,7 @@ const CourseDetails: React.FC<CourseDetailsProps> = ({ selectedCourse, setSelect
 
       await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/reviews`, newReview, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('accessToken')}`, 
+          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
         },
       })
       setReviews((prev) => [...prev, newReview])
@@ -79,7 +81,7 @@ const CourseDetails: React.FC<CourseDetailsProps> = ({ selectedCourse, setSelect
       setComment('')
       setUsername('')
     } catch (error) {
-      console.error('Error submitting review:', error)
+      toast.error('Error submitting review: ' + error)
     } finally {
       setIsSubmitting(false)
     }

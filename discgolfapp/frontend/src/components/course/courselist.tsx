@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { X, ChevronDown } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 import { FaStar } from 'react-icons/fa';
+
 import Course from '@/types/course';
 import Review from '@/types/review';
+
 
 interface CourseListProps {
   courses: Course[];
@@ -16,7 +19,7 @@ const CourseList: React.FC<CourseListProps> = ({ courses, setCourses, setSelecte
   const [searchTerm, setSearchTerm] = useState('');
   const [showDropdownBox, setShowDropdownBox] = useState(false);
   const [uniqueTowns, setUniqueTowns] = useState<string[]>([]);
-  const [selectedTowns, setSelectedTowns] = useState<string[]>([]); 
+  const [selectedTowns, setSelectedTowns] = useState<string[]>([]);
   const [selectedRating, setSelectedRating] = useState<number | null>(null);
 
   useEffect(() => {
@@ -36,10 +39,10 @@ const CourseList: React.FC<CourseListProps> = ({ courses, setCourses, setSelecte
           const towns = Array.from(new Set(data.map((course: Course) => course.town)));
           setUniqueTowns(towns);
         } else {
-          console.error(t('error_notanarray'), data);
+          toast.error(t('error_notanarray') + " " + data);
         }
       } catch (error) {
-        console.error(t('error_getcourses'), error);
+        toast.error(t('error_getcourses') + " " + error);
       }
     };
     fetchCourses();
@@ -48,7 +51,7 @@ const CourseList: React.FC<CourseListProps> = ({ courses, setCourses, setSelecte
   const calculateAverageRating = (reviews: Review[]) => {
     if (!reviews || reviews.length === 0) return 0;
     const totalRating = reviews.reduce((sum, review) => sum + review.rating, 0);
-    return Math.round(totalRating / reviews.length); 
+    return Math.round(totalRating / reviews.length);
   };
 
   const filteredCourses = courses.filter((course) => {
@@ -64,7 +67,7 @@ const CourseList: React.FC<CourseListProps> = ({ courses, setCourses, setSelecte
 
   const handleTownSelect = (town: string) => {
     if (selectedTowns.includes(town)) {
-      setSelectedTowns(selectedTowns.filter((t) => t !== town)); 
+      setSelectedTowns(selectedTowns.filter((t) => t !== town));
     } else {
       setSelectedTowns([...selectedTowns, town]);
     }
@@ -89,8 +92,8 @@ const CourseList: React.FC<CourseListProps> = ({ courses, setCourses, setSelecte
           <button
             className="absolute right-3 top-2.5"
             onClick={() => {
-              setSearchTerm(''); 
-              setSelectedTowns([]); 
+              setSearchTerm('');
+              setSelectedTowns([]);
               setSelectedRating(null);
             }}
           >
