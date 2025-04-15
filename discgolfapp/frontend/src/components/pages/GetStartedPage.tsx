@@ -110,7 +110,7 @@ const GetStartedPage = () => {
   };
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col mt-24">
       <div className="flex-grow flex flex-col items-center justify-center pb-8">
         <div className="max-w-4xl w-full p-8 rounded-lg shadow-lg text-center bg-[#E7EFFB]">
           <h1 className="text-2xl font-bold text-[#1B365D] mb-4">{t('getstarted_title')}</h1>
