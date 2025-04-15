@@ -3,7 +3,7 @@ import { I18nextProvider } from 'react-i18next';
 import i18next from '@/i18n';
 import { toast, ToastContainer } from 'react-toastify';
 
-import Home from '@/components/pages/Home';
+import HomePage from '@/components/pages/HomePage';
 import AdminPage from '@/components/pages/AdminPage';
 import PlayPage from '@/components/pages/PlayPage';
 import GetStartedPage from '@/components/pages/GetStartedPage';
@@ -19,7 +19,7 @@ import Footer from '@/components/global/footer';
 import PopupWrapper from '@/components/global/popupwrapper';
 import { usePopup } from '@/components/global/usepopup';
 
-import validateSession from '@/Utils/validateSession';
+import validateSession from '@/utils/validateSession';
 
 const Index = () => {
   const { popupType, toggleLoginPopup, toggleRegisterPopup, closePopup } = usePopup();
@@ -27,7 +27,7 @@ const Index = () => {
   const [loading, setLoading] = useState(true);
 
   const currentPage: { [key: string]: React.FC } = {
-    'Home': () => <Home setSelectedPage={setSelectedPage} />,
+    'Home': () => <HomePage setSelectedPage={setSelectedPage} />,
     'Admin': () => <AdminPage setSelectedPage={setSelectedPage} />,
     'Play': () => <PlayPage />,
     'GetStarted': () => <GetStartedPage />,

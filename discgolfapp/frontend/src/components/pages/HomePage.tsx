@@ -5,7 +5,7 @@ interface HomeProps {
     setSelectedPage: (page: string) => void;
 }
 
-const Home: React.FC<HomeProps> = ({ setSelectedPage }) => {
+const HomePage: React.FC<HomeProps> = ({ setSelectedPage }) => {
     return (
         <div aria-label="Home" className="mt-24">
             <DiscgolfInfo setSelectedPage={setSelectedPage}/>
@@ -14,4 +14,4 @@ const Home: React.FC<HomeProps> = ({ setSelectedPage }) => {
     )
 }
 
-export default Home
+export default HomePage
