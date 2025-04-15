@@ -165,6 +165,15 @@ const checkIfAdmin = async (req, res) => {
   }
 }
 
+const hasAccess = async (req, res) => {
+  try {
+    const hasAccess = req.user.role === 'clubowner' || req.user.role === 'admin'
+    res.status(200).json({ hasAccess })
+  } catch (error) {
+    res.status(500).json({ error: "Couldn't check if user has access, try again later." });
+  }
+}
+
 /**
  * @author Lars Andreas Strand
  * @description This function handles the request to register a new user.
@@ -383,6 +392,7 @@ export {
   getUserGames,
   searchUsers,
   checkIfAdmin,
+  hasAccess,
   registerUser,
   loginUser,
   postProfileImage,

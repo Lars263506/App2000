@@ -26,7 +26,7 @@ type Line = {
   pinId2: string;
 }
 
-export default function EditCoursePage() {
+export default function CourseSettings() {
   const [selectedCourse, setSelectedCourse] = useState("");
   const [courses, setCourses] = useState<Course[]>([]);
   const [filteredCourses, setFilteredCourses] = useState<Course[]>([]);
@@ -464,7 +464,7 @@ export default function EditCoursePage() {
     <div className="min-h-screen flex flex-col text-black">
       <div className="flex-grow flex items-start justify-center">
         <div
-          className="max-w-5xl w-full p-10 top-[-50px] bg-gray-100 shadow-xl rounded-3xl min-h-[950px] relative flex flex-col"
+          className="max-w-5xl w-full p-10 top-[-50px] bg-gray-100 shadow-xl rounded-3xl min-h-[950px] relative flex flex-col mt-24"
           onClick={handleContainerClick}
         >
           {!isCourseSelected && (

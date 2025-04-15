@@ -1,7 +1,7 @@
 import express from 'express'
 
 import passport from '../config/passportConfig.js'
-import { authorizeAdmin } from '../middleware/authorization.js'
+import { authorizeAdmin, authorizeClubowner } from '../middleware/authorization.js'
 import {
   getSettings,
   grantSetting,
@@ -21,7 +21,7 @@ const router = express.Router()
 
 router.get('/',
     passport.authenticate('jwt', { session: false }),
-    authorizeAdmin,
+    authorizeClubowner,
     getSettings
 )
 
