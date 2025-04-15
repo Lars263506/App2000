@@ -90,7 +90,7 @@ const CourseDetails: React.FC<CourseDetailsProps> = ({ selectedCourse, setSelect
   return (
     <div className='flex'>
       {selectedCourse != null && (
-        <div className='flex-1 h-[100vh] min-w-[450px] bg-gray-200 p-4 rounded-xl shadow flex flex-col'>
+       <div className='flex-1 h-[100vh] min-w-[450px] bg-[#E7EFFB] p-4 rounded-xl shadow flex flex-col'>
           <div className='flex w-full'>
             <button
               className={`flex-1 py-1 text-center rounded-l-lg ${activeTab === 'details' ? 'bg-gray-700 text-white' : 'bg-gray-200 text-gray-700'}`}

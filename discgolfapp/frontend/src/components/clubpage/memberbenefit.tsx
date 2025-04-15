@@ -14,7 +14,7 @@ const MemberBenefit = () => {
 
   return (
     <div className="flex-1 p-4 rounded-xl">
-      <h1 className="text-4xl font-bold mb-4">{t('member_benefit_title')}</h1>
+      <h1 className="text-2xl font-bold mb-4">{t('member_benefit_title')}</h1>
       <h2>{t('member_benefit_intro')}</h2>
       <ul className="mt-2 list-disc pl-5 space-y-2">
         <li>
