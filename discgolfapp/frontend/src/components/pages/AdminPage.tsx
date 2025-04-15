@@ -9,10 +9,14 @@ import WithPageEditAccess from '../adminpage/withpageeditaccess';
  * This page is only accessible by users with the role 'admin'.
 */
 
-const AdminPage = () => {
+interface AdminPageProps {
+    setSelectedPage: (page: string) => void;
+}
+
+const AdminPage: React.FC<AdminPageProps> = ({ setSelectedPage }) => {
     return (
         <WithPageEditAccess>
-            <Settings setSelectedPage={(page: string) => console.log(`Selected page: ${page}`)} />
+            <Settings setSelectedPage={setSelectedPage}/>
         </WithPageEditAccess>
     );
 };

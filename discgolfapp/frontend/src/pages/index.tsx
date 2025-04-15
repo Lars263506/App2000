@@ -28,7 +28,7 @@ const Index = () => {
 
   const currentPage: { [key: string]: React.FC } = {
     'Home': () => <Home setSelectedPage={setSelectedPage} />,
-    'Admin': () => <AdminPage/>,
+    'Admin': () => <AdminPage setSelectedPage={setSelectedPage} />,
     'Play': () => <PlayPage />,
     'GetStarted': () => <GetStartedPage />,
     'Courses': () => <CoursePage />,
