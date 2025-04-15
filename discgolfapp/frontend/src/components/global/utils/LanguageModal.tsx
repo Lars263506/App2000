@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 
-import Button from '../button';
+import Button from '../Button';
 
 interface LanguageModalProps {
   availableLanguages: string[];

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 
 import MemberBenefit from '@/components/clubpage/MemberBenefit'
-import ClubList from '@/components/global/clublist'
+import ClubList from '@/components/global/ClubList'
 import ClubMap from '@/components/clubpage/ClubMap'
 
 import { Club } from '@/types/club'

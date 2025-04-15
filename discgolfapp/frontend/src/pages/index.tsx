@@ -14,10 +14,10 @@ import MyPage from '@/components/pages/MyPage';
 import ContactPage from '@/components/pages/ContactPage';
 import PrivacyPage from '@/components/pages/PrivacyPage';
 
-import Navbar from '@/components/global/navbar';
-import Footer from '@/components/global/footer';
-import PopupWrapper from '@/components/global/popupwrapper';
-import { usePopup } from '@/components/global/usepopup';
+import Navbar from '@/components/global/Navbar';
+import Footer from '@/components/global/Footer';
+import PopupWrapper from '@/components/global/PopupWrapper';
+import { usePopup } from '@/components/global/UsePopup';
 
 import validateSession from '@/utils/validateSession';
 

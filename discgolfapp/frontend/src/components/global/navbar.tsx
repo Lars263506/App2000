@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 import "../../i18n"
 import { useTranslation } from 'react-i18next';
 
-import LanguageModal from '../global/utils/LanguageModal';
+import LanguageModal from './utils/LanguageModal';
 import WithAdminAccess from '../adminpage/WithAdminAccess';
 import WithPageEditAccess from '../adminpage/WithEditPageAccess';
 

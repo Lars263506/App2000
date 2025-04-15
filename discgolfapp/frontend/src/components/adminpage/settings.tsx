@@ -6,7 +6,7 @@ import CourseAdminDetails from './CourseAdminDetails'
 import UserAdminDetails from './UserAdminDetails'
 import CourseSettings from './CourseSettings'
 import { Setting } from '../../types/setting';
-import SelectButton from '../global/selectButton'
+import SelectButton from '../global/SelectButton'
 
 interface SettingsProps {
     setSelectedPage: (page: string) => void;

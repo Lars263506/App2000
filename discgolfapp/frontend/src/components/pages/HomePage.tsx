@@ -1,5 +1,5 @@
-import DiscgolfInfo from '../frontpage/discgolfinfo';
-import Navigation from '../frontpage/navigation';
+import DiscgolfInfo from '../frontpage/DiscgolfInfo';
+import Navigation from '../frontpage/Navigation';
 
 interface HomeProps {
     setSelectedPage: (page: string) => void;

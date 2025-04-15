@@ -1,8 +1,8 @@
 import { useState } from 'react';
 
 import { Club } from '../../types/club';
-import ClubList from '../global/clublist';
-import ClubSettings from '../global/clubsettings';
+import ClubList from '../global/ClubList';
+import ClubSettings from '../global/ClubSettings';
 import CreateNewClub from './CreateNewClub';
 
 interface ClubAdminDetailsProps {
