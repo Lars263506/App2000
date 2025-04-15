@@ -1,7 +1,7 @@
 import React from 'react'
-import WithAdminAccess from '../adminpage/withadminaccess';
-import Settings from '@/components/adminpage/settings'
-import WithPageEditAccess from '../adminpage/withpageeditaccess';
+import WithAdminAccess from '../adminpage/WithAdminAccess';
+import Settings from '@/components/adminpage/Settings'
+import WithPageEditAccess from '../adminpage/WithEditPageAccess';
 
 /**
  * @author Lars Andreas Strand

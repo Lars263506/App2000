@@ -1,5 +1,5 @@
 import React from 'react';
-import UserList from './userlist';
+import UserList from './UserList';
 
 const UserAdminDetails: React.FC = () => {
   return (

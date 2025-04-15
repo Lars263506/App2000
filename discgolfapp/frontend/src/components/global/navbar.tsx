@@ -6,8 +6,8 @@ import "../../i18n"
 import { useTranslation } from 'react-i18next';
 
 import LanguageModal from '../global/utils/LanguageModal';
-import WithAdminAccess from '../adminpage/withadminaccess';
-import WithPageEditAccess from '../adminpage/withpageeditaccess';
+import WithAdminAccess from '../adminpage/WithAdminAccess';
+import WithPageEditAccess from '../adminpage/WithEditPageAccess';
 
 interface NavBarProps {
   toggleLoginPopup: () => void;

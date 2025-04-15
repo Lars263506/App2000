@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 
-import ClubAdminDetails from './clubadmindetails'
-import CourseAdminDetails from './courseadmindetails'
-import UserAdminDetails from './useradmindetails'
+import ClubAdminDetails from './ClubAdminDetails'
+import CourseAdminDetails from './CourseAdminDetails'
+import UserAdminDetails from './UserAdminDetails'
 import CourseSettings from './CourseSettings'
 import { Setting } from '../../types/setting';
 import SelectButton from '../global/selectButton'
@@ -22,7 +22,7 @@ const Settings: React.FC<SettingsProps> = ({ setSelectedPage }) => {
         "Baneadministarjon": CourseAdminDetails,
         'Brukeradministrasjon': UserAdminDetails,
         'Oversettelser': () => <header>Oversettelser</header>,
-        'Banetegningadministrasjon': CourseSettings, 
+        'Banetegningadministrasjon': CourseSettings,
     };
 
     useEffect(() => {
