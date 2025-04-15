@@ -106,9 +106,7 @@ const resetTestData = async (userId) => {
             familyFriendly: true,
             holes: 21,
             pins: "",
-            lines: JSON.stringify([
-                { id: 1, startPin: 1, endPin: 2 },
-            ]),
+            lines: [],
             reviews: [],
         },
     ]);
