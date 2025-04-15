@@ -8,19 +8,19 @@ const PrivacyPage: React.FC<PrivacyProps> = ({ setSelectedPage }) => {
   return (
     <div className="flex flex-col min-h-screen bg-white">
       <div className="flex-grow p-8 max-w-4xl mx-auto">
-        <h1 className="text-3xl font-bold mb-6 text-center">Personvernerklæring</h1>
-
         <div className="bg-[#E7EFFB] p-6 rounded-2xl shadow-md">
+          <h1 className="text-2xl font-bold mb-6 text-center">Personvernerklæring</h1>
+
           <p className="mb-4">
             Ditt personvern er viktig for oss. Denne erklæringen forklarer hvordan vi samler inn, bruker og beskytter dine personopplysninger i samsvar med gjeldende lover og forskrifter.
           </p>
 
-          <h2 className="text-2xl font-semibold mt-6 mb-2">1. Hvilken informasjon samler vi inn?</h2>
+          <h2 className="text-1xl font-semibold mt-6 mb-2">1. Hvilken informasjon samler vi inn?</h2>
           <p className="mb-4">
             Vi samler inn personopplysninger du oppgir når du bruker våre tjenester, for eksempel e-postadresse og telefonnummer eller meldinger du sender til oss via kontaktskjemaet.
           </p>
 
-          <h2 className="text-2xl font-semibold mt-6 mb-2">2. Hvordan bruker vi din informasjon?</h2>
+          <h2 className="text-1xl font-semibold mt-6 mb-2">2. Hvordan bruker vi din informasjon?</h2>
           <p className="mb-4">Vi bruker innsamlet informasjon for å:</p>
           <ul className="list-disc list-inside mb-4">
             <li>Levere, drifte og forbedre våre tjenester.</li>
@@ -30,12 +30,12 @@ const PrivacyPage: React.FC<PrivacyProps> = ({ setSelectedPage }) => {
             <li>Overholde juridiske forpliktelser og beskytte våre rettigheter.</li>
           </ul>
 
-          <h2 className="text-2xl font-semibold mt-6 mb-2">3. Hvordan deler vi informasjonen din?</h2>
+          <h2 className="text-1xl font-semibold mt-6 mb-2">3. Hvordan deler vi informasjonen din?</h2>
           <p className="mb-4">
             Vi deler ikke din informasjon med tredjeparter uten ditt samtykke, med mindre det er nødvendig for å levere våre tjenester, beskytte våre rettigheter eller overholde lovpålagte krav.
           </p>
 
-          <h2 className="text-2xl font-semibold mt-6 mb-2">4. Dine rettigheter</h2>
+          <h2 className="text-1xl font-semibold mt-6 mb-2">4. Dine rettigheter</h2>
           <p className="mb-4">Du har rett til å:</p>
           <ul className="list-disc list-inside mb-4">
             <li>Be om innsyn i hvilke personopplysninger vi har om deg.</li>
@@ -45,12 +45,12 @@ const PrivacyPage: React.FC<PrivacyProps> = ({ setSelectedPage }) => {
             <li>Be om overføring av dine data til en annen tjenesteleverandør der det er relevant.</li>
           </ul>
 
-          <h2 className="text-2xl font-semibold mt-6 mb-2">5. Sikkerhet og lagring</h2>
+          <h2 className="text-1xl font-semibold mt-6 mb-2">5. Sikkerhet og lagring</h2>
           <p className="mb-4">
             Vi tar datasikkerhet på alvor og bruker egnede tekniske og organisatoriske tiltak for å beskytte dine personopplysninger.
           </p>
 
-          <h2 className="text-2xl font-semibold mt-6 mb-2">6. Spørsmål eller bekymringer?</h2>
+          <h2 className="text-1xl font-semibold mt-6 mb-2">6. Spørsmål eller bekymringer?</h2>
           <p className="mb-4">
             Hvis du har spørsmål om vår personvernerklæring eller ønsker å utøve dine rettigheter, er du velkommen til å kontakte oss.
           </p>

@@ -38,7 +38,7 @@ const ContactPage = () => {
   return (
     <div className="flex justify-center items-center min-h-screen bg-white p-8">
       <div className="bg-[#E7EFFB] p-8 rounded-lg shadow-lg w-full max-w-3xl">
-        <h1 className="text-4xl font-semibold text-center text-[#1B365D] mb-8">
+        <h1 className="text-2xl font-semibold text-center text-[#1B365D] mb-8">
           Kontakt oss
         </h1>
 
