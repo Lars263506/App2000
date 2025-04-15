@@ -199,7 +199,6 @@ export default function CourseSettings() {
               const errorText = await response.text();
               throw new Error(`Failed to save pin deletion: ${errorText}`);
             }
-            console.log(`Pin "${pinName}" deleted permanently`);
           } catch (error) {
             console.error("Error saving pin deletion:", error);
             // Gjenopprett pinnen lokalt hvis sletting feiler
@@ -213,17 +212,14 @@ export default function CourseSettings() {
 
     if (isDrawingLine) {
       setLinePins((prev) => {
-        console.log("Previous linePins:", prev);
         if (prev.length < 2) {
           const newLinePins = [...prev, pin];
-          console.log("New linePins:", newLinePins);
           if (newLinePins.length === 2) {
             setLines((prevLines) => {
               const updatedLines = [
                 ...prevLines,
                 { pinId1: newLinePins[0].id, pinId2: newLinePins[1].id },
               ];
-              console.log("Updated lines:", updatedLines);
               return updatedLines;
             });
           }
@@ -235,7 +231,6 @@ export default function CourseSettings() {
               ...prevLines,
               { pinId1: newLinePins[0].id, pinId2: newLinePins[1].id },
             ];
-            console.log("Updated lines:", updatedLines);
             return updatedLines;
           });
           return newLinePins;
@@ -309,7 +304,6 @@ export default function CourseSettings() {
               const errorText = await response.text();
               throw new Error(`Failed to save line deletion: ${errorText}`);
             }
-            console.log(`Line "${lineName}" deleted permanently`);
           } catch (error) {
             console.error("Error saving line deletion:", error);
             // Gjenopprett linjen lokalt hvis sletting feiler
@@ -607,7 +601,6 @@ export default function CourseSettings() {
                       {lines.map((line, index) => {
                         const pin1 = pins.find((p) => p.id === line.pinId1);
                         const pin2 = pins.find((p) => p.id === line.pinId2);
-                        console.log("Rendering line:", line, "Pin1:", pin1, "Pin2:", pin2);
                         if (!pin1 || !pin2) return null;
                         return (
                           <Polyline
