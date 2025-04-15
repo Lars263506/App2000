@@ -111,7 +111,7 @@ const Index = () => {
     <I18nextProvider i18n={i18next}>
       <div aria-label="Index root" className="flex flex-col min-h-screen"
         onLoad={() => setSelectedPage(localStorage.getItem('selectedPage') || 'Home')}>
-        <div aria-label="Navbar container" className="h-[15vh]">
+        <div aria-label="Navbar container" className="h-auto">
           <Navbar toggleLoginPopup={toggleLoginPopup} setSelectedPage={setSelectedPage} />
         </div>
 

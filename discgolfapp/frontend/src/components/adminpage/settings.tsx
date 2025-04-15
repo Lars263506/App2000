@@ -50,14 +50,14 @@ const Settings: React.FC = () => {
 
     if (isClubOwner) {
         return (
-            <div className="flex flex-col w-full p-4 rounded-md min-h-[80vh] bg-white">
+            <div className="flex flex-col w-full p-4 rounded-md min-h-[100vh] bg-white">
                 <CourseAdminDetails />
             </div>
         );
     }
 
     return (
-        <div className="flex flex-row gap-4 p-4 rounded-md min-h-[80vh] bg-white">
+        <div className="flex flex-row gap-4 p-4 rounded-md min-h-[100vh] bg-white">
 
             {/* Settings list */}
             <div className="flex flex-col w-1/5 p-2 rounded-md bg-[#E7EFFB] overflow-y-auto">
