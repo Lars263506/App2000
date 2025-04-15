@@ -43,49 +43,55 @@ const CourseDetails: React.FC<CourseDetailsProps> = ({ selectedCourse, setSelect
   }, [selectedCourse])
 
   useEffect(() => {
-    if (selectedCourse && activeTab === 'reviews') {
+    if (selectedCourse) {
       const fetchReviews = async () => {
         try {
           const response = await axios.get(
             `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/reviews/course/${selectedCourse._id}`
-          )
-          setReviews(response.data)
+          );
+          setReviews(response.data);
         } catch (error) {
-          toast.error('Error fetching reviews: ' + error)
-      }
+          toast.error('Error fetching reviews: ' + error);
+        }
+      };
 
-      fetchReviews()
-      }
+      fetchReviews();
     }
-  }, [selectedCourse, activeTab])
+  }, [selectedCourse]);
 
   const handleSubmitReview = async () => {
-    if (!selectedCourse) return
+    if (!selectedCourse) return;
 
-    setIsSubmitting(true)
+    setIsSubmitting(true);
     try {
       const newReview = {
         courseId: selectedCourse._id,
         username: username || 'Anonymous',
         rating,
         comment,
-      }
+      };
 
       await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/reviews`, newReview, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
         },
-      })
-      setReviews((prev) => [...prev, newReview])
-      setRating(0)
-      setComment('')
-      setUsername('')
+      });
+
+      // Fetch updated reviews
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/reviews/course/${selectedCourse._id}`
+      );
+      setReviews(response.data);
+
+      setRating(0);
+      setComment('');
+      setUsername('');
     } catch (error) {
-      toast.error('Error submitting review: ' + error)
+      toast.error('Error submitting review: ' + error);
     } finally {
-      setIsSubmitting(false)
+      setIsSubmitting(false);
     }
-  }
+  };
 
   return (
     <div className='flex'>

@@ -2,8 +2,8 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 import { toast } from "react-toastify";
-import Course from '@/types/course'
-
+import Course from '@/types/course';
+import CourseList from '@/components/course/courselist'; 
 
 export default function StartGame() {
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
@@ -44,7 +44,7 @@ export default function StartGame() {
     if (selectedCourse) {
       setGameStarted(true);
       const initialScores = players.reduce<{ [key: string]: number[] }>((acc, player) => {
-        acc[player] = Array(selectedCourse.holes).fill(0); // Use selectedCourse.holes
+        acc[player] = Array(selectedCourse.holes).fill(0);
         return acc;
       }, {});
       setScores(initialScores);
@@ -172,44 +172,22 @@ export default function StartGame() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col text-black">
-      <div className="flex-grow flex items-center justify-center">
-      <div className="max-w-5xl w-full p-10 bg-[#E7EFFB] shadow-xl rounded-3xl min-h-[600px] max-h-[600px] overflow-y-auto relative mb-72">
-
-
-          {gameStarted && !gameEnded && (
-            <button
-              className="absolute top-4 right-4 bg-red-600 text-white p-3 rounded-lg"
-              onClick={finishGame}
-            >
-              Avslutt spill
-            </button>
-          )}
-
+    <div className="min-h-screen flex flex-col text-black ">
+      <div className="flex-grow flex items-center justify-center ">
+        <div className="min-w-[1500px] max-w-[800px] p-10  min-h-[600px] max-h-[800px] ">
           {!gameStarted ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-              <div className="col-span-1">
-                <h1 className="text-xl font-bold text-center mb-4">Velg Bane</h1>
-                <div className="w-full mt-10">
-                <ul className="space-y-2 mt-4">
-  {courses.map((course) => (
-    <li key={course.name}>
-      <button
-        onClick={() => setSelectedCourse(course)}
-        className={`block w-full text-left px-4 py-2 rounded-lg shadow transition 
-          ${selectedCourse?.name === course.name 
-            ? 'bg-blue-600 text-white' 
-            : 'bg-white hover:bg-blue-100 text-black'}`}
-      >
-        {course.name}
-      </button>
-    </li>
-  ))}
-</ul>
-
-                </div>
+              <div
+                className={`transition-all duration-300 ${
+                  selectedCourse ? "col-span-1" : "flex justify-center items-center col-span-3"
+                }`}
+              >
+                <CourseList
+                  courses={courses}
+                  setCourses={setCourses}
+                  setSelectedCourse={setSelectedCourse}
+                />
               </div>
-
               <div className="items-center">
                 {selectedCourse && (
                   <LoadScript googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string}>
@@ -219,7 +197,7 @@ export default function StartGame() {
                         lng: courses.find(course => course.name === selectedCourse.name)?.longitude || 10.7522
                       }}
                       zoom={15}
-                      mapContainerStyle={{ height: "500px", width: "300px", borderRadius: "1rem" }}
+                      mapContainerStyle={{ height: "740px", width: "450px", borderRadius: "1rem" }}
                     >
                       {courses.map((course) => (
                         course.name === selectedCourse.name && (
@@ -237,9 +215,10 @@ export default function StartGame() {
                 )}
               </div>
 
-              <div className="col-span-1 flex flex-col">
+              <div className=" col-span-1 flex flex-col">
                 {selectedCourse && (
                   <>
+                  <div className="bg-[#E7EFFB] max-w-5xl w-full p-10 rounded-lg  min-h-[600px] max-h-[800px]">
                     <h2 className="text-lg font-semibold mb-3">Vanskelighetsgrad: </h2>
                     <p>{selectedCourse.difficulty}</p>
                     <h2 className="text-lg font-semibold mb-3">Antall hull: </h2>
@@ -317,17 +296,19 @@ export default function StartGame() {
                         </div>
                       </div>
                     </div>
+                  </div>
                   </>
                 )}
               </div>
+              
             </div>
           ) : gameEnded ? (
-            <div>
+            <div className="bg-[#E7EFFB] rounded-lg shadow-lg p-10 max min-h-[600px] max-h-[800px]" >
               <h2 className="text-xl font-bold text-center mb-4">Resultater</h2>
               <div className="overflow-y-auto max-h-96">
-                <table className="w-full border rounded-lg mb-4">
+                <table className=" w-full border rounded-lg mb-4">
                   <thead>
-                    <tr className="bg-gray-300">
+                    <tr className="bg-[#E7EFFB] rounded-lg">
                       <th className="p-3 text-base">Kurv</th>
                       {players.map((player, index) => (
                         <th key={index} className="p-4 text-xl">{player}</th>
@@ -368,7 +349,7 @@ export default function StartGame() {
               </div>
             </div>
           ) : (
-            <div>
+            <div className="bg-[#E7EFFB] rounded-lg shadow-lg p-10 min-h-[600px] max-h-[800px]">
               <h2 className="text-lg font-semibold text-center mb-4">Kurv {currentBasket}</h2>
               {selectedCourse && (
                 <LoadScript googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string}>
@@ -394,11 +375,11 @@ export default function StartGame() {
                   </GoogleMap>
                 </LoadScript>
               )}
-
-              <div className="overflow-y-auto max-h-60 mt-4">
-                <table className="w-full border rounded-lg mb-4">
+              
+              <div className="overflow-y-auto max-h-60 mt-4 bg-[#E7EFFB] rounded-lg  p-4">
+                <table className="w-full rounded-lg mb-4">
                   <thead>
-                    <tr className="bg-gray-300">
+                    <tr className="">
                       <th className="p-2 text-base">Navn</th>
                       <th className="p-2 text-base">Score</th>
 
@@ -432,6 +413,7 @@ export default function StartGame() {
                   </tbody>
                 </table>
               </div>
+             
 
               <div className="flex justify-between items-center mt-4">
                 <button
@@ -452,7 +434,17 @@ export default function StartGame() {
                   ▶
                 </button>
               </div>
+
+              <div className="mt-4 flex justify-center">
+                <button
+                  className="bg-red-600 text-white p-2 rounded-lg text-base hover:bg-red-700"
+                  onClick={finishGame}
+                >
+                  Avslutt spill
+                </button>
+              </div>
             </div>
+            
           )}
         </div>
       </div>
