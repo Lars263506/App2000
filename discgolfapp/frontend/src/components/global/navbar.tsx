@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 
 import LanguageModal from '../global/utils/LanguageModal';
 import WithAdminAccess from '../adminpage/withadminaccess';
+import WithPageEditAccess from '../adminpage/withpageeditaccess';
 
 interface NavBarProps {
   toggleLoginPopup: () => void;
@@ -83,7 +84,7 @@ const Navbar: React.FC<NavBarProps> = ({ toggleLoginPopup, setSelectedPage }) =>
               onClick={() => setIsModalOpen(true)}
             />
           </div>
-          <WithAdminAccess setSelectedPage={setSelectedPage}>
+          <WithPageEditAccess>
             <div className="w-8 h-8 flex items-center justify-center">
               <Image
                 src='/images/adminsettings.png'
@@ -95,7 +96,7 @@ const Navbar: React.FC<NavBarProps> = ({ toggleLoginPopup, setSelectedPage }) =>
                 onClick={() => setSelectedPage('Admin')}
               />
             </div>
-          </WithAdminAccess>
+          </WithPageEditAccess>
         </div>
       </div>
 

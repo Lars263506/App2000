@@ -1,6 +1,7 @@
 import React from 'react'
 import WithAdminAccess from '../adminpage/withadminaccess';
 import Settings from '@/components/adminpage/settings'
+import WithPageEditAccess from '../adminpage/withpageeditaccess';
 
 /**
  * @author Lars Andreas Strand
@@ -8,15 +9,11 @@ import Settings from '@/components/adminpage/settings'
  * This page is only accessible by users with the role 'admin'.
 */
 
-interface AdminPageProps {
-    setSelectedPage: (page: string) => void;
-}
-
-const AdminPage: React.FC<AdminPageProps> = ({ setSelectedPage }) => {
+const AdminPage = () => {
     return (
-        <WithAdminAccess setSelectedPage={setSelectedPage}>
+        <WithPageEditAccess>
             <Settings />
-        </WithAdminAccess>
+        </WithPageEditAccess>
     );
 };
 

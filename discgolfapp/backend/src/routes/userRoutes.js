@@ -2,7 +2,7 @@ import express from 'express'
 
 import passport from '../config/passportConfig.js'
 import upload from '../middleware/uploadMiddleware.js'
-import { authorizeAdmin } from '../middleware/authorization.js'
+import { authorizeAdmin, authorizeClubowner } from '../middleware/authorization.js'
 import { optionalAuth } from '../middleware/auth.js'
 import { loginLimiter, registerLimiter } from '../middleware/rateLimiter.js'
 import {
@@ -14,6 +14,7 @@ import {
   getUserGames,
   searchUsers,
   checkIfAdmin,
+  hasAccess,
   getUser,
   getUserByEmail,
   registerUser,
@@ -71,6 +72,12 @@ router.get('/my-games',
 router.get('/admin',
   optionalAuth,
   checkIfAdmin
+)
+
+router.get('/has-access',
+  optionalAuth,
+  authorizeClubowner,
+  hasAccess
 )
 
 router.get('/search',

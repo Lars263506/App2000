@@ -4,45 +4,57 @@ import { toast } from 'react-toastify'
 import ClubAdminDetails from './clubadmindetails'
 import CourseAdminDetails from './courseadmindetails'
 import UserAdminDetails from './useradmindetails'
+import CourseSettings from './CourseSettings'
 import { Setting } from '../../types/setting';
 import SelectButton from '../global/selectButton'
 
 const Settings: React.FC = () => {
     const [settings, setSettings] = useState<Setting[] | null>();
     const [selectedSetting, setSelectedSetting] = useState<Setting | null>(null);
+    const [isClubOwner, setIsClubOwner] = useState(false);
+
     const settingComponents: { [key: string]: React.FC } = {
         'Klubbadministrasjon': ClubAdminDetails,
-        "Baneadministarjon": CourseAdminDetails,
+        'Baneadministrasjon': CourseAdminDetails,
         'Brukeradministrasjon': UserAdminDetails,
         'Oversettelser': () => <header>Oversettelser</header>,
+        'Banetegningadministrasjon': CourseSettings, 
     };
 
     useEffect(() => {
         const fetchSettings = async () => {
             try {
-                const accessToken = localStorage.getItem('accessToken')
-                const url = process.env.NEXT_PUBLIC_BACKEND_BASE_URL + '/settings/'
+                const accessToken = localStorage.getItem('accessToken');
+                const url = process.env.NEXT_PUBLIC_BACKEND_BASE_URL + '/settings/';
 
                 const response = await fetch(url, {
                     method: 'GET',
-                    headers: accessToken ? { Authorization: 'Bearer ' + accessToken } : undefined
-                })
+                    headers: accessToken ? { Authorization: 'Bearer ' + accessToken } : undefined,
+                });
 
-                const data: Setting[] = await response.json()
+                const data: Setting[] = await response.json();
 
                 if (Array.isArray(data)) {
-                    setSettings(data)
+                    setSettings(data);
                 } else {
-                    toast.error('Responsen fra serveren var ikke en liste med innstillinger.')
+                    toast.error('Responsen fra serveren var ikke en liste med innstillinger.');
                 }
 
             } catch (error: unknown) {
-              if (error instanceof Error) toast.error(error.message)
-                else toast.error('Det var en feil med å hente innstillingene. Prøv igjen senere.')
+                if (error instanceof Error) toast.error(error.message);
+                else toast.error('Det var en feil med å hente innstillingene. Prøv igjen senere.');
             }
-          }
-        fetchSettings()
-    }, [])
+        };
+        fetchSettings();
+    }, []);
+
+    if (isClubOwner) {
+        return (
+            <div className="flex flex-col w-full p-4 rounded-md min-h-[80vh] bg-white">
+                <CourseAdminDetails />
+            </div>
+        );
+    }
 
     return (
         <div className="flex flex-row gap-4 p-4 rounded-md min-h-[80vh] bg-white">
