@@ -97,8 +97,6 @@ export default function StartGame() {
       date: new Date().toISOString(),
     };
 
-    console.log('Game result payload:', gameResult);
-
     const accessToken = localStorage.getItem('accessToken');
 
     if (accessToken) {
@@ -196,9 +194,9 @@ export default function StartGame() {
     <li key={course.name}>
       <button
         onClick={() => setSelectedCourse(course)}
-        className={`block w-full text-left px-4 py-2 rounded-lg shadow transition 
-          ${selectedCourse?.name === course.name 
-            ? 'bg-blue-600 text-white' 
+        className={`block w-full text-left px-4 py-2 rounded-lg shadow transition
+          ${selectedCourse?.name === course.name
+            ? 'bg-blue-600 text-white'
             : 'bg-white hover:bg-blue-100 text-black'}`}
       >
         {course.name}
