@@ -119,7 +119,7 @@ const Index = () => {
           {currentPage[selectedPage] ? (
             React.createElement(currentPage[selectedPage])
           ) : (
-            <Home setSelectedPage={setSelectedPage} />
+            <HomePage setSelectedPage={setSelectedPage} />
           )}
         </div>
 
