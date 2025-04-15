@@ -191,17 +191,22 @@ export default function StartGame() {
               <div className="col-span-1">
                 <h1 className="text-xl font-bold text-center mb-4">Velg Bane</h1>
                 <div className="w-full mt-10">
-                  <ul className="space-y-6">
-                    {courses.map((course) => (
-                      <li
-                        key={course.name}
-                        className={`p-4 border rounded-lg cursor-pointer ${selectedCourse?.name === course.name ? 'bg-gray-400 text-white' : ''}`}
-                        onClick={() => setSelectedCourse(course)}
-                      >
-                        {course.name}
-                      </li>
-                    ))}
-                  </ul>
+                <ul className="space-y-2 mt-4">
+  {courses.map((course) => (
+    <li key={course.name}>
+      <button
+        onClick={() => setSelectedCourse(course)}
+        className={`block w-full text-left px-4 py-2 rounded-lg shadow transition 
+          ${selectedCourse?.name === course.name 
+            ? 'bg-blue-600 text-white' 
+            : 'bg-white hover:bg-blue-100 text-black'}`}
+      >
+        {course.name}
+      </button>
+    </li>
+  ))}
+</ul>
+
                 </div>
               </div>
 
