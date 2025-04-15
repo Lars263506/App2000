@@ -132,7 +132,9 @@ const Navbar: React.FC<NavBarProps> = ({ toggleLoginPopup, setSelectedPage }) =>
                 onClick={() => setSelectedPage('Admin')}
               />
             </div>
-            <div className="w-8 h-8 flex items-center justify-center">
+          </WithPageEditAccess>
+          <WithAdminAccess>
+          <div className="w-8 h-8 flex items-center justify-center">
               <Image
                 src='/images/bx-reset.png'
                 alt='ResetTestData'
@@ -144,7 +146,7 @@ const Navbar: React.FC<NavBarProps> = ({ toggleLoginPopup, setSelectedPage }) =>
                 onClick={handleResetTestData}
               />
             </div>
-          </WithPageEditAccess>
+          </WithAdminAccess>
         </div>
       </div>
 
