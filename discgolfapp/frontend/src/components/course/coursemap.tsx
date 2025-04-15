@@ -30,7 +30,7 @@ const CourseMap: React.FC<CourseMapProps> = ({ selectedCourse, courses, setSelec
   );
 
   return (
-    <div className={`flex flex-col gap-2 p-4 rounded-xl shadow bg-gray-200 ${selectedCourse ? 'w-7/10' : 'w-full'} h-[100vh]`}>
+    <div className={`flex flex-col gap-2 p-4 rounded-xl shadow bg-[#E7EFFB] ${selectedCourse ? 'w-7/10' : 'w-full'} h-[100vh]`}>
       <select
         className="p-2 border rounded"
         value={difficultyFilter}
