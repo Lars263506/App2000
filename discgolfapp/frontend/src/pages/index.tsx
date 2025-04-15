@@ -13,7 +13,6 @@ import CoursePage from '@/components/pages/CoursePage';
 import MyPage from '@/components/pages/MyPage';
 import ContactPage from '@/components/pages/ContactPage';
 import PrivacyPage from '@/components/pages/PrivacyPage';
-import EditCoursePage from '@/components/pages/EditCoursePage';
 
 import Navbar from '@/components/global/navbar';
 import Footer from '@/components/global/footer';
@@ -38,7 +37,6 @@ const Index = () => {
     'MyPage': () => <MyPage setSelectedPage={setSelectedPage} />,
     'Contact': () => <ContactPage />,
     'Privacy': () => <PrivacyPage setSelectedPage={setSelectedPage} />,
-    'EditCourseMap': () => <EditCoursePage />
   };
 
   useEffect(() => {
@@ -113,7 +111,7 @@ const Index = () => {
     <I18nextProvider i18n={i18next}>
       <div aria-label="Index root" className="flex flex-col min-h-screen"
         onLoad={() => setSelectedPage(localStorage.getItem('selectedPage') || 'Home')}>
-        <div aria-label="Navbar container" className="h-[15vh]">
+        <div aria-label="Navbar container" className="h-auto">
           <Navbar toggleLoginPopup={toggleLoginPopup} setSelectedPage={setSelectedPage} />
         </div>
 

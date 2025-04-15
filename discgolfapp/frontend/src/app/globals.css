@@ -9,8 +9,8 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #B0B8C3;  /* Mørk blå i mørk modus */
-    --foreground: #1B365D;  /* Lys grå tekst for bedre kontrast */
+    --background: #B0B8C3;  /* Lys grå bakgrunn for bedre kontrast */
+    --foreground: #1B365D;  /* Mørk blå tekst*/
   }
 }
 

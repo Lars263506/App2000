@@ -8,11 +8,11 @@ import { useTranslation } from 'react-i18next';
  * @description Wrapper for components that require admin access.
  */
 
-interface WithAdminAccessProps {
+interface WithPageEditAccessProps {
   children: React.ReactNode;
 }
 
-const WithAdminAccess: React.FC<WithAdminAccessProps> = ({ children }) => {
+const WithPageEditAccess: React.FC<WithPageEditAccessProps> = ({ children }) => {
   const { t } = useTranslation();
   const [isLoading, setIsLoading] = useState(true);
   const [hasAccess, setHasAccess] = useState(false);
@@ -26,19 +26,18 @@ const WithAdminAccess: React.FC<WithAdminAccessProps> = ({ children }) => {
       }
 
       try {
-        const url = `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/users/admin`;
+        const url = `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/users/has-access`;
+
         const response = await fetch(url, {
           method: 'GET',
-          headers: { Authorization: `Bearer ${accessToken}`},
+          headers: { Authorization: `Bearer ${accessToken}` },
         });
 
         if (response.status === 200) {
-          const data: { isAdmin: boolean } = await response.json();
-          if (data.isAdmin) {
+          const data: { hasAccess: boolean } = await response.json();
+          if (data.hasAccess) {
             setHasAccess(true);
           }
-        } else {
-          toast.error(t("error_fetching_admin_status"));
         }
       } catch (error: unknown) {
         if (error instanceof Error) {
@@ -71,4 +70,4 @@ const WithAdminAccess: React.FC<WithAdminAccessProps> = ({ children }) => {
   return <>{children}</>;
 };
 
-export default WithAdminAccess
+export default WithPageEditAccess;

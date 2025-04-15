@@ -50,21 +50,17 @@ const ClubList: React.FC<ClubListProps> = ({ selectedClub, setSelectedClub, sear
           {clubs
             .filter((club) => club.name.toLowerCase().includes(searchTerm.toLowerCase()))
             .map((club) => (
-              <li key={club._id} className='p-1 shadow shadow-black rounded-md mb-2'>
-                <div className='flex justify-between items-center'>
-                  <button onClick={() => setSelectedClub(club)} className='hover:text-blue-800'>
-                    {club.name}
-                  </button>
-                  <button
-                    onClick={() => {
-                      localStorage.setItem("selectedClub", JSON.stringify(club));
-                      setSelectedClub(club);
-                      setSelectedPage('Club');
-                    }}
-                    className='bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-700'>
-                    {t('clublist_visit')}
-                  </button>
-                </div>
+              <li key={club._id}>
+                <button
+                  className={`block w-full text-left px-4 py-2 rounded-lg shadow transition ${selectedClub?.name === club.name ? 'bg-blue-600 text-white' : 'bg-white hover:bg-blue-100 text-black'}`}
+                  onClick={() => {
+                    localStorage.setItem("selectedClub", JSON.stringify(club));
+                    setSelectedClub(club);
+                    setSelectedPage('Club');
+                  }}
+                >
+                  {club.name} 
+                </button>
               </li>
             ))}
         </ul>

@@ -26,7 +26,7 @@ type Line = {
   pinId2: string;
 }
 
-export default function EditCoursePage() {
+export default function CourseSettings() {
   const [selectedCourse, setSelectedCourse] = useState("");
   const [courses, setCourses] = useState<Course[]>([]);
   const [filteredCourses, setFilteredCourses] = useState<Course[]>([]);
@@ -464,7 +464,7 @@ export default function EditCoursePage() {
     <div className="min-h-screen flex flex-col text-black">
       <div className="flex-grow flex items-start justify-center">
         <div
-          className="max-w-5xl w-full p-10 top-[-50px] bg-gray-100 shadow-xl rounded-3xl min-h-[950px] relative flex flex-col"
+          className="max-w-5xl w-full p-10 top-[-50px] bg-gray-100 shadow-xl rounded-3xl min-h-[950px] relative flex flex-col mt-24"
           onClick={handleContainerClick}
         >
           {!isCourseSelected && (
@@ -473,12 +473,10 @@ export default function EditCoursePage() {
                 <h1 className="text-xl font-bold text-center mb-4">Velg Bane</h1>
                 <div className="w-full mt-6">
                   <ul className="space-y-6">
-                  {filteredCourses.map((course) => (
+                    {filteredCourses.map((course) => (
                       <li
                         key={course.name}
-                        className={`p-4 border rounded-lg cursor-pointer ${
-                          selectedCourse === course.name ? "bg-gray-400 text-white" : ""
-                        }`}
+                        className={`block w-full text-left px-4 py-2 rounded-lg shadow transition ${selectedCourse === course.name ? 'bg-blue-600 text-white' : 'bg-white hover:bg-blue-100 text-black'}`}
                         onClick={() => handleCourseSelection(course.name)}
                       >
                         {course.name}

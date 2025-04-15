@@ -174,7 +174,8 @@ export default function StartGame() {
   return (
     <div className="min-h-screen flex flex-col text-black">
       <div className="flex-grow flex items-center justify-center">
-        <div className="max-w-5xl w-full p-10 bg-gray-100 shadow-xl rounded-3xl min-h-[600px] max-h-[600px] overflow-y-auto relative mb-72">
+      <div className="max-w-5xl w-full p-10 bg-[#E7EFFB] shadow-xl rounded-3xl min-h-[600px] max-h-[600px] overflow-y-auto relative mb-72">
+
 
           {gameStarted && !gameEnded && (
             <button
@@ -190,17 +191,22 @@ export default function StartGame() {
               <div className="col-span-1">
                 <h1 className="text-xl font-bold text-center mb-4">Velg Bane</h1>
                 <div className="w-full mt-10">
-                  <ul className="space-y-6">
-                    {courses.map((course) => (
-                      <li
-                        key={course.name}
-                        className={`p-4 border rounded-lg cursor-pointer ${selectedCourse?.name === course.name ? 'bg-gray-400 text-white' : ''}`}
-                        onClick={() => setSelectedCourse(course)}
-                      >
-                        {course.name}
-                      </li>
-                    ))}
-                  </ul>
+                <ul className="space-y-2 mt-4">
+  {courses.map((course) => (
+    <li key={course.name}>
+      <button
+        onClick={() => setSelectedCourse(course)}
+        className={`block w-full text-left px-4 py-2 rounded-lg shadow transition 
+          ${selectedCourse?.name === course.name 
+            ? 'bg-blue-600 text-white' 
+            : 'bg-white hover:bg-blue-100 text-black'}`}
+      >
+        {course.name}
+      </button>
+    </li>
+  ))}
+</ul>
+
                 </div>
               </div>
 

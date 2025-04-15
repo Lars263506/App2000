@@ -80,7 +80,7 @@ const CourseList: React.FC<CourseListProps> = ({ courses, setCourses, setSelecte
 
   return (
     <div className="min-w-[400px]">
-      <div className="h-[100vh] p-4 rounded-xl shadow bg-gray-200">
+      <div className="h-[100vh] p-4 rounded-xl shadow bg-[#E7EFFB]">
         <div className="relative">
           <input
             type="text"
@@ -144,15 +144,19 @@ const CourseList: React.FC<CourseListProps> = ({ courses, setCourses, setSelecte
             </div>
           )}
         </div>
-        <ul>
-          {filteredCourses.map((course) => (
-            <li key={course._id}>
-              <button onClick={() => setSelectedCourse(course)}>
-                {course.name} {}
-              </button>
-            </li>
-          ))}
-        </ul>
+        <ul className="space-y-2 mt-4">
+  {filteredCourses.map((course) => (
+    <li key={course._id}>
+      <button
+        onClick={() => setSelectedCourse(course)}
+        className="block w-full text-left bg-white hover:bg-blue-100 text-black px-4 py-2 rounded-lg shadow transition"
+      >
+        {course.name}
+      </button>
+    </li>
+  ))}
+</ul>
+
       </div>
     </div>
   );
