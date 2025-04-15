@@ -80,7 +80,7 @@ const CourseList: React.FC<CourseListProps> = ({ courses, setCourses, setSelecte
 
   return (
     <div className="min-w-[400px]">
-      <div className="h-[100vh] p-4 rounded-xl shadow bg-gray-200">
+      <div className="h-[100vh] p-4 rounded-xl shadow bg-[#E7EFFB]">
         <div className="relative">
           <input
             type="text"

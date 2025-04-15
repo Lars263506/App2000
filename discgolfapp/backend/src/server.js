@@ -1,7 +1,7 @@
-import express from 'express'
-import mongoose from 'mongoose'
-import cors from 'cors'
-import { rateLimit } from 'express-rate-limit'
+import express from 'express';
+import mongoose from 'mongoose';
+import cors from 'cors';
+import { rateLimit } from 'express-rate-limit';
 
 import passport from './config/passportConfig.js'
 import authRoutes from './routes/authRoutes.js'
@@ -9,6 +9,7 @@ import clubpageRoutes from './routes/clubpageRoutes.js'
 import courseRoutes from './routes/courseRoutes.js'
 import gameRoutes from './routes/gameRoutes.js'
 import invitationsRoutes from './routes/invitationsRoutes.js'
+import minutesRoutes from './routes/minutesRoutes.js'
 import reviewRoutes from './routes/reviewRoutes.js'
 import settingsRoutes from './routes/settingsRoutes.js'
 import translationsRoutes from './routes/translationsRoutes.js'
@@ -20,7 +21,7 @@ import userRoutes from './routes/userRoutes.js'
  * which sets up middleware, routes and database connection, and starts the server
  */
 
-const app = express()
+const app = express();
 
 // Middleware to allow cross-origin requests
 app.use(cors({
@@ -28,26 +29,22 @@ app.use(cors({
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
-}))
+}));
 
-// Middleware to parse JSON bodies and append them to req.body
-app.use(express.json())
+app.use(express.json());
 
-// Middleware to log request method and path
+// Logging
 app.use((req, res, next) => {
-  console.log(`Request method: ${req.method}\nRequest path: ${req.path}`)
-  next()
-})
+  console.log(`Request method: ${req.method}\nRequest path: ${req.path}`);
+  next();
+});
 
-// Passport middleware to authenticate requests
-app.use(passport.initialize())
-
-// Rate limiter middleware for all requests
+app.use(passport.initialize());
 app.use(rateLimit({
   windowMs: 10 * 60 * 1000,
   max: process.env.RATE_LIMIT_MAX || 100,
   message: 'Too many requests. Please try again in 15 minutes.'
-}))
+}));
 
 // Routes for handling requests
 app.use('/auth', authRoutes)
@@ -55,6 +52,7 @@ app.use('/clubpage', clubpageRoutes)
 app.use('/course', courseRoutes)
 app.use('/games', gameRoutes)
 app.use('/invitations', invitationsRoutes)
+app.use('/minutes', minutesRoutes)
 app.use('/reviews', reviewRoutes)
 app.use('/settings', settingsRoutes)
 app.use('/translations', translationsRoutes)
@@ -66,17 +64,14 @@ app.use('/users', userRoutes)
  * @throws Error if there was an error connecting to the database
  */
 
+// MongoDB init
 mongoose.connect(process.env.MONGODB_URI)
   .then(() => {
-    /**
-         * @param process.env.PORT
-         * @description Starts the server and listens on the specified port
-         * @throws Error if there was an error starting the server
-         */
     app.listen(process.env.PORT || 4000, () => {
-      console.log('Connected to MongoDB and listening on port', process.env.PORT)
-    })
-  }).catch((error) => {
-    console.error('Error connecting to MongoDB: ', error.message)
-    console.error('Please check your MongoDB URI and network connection.')
+      console.log('Connected to MongoDB and listening on port', process.env.PORT);
+    });
   })
+  .catch((error) => {
+    console.error('Error connecting to MongoDB: ', error.message);
+    console.error('Please check your MongoDB URI and network connection.');
+  });

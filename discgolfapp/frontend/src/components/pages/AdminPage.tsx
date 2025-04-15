@@ -12,7 +12,7 @@ import WithPageEditAccess from '../adminpage/withpageeditaccess';
 const AdminPage = () => {
     return (
         <WithPageEditAccess>
-            <Settings />
+            <Settings setSelectedPage={(page: string) => console.log(`Selected page: ${page}`)} />
         </WithPageEditAccess>
     );
 };
