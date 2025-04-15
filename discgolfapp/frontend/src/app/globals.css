@@ -3,14 +3,14 @@
 @tailwind utilities;
 
 :root {
-  --background: #B0B8C3;  /* Mørkere grå for bedre kontrast */
+  --background: #ffffff;  /* Mørkere grå for bedre kontrast */
   --foreground: #1B365D;  /* Mørk blå tekst for lesbarhet */
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #ffffff;  /* Mørk blå i mørk modus */
-    --foreground: #000000;  /* Lys grå tekst for bedre kontrast */
+    --background: #B0B8C3;  /* Mørk blå i mørk modus */
+    --foreground: #1B365D;  /* Lys grå tekst for bedre kontrast */
   }
 }
 
