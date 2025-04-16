@@ -41,12 +41,12 @@ const Navbar: React.FC<NavBarProps> = ({ toggleLoginPopup, setSelectedPage }) =>
         toast.error(t('navbar_testdata_no_access_token'));
         return;
       }
-      const url = process.env.NEXT_PUBLIC_BACKEND_BASE_URL + '/reset/testdata/';
+      const url = process.env.NEXT_PUBLIC_BACKEND_BASE_URL + '/reset/testdata';
       const response = await fetch(url, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
+          'Authorization': `Bearer ${accessToken}`,
         },
       });
 
