@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { Club } from '../../types/club';
+import Club from '../../types/club';
 import ClubList from '../global/ClubList';
 import ClubSettings from '../global/ClubSettings';
 import CreateNewClub from './CreateNewClub';
