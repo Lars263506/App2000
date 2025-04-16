@@ -5,7 +5,6 @@ import { authorizeAdmin, authorizeClubowner } from '../middleware/authorization.
 import {
   getAllClubPages,
   getClubPage,
-  getView,
   isMember,
   isOwner,
   getMembers,
@@ -40,11 +39,6 @@ const router = express.Router()
 
 router.get('/',
   getAllClubPages
-)
-
-router.get('/view/:id',
-  checkMemberStatus,
-  getView
 )
 
 router.get('/is-member/:clubId',
@@ -108,7 +102,7 @@ router.put('/:id',
   updateClubPage
 )
 
-router.patch('/members/position', 
+router.patch('/members/position',
   passport.authenticate('jwt', { session: false }),
   authorizeClubowner,
   updatePosition
