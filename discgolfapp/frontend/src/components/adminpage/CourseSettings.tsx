@@ -199,6 +199,7 @@ export default function CourseSettings() {
               const errorText = await response.text();
               throw new Error(`Failed to save pin deletion: ${errorText}`);
             }
+            console.log(`Pin "${pinName}" deleted permanently`);
           } catch (error) {
             console.error("Error saving pin deletion:", error);
             // Gjenopprett pinnen lokalt hvis sletting feiler
@@ -215,24 +216,18 @@ export default function CourseSettings() {
         if (prev.length < 2) {
           const newLinePins = [...prev, pin];
           if (newLinePins.length === 2) {
-            setLines((prevLines) => {
-              const updatedLines = [
-                ...prevLines,
-                { pinId1: newLinePins[0].id, pinId2: newLinePins[1].id },
-              ];
-              return updatedLines;
-            });
+            setLines((prevLines) => [
+              ...prevLines,
+              { pinId1: newLinePins[0].id, pinId2: newLinePins[1].id },
+            ]);
           }
           return newLinePins;
         } else {
           const newLinePins = [prev[1], pin];
-          setLines((prevLines) => {
-            const updatedLines = [
-              ...prevLines,
-              { pinId1: newLinePins[0].id, pinId2: newLinePins[1].id },
-            ];
-            return updatedLines;
-          });
+          setLines((prevLines) => [
+            ...prevLines,
+            { pinId1: newLinePins[0].id, pinId2: newLinePins[1].id },
+          ]);
           return newLinePins;
         }
       });
@@ -304,6 +299,7 @@ export default function CourseSettings() {
               const errorText = await response.text();
               throw new Error(`Failed to save line deletion: ${errorText}`);
             }
+            console.log(`Line "${lineName}" deleted permanently`);
           } catch (error) {
             console.error("Error saving line deletion:", error);
             // Gjenopprett linjen lokalt hvis sletting feiler
@@ -442,10 +438,9 @@ export default function CourseSettings() {
   const handleContainerClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.target instanceof HTMLElement && !e.target.closest(".edit-panel")) {
       setSelectedPin(null);
-      if (!isDrawingLine) {
-        setLinePins([]);
-        setIsDeleteMode(false);
-      }
+      setIsDrawingLine(false);
+      setLinePins([]);
+      setIsDeleteMode(false);
     }
   };
 
@@ -622,6 +617,7 @@ export default function CourseSettings() {
                                 },
                               ],
                             }}
+                            onClick={() => handleLineClick(line, index)}
                           />
                         );
                       })}
