@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 import { toast } from "react-toastify";
 import Course from '@/types/course';
-import CourseList from '@/components/course/courselist'; 
+import CourseList from '@/components/coursepage/CourseList'; 
 
 export default function StartGame() {
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
@@ -170,258 +170,243 @@ export default function StartGame() {
   };
 
   return (
-    <div className="min-h-screen flex flex-row text-black">
+    <div className="min-h-screen flex flex-col sm:flex-row text-black">
       {/* Left Section: Course List */}
-      <div className="w-3/10 h-full">
-        <CourseList
-          courses={courses}
-          setCourses={setCourses}
-          setSelectedCourse={setSelectedCourse}
-        />
-      </div>
+      {!gameStarted && (
+        <div className="w-full sm:w-1/4 h-full">
+          <CourseList
+            courses={courses}
+            setCourses={setCourses}
+            setSelectedCourse={setSelectedCourse}
+          />
+        </div>
+      )}
 
-      {/* Middle Section: Map and Content */}
-      <div className="flex-grow flex flex-col">
-        {!gameStarted ? (
-          <div className="flex-grow flex flex-col">
-            {selectedCourse ? (
-              <>
-                <div className="flex-grow">
-                  <LoadScript googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string}>
-                    <GoogleMap
-                      center={{
-                        lat: selectedCourse.latitude,
-                        lng: selectedCourse.longitude,
-                      }}
-                      zoom={15}
-                      mapContainerStyle={{ height: "100%", width: "100%" }}
-                    >
-                      <Marker
-                        position={{
-                          lat: selectedCourse.latitude,
-                          lng: selectedCourse.longitude,
-                        }}
-                      />
-                    </GoogleMap>
-                  </LoadScript>
-                </div>
-                <div className="bg-[#E7EFFB] rounded-lg shadow-lg p-10">
-                  <h2 className="text-lg font-semibold mb-3">Vanskelighetsgrad:</h2>
-                  <p>{selectedCourse.difficulty}</p>
-                  <h2 className="text-lg font-semibold mb-3">Antall hull:</h2>
-                  <p>{selectedCourse.holes}</p>
-                  <div className="mt-4">
-                    <h2 className="text-base font-semibold mb-3">Legg til spillere</h2>
-                    <div className="flex justify-center mt-3">
+      {/* Middle Section: Map and Player Management */}
+      <div className={`flex-grow flex flex-col sm:flex-row rounded-lg`}>
+        {/* Map Section */}
+        <div className="flex-grow sm:w-4/5 h-[300px] sm:h-auto transition-all duration-300 rounded-lg overflow-hidden">
+          <LoadScript googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string}>
+            <GoogleMap
+              center={{
+                lat: selectedCourse?.latitude || 59.9139,
+                lng: selectedCourse?.longitude || 10.7522,
+              }}
+              zoom={selectedCourse ? 15 : 6}
+              mapContainerStyle={{ height: "100%", width: "100%" }}
+            >
+              {courses.map((course) => (
+                <Marker
+                  key={course.name}
+                  position={{
+                    lat: course.latitude,
+                    lng: course.longitude,
+                  }}
+                  onClick={() => setSelectedCourse(course)}
+                />
+              ))}
+            </GoogleMap>
+          </LoadScript>
+        </div>
+
+        {/* Player Management Section */}
+        {selectedCourse && !gameStarted && (
+          <div className="w-full sm:w-3/10 bg-[#E7EFFB] p-4 sm:p-10 rounded-lg shadow-lg">
+            <h2 className="text-lg font-semibold mb-3">Vanskelighetsgrad:</h2>
+            <p>{selectedCourse.difficulty}</p>
+            <h2 className="text-lg font-semibold mb-3">Antall hull:</h2>
+            <p>{selectedCourse.holes}</p>
+            <div className="mt-4">
+              <h2 className="text-base font-semibold mb-3">Legg til spillere</h2>
+              <div className="flex justify-center mt-3">
+                <input
+                  type="text"
+                  className="w-full p-2 border rounded-lg text-base"
+                  placeholder="Søk etter registrerte brukere"
+                  value={searchQuery}
+                  onChange={(e) => handleSearchChange(e.target.value)}
+                />
+                {searchResults.length > 0 && (
+                  <ul className="absolute bg-white border rounded-lg mt-2 w-full max-h-40 overflow-y-auto">
+                    {searchResults.map((user) => (
+                      <li
+                        key={user.email}
+                        className="p-2 cursor-pointer hover:bg-gray-200"
+                        onClick={() => handleAddPlayer(user)}
+                      >
+                        {user.displayName} ({user.email})
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+              <div className="flex flex-col h-full">
+                <div className="overflow-y-auto max-h-40 mt-4">
+                  {players.map((player, index) => (
+                    <div key={index} className="flex items-center mb-4">
                       <input
                         type="text"
                         className="w-full p-2 border rounded-lg text-base"
-                        placeholder="Søk etter registrerte brukere"
-                        value={searchQuery}
-                        onChange={(e) => handleSearchChange(e.target.value)}
+                        value={player}
+                        onChange={(e) => handlePlayerNameChange(index, e.target.value)}
+                        placeholder={`Spiller ${index + 1}`}
                       />
-                      {searchResults.length > 0 && (
-                        <ul className="absolute bg-white border rounded-lg mt-2 w-30 max-h-40 overflow-y-auto">
-                          {searchResults.map((user) => (
-                            <li
-                              key={user.email}
-                              className="p-2 cursor-pointer hover:bg-gray-200"
-                              onClick={() => handleAddPlayer(user)}
-                            >
-                              {user.displayName} ({user.email})
-                            </li>
-                          ))}
-                        </ul>
-                      )}
+                      <button
+                        className="ml-3 bg-red-600 text-white p-2 rounded"
+                        onClick={() => {
+                          const updatedPlayers = [...players];
+                          updatedPlayers.splice(index, 1);
+                          setPlayers(updatedPlayers);
+                        }}
+                        disabled={players.length <= 1}
+                      >
+                        -
+                      </button>
                     </div>
-                    <div className="flex flex-col h-full">
-                      <div className="overflow-y-auto max-h-40 mt-4">
-                        {players.map((player, index) => (
-                          <div key={index} className="flex items-center mb-4">
-                            <input
-                              type="text"
-                              className="w-full p-2 border rounded-lg text-base"
-                              value={player}
-                              onChange={(e) => handlePlayerNameChange(index, e.target.value)}
-                              placeholder={`Spiller ${index + 1}`}
-                            />
-                            <button
-                              className="ml-3 bg-red-600 text-white p-2 rounded"
-                              onClick={() => {
-                                const updatedPlayers = [...players];
-                                updatedPlayers.splice(index, 1);
-                                setPlayers(updatedPlayers);
-                              }}
-                              disabled={players.length <= 1}
-                            >
-                              -
-                            </button>
-                          </div>
-                        ))}
-                      </div>
-                      <div className="mt-1">
-                        <div className="flex justify-center mt-3">
-                          <button
-                            className="bg-green-600 text-white p-2 rounded-xl text-base"
-                            onClick={() => setPlayers([...players, `Spiller ${players.length + 1}`])}
-                          >
-                            Legg til spiller
-                          </button>
-                        </div>
-                      </div>
-                      <div className="mt-2">
-                        <button
-                          className="w-full bg-blue-600 text-white p-2 rounded-lg text-base hover:bg-blue-700"
-                          onClick={startGame}
-                          disabled={!selectedCourse || players.some(player => !player)}
-                        >
-                          Start spill
-                        </button>
-                      </div>
-                    </div>
+                  ))}
+                </div>
+                <div className="mt-1">
+                  <div className="flex justify-center mt-3">
+                    <button
+                      className="bg-green-600 text-white p-2 rounded-xl text-base"
+                      onClick={() => setPlayers([...players, `Spiller ${players.length + 1}`])}
+                    >
+                      Legg til spiller
+                    </button>
                   </div>
                 </div>
-              </>
-            ) : (
-              <div className="flex-grow flex items-center justify-center">
-                <p>Velg en bane for å starte spillet.</p>
+                <div className="mt-2">
+                  <button
+                    className="w-full bg-blue-600 text-white p-2 rounded-lg text-base hover:bg-blue-700"
+                    onClick={startGame}
+                    disabled={!selectedCourse || players.some(player => !player)}
+                  >
+                    Start spill
+                  </button>
+                </div>
               </div>
-            )}
-          </div>
-        ) : gameEnded ? (
-          <div className="bg-[#E7EFFB] rounded-lg shadow-lg p-10 min-h-[600px] max-h-[800px]">
-            <h2 className="text-xl font-bold text-center mb-4">Resultater</h2>
-            <div className="overflow-y-auto max-h-96">
-              <table className="w-full border rounded-lg mb-4">
-                <thead>
-                  <tr className="bg-[#E7EFFB] rounded-lg">
-                    <th className="p-3 text-base">Kurv</th>
-                    {players.map((player, index) => (
-                      <th key={index} className="p-4 text-xl">{player}</th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {Array.from({ length: selectedCourse?.holes || 12 }, (_, index) => (
-                    <tr key={index} className="text-center border-b text-base">
-                      <td className="p-3">Kurv {index + 1}:</td>
-                      {players.map((player) => (
-                        <td key={player} className="p-3">
-                          {index + 1 > currentBasket
-                            ? '-'
-                            : scores[player]?.[index] || '-'}
-                        </td>
-                      ))}
-                    </tr>
-                  ))}
-                  {players.map((player) => (
-                    <tr key={player} className="text-center border-t font-semibold">
-                      <td colSpan={players.length + 1} className="p-3 text-left">
-                        <div className="flex justify-between">
-                          <span>Totalt score for {player}:</span>
-                          <span className="mr-6">
-                            {scores[player]
-                              ? scores[player]
-                                  .slice(0, currentBasket)
-                                  .reduce((total, score) => total + score, 0)
-                              : '-'}
-                          </span>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        ) : (
-          <div className="bg-[#E7EFFB] rounded-lg shadow-lg p-10 min-h-[600px] max-h-[800px]">
-            <h2 className="text-lg font-semibold text-center mb-4">Kurv {currentBasket}</h2>
-            {selectedCourse && (
-              <LoadScript googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string}>
-                <GoogleMap
-                  center={{
-                    lat: selectedCourse.latitude,
-                    lng: selectedCourse.longitude,
-                  }}
-                  zoom={15}
-                  mapContainerStyle={{ height: "200px", width: "100%", borderRadius: "1rem" }}
-                >
-                  <Marker
-                    position={{
-                      lat: selectedCourse.latitude,
-                      lng: selectedCourse.longitude,
-                    }}
-                  />
-                </GoogleMap>
-              </LoadScript>
-            )}
-            <div className="overflow-y-auto max-h-60 mt-4 bg-[#E7EFFB] rounded-lg p-4">
-              <table className="w-full rounded-lg mb-4">
-                <thead>
-                  <tr>
-                    <th className="p-2 text-base">Navn</th>
-                    <th className="p-2 text-base">Score</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {players.map((player, index) => (
-                    <tr key={index} className="text-center border-b text-base">
-                      <td className="p-3">
-                        <input
-                          type="text"
-                          className="w-48 p-2 border rounded-lg text-base"
-                          value={player}
-                          onChange={(e) => handlePlayerNameChange(index, e.target.value)}
-                        />
-                      </td>
-                      <td className="p-3">
-                        <input
-                          type="number"
-                          inputMode="numeric"
-                          className="w-32 p-3 border rounded-lg text-base"
-                          value={scores[player] ? scores[player][currentBasket - 1] : ""}
-                          onChange={(e) => handleScoreChange(player, currentBasket, parseInt(e.target.value))}
-                        />
-                      </td>
-                      <td className="p-3">
-                        {getScoreDescription(player, currentBasket - 1)}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-            <div className="flex justify-between items-center mt-4">
-              <button
-                className="bg-gray-300 p-1 rounded-lg"
-                onClick={handlePreviousBasket}
-                disabled={currentBasket === 1}
-              >
-                ◀
-              </button>
-              <div className="flex gap-3">
-                <span>Kurv {currentBasket}</span>
-              </div>
-              <button
-                className="bg-gray-300 p-1 rounded-lg"
-                onClick={handleNextBasket}
-                disabled={currentBasket === (selectedCourse?.holes || 12)}
-              >
-                ▶
-              </button>
-            </div>
-            <div className="mt-4 flex justify-center">
-              <button
-                className="bg-red-600 text-white p-2 rounded-lg text-base hover:bg-red-700"
-                onClick={finishGame}
-              >
-                Avslutt spill
-              </button>
             </div>
           </div>
         )}
       </div>
+
+      {/* Game State Sections */}
+      {gameStarted && !gameEnded && (
+        <div className="bg-[#E7EFFB] rounded-lg shadow-lg p-4 sm:p-10">
+          <h2 className="text-lg font-semibold text-center mb-4">Kurv {currentBasket}</h2>
+          <div className="mt-4 bg-[#E7EFFB] rounded-lg p-4">
+            <table className="w-full rounded-lg mb-4">
+              <thead>
+                <tr>
+                  <th className="p-2 text-base">Navn</th>
+                  <th className="p-2 text-base">Score</th>
+                </tr>
+              </thead>
+              <tbody>
+                {players.map((player, index) => (
+                  <tr key={index} className="text-center border-b text-base">
+                    <td className="p-3">
+                      <input
+                        type="text"
+                        className="w-48 p-2 border rounded-lg text-base"
+                        value={player}
+                        onChange={(e) => handlePlayerNameChange(index, e.target.value)}
+                      />
+                    </td>
+                    <td className="p-3">
+                      <input
+                        type="number"
+                        inputMode="numeric"
+                        className="w-32 p-3 border rounded-lg text-base"
+                        value={scores[player] ? scores[player][currentBasket - 1] : ""}
+                        onChange={(e) => handleScoreChange(player, currentBasket, parseInt(e.target.value))}
+                      />
+                    </td>
+                    <td className="p-3">
+                      {getScoreDescription(player, currentBasket - 1)}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <div className="flex justify-between items-center mt-4">
+            <button
+              className="bg-gray-300 p-1 rounded-lg"
+              onClick={handlePreviousBasket}
+              disabled={currentBasket === 1}
+            >
+              ◀
+            </button>
+            <div className="flex gap-3">
+              <span>Kurv {currentBasket}</span>
+            </div>
+            <button
+              className="bg-gray-300 p-1 rounded-lg"
+              onClick={handleNextBasket}
+              disabled={currentBasket === (selectedCourse?.holes || 12)}
+            >
+              ▶
+            </button>
+          </div>
+          <div className="mt-4 flex justify-center">
+            <button
+              className="bg-red-600 text-white p-2 rounded-lg text-base hover:bg-red-700"
+              onClick={finishGame}
+            >
+              Avslutt spill
+            </button>
+          </div>
+        </div>
+      )}
+
+      {gameEnded && (
+        <div className="bg-[#E7EFFB] rounded-lg shadow-lg p-4 sm:p-10">
+          <h2 className="text-xl font-bold text-center mb-4">Resultater</h2>
+          <div className="bg-[#E7EFFB] rounded-lg p-4">
+            <table className="w-full border rounded-lg mb-4">
+              <thead>
+                <tr className="bg-[#E7EFFB] rounded-lg">
+                  <th className="p-3 text-base">Kurv</th>
+                  {players.map((player, index) => (
+                    <th key={index} className="p-4 text-xl">{player}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {Array.from({ length: selectedCourse?.holes || 12 }, (_, index) => (
+                  <tr key={index} className="text-center border-b text-base">
+                    <td className="p-3">Kurv {index + 1}:</td>
+                    {players.map((player) => (
+                      <td key={player} className="p-3">
+                        {index + 1 > currentBasket
+                          ? '-'
+                          : scores[player]?.[index] || '-'}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+                {players.map((player) => (
+                  <tr key={player} className="text-center border-t font-semibold">
+                    <td colSpan={players.length + 1} className="p-3 text-left">
+                      <div className="flex justify-between">
+                        <span>Totalt score for {player}:</span>
+                        <span className="mr-6">
+                          {scores[player]
+                            ? scores[player]
+                                .slice(0, currentBasket)
+                                .reduce((total, score) => total + score, 0)
+                            : '-'}
+                        </span>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
