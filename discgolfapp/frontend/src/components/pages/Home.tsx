@@ -7,7 +7,7 @@ interface HomeProps {
 
 const Home: React.FC<HomeProps> = ({ setSelectedPage }) => {
     return (
-        <div aria-label="Home">
+        <div aria-label="Home" className="mt-24">
             <DiscgolfInfo setSelectedPage={setSelectedPage}/>
             <Navigation setSelectedPage={setSelectedPage} />
         </div>

@@ -11,6 +11,7 @@ import gameRoutes from './routes/gameRoutes.js'
 import invitationsRoutes from './routes/invitationsRoutes.js'
 import minutesRoutes from './routes/minutesRoutes.js'
 import reviewRoutes from './routes/reviewRoutes.js'
+import resetRoutes from './routes/resetRoutes.js'
 import settingsRoutes from './routes/settingsRoutes.js'
 import translationsRoutes from './routes/translationsRoutes.js'
 import userRoutes from './routes/userRoutes.js'
@@ -54,6 +55,7 @@ app.use('/games', gameRoutes)
 app.use('/invitations', invitationsRoutes)
 app.use('/minutes', minutesRoutes)
 app.use('/reviews', reviewRoutes)
+app.use('/reset', resetRoutes)
 app.use('/settings', settingsRoutes)
 app.use('/translations', translationsRoutes)
 app.use('/users', userRoutes)

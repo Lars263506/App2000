@@ -97,8 +97,6 @@ export default function StartGame() {
       date: new Date().toISOString(),
     };
 
-    console.log('Game result payload:', gameResult);
-
     const accessToken = localStorage.getItem('accessToken');
 
     if (accessToken) {

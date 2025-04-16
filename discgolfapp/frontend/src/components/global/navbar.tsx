@@ -1,11 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
+import { toast } from 'react-toastify';
 
 import "../../i18n"
 import { useTranslation } from 'react-i18next';
 
 import LanguageModal from '../global/utils/LanguageModal';
 import WithAdminAccess from '../adminpage/withadminaccess';
+import WithPageEditAccess from '../adminpage/withpageeditaccess';
 
 interface NavBarProps {
   toggleLoginPopup: () => void;
@@ -26,12 +28,44 @@ const Navbar: React.FC<NavBarProps> = ({ toggleLoginPopup, setSelectedPage }) =>
     setIsModalOpen(false);
   };
 
-  return (
-    <nav className='bg-[#1B365D] text-white py-4 px-6 flex justify-center'>
-      {/* Wrapper for å sentrere innholdet */}
-      <div className='w-full max-w-5xl flex items-center justify-between'>
+  const handleResetTestData = async () => {
+    try {
+      const confirmation = prompt(t('navbar_testdata_reset_confirm'));
+      if (confirmation !== 'OK') {
+        toast.info(t('navbar_testdata_reset_cancelled'));
+        return;
+      }
 
-        {/* Logo + Tittel (Sentrert i sin del av navbaren) */}
+      const accessToken = localStorage.getItem('accessToken');
+      if (!accessToken) {
+        toast.error(t('navbar_testdata_no_access_token'));
+        return;
+      }
+      const url = process.env.NEXT_PUBLIC_BACKEND_BASE_URL + '/reset/testdata/';
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
+        },
+      });
+
+      if (response.status !== 200) {
+        throw new Error(response.statusText);
+      }
+
+      toast.success(t('navbar_testdata_reset_success'));
+    } catch (error) {
+      if (error instanceof Error)
+        toast.error(error.message);
+      else
+        toast.error(t('navbar_testdata_reset_error'));
+    }
+  }
+
+  return (
+    <nav aria-label="Navbar root" className='bg-[#1B365D] text-white py-4 px-6 flex justify-center'>
+      <div className='w-full max-w-5xl flex items-center justify-between'>
         <div
           className='flex items-center gap-2 cursor-pointer'
           onClick={async () => setSelectedPage('Home')}
@@ -48,12 +82,12 @@ const Navbar: React.FC<NavBarProps> = ({ toggleLoginPopup, setSelectedPage }) =>
           </h1>
         </div>
 
-        {/* Ikoner (Jevnt fordelt, sentrert i sin del) */}
         <div className='flex space-x-6'>
           <div className="w-8 h-8 flex items-center justify-center">
             <Image
               src='/images/home-regular-24.png'
               alt='Hjem'
+              title={t('navbar_home')}
               width={26}
               height={26}
               priority
@@ -65,6 +99,7 @@ const Navbar: React.FC<NavBarProps> = ({ toggleLoginPopup, setSelectedPage }) =>
             <Image
               src='/images/user-circle-regular-24.png'
               alt='Profil'
+              title={t('navbar_profile')}
               width={26}
               height={26}
               priority
@@ -76,6 +111,7 @@ const Navbar: React.FC<NavBarProps> = ({ toggleLoginPopup, setSelectedPage }) =>
             <Image
               src='/images/world-regular-24.png'
               alt='Språk'
+              title={t('navbar_language')}
               width={26}
               height={26}
               priority
@@ -83,11 +119,12 @@ const Navbar: React.FC<NavBarProps> = ({ toggleLoginPopup, setSelectedPage }) =>
               onClick={() => setIsModalOpen(true)}
             />
           </div>
-          <WithAdminAccess setSelectedPage={setSelectedPage}>
+          <WithPageEditAccess>
             <div className="w-8 h-8 flex items-center justify-center">
               <Image
                 src='/images/adminsettings.png'
                 alt='AdminPage'
+                title={t('navbar_admin')}
                 width={26}
                 height={26}
                 priority
@@ -95,7 +132,19 @@ const Navbar: React.FC<NavBarProps> = ({ toggleLoginPopup, setSelectedPage }) =>
                 onClick={() => setSelectedPage('Admin')}
               />
             </div>
-          </WithAdminAccess>
+            <div className="w-8 h-8 flex items-center justify-center">
+              <Image
+                src='/images/bx-reset.png'
+                alt='ResetTestData'
+                title={t('navbar_reset_testdata')}
+                width={26}
+                height={26}
+                priority
+                className='cursor-pointer invert'
+                onClick={handleResetTestData}
+              />
+            </div>
+          </WithPageEditAccess>
         </div>
       </div>
 

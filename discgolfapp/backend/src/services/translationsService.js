@@ -23,7 +23,6 @@ const addNewTranslation = async (language, key, translationText) => {
 };
 
 const updateTranslation = async (language, key, newTranslation) => {
-    console.log('Updating translation:', language, key, newTranslation);
     const translation = await Translation.findOneAndUpdate(
         { language, key },
         { translation: newTranslation },
@@ -36,8 +35,6 @@ const updateTranslation = async (language, key, newTranslation) => {
 };
 
 const updateTranslationsBatch = async (updates) => {
-    console.log('Batch updating translations:', updates);
-
     try {
         // Valider oppdateringene
         const validUpdates = updates.filter(({ language, key, index, translation }) => {

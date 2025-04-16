@@ -51,17 +51,12 @@ const MemberList: React.FC<MemberListProps> = () => {
     const updatedMembers = [...members];
     updatedMembers[index].position = newPosition;
     setMembers(updatedMembers);
-  
+
     const accessToken = localStorage.getItem('accessToken');
-    
+
     const url = `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/clubpage/members/position`;
-  
+
     try {
-      console.log('Sending to backend:', {
-        displayName: updatedMembers[index].displayName,
-        position: newPosition,
-      });
-  
       const response = await fetch(url, {
         method: 'PATCH',
         headers: {
@@ -73,7 +68,7 @@ const MemberList: React.FC<MemberListProps> = () => {
           position: newPosition,
         }),
       });
-  
+
       if (response.status === 204 || response.status === 200) {
         toast.success('Position oppdatert!');
       } else if (response.status === 404) {
@@ -81,14 +76,14 @@ const MemberList: React.FC<MemberListProps> = () => {
       } else {
         throw new Error(`Server svarte med status: ${response.status}`);
       }
-  
+
     } catch (error) {
       console.error(error);
       toast.error('Feil ved lagring av position.');
     }
   };
-  
-  
+
+
 
   return (
     <div className="p-4 border rounded-lg shadow-md bg-white w-full h-full">
