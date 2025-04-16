@@ -2,7 +2,7 @@ import React from 'react'
 import { toast, ToastContainer } from 'react-toastify'
 
 import { Club } from '../../types/club'
-import SelectButton from './selectButton'
+import SelectButton from './SelectButton'
 
 interface ClubDetailsProps {
   selectedClub: Club | null;
@@ -15,10 +15,10 @@ const ClubSettings: React.FC<ClubDetailsProps> = ({ selectedClub, setSelectedClu
         toast.error('Klubben eksisterer ikke');
         return;
       }
-  
+
       const accessToken = localStorage.getItem('accessToken');
       const url = process.env.NEXT_PUBLIC_BACKEND_BASE_URL + '/clubpage/' + selectedClub._id;
-  
+
       try {
         const response = await fetch(url, {
           method: 'PUT',
@@ -41,16 +41,16 @@ const ClubSettings: React.FC<ClubDetailsProps> = ({ selectedClub, setSelectedClu
         }
       }
     };
-  
+
     const deleteClub = async (clubId: string) => {
       if (!clubId) {
         toast.error('Klubb-ID mangler');
         return;
       }
-  
+
       const accessToken = localStorage.getItem('accessToken');
       const url = process.env.NEXT_PUBLIC_BACKEND_BASE_URL + '/clubpage/' + clubId;
-  
+
       try {
         const response = await fetch(url, {
           method: 'DELETE',
@@ -58,7 +58,7 @@ const ClubSettings: React.FC<ClubDetailsProps> = ({ selectedClub, setSelectedClu
             Authorization: 'Bearer ' + accessToken,
           },
         });
-  
+
         if (response.status === 200) {
           toast.success('Klubben ble slettet!');
           setSelectedClub(null);
@@ -73,7 +73,7 @@ const ClubSettings: React.FC<ClubDetailsProps> = ({ selectedClub, setSelectedClu
         }
       }
     };
-  
+
     return (
       <div className="flex w-auto shadow text-black overflow-y-auto">
         {selectedClub ? (
@@ -132,15 +132,15 @@ const ClubSettings: React.FC<ClubDetailsProps> = ({ selectedClub, setSelectedClu
                 onChange={(e) => setSelectedClub({ ...selectedClub, phone: e.target.value })}
               />
             </div>
-  
+
             <SelectButton onClick={() => changeClubInformation()}>
               Lagre klubbinformasjon
             </SelectButton>
-  
+
             <SelectButton onClick={() => deleteClub(selectedClub._id)}>
               Slett klubb
             </SelectButton>
-  
+
             <SelectButton onClick={() => setSelectedClub(null)}>
               Tilbake til klubbvalg
             </SelectButton>
@@ -148,10 +148,10 @@ const ClubSettings: React.FC<ClubDetailsProps> = ({ selectedClub, setSelectedClu
         ) : (
           <header>Ingen klubb valgt.</header>
         )}
-  
+
         <ToastContainer />
       </div>
     );
   };
-  
+
   export default ClubSettings;

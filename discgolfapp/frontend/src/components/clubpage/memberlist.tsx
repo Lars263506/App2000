@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 
 import Member from '../../types/member';
-import { Club } from '../../types/club';
+import Club from '../../types/club';
 import { useTranslation } from 'react-i18next';
 
 interface MemberListProps {

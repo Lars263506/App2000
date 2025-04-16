@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
 
-import Button from '../global/button'
+import Button from '../global/Button'
 import { useTranslation } from 'react-i18next'
 
 interface DiscGolfInfoProps {

@@ -4,7 +4,7 @@ import { toast } from 'react-toastify'
 import Course from '@/types/course'
 import Review from '@/types/review'
 import axios from 'axios'
-import Button from '../global/button'
+import Button from '../global/Button'
 
 interface CourseDetailsProps {
   selectedCourse: Course | null

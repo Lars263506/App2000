@@ -1,4 +1,4 @@
-import { Club } from "@/types/club"
+import Club from "@/types/club"
 
 interface ClubHeaderProps {
     clubData: Club | null

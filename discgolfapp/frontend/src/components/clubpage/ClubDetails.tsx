@@ -3,8 +3,8 @@ import { Club } from '../../types/club';
 import { toast } from 'react-toastify';
 
 import { useTranslation } from 'react-i18next';
-import MemberList from './memberlist';
-import Announcements from './announcements';
+import MemberList from './MemberList';
+import Announcements from './Announcements';
 import Meetings from './Meetings';
 import JoinClubModal from './JoinClubModal';
 

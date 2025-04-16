@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import User from '../../types/user';
-import UserEditModal from './usereditmodal';
+import UserEditModal from './UserEditModal'
 import { toast } from 'react-toastify';
 
 const UserList: React.FC = () => {
@@ -18,7 +18,7 @@ const UserList: React.FC = () => {
             'Authorization': `Bearer ${accessToken}`
           }
         });
-        if (response.status !== 200) { 
+        if (response.status !== 200) {
             toast.error('Failed to fetch users');
         }
         const data = await response.json();

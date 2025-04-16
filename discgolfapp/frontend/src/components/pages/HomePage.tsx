@@ -1,11 +1,11 @@
-import DiscgolfInfo from '../frontpage/discgolfinfo';
-import Navigation from '../frontpage/navigation';
+import DiscgolfInfo from '../frontpage/DiscgolfInfo';
+import Navigation from '../frontpage/Navigation';
 
 interface HomeProps {
     setSelectedPage: (page: string) => void;
 }
 
-const Home: React.FC<HomeProps> = ({ setSelectedPage }) => {
+const HomePage: React.FC<HomeProps> = ({ setSelectedPage }) => {
     return (
         <div aria-label="Home" className="mt-24">
             <DiscgolfInfo setSelectedPage={setSelectedPage}/>
@@ -14,4 +14,4 @@ const Home: React.FC<HomeProps> = ({ setSelectedPage }) => {
     )
 }
 
-export default Home
+export default HomePage

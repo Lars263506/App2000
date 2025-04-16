@@ -1,4 +1,4 @@
-export type Club = {
+type Club = {
   _id: string
   name: string
   address: string
@@ -7,3 +7,5 @@ export type Club = {
   email: string
   phone: string
 }
+
+export default Club

@@ -1,5 +1,5 @@
-import Login from '@/components/global/login'
-import Register from '@/components/global/register'
+import Login from '@/components/global/Login'
+import Register from '@/components/global/Register'
 
 interface PopupWrapperProps {
   popupType: 'login' | 'register' | 'mypage' | null
