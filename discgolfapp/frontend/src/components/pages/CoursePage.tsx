@@ -1,8 +1,8 @@
 import { useState } from 'react'
 
-import CourseList from '@/components/course/courselist'
-import CourseDetails from '@/components/course/coursedetails'
-import CourseMap from '@/components/course/coursemap'
+import CourseList from '@/components/coursepage/CourseList'
+import CourseDetails from '@/components/coursepage/CourseDetails'
+import CourseMap from '@/components/coursepage/CourseMap'
 import Course from '@/types/course'
 
 const CoursePage = () => {
@@ -12,10 +12,10 @@ const CoursePage = () => {
   return (
     <div className='flex flex-row flex-wrap gap-4 p-4'>
         <div className="w-3/10 h-full">
-            <CourseList 
-              courses={courses} 
-              setCourses={setCourses} 
-              setSelectedCourse={setSelectedCourse} 
+            <CourseList
+              courses={courses}
+              setCourses={setCourses}
+              setSelectedCourse={setSelectedCourse}
             />
         </div>
 
@@ -27,10 +27,10 @@ const CoursePage = () => {
         </div>
 
         <div className="w-5/10 flex-grow">
-            <CourseMap 
-              selectedCourse={selectedCourse} 
-              courses={courses} 
-              setSelectedCourse={setSelectedCourse} 
+            <CourseMap
+              selectedCourse={selectedCourse}
+              courses={courses}
+              setSelectedCourse={setSelectedCourse}
             />
         </div>
     </div>

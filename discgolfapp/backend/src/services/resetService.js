@@ -22,16 +22,67 @@ const resetTestData = async (userId) => {
     console.log('Deleted courses:', courseDeleteResult?.deletedCount || 0);
     console.log('Deleted games:', gameDeleteResult?.deletedCount || 0);
 
-    const adminPassword = await bcrypt.hash(process.env.ADMIN_PASSWORD, 10);
-    const clubownerPassword = await bcrypt.hash(process.env.CLUBOWNER_PASSWORD, 10);
-    const memberPassword = await bcrypt.hash(process.env.MEMBER_PASSWORD, 10);
-    const userPassword = await bcrypt.hash(process.env.USER_PASSWORD, 10);
+    const adminPassword = await bcrypt.hash(process.env.JWT_ADMIN_PASSWORD, 10);
+    const clubownerPassword = await bcrypt.hash(process.env.JWT_CLUBOWNER_PASSWORD, 10);
+    const memberPassword = await bcrypt.hash(process.env.JWT_MEMBER_PASSWORD, 10);
+    const userPassword = await bcrypt.hash(process.env.JWT_USER_PASSWORD, 10);
 
     await User.insertMany([
-        { displayName: 'admin', email: 'admin@testmail.no', password: adminPassword, role: 'admin' },
-        { displayName: 'klubbeier', email: 'klubbeier@testmail.no', password: clubownerPassword, role: 'clubowner' },
-        { displayName: 'medlem', email: 'medlem@testmail.no', password: memberPassword, role: 'member' },
-        { displayName: 'bruker', email: 'bruker@testmail.no', password: userPassword, role: 'user' },
+        {
+            displayName: 'admin',
+            email: 'admin@testmail.no',
+            hashedPassword: adminPassword,
+            role: 'admin',
+            emailChangedAt: new Date(),
+            passwordChangedAt: new Date(),
+            roleChangedAt: new Date(),
+            profileImage: '',
+            settings: [
+                {name: 'Klubbadministrasjon', description: 'Administrer klubbene dine'},
+                {name: 'Brukeradministrasjon', description: 'Administrer brukerne dine'},
+                {name: 'Lage baner', description: 'Lage, redigere og slette baner'},
+            ],
+            games: [],
+        },
+        {
+            displayName: 'klubbeier',
+            email: 'klubbeier@testmail.no',
+            hashedPassword: clubownerPassword,
+            role: 'clubowner',
+            emailChangedAt: new Date(),
+            passwordChangedAt: new Date(),
+            roleChangedAt: new Date(),
+            profileImage: '',
+            settings: [
+                {name: 'Lage baner', description: 'Lage, redigere og slette baner'},
+                {name: 'Banetegningadministrasjon', description: 'Redigere og slette pins og linjer fra kartet'},
+            ],
+            games: [],
+        },
+        {
+            displayName: 'medlem',
+            email: 'medlem@testmail.no',
+            hashedPassword: memberPassword,
+            role: 'member',
+            emailChangedAt: new Date(),
+            passwordChangedAt: new Date(),
+            roleChangedAt: new Date(),
+            profileImage: '',
+            settings: [],
+            games: [],
+        },
+        {
+            displayName: 'bruker',
+            email: 'bruker@testmail.no',
+            hashedPassword: userPassword,
+            role: 'user',
+            emailChangedAt: new Date(),
+            passwordChangedAt: new Date(),
+            roleChangedAt: new Date(),
+            profileImage: '',
+            settings: [],
+            games: [],
+        },
     ]);
 
     await ClubPage.insertMany([
@@ -47,7 +98,6 @@ const resetTestData = async (userId) => {
             members: [
                 { displayName: 'klubbeier', role: 'clubowner' },
                 { displayName: 'medlem', role: 'member' },
-                { displayName: 'bruker', role: 'user' },
             ],
             announcements: [],
             events: [],
@@ -102,10 +152,10 @@ const resetTestData = async (userId) => {
             url: 'http://skien.no',
             latitude: 59.11062,
             longitude: 9.35498,
-            difficulty: 'Difficult',
+            difficulty: 'Hard',
             familyFriendly: true,
             holes: 21,
-            pins: "",
+            pins: [],
             lines: [],
             reviews: [],
         },

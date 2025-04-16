@@ -1,20 +1,36 @@
 import mongoose from 'mongoose';
 import { resetTestData } from '../../src/services/resetService.js';
-import User from '../../src/models/User.js';
-import ClubPage from '../../src/models/Clubpage.js';
-import Course from '../../src/models/Course.js';
-import Game from '../../src/models/Game.js';
+import User from '../../src/models/User';
+import ClubPage from '../../src/models/Clubpage';
+import Course from '../../src/models/Course';
+import Game from '../../src/models/Game';
 
-jest.mock('../../src/models/User.js');
-jest.mock('../../src/models/Clubpage.js');
-jest.mock('../../src/models/Course.js');
-jest.mock('../../src/models/Game.js');
+jest.mock('../../src/models/User', () => ({
+    deleteMany: jest.fn(),
+    findById: jest.fn(),
+    insertMany: jest.fn(),
+}));
+
+jest.mock('../../src/models/Clubpage', () => ({
+    deleteMany: jest.fn(),
+    insertMany: jest.fn(),
+}));
+
+jest.mock('../../src/models/Course', () => ({
+    deleteMany: jest.fn(),
+    insertMany: jest.fn(),
+}));
+
+jest.mock('../../src/models/Game', () => ({
+    deleteMany: jest.fn(),
+}));
+
 jest.mock('bcrypt', () => ({
     hash: jest.fn().mockResolvedValue('hashed_password'),
 }));
 
 describe('resetTestData', () => {
-    beforeEach(() => {
+    afterEach(() => {
         jest.clearAllMocks();
     });
 

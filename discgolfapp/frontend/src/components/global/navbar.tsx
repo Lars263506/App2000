@@ -5,9 +5,9 @@ import { toast } from 'react-toastify';
 import "../../i18n"
 import { useTranslation } from 'react-i18next';
 
-import LanguageModal from '../global/utils/LanguageModal';
-import WithAdminAccess from '../adminpage/withadminaccess';
-import WithPageEditAccess from '../adminpage/withpageeditaccess';
+import LanguageModal from './utils/LanguageModal';
+import WithAdminAccess from '../adminpage/WithAdminAccess';
+import WithPageEditAccess from '../adminpage/WithEditPageAccess';
 
 interface NavBarProps {
   toggleLoginPopup: () => void;
@@ -41,12 +41,12 @@ const Navbar: React.FC<NavBarProps> = ({ toggleLoginPopup, setSelectedPage }) =>
         toast.error(t('navbar_testdata_no_access_token'));
         return;
       }
-      const url = process.env.NEXT_PUBLIC_BACKEND_BASE_URL + '/reset/testdata/';
+      const url = process.env.NEXT_PUBLIC_BACKEND_BASE_URL + '/reset/testdata';
       const response = await fetch(url, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
+          'Authorization': `Bearer ${accessToken}`,
         },
       });
 
@@ -132,7 +132,9 @@ const Navbar: React.FC<NavBarProps> = ({ toggleLoginPopup, setSelectedPage }) =>
                 onClick={() => setSelectedPage('Admin')}
               />
             </div>
-            <div className="w-8 h-8 flex items-center justify-center">
+          </WithPageEditAccess>
+          <WithAdminAccess>
+          <div className="w-8 h-8 flex items-center justify-center">
               <Image
                 src='/images/bx-reset.png'
                 alt='ResetTestData'
@@ -144,7 +146,7 @@ const Navbar: React.FC<NavBarProps> = ({ toggleLoginPopup, setSelectedPage }) =>
                 onClick={handleResetTestData}
               />
             </div>
-          </WithPageEditAccess>
+          </WithAdminAccess>
         </div>
       </div>
 

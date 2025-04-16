@@ -1,10 +1,10 @@
 import { useState } from 'react'
 
-import MemberBenefit from '@/components/clubpage/memberbenefit'
-import ClubList from '@/components/global/clublist'
-import ClubMap from '@/components/clubpage/clubmap'
+import MemberBenefit from '@/components/clubpage/MemberBenefit'
+import ClubList from '@/components/global/ClubList'
+import ClubMap from '@/components/clubpage/ClubMap'
 
-import { Club } from '@/types/club'
+import Club from '@/types/club'
 
 interface ClubLandingPageProps {
   setSelectedPage: (page: string) => void

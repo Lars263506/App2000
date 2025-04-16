@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import Button from '../global/button';
+import Button from '../global/Button';
 import { toast } from 'react-toastify';
 
 const Announcements = () => {

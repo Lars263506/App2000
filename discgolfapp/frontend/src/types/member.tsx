@@ -4,6 +4,5 @@ type Member = {
     profilePicture?: string | null;
     position?: string; // Nytt valgfritt fritekstfelt
   };
-  
-  export default Member;
-  
+
+export default Member;

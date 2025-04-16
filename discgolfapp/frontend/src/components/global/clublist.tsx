@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { toast } from 'react-toastify'
 
-import { Club } from '../../types/club'
+import Club from '../../types/club'
 import { useTranslation } from 'react-i18next'
 
 interface ClubListProps {
@@ -59,7 +59,7 @@ const ClubList: React.FC<ClubListProps> = ({ selectedClub, setSelectedClub, sear
                     setSelectedPage('Club');
                   }}
                 >
-                  {club.name} 
+                  {club.name}
                 </button>
               </li>
             ))}

@@ -24,7 +24,7 @@ const memberSchema = new mongoose.Schema({
   position: {
     type: String,
     default: ''
-    
+
   }
 
 });
