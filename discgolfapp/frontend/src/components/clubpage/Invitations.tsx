@@ -3,7 +3,7 @@ import jsPDF from 'jspdf';
 import { toast } from 'react-toastify';
 
 import Invitation from '../../types/invitation';
-import { Club } from '../../types/club';
+import Club from '../../types/club';
 
 const backendUrl = `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/invitations/`;
 

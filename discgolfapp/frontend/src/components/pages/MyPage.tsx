@@ -4,7 +4,7 @@ import { PencilIcon } from '@heroicons/react/20/solid'
 
 import User from "../../types/user";
 import Game from "../../types/game";
-import { Club } from "../../types/club";
+import Club from "../../types/club";
 import GameResultsModal from '../myprofile/GameResultsModal';
 
 interface MyPageProps {
