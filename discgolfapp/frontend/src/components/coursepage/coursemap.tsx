@@ -39,7 +39,7 @@ const CourseMap: React.FC<CourseMapProps> = ({ selectedCourse, courses, setSelec
         <option value="">{t("coursemap_alldifficulties")}</option>
         <option value="Easy">{t("coursemap_easy")}</option>
         <option value="Medium">{t("coursemap_medium")}</option>
-        <option value="Difficult">{t("coursemap_hard")}</option>
+        <option value="Hard">{t("coursemap_hard")}</option>
       </select>
 
       <LoadScript

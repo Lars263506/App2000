@@ -22,16 +22,16 @@ const resetTestData = async (userId) => {
     console.log('Deleted courses:', courseDeleteResult?.deletedCount || 0);
     console.log('Deleted games:', gameDeleteResult?.deletedCount || 0);
 
-    const adminPassword = await bcrypt.hash(process.env.ADMIN_PASSWORD, 10);
-    const clubownerPassword = await bcrypt.hash(process.env.CLUBOWNER_PASSWORD, 10);
-    const memberPassword = await bcrypt.hash(process.env.MEMBER_PASSWORD, 10);
-    const userPassword = await bcrypt.hash(process.env.USER_PASSWORD, 10);
+    const adminPassword = await bcrypt.hash(process.env.JWT_ADMIN_PASSWORD, 10);
+    const clubownerPassword = await bcrypt.hash(process.env.JWT_CLUBOWNER_PASSWORD, 10);
+    const memberPassword = await bcrypt.hash(process.env.JWT_MEMBER_PASSWORD, 10);
+    const userPassword = await bcrypt.hash(process.env.JWT_USER_PASSWORD, 10);
 
     await User.insertMany([
         {
             displayName: 'admin',
             email: 'admin@testmail.no',
-            password: adminPassword,
+            hashedPassword: adminPassword,
             role: 'admin',
             emailChangedAt: new Date(),
             passwordChangedAt: new Date(),
@@ -47,7 +47,7 @@ const resetTestData = async (userId) => {
         {
             displayName: 'klubbeier',
             email: 'klubbeier@testmail.no',
-            password: clubownerPassword,
+            hashedPassword: clubownerPassword,
             role: 'clubowner',
             emailChangedAt: new Date(),
             passwordChangedAt: new Date(),
@@ -62,7 +62,7 @@ const resetTestData = async (userId) => {
         {
             displayName: 'medlem',
             email: 'medlem@testmail.no',
-            password: memberPassword,
+            hashedPassword: memberPassword,
             role: 'member',
             emailChangedAt: new Date(),
             passwordChangedAt: new Date(),
@@ -74,7 +74,7 @@ const resetTestData = async (userId) => {
         {
             displayName: 'bruker',
             email: 'bruker@testmail.no',
-            password: userPassword,
+            hashedPassword: userPassword,
             role: 'user',
             emailChangedAt: new Date(),
             passwordChangedAt: new Date(),
@@ -98,7 +98,6 @@ const resetTestData = async (userId) => {
             members: [
                 { displayName: 'klubbeier', role: 'clubowner' },
                 { displayName: 'medlem', role: 'member' },
-                { displayName: 'bruker', role: 'user' },
             ],
             announcements: [],
             events: [],
@@ -153,10 +152,10 @@ const resetTestData = async (userId) => {
             url: 'http://skien.no',
             latitude: 59.11062,
             longitude: 9.35498,
-            difficulty: 'Difficult',
+            difficulty: 'Hard',
             familyFriendly: true,
             holes: 21,
-            pins: "",
+            pins: [],
             lines: [],
             reviews: [],
         },
