@@ -16,12 +16,12 @@ import * as clubpageService from '../services/clubpageService.js'
 
 const getAllClubPages = async (req, res) => {
   try {
-    const response = await clubpageService.getAllClubPages();
-    res.status(200).json({ mssg: 'List of all club pages', data: response });
+    const response = await clubpageService.getAllClubPages()
+    res.json({ mssg: 'List of all club pages', data: response })
   } catch (err) {
-    res.status(404).json({ error: err.message });
+    res.status(404).json({ error: err.message })
   }
-};
+}
 
 /**
  * @author Lars Andreas Strand
@@ -32,17 +32,32 @@ const getAllClubPages = async (req, res) => {
 
 const getClubPage = async (req, res) => {
   try {
-    const id = req.params.id;
-    const role = req.user?.role || 'guest';
-    const response = await clubpageService.getClubPage(id, role);
-    if (!response) {
-      throw new Error('Club page not found');
-    }
-    res.status(200).json({ mssg: 'Club page found', data: response });
+    const id = req.params.id
+    const role = req.user.role
+    const response = await clubpageService.getClubPage(id, role)
+    res.json({ mssg: 'Club page found', data: response })
   } catch (err) {
-    res.status(404).json({ error: err.message });
+    res.status(404).json({ error: err.message })
   }
-};
+}
+
+/**
+ * @author Lars Andreas Strand
+ * @description This function handles the request to get the view based on the user's role.
+ * It checks the user's role and sends the appropriate view as a response.
+ * If there is an error, it sends a 404 status code and the error message.
+ */
+
+const getView = async (req, res) => {
+  try {
+    const role = req.user.role
+    if (role === 'member') {
+      res.json({ view: 'member' })
+    } else res.json({ view: 'nonmember' })
+  } catch (err) {
+    res.status(404).json({ error: 'No role found' })
+  }
+}
 
 const isMember = async (req, res) => {
   try {
@@ -73,16 +88,13 @@ const isOwner = async (req, res) => {
 
 const getMembers = async (req, res) => {
   try {
-    const id = req.params.id;
-    const members = await clubpageService.getMembers(id);
-    if (!members) {
-      throw new Error('No members found');
-    }
-    res.status(200).json({ data: members });
+    const id = req.user.id
+    const members = await clubpageService.getMembers(id)
+    res.json(members)
   } catch (err) {
-    res.status(404).json({ error: err.message });
+    res.status(404).json({ error: err.message })
   }
-};
+}
 
 /**
  * @author Lars Andreas Strand
@@ -114,18 +126,26 @@ const getAnnouncements = async (req, res) => {
 
 const createNewMember = async (req, res) => {
   try {
-    const userId = req.user?.id;
-    const clubId = req.params.clubId;
-    const { reason } = req.body;
+    const userId = req.user.id
+    const clubId = req.params.clubId
+    const { reason } = req.body
 
-    await clubpageService.createNewApplication(userId, clubId, reason);
-    await clubpageService.createNewMember(userId, clubId);
+    await clubpageService.createNewApplication(
+      userId,
+      clubId,
+      reason
+    )
 
-    res.status(200).json({ mssg: 'New member created' });
+    await clubpageService.createNewMember(
+      userId,
+      clubId
+    )
+
+    res.status(200).json({ mssg: 'New member created' })
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ error: err.message })
   }
-};
+}
 
 /**
  * @author Lars Andreas Strand
@@ -250,6 +270,7 @@ const updatePosition = async (req, res) => {
 export {
   getAllClubPages,
   getClubPage,
+  getView,
   isMember,
   isOwner,
   getMembers,
