@@ -28,10 +28,61 @@ const resetTestData = async (userId) => {
     const userPassword = await bcrypt.hash(process.env.USER_PASSWORD, 10);
 
     await User.insertMany([
-        { displayName: 'admin', email: 'admin@testmail.no', password: adminPassword, role: 'admin' },
-        { displayName: 'klubbeier', email: 'klubbeier@testmail.no', password: clubownerPassword, role: 'clubowner' },
-        { displayName: 'medlem', email: 'medlem@testmail.no', password: memberPassword, role: 'member' },
-        { displayName: 'bruker', email: 'bruker@testmail.no', password: userPassword, role: 'user' },
+        {
+            displayName: 'admin',
+            email: 'admin@testmail.no',
+            password: adminPassword,
+            role: 'admin',
+            emailChangedAt: new Date(),
+            passwordChangedAt: new Date(),
+            roleChangedAt: new Date(),
+            profileImage: '',
+            settings: [
+                {name: 'Klubbadministrasjon', description: 'Administrer klubbene dine'},
+                {name: 'Brukeradministrasjon', description: 'Administrer brukerne dine'},
+                {name: 'Lage baner', description: 'Lage, redigere og slette baner'},
+            ],
+            games: [],
+        },
+        {
+            displayName: 'klubbeier',
+            email: 'klubbeier@testmail.no',
+            password: clubownerPassword,
+            role: 'clubowner',
+            emailChangedAt: new Date(),
+            passwordChangedAt: new Date(),
+            roleChangedAt: new Date(),
+            profileImage: '',
+            settings: [
+                {name: 'Lage baner', description: 'Lage, redigere og slette baner'},
+                {name: 'Banetegningadministrasjon', description: 'Redigere og slette pins og linjer fra kartet'},
+            ],
+            games: [],
+        },
+        {
+            displayName: 'medlem',
+            email: 'medlem@testmail.no',
+            password: memberPassword,
+            role: 'member',
+            emailChangedAt: new Date(),
+            passwordChangedAt: new Date(),
+            roleChangedAt: new Date(),
+            profileImage: '',
+            settings: [],
+            games: [],
+        },
+        {
+            displayName: 'bruker',
+            email: 'bruker@testmail.no',
+            password: userPassword,
+            role: 'user',
+            emailChangedAt: new Date(),
+            passwordChangedAt: new Date(),
+            roleChangedAt: new Date(),
+            profileImage: '',
+            settings: [],
+            games: [],
+        },
     ]);
 
     await ClubPage.insertMany([
