@@ -16,10 +16,7 @@ const ClubLandingPage: React.FC<ClubLandingPageProps> = ({ setSelectedPage }) =>
 
   return (
     <div className='flex flex-row justify-center items-center m-4'>
-      <div className='flex flex-row h-full gap-4'>
-        <div className="max-w-[300px] rounded-md bg-[#E7EFFB] p-2">
-          <MemberBenefit />
-        </div>
+      <div className='flex flex-row flex-wrap h-full gap-4'>
         <div className="rounded-md bg-[#E7EFFB]">
           <ClubList
             selectedClub={selectedClub}
@@ -29,7 +26,7 @@ const ClubLandingPage: React.FC<ClubLandingPageProps> = ({ setSelectedPage }) =>
             setSelectedPage={setSelectedPage}
           />
         </div>
-        <div className="min-w-[700px] rounded-md bg-[#E7EFFB]">
+        <div className="min-w-[350px] rounded-md bg-[#E7EFFB]">
           <ClubMap selectedClub={selectedClub} setSelectedPage={setSelectedPage} />
         </div>
       </div>

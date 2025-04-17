@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Club } from '../../types/club';
+import Club from '../../types/club';
 import { toast } from 'react-toastify';
 
 import { useTranslation } from 'react-i18next';
@@ -7,6 +7,7 @@ import MemberList from './MemberList';
 import Announcements from './Announcements';
 import Meetings from './Meetings';
 import JoinClubModal from './JoinClubModal';
+import MemberBenefit from './MemberBenefit';
 
 interface ClubDetailsProps {
     clubData: Club | null;
@@ -98,7 +99,7 @@ const ClubDetails: React.FC<ClubDetailsProps> = ({ clubData, setSelectedPage }) 
         ) : (
           <div
             aria-label="Nonmember section"
-            className="flex flex-col items-center h-full text-center mt-20"
+            className="flex flex-col items-center h-full text-center"
           >
             <h2
               className="text-xl font-bold mb-4"
@@ -129,6 +130,10 @@ const ClubDetails: React.FC<ClubDetailsProps> = ({ clubData, setSelectedPage }) 
                 onClose={() => setIsModalOpen(false)}
               />
             )}
+
+            <div className="mt-4 max-w-[500px] rounded-md bg-[#E7EFFB] p-2">
+              <MemberBenefit />
+            </div>
           </div>
         )
       ) : (
