@@ -35,17 +35,7 @@ const DiscgolfInfo: React.FC<DiscGolfInfoProps> = ({ setSelectedPage }) => {
   return (
     <div className='max-w-6xl mx-auto py-4 flex flex-wrap justify-center items-center gap-5'>
 
-      <div className='bg-[#E7EFFB] p-6 rounded-lg shadow-md w-full sm:w-[40%] flex items-center justify-center'>
-        <Image
-          src={images[currentImageIndex]}
-          alt='Placeholder'
-          width={250}
-          height={250}
-          className='object-cover rounded'
-        />
-      </div>
-
-      <div className='bg-[#E7EFFB] p-6 rounded-lg shadow-md w-full sm:w-[50%] h-[300px] flex flex-col justify-between'>
+      <div className='bg-[#E7EFFB] p-6 rounded-lg shadow-md w-full sm:w-[50%] min-h-[300px] flex flex-col justify-between'>
         <div>
           <h2 className='text-[#1B365D] text-2xl font-bold text-center'>{t("discgolfinfo_title")}</h2>
           <p className='mt-2 text-[#2A4470] text-sm text-center'>
@@ -59,6 +49,16 @@ const DiscgolfInfo: React.FC<DiscGolfInfoProps> = ({ setSelectedPage }) => {
         <div className="text-center">
           <Button onClick={() => setSelectedPage("Play")}>{t("discgolfinfo_playnow")}</Button>
         </div>
+      </div>
+
+      <div className='bg-[#E7EFFB] p-6 rounded-lg shadow-md w-full sm:w-[40%] flex items-center justify-center'>
+        <Image
+          src={images[currentImageIndex]}
+          alt='Placeholder'
+          width={250}
+          height={250}
+          className='object-cover rounded'
+        />
       </div>
 
     </div>
