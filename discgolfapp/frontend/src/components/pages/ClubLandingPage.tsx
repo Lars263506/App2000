@@ -15,12 +15,12 @@ const ClubLandingPage: React.FC<ClubLandingPageProps> = ({ setSelectedPage }) =>
   const [searchTerm, setSearchTerm] = useState('')
 
   return (
-    <div className='flex flex-row justify-center items-center mt-24'>
+    <div className='flex flex-row justify-center items-center m-4'>
       <div className='flex flex-row h-full gap-4'>
-        <div className="w-2/10 rounded-md bg-[#E7EFFB]">
+        <div className="max-w-[300px] rounded-md bg-[#E7EFFB] p-2">
           <MemberBenefit />
         </div>
-        <div className="w-2/10 rounded-md bg-[#E7EFFB]">
+        <div className="rounded-md bg-[#E7EFFB]">
           <ClubList
             selectedClub={selectedClub}
             setSelectedClub={setSelectedClub}
@@ -29,7 +29,7 @@ const ClubLandingPage: React.FC<ClubLandingPageProps> = ({ setSelectedPage }) =>
             setSelectedPage={setSelectedPage}
           />
         </div>
-        <div className="w-1/2 rounded-md bg-[#E7EFFB]">
+        <div className="min-w-[700px] rounded-md bg-[#E7EFFB]">
           <ClubMap selectedClub={selectedClub} setSelectedPage={setSelectedPage} />
         </div>
       </div>

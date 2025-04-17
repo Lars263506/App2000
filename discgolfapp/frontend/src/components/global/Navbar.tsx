@@ -65,7 +65,7 @@ const Navbar: React.FC<NavBarProps> = ({ toggleLoginPopup, setSelectedPage }) =>
 
   return (
     <nav aria-label="Navbar root" className='bg-[#1B365D] text-white py-4 px-6 flex justify-center'>
-      <div className='w-full max-w-5xl flex items-center justify-center gap-72'>
+      <div className='w-full flex items-center justify-center gap-72'>
         <div
           className='flex items-center gap-2 cursor-pointer'
           onClick={async () => setSelectedPage('Home')}
