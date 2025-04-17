@@ -14,7 +14,7 @@ const Footer: React.FC<FooterProps> = ({ setSelectedPage }) => {
 
   return (
     <footer className='text-center py-2 bg-[#1B365D] text-white'>
-      <div className='max-w-6xl mx-auto flex flex-col sm:flex-row justify-between items-center'>
+      <div className='max-w-6xl mx-auto flex flex-col sm:flex-row justify-center gap-36 items-center'>
 
         {/* Kontakt oss-knapp */}
         <button
