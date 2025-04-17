@@ -19,7 +19,7 @@ import Footer from '@/components/global/Footer';
 import PopupWrapper from '@/components/global/PopupWrapper';
 import { usePopup } from '@/components/global/UsePopup';
 
-import validateSession from '@/utils/validatesession';
+import validateSession from '@/utils/validate-session';
 
 const Index = () => {
   const { popupType, toggleLoginPopup, toggleRegisterPopup, closePopup } = usePopup();
