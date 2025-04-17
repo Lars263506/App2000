@@ -6,7 +6,7 @@ interface PrivacyProps {
 
 const PrivacyPage: React.FC<PrivacyProps> = ({ setSelectedPage }) => {
   return (
-    <div className="flex flex-col min-h-screen bg-white">
+    <div className="flex flex-col min-h-screen">
       <div className="flex-grow p-8 max-w-4xl mx-auto">
         <div className="bg-[#E7EFFB] p-6 rounded-2xl shadow-md">
           {/* Hvit innholdsboks */}
