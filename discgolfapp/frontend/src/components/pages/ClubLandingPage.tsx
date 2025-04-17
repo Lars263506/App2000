@@ -4,7 +4,7 @@ import MemberBenefit from '@/components/clubpage/MemberBenefit'
 import ClubList from '@/components/global/ClubList'
 import ClubMap from '@/components/clubpage/ClubMap'
 
-import Club from '@/types/club'
+import Club from '@/types/aaa'
 
 interface ClubLandingPageProps {
   setSelectedPage: (page: string) => void

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 import { toast } from "react-toastify";
-import Course from '@/types/course'
+import Course from '@/types/aaa'
 
 
 export default function StartGame() {

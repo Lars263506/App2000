@@ -1,7 +1,7 @@
 import React from 'react'
 import { toast, ToastContainer } from 'react-toastify'
 
-import { Club } from '../../types/club'
+import { Club } from '../../types/Course'
 import SelectButton from './SelectButton'
 
 interface ClubDetailsProps {

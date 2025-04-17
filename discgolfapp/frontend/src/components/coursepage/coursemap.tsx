@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { GoogleMap, LoadScript, Marker, InfoWindow } from '@react-google-maps/api';
-import Course from '@/types/course'
+import Course from '@/types/aaa'
 
 import { useTranslation } from 'react-i18next';
 import i18next from 'i18next';

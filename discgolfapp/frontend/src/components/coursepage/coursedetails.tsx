@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { toast } from 'react-toastify'
 
-import Course from '@/types/course'
-import Review from '@/types/review'
+import Course from '@/types/aaa'
+import Review from '@/types/aaa'
 import axios from 'axios'
 import Button from '../global/Button'
 

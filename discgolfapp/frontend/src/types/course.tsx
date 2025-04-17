@@ -1,4 +1,4 @@
-import Review from './review';
+import Review from './aaa';
 
 type Course = {
     _id: string;

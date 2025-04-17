@@ -4,8 +4,8 @@ import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { FaStar } from 'react-icons/fa';
 
-import Course from '@/types/course';
-import Review from '@/types/review';
+import Course from '@/types/aaa';
+import Review from '@/types/aaa';
 
 
 interface CourseListProps {

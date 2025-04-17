@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback, useRef } from 'react'
 import { GoogleMap, LoadScript, Marker, InfoWindow } from '@react-google-maps/api'
 import { toast } from 'react-toastify'
 
-import Club from '../../types/club'
+import Club from '../../types/Course'
 import { useTranslation } from 'react-i18next'
 
 interface ClubMapProps {

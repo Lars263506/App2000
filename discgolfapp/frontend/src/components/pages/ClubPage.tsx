@@ -3,7 +3,7 @@ import { useState, useEffect } from "react"
 import { toast } from "react-toastify"
 import { useTranslation } from "react-i18next"
 
-import Club from "@/types/club"
+import Club from "@/types/aaa"
 
 import ClubHeader from "@/components/clubpage/ClubHeader"
 import ClubDetails from "@/components/clubpage/ClubDetails"

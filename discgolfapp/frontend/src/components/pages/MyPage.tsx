@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { PencilIcon } from '@heroicons/react/20/solid'
 
-import User from "../../types/user";
-import Game from "../../types/game";
-import Club from "../../types/club";
+import User from "../../types/User";
+import Game from "../../types/Game";
+import Club from "../../types/Course";
 import GameResultsModal from '../myprofile/GameResultsModal';
 
 interface MyPageProps {

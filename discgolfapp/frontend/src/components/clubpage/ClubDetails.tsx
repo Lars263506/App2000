@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Club } from '../../types/club';
+import { Club } from '../../types/Course';
 import { toast } from 'react-toastify';
 
 import { useTranslation } from 'react-i18next';

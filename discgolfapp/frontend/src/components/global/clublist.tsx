@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { toast } from 'react-toastify'
 
-import Club from '../../types/club'
+import Club from '../../types/Course'
 import { useTranslation } from 'react-i18next'
 
 interface ClubListProps {
