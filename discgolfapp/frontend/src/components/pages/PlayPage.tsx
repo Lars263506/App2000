@@ -171,7 +171,6 @@ export default function StartGame() {
 
   return (
     <div className="min-h-screen flex flex-col sm:flex-row text-black">
-   
       {!gameStarted && (
         <div className="w-full sm:w-1/4 h-full">
           <CourseList
@@ -182,9 +181,8 @@ export default function StartGame() {
         </div>
       )}
 
-
       <div className={`flex-grow flex flex-col sm:flex-row rounded-lg`}>
-    
+        {/* Map Section */}
         <div className="flex-grow sm:w-4/5 h-[300px] sm:h-auto transition-all duration-300 rounded-lg overflow-hidden">
           <LoadScript googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string}>
             <GoogleMap
@@ -241,7 +239,11 @@ export default function StartGame() {
                     </ul>
                   )}
                 </div>
-              ) : null}
+              ) : (
+                <p className="text-sm text-gray-600 mt-2">
+                  Logg inn for å søke etter registrerte brukere.
+                </p>
+              )}
 
               <div className="flex flex-col h-full">
                 <div className="overflow-y-auto max-h-40 mt-4">
@@ -293,7 +295,7 @@ export default function StartGame() {
         )}
       </div>
 
- 
+      
       {gameStarted && !gameEnded && (
         <div className="bg-[#E7EFFB] rounded-lg shadow-lg p-4 sm:p-10">
           <h2 className="text-lg font-semibold text-center mb-4">Kurv {currentBasket}</h2>
