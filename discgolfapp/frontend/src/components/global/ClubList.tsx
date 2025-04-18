@@ -50,7 +50,7 @@ const ClubList: React.FC<ClubListProps> = ({ selectedClub, setSelectedClub, sear
           {clubs
             .filter((club) => club.name.toLowerCase().includes(searchTerm.toLowerCase()))
             .map((club) => (
-              <li key={club._id}>
+              <li key={club._id} className="mb-2">
                 <button
                   className={`block w-full text-left px-4 py-2 rounded-lg shadow transition ${selectedClub?.name === club.name ? 'bg-blue-600 text-white' : 'bg-white hover:bg-blue-100 text-black'}`}
                   onClick={() => {
