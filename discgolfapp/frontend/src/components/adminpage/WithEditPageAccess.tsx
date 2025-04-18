@@ -62,9 +62,7 @@ const WithPageEditAccess: React.FC<WithPageEditAccessProps> = ({ children }) => 
   }
 
   if (!hasAccess) {
-    return (
-      <></>
-    )
+    return <></>;
   }
 
   return <>{children}</>;

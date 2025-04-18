@@ -72,12 +72,18 @@ const CreateNewClub: React.FC<CreateNewClubProps> = ({ onClose }) => {
   };
 
   return (
-    <div className="flex justify-center items-center fixed inset-0 bg-black bg-opacity-50">
-      <div ref={modalRef} className="bg-white p-6 rounded shadow-lg w-96">
-        <h2 className="text-xl mb-4">Create New Club</h2>
+    <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50">
+      <div
+        ref={modalRef}
+        className="w-96 p-6 bg-white rounded shadow-lg"
+      >
+        <h2 className="mb-4 text-xl">Create New Club</h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label className="block text-sm font-medium mb-1" htmlFor="name">
+            <label
+              htmlFor="name"
+              className="block mb-1 text-sm font-medium"
+            >
               Club Name
             </label>
             <input
@@ -87,12 +93,15 @@ const CreateNewClub: React.FC<CreateNewClubProps> = ({ onClose }) => {
               placeholder="Must be unique and not empty"
               value={formData.name}
               onChange={handleInputChange}
-              className="w-full border p-2 rounded"
+              className="w-full p-2 border rounded"
               required
             />
           </div>
           <div className="mb-4">
-            <label className="block text-sm font-medium mb-1" htmlFor="clubOwner">
+            <label
+              htmlFor="clubOwner"
+              className="block mb-1 text-sm font-medium"
+            >
               Club Owner
             </label>
             <input
@@ -102,12 +111,15 @@ const CreateNewClub: React.FC<CreateNewClubProps> = ({ onClose }) => {
               placeholder="Insert club owner's display name"
               value={formData.clubOwner}
               onChange={handleInputChange}
-              className="w-full border p-2 rounded"
+              className="w-full p-2 border rounded"
               required
             />
           </div>
           <div className="mb-4">
-            <label className="block text-sm font-medium mb-1" htmlFor="description">
+            <label
+              htmlFor="description"
+              className="block mb-1 text-sm font-medium"
+            >
               Description
             </label>
             <textarea
@@ -116,13 +128,16 @@ const CreateNewClub: React.FC<CreateNewClubProps> = ({ onClose }) => {
               placeholder="Insert a short description of the club"
               value={formData.description}
               onChange={handleInputChange}
-              className="w-full border p-2 rounded"
+              className="w-full p-2 border rounded"
               rows={3}
               required
             />
           </div>
           <div className="mb-4">
-            <label className="block text-sm font-medium mb-1" htmlFor="address">
+            <label
+              htmlFor="address"
+              className="block mb-1 text-sm font-medium"
+            >
               Address
             </label>
             <input
@@ -132,12 +147,15 @@ const CreateNewClub: React.FC<CreateNewClubProps> = ({ onClose }) => {
               placeholder="Insert the club's address"
               value={formData.address}
               onChange={handleInputChange}
-              className="w-full border p-2 rounded"
+              className="w-full p-2 border rounded"
               required
             />
           </div>
           <div className="mb-4">
-            <label className="block text-sm font-medium mb-1" htmlFor="zipCode">
+            <label
+              htmlFor="zipCode"
+              className="block mb-1 text-sm font-medium"
+            >
               Zip Code
             </label>
             <input
@@ -147,12 +165,15 @@ const CreateNewClub: React.FC<CreateNewClubProps> = ({ onClose }) => {
               placeholder="Insert the club's zip code"
               value={formData.zipCode}
               onChange={handleInputChange}
-              className="w-full border p-2 rounded"
+              className="w-full p-2 border rounded"
               required
             />
           </div>
           <div className="mb-4">
-            <label className="block text-sm font-medium mb-1" htmlFor="websiteURL">
+            <label
+              htmlFor="websiteURL"
+              className="block mb-1 text-sm font-medium"
+            >
               Website URL
             </label>
             <input
@@ -162,11 +183,14 @@ const CreateNewClub: React.FC<CreateNewClubProps> = ({ onClose }) => {
               placeholder="Insert the club's website URL"
               value={formData.websiteURL}
               onChange={handleInputChange}
-              className="w-full border p-2 rounded"
+              className="w-full p-2 border rounded"
             />
           </div>
           <div className="mb-4">
-            <label className="block text-sm font-medium mb-1" htmlFor="email">
+            <label
+              htmlFor="email"
+              className="block mb-1 text-sm font-medium"
+            >
               Email
             </label>
             <input
@@ -176,12 +200,15 @@ const CreateNewClub: React.FC<CreateNewClubProps> = ({ onClose }) => {
               placeholder="Insert the club's email address"
               value={formData.email}
               onChange={handleInputChange}
-              className="w-full border p-2 rounded"
+              className="w-full p-2 border rounded"
               required
             />
           </div>
           <div className="mb-4">
-            <label className="block text-sm font-medium mb-1" htmlFor="phone">
+            <label
+              htmlFor="phone"
+              className="block mb-1 text-sm font-medium"
+            >
               Phone
             </label>
             <input
@@ -191,18 +218,21 @@ const CreateNewClub: React.FC<CreateNewClubProps> = ({ onClose }) => {
               placeholder="Insert the club's phone number"
               value={formData.phone}
               onChange={handleInputChange}
-              className="w-full border p-2 rounded"
+              className="w-full p-2 border rounded"
             />
           </div>
           <div className="flex justify-end">
             <button
               type="button"
-              className="p-2 bg-gray-500 text-white rounded mr-2"
+              className="mr-2 p-2 bg-gray-500 text-white rounded"
               onClick={onClose}
             >
               Cancel
             </button>
-            <button type="submit" className="p-2 bg-blue-600 text-white rounded">
+            <button
+              type="submit"
+              className="p-2 bg-blue-600 text-white rounded"
+            >
               Create Club
             </button>
           </div>

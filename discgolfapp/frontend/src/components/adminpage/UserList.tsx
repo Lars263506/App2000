@@ -76,34 +76,43 @@ const UserList: React.FC = () => {
   );
 
   return (
-    <div className='p-4'>
-      <h2 className='text-2xl font-bold mb-4'>User Administration</h2>
+    <div className="p-4">
+      <h2 className="mb-4 text-2xl font-bold">User Administration</h2>
       <input
-        type='text'
-        placeholder='Filter users...'
+        type="text"
+        placeholder="Filter users..."
         value={filter}
         onChange={(e) => setFilter(e.target.value)}
-        className='mb-4 p-2 border rounded'
+        className="mb-4 p-2 border rounded"
       />
       <div>
         {filteredUsers.length > 0 ? (
           <ul>
-          {filteredUsers.map((user, index) => (
-            <li key={index} className='mb-2 p-4 border-2 border-gray-600 rounded-lg flex justify-between items-center shadow-md'>
-              <div>
-                <p><strong>Display Name:</strong> {user.displayName}</p>
-                <p><strong>Email:</strong> {user.email}</p>
-                <p><strong>Role:</strong> {user.role}</p>
-              </div>
-              <button
-                onClick={() => handleEditUser(user)}
-                className='bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700'
+            {filteredUsers.map((user, index) => (
+              <li
+                key={index}
+                className="mb-2 flex items-center justify-between p-4 border-2 border-gray-600 rounded-lg shadow-md"
               >
-                Edit
-              </button>
-            </li>
-          ))}
-        </ul>
+                <div>
+                  <p>
+                    <strong>Display Name:</strong> {user.displayName}
+                  </p>
+                  <p>
+                    <strong>Email:</strong> {user.email}
+                  </p>
+                  <p>
+                    <strong>Role:</strong> {user.role}
+                  </p>
+                </div>
+                <button
+                  onClick={() => handleEditUser(user)}
+                  className="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-700"
+                >
+                  Edit
+                </button>
+              </li>
+            ))}
+          </ul>
         ) : (
           <p>No users found.</p>
         )}

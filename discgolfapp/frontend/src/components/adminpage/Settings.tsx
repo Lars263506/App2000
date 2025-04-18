@@ -54,21 +54,19 @@ const Settings: React.FC<SettingsProps> = ({ setSelectedPage }) => {
 
     if (isClubOwner) {
         return (
-            <div className="flex flex-col w-full p-4 rounded-md min-h-[100vh] bg-white">
+            <div className="flex flex-col w-full min-h-[100vh] p-4 rounded-md bg-white">
                 <CourseAdminDetails />
             </div>
         );
     }
 
     return (
-        <div className="flex flex-row gap-4 p-4 rounded-md min-h-[100vh] bg-white">
-
+        <div className="flex flex-row gap-4 min-h-[100vh] p-4 rounded-md bg-white">
             {/* Settings list */}
             <div className="flex flex-col w-1/5 p-2 rounded-md bg-[#E7EFFB] overflow-y-auto">
                 {settings && settings.length > 0 ? (
                     settings.map((setting, index) => (
-                        <SelectButton key={index} onClick={() => setSelectedSetting(setting)}
-                            >
+                        <SelectButton key={index} onClick={() => setSelectedSetting(setting)}>
                             {setting.name}
                         </SelectButton>
                     ))
@@ -86,7 +84,7 @@ const Settings: React.FC<SettingsProps> = ({ setSelectedPage }) => {
                 )}
             </div>
         </div>
-    )
-  }
+    );
+}
 
-  export default Settings;
+export default Settings;

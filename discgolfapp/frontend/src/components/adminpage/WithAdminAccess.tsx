@@ -63,12 +63,10 @@ const WithAdminAccess: React.FC<WithAdminAccessProps> = ({ children }) => {
   }
 
   if (!hasAccess) {
-    return (
-      <></>
-    )
+    return <></>;
   }
 
   return <>{children}</>;
 };
 
-export default WithAdminAccess
+export default WithAdminAccess;

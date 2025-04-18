@@ -469,7 +469,7 @@ export default function CourseSettings() {
     <div className="min-h-screen flex flex-col text-black">
       <div className="flex-grow flex items-start justify-center">
         <div
-          className="max-w-5xl w-full p-10 top-[-50px] bg-gray-100 shadow-xl rounded-3xl min-h-[950px] relative flex flex-col mt-24"
+          className="relative flex flex-col w-full max-w-5xl p-10 mt-24 min-h-[950px] bg-gray-100 shadow-xl rounded-3xl top-[-50px]"
           onClick={handleContainerClick}
         >
           {!isCourseSelected && (
@@ -481,7 +481,11 @@ export default function CourseSettings() {
                     {filteredCourses.map((course) => (
                       <li
                         key={course.name}
-                        className={`block w-full text-left px-4 py-2 rounded-lg shadow transition ${selectedCourse === course.name ? 'bg-blue-600 text-white' : 'bg-white hover:bg-blue-100 text-black'}`}
+                        className={`block w-full px-4 py-2 text-left transition rounded-lg shadow ${
+                          selectedCourse === course.name
+                            ? "bg-blue-600 text-white"
+                            : "bg-white text-black hover:bg-blue-100"
+                        }`}
                         onClick={() => handleCourseSelection(course.name)}
                       >
                         {course.name}
@@ -501,103 +505,51 @@ export default function CourseSettings() {
                     <GoogleMap
                       center={mapCenter}
                       zoom={15}
-                      mapContainerStyle={{ height: "900px", width: "75%", borderRadius: "1rem" }}
+                      mapContainerStyle={{
+                        height: "900px",
+                        width: "75%",
+                        borderRadius: "1rem",
+                      }}
                       onClick={handleMapClick}
                     >
-                      {Array.isArray(pins) && pins.map((pin) => (
-                        <>
-                          <Marker
-                            key={pin.id}
-                            position={{ lat: pin.latitude, lng: pin.longitude }}
-                            draggable={isDragging && selectedPin?.id === pin.id}
-                            onDragStart={handleDragStart}
-                            onDragEnd={handleDragEnd}
-                            onClick={() => handlePinClick(pin)}
-                          />
-                          <OverlayView
-                            position={{ lat: pin.latitude, lng: pin.longitude }}
-                            mapPaneName={"floatPane"}
-                          >
-                            <div
-                              style={{
-                                position: "absolute",
-                                transform: "translate(-50%, -250%)",
-                                backgroundColor: "rgba(255, 255, 255, 1)",
-                                padding: "4px 8px",
-                                borderRadius: "4px",
-                                border: "1px solid black",
-                                fontSize: "14px",
-                                fontWeight: "bold",
-                                color: "black",
-                                whiteSpace: "nowrap",
-                                boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2)",
-                              }}
+                      {/* Render pins */}
+                      {Array.isArray(pins) &&
+                        pins.map((pin) => (
+                          <>
+                            <Marker
+                              key={pin.id}
+                              position={{ lat: pin.latitude, lng: pin.longitude }}
+                              draggable={isDragging && selectedPin?.id === pin.id}
+                              onDragStart={handleDragStart}
+                              onDragEnd={handleDragEnd}
+                              onClick={() => handlePinClick(pin)}
+                            />
+                            <OverlayView
+                              position={{ lat: pin.latitude, lng: pin.longitude }}
+                              mapPaneName={"floatPane"}
                             >
-                              {pin.name}
-                            </div>
-                          </OverlayView>
-                        </>
-                      ))}
-                      {selectedPin && (
-                        <OverlayView
-                          position={{ lat: selectedPin.latitude, lng: selectedPin.longitude }}
-                          mapPaneName={"floatPane"}
-                        >
-                          <div
-                            style={{
-                              position: "absolute",
-                              transform: "translate(30px, -75%)",
-                              backgroundColor: "white",
-                              padding: "15px",
-                              borderRadius: "8px",
-                              boxShadow: "0 2px 6px rgba(0,0,0,0.3)",
-                              fontSize: "14px",
-                              fontWeight: "bold",
-                              color: "black",
-                              textAlign: "left",
-                              zIndex: 1000,
-                              width: "150px",
-                            }}
-                          >
-                            {selectedPin.distance && (
-                              <div>
-                                <strong>Distanse:</strong> {selectedPin.distance} meter
+                              <div
+                                style={{
+                                  position: "absolute",
+                                  transform: "translate(-50%, -250%)",
+                                  backgroundColor: "rgba(255, 255, 255, 1)",
+                                  padding: "4px 8px",
+                                  borderRadius: "4px",
+                                  border: "1px solid black",
+                                  fontSize: "14px",
+                                  fontWeight: "bold",
+                                  color: "black",
+                                  whiteSpace: "nowrap",
+                                  boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2)",
+                                }}
+                              >
+                                {pin.name}
                               </div>
-                            )}
-                            {selectedPin.par && (
-                              <div>
-                                <strong>Par:</strong> {selectedPin.par}
-                              </div>
-                            )}
-                            {selectedPin.outOfBounds && (
-                              <div>
-                                <strong>OB:</strong> {selectedPin.outOfBounds}
-                              </div>
-                            )}
-                          </div>
-                        </OverlayView>
-                      )}
-                      {linePins.length === 2 && (
-                        <Polyline
-                          path={[
-                            { lat: linePins[0].latitude, lng: linePins[0].longitude },
-                            { lat: linePins[1].latitude, lng: linePins[1].longitude },
-                          ]}
-                          options={{
-                            strokeColor: "#808080",
-                            strokeOpacity: 0.8,
-                            strokeWeight: 2,
-                            geodesic: true,
-                            icons: [
-                              {
-                                icon: { path: "M 0,-1 0,1", strokeOpacity: 1, scale: 4 },
-                                offset: "0",
-                                repeat: "20px",
-                              },
-                            ],
-                          }}
-                        />
-                      )}
+                            </OverlayView>
+                          </>
+                        ))}
+
+                      {/* Render lines */}
                       {lines.map((line, index) => {
                         const pin1 = pins.find((p) => p.id === line.pinId1);
                         const pin2 = pins.find((p) => p.id === line.pinId2);
@@ -630,7 +582,7 @@ export default function CourseSettings() {
                 )}
               </div>
 
-              <div className="edit-panel absolute top-0 right-0 w-1/4 bg-gray-100 p-4 h-[850px] flex flex-col justify-between">
+              <div className="absolute top-0 right-0 w-1/4 h-[850px] p-4 bg-gray-100 flex flex-col justify-between edit-panel">
                 <h2 className="text-xl font-semibold">Rediger bane</h2>
                 <div>
                   <label className="block mt-4">Navn:</label>
@@ -653,13 +605,13 @@ export default function CourseSettings() {
                   </select>
                   <button
                     onClick={savePinsToDatabase}
-                    className="bg-green-600 text-white px-4 py-2 rounded-lg mt-4"
+                    className="mt-4 px-4 py-2 text-white bg-green-600 rounded-lg"
                   >
                     Lagre alle pins
                   </button>
                   <button
                     onClick={toggleDrawLine}
-                    className={`px-4 py-2 rounded-lg mt-2 ${
+                    className={`mt-2 px-4 py-2 rounded-lg ${
                       isDrawingLine ? "bg-gray-400 text-black" : "bg-blue-600 text-white"
                     }`}
                   >
@@ -667,7 +619,7 @@ export default function CourseSettings() {
                   </button>
                   <button
                     onClick={toggleDeleteMode}
-                    className={`px-4 py-2 rounded-lg mt-2 ${
+                    className={`mt-2 px-4 py-2 rounded-lg ${
                       isDeleteMode ? "bg-gray-400 text-black" : "bg-red-600 text-white"
                     }`}
                   >
@@ -676,8 +628,8 @@ export default function CourseSettings() {
                 </div>
 
                 {selectedPin && (
-                  <div className="mt-4 p-4 border rounded-lg bg-gray-200">
-                    <h3 className="text-lg font-semibold mb-2">Rediger Pin</h3>
+                  <div className="mt-4 p-4 bg-gray-200 border rounded-lg">
+                    <h3 className="mb-2 text-lg font-semibold">Rediger Pin</h3>
                     <div className="mb-2">
                       <label className="block text-sm font-medium">Navn:</label>
                       <input
@@ -715,7 +667,7 @@ export default function CourseSettings() {
                     </div>
                     <button
                       onClick={() => setIsDragging(!isDragging)}
-                      className={`px-4 py-2 rounded-lg mt-2 ${
+                      className={`mt-2 px-4 py-2 rounded-lg ${
                         isDragging ? "bg-gray-400 text-black" : "bg-blue-600 text-white"
                       }`}
                     >
@@ -723,7 +675,7 @@ export default function CourseSettings() {
                     </button>
                     <button
                       onClick={handleSavePinChanges}
-                      className="bg-green-600 text-white px-4 py-2 rounded-lg mt-2"
+                      className="mt-2 px-4 py-2 text-white bg-green-600 rounded-lg"
                     >
                       Lagre endringer
                     </button>
@@ -733,7 +685,7 @@ export default function CourseSettings() {
                 <div className="mt-auto">
                   <button
                     onClick={handleGoBack}
-                    className="bg-blue-600 text-white p-2 rounded-lg w-full mt-4"
+                    className="w-full mt-4 p-2 text-white bg-blue-600 rounded-lg"
                   >
                     Gå tilbake til velg bane
                   </button>
