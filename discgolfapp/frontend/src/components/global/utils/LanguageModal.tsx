@@ -34,33 +34,30 @@ const LanguageModal: React.FC<LanguageModalProps> = ({
   const languageMap = new Intl.DisplayNames([selectedLanguage], { type: 'language' });
 
   return (
-    <div className="flex justify-center items-center fixed inset-0 bg-black bg-opacity-50">
-      <div ref={modalRef} className="bg-white p-4 rounded shadow-lg">
-        <h2 className="text-xl mb-4">Select Language</h2>
-        <ul>
-          {availableLanguages.map((language: string) => {
-            const languageName: string = languageMap.of(language) || 'Unknown';
+    <div
+      ref={modalRef}
+      className="absolute top-18 left-[50%] bg-white border border-gray-300 rounded shadow-lg w-48 z-50"
+    >
+      <ul className="py-2">
+        {availableLanguages.map((language: string) => {
+          const languageName: string = languageMap.of(language) || 'Unknown';
 
-            return (
-              <li key={language} className="mb-2 flex items-center">
-                <img
-                  src={`https://flagcdn.com/w320/${language === 'en' ? 'gb' : language}.png`}
-                  alt={`${languageName.charAt(0).toUpperCase() + languageName.slice(1)} flag`}
-                  className="w-6 h-4 mr-2"
-                />
-                <Button onClick={() => onSelectLanguage(language)}>
-                  <span>
-                    {languageName.charAt(0).toUpperCase() + languageName.slice(1)}
-                  </span>
-                </Button>
-              </li>
-            );
-          })}
-        </ul>
-        <button className="mt-4 p-2 bg-red-500 text-white rounded" onClick={onClose}>
-          Close
-        </button>
-      </div>
+          return (
+            <li
+              key={language}
+              className="px-4 py-2 text-black hover:bg-gray-100 cursor-pointer flex items-center"
+              onClick={() => onSelectLanguage(language)}
+            >
+              <img
+                src={`https://flagcdn.com/w320/${language === 'en' ? 'gb' : language}.png`}
+                alt={`${languageName.charAt(0).toUpperCase() + languageName.slice(1)} flag`}
+                className="w-6 h-4 mr-2"
+              />
+              <span>{languageName.charAt(0).toUpperCase() + languageName.slice(1)}</span>
+            </li>
+          );
+        })}
+      </ul>
     </div>
   );
 };
