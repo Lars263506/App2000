@@ -171,7 +171,6 @@ export default function StartGame() {
 
   return (
     <div className="min-h-screen flex flex-col sm:flex-row text-black">
-      {/* Left Section: Course List */}
       {!gameStarted && (
         <div className="w-full sm:w-1/4 h-full">
           <CourseList
@@ -182,7 +181,6 @@ export default function StartGame() {
         </div>
       )}
 
-      {/* Middle Section: Map and Player Management */}
       <div className={`flex-grow flex flex-col sm:flex-row rounded-lg`}>
         {/* Map Section */}
         <div className="flex-grow sm:w-4/5 h-[300px] sm:h-auto transition-all duration-300 rounded-lg overflow-hidden">
@@ -209,7 +207,6 @@ export default function StartGame() {
           </LoadScript>
         </div>
 
-        {/* Player Management Section */}
         {selectedCourse && !gameStarted && (
           <div className="w-full sm:w-3/10 bg-[#E7EFFB] p-4 sm:p-10 rounded-lg shadow-lg">
             <h2 className="text-lg font-semibold mb-3">Vanskelighetsgrad:</h2>
@@ -218,28 +215,36 @@ export default function StartGame() {
             <p>{selectedCourse.holes}</p>
             <div className="mt-4">
               <h2 className="text-base font-semibold mb-3">Legg til spillere</h2>
-              <div className="flex justify-center mt-3">
-                <input
-                  type="text"
-                  className="w-full p-2 border rounded-lg text-base"
-                  placeholder="Søk etter registrerte brukere"
-                  value={searchQuery}
-                  onChange={(e) => handleSearchChange(e.target.value)}
-                />
-                {searchResults.length > 0 && (
-                  <ul className="absolute bg-white border rounded-lg mt-2 w-full max-h-40 overflow-y-auto">
-                    {searchResults.map((user) => (
-                      <li
-                        key={user.email}
-                        className="p-2 cursor-pointer hover:bg-gray-200"
-                        onClick={() => handleAddPlayer(user)}
-                      >
-                        {user.displayName} ({user.email})
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </div>
+
+              {localStorage.getItem('accessToken') ? (
+                <div className="flex justify-center mt-3 relative">
+                  <input
+                    type="text"
+                    className="w-full p-2 border rounded-lg text-base"
+                    placeholder="Søk etter registrerte brukere"
+                    value={searchQuery}
+                    onChange={(e) => handleSearchChange(e.target.value)}
+                  />
+                  {searchResults.length > 0 && (
+                    <ul className="absolute top-full left-0 w-full bg-white border rounded-lg shadow-lg mt-1 max-h-40 overflow-y-auto text-sm">
+                      {searchResults.map((user) => (
+                        <li
+                          key={user.email}
+                          className="p-2 cursor-pointer hover:bg-gray-200"
+                          onClick={() => handleAddPlayer(user)}
+                        >
+                          {user.displayName} ({user.email})
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              ) : (
+                <p className="text-sm text-gray-600 mt-2">
+                  Logg inn for å søke etter registrerte brukere.
+                </p>
+              )}
+
               <div className="flex flex-col h-full">
                 <div className="overflow-y-auto max-h-40 mt-4">
                   {players.map((player, index) => (
@@ -290,7 +295,7 @@ export default function StartGame() {
         )}
       </div>
 
-      {/* Game State Sections */}
+      
       {gameStarted && !gameEnded && (
         <div className="bg-[#E7EFFB] rounded-lg shadow-lg p-4 sm:p-10">
           <h2 className="text-lg font-semibold text-center mb-4">Kurv {currentBasket}</h2>
