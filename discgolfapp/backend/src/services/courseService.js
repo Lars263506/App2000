@@ -38,7 +38,13 @@ const getCoursePins = async (id) => {
 };
 
 const getCoursesForOwner = async (clubOwnerId) => {
-  const courses = await Course.find({ courseOwner: clubOwnerId });
+  const user = await Course.findById(clubOwnerId).select('displayName');
+
+  if (!user) {
+    throw new Error('User not found');
+  }
+
+  const courses = await Course.find({ courseOwner: user.displayName });
 
   if (!courses) {
     return [];
