@@ -20,13 +20,13 @@ const ClubAdminDetails: React.FC<ClubAdminDetailsProps> = ({ setSelectedPage }) 
       {!selectedAction && (
         <div className="flex flex-row justify-center gap-4">
           <button
-            className="p-4 bg-black text-white rounded shadow hover:bg-blue-600"
+            className="p-4 rounded bg-black text-white shadow hover:bg-blue-600"
             onClick={() => setSelectedAction('create')}
           >
             Create New Club
           </button>
           <button
-            className="p-4 bg-black text-white rounded shadow hover:bg-green-600"
+            className="p-4 rounded bg-black text-white shadow hover:bg-green-600"
             onClick={() => setSelectedAction('update')}
           >
             Update Existing Club
@@ -42,7 +42,7 @@ const ClubAdminDetails: React.FC<ClubAdminDetailsProps> = ({ setSelectedPage }) 
       {/* Render ClubList and ClubSettings if "Update Existing Club" is selected */}
       {selectedAction === 'update' && (
         <div className="flex flex-row h-full gap-4">
-          <div className="w-5/10 rounded-md bg-white border border-solid border-black">
+          <div className="w-5/10 rounded-md border border-solid border-black bg-white">
             <ClubList
               selectedClub={selectedClub}
               setSelectedClub={setSelectedClub}
@@ -53,7 +53,7 @@ const ClubAdminDetails: React.FC<ClubAdminDetailsProps> = ({ setSelectedPage }) 
           </div>
 
           {selectedClub && (
-            <div className="w-5/10 rounded-md bg-white border border-solid border-black overflow-y-auto">
+            <div className="w-5/10 rounded-md border border-solid border-black bg-white overflow-y-auto">
               <ClubSettings
                 selectedClub={selectedClub}
                 setSelectedClub={setSelectedClub}
