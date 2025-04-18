@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 
 import ClubAdminDetails from './ClubAdminDetails'
-import CourseAdminDetails from './CourseAdminDetails'
 import UserAdminDetails from './UserAdminDetails'
 import CourseSettings from './CourseSettings'
 import Setting  from '../../types/setting';
@@ -19,7 +18,6 @@ const Settings: React.FC<SettingsProps> = ({ setSelectedPage }) => {
 
     const settingComponents: { [key: string]: React.FC } = {
         'Klubbadministrasjon': () => <ClubAdminDetails setSelectedPage={setSelectedPage} />,
-        "Baneadministarjon": CourseAdminDetails,
         'Brukeradministrasjon': UserAdminDetails,
         'Oversettelser': () => <header>Oversettelser</header>,
         'Banetegningadministrasjon': CourseSettings,
@@ -51,14 +49,6 @@ const Settings: React.FC<SettingsProps> = ({ setSelectedPage }) => {
         };
         fetchSettings();
     }, []);
-
-    if (isClubOwner) {
-        return (
-            <div className="flex flex-col w-full p-4 rounded-md min-h-[100vh] bg-white">
-                <CourseAdminDetails />
-            </div>
-        );
-    }
 
     return (
         <div className="flex flex-row gap-4 p-4 rounded-md min-h-[100vh] bg-white">
