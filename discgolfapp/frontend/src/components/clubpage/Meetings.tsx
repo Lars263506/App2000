@@ -8,19 +8,27 @@ const Meetings: React.FC<MeetingsProps> = () => {
   const [activeTab, setActiveTab] = useState<'invitations' | 'minutes'>('invitations');
 
   return (
-    <div className="p-4 border rounded-lg shadow-md bg-white w-full h-full max-h-100 overflow-y-auto">
-      <h2 className="text-xl font-bold mb-2 text-black">Møter</h2>
+    <div className="w-full h-full max-h-100 p-4 border rounded-lg shadow-md bg-white overflow-y-auto">
+      <h2 className="mb-2 text-xl font-bold text-black">Møter</h2>
 
       {/* Tabs */}
-      <div className="flex border-b mb-4">
+      <div className="flex mb-4 border-b">
         <button
-          className={`px-4 py-2 ${activeTab === 'invitations' ? 'border-b-2 border-blue-500 font-bold' : 'text-gray-500'}`}
+          className={`px-4 py-2 ${
+            activeTab === 'invitations'
+              ? 'border-b-2 border-blue-500 font-bold'
+              : 'text-gray-500'
+          }`}
           onClick={() => setActiveTab('invitations')}
         >
           Møteinnkallinger
         </button>
         <button
-          className={`px-4 py-2 ${activeTab === 'minutes' ? 'border-b-2 border-blue-500 font-bold' : 'text-gray-500'}`}
+          className={`px-4 py-2 ${
+            activeTab === 'minutes'
+              ? 'border-b-2 border-blue-500 font-bold'
+              : 'text-gray-500'
+          }`}
           onClick={() => setActiveTab('minutes')}
         >
           Møtereferater

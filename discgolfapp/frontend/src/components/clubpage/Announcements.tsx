@@ -133,12 +133,12 @@ const Announcements = () => {
   };
 
   return (
-    <div className="p-4 border rounded-lg shadow-md bg-white w-full h-full max-h-100 overflow-y-auto">
-      <h2 className="text-xl font-bold mb-2 text-black">Kunngjøringer</h2>
+    <div className="w-full h-full max-h-100 p-4 border rounded-lg shadow-md bg-white overflow-y-auto">
+      <h2 className="mb-2 text-xl font-bold text-black">Kunngjøringer</h2>
 
       {editRights && !isCreating && (
         <Button
-          className="mb-4 p-2 text-white"
+          className="mb-4 p-2 text-white bg-blue-500 rounded hover:bg-blue-700"
           onClick={handleCreateAnnouncement}
         >
           Ny kunngjøring
@@ -148,7 +148,7 @@ const Announcements = () => {
       {isCreating ? (
         <>
           <textarea
-            className="p-2 border rounded-md text-black w-full min-h-[100px]"
+            className="w-full min-h-[100px] p-2 border rounded-md text-black"
             placeholder="Skriv inn kunngjøring..."
             value={isCreating ? content[content.length - 1] || '' : ''} // Start with no value
             onChange={(e) => {
@@ -160,7 +160,7 @@ const Announcements = () => {
             }}
           />
           <Button
-            className="mt-2 p-2 text-white"
+            className="mt-2 p-2 text-white bg-green-500 rounded hover:bg-green-700"
             onClick={handleSubmitNewAnnouncement}
             disabled={!content[content.length - 1]?.trim()}
           >
@@ -171,12 +171,12 @@ const Announcements = () => {
         content.map((announcement, index) => (
           <div
             key={index}
-            className="p-2 border-b last:border-b-0 text-black w-full min-h-[50px] flex items-center"
+            className="w-full min-h-[50px] p-2 border-b last:border-b-0 flex items-center text-black"
           >
             {isEditing === index ? (
               <>
                 <textarea
-                  className="mr-2 p-2 border rounded-md text-black w-full min-h-[50px]"
+                  className="w-full min-h-[50px] mr-2 p-2 border rounded-md text-black"
                   value={announcement}
                   onChange={(e) => {
                     const newContent = [...content];
@@ -185,7 +185,7 @@ const Announcements = () => {
                   }}
                 />
                 <Button
-                  className="mt-2 p-2 text-white"
+                  className="mt-2 p-2 text-white bg-blue-500 rounded hover:bg-blue-700"
                   onClick={() => handleSubmitEdit(index)}
                 >
                   Oppdater

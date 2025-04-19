@@ -92,9 +92,9 @@ const ClubMap: React.FC<ClubMapProps> = ({ selectedClub, setSelectedPage }) => {
   }
 
   return (
-    <div className='flex min-h-[580px] flex-col md:flex-row gap-6 w-full h-100 max-w-5xl '>
-      <div className='w-full p-4 rounded-xl shadow'>
-        <h1 className='text-xl font-bold text-black'>{t("clubmap_title")}</h1>
+    <div className="flex flex-col md:flex-row gap-6 w-full h-100 min-h-[580px] max-w-5xl">
+      <div className="w-full p-4 rounded-xl shadow">
+        <h1 className="text-xl font-bold text-black">{t("clubmap_title")}</h1>
         <h2>{t("clubmap_prompt_action")}</h2>
         <LoadScript
           googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string}
@@ -105,20 +105,23 @@ const ClubMap: React.FC<ClubMapProps> = ({ selectedClub, setSelectedPage }) => {
           ) : (
             <GoogleMap
               onLoad={(map) => {
-                mapRef.current = map
+                mapRef.current = map;
                 if (markers.length > 0) {
-                  const bounds = new window.google.maps.LatLngBounds()
+                  const bounds = new window.google.maps.LatLngBounds();
                   markers.forEach((marker) => {
                     if (marker && marker.lat() && marker.lng()) {
-                      bounds.extend(marker)
+                      bounds.extend(marker);
                     }
-                  })
-                  map.fitBounds(bounds)
+                  });
+                  map.fitBounds(bounds);
                 }
               }}
-              center={selectedMarker || (markers.length > 0 ? markers[0] : { lat: 59.9139, lng: 10.7522 })}
-              zoom={(selectedMarker != null) ? 15 : 6}
-              mapContainerStyle={{ height: '520px', width: '100%' }}
+              center={
+                selectedMarker ||
+                (markers.length > 0 ? markers[0] : { lat: 59.9139, lng: 10.7522 })
+              }
+              zoom={selectedMarker != null ? 15 : 6}
+              mapContainerStyle={{ height: "520px", width: "100%" }}
             >
               {markers.map((marker, index) => (
                 <Marker
@@ -149,7 +152,7 @@ const ClubMap: React.FC<ClubMapProps> = ({ selectedClub, setSelectedPage }) => {
         </LoadScript>
       </div>
     </div>
-  )
+  );
 }
 
 export default ClubMap

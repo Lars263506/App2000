@@ -101,13 +101,12 @@ const ClubDetails: React.FC<ClubDetailsProps> = ({ clubData, setSelectedPage }) 
             aria-label="Nonmember section"
             className="flex flex-col items-center h-full text-center"
           >
-            <h2
-              className="text-xl font-bold mb-4"
-            >
-              Bli medlem i {
-              selectedClub
-              ? JSON.parse(selectedClub).name
-              : "den valgte klubben"} for å se mer informasjon!
+            <h2 className="text-xl font-bold mb-4">
+              Bli medlem i{' '}
+              {selectedClub
+                ? JSON.parse(selectedClub).name
+                : 'den valgte klubben'}{' '}
+              for å se mer informasjon!
             </h2>
             <div aria-label="Button container" className="flex flex-row gap-6 items-center">
               <button
@@ -138,7 +137,9 @@ const ClubDetails: React.FC<ClubDetailsProps> = ({ clubData, setSelectedPage }) 
         )
       ) : (
         <div className="flex flex-col items-center min-h-screen">
-          <p className="text-lg">Du er ikke logget inn. Vennligst logg inn for å se klubbsiden.</p>
+          <p className="text-lg">
+            Du er ikke logget inn. Vennligst logg inn for å se klubbsiden.
+          </p>
           <button
             className="px-6 py-3 mt-4 bg-gray-500 text-white text-lg font-semibold rounded hover:bg-gray-700"
             onClick={() => setSelectedPage('ClubLanding')}

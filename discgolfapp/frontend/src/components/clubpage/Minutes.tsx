@@ -225,44 +225,42 @@ const Minutes: React.FC = () => {
       {showModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
           <div className="bg-white p-6 rounded-lg shadow-lg w-96">
-            <h2 className="text-lg font-bold mb-4">
-              Alle felter er påkrevd
-            </h2>
+            <h2 className="text-lg font-bold mb-4">Alle felter er påkrevd</h2>
             <div className="mb-4">
               <label className="block text-sm font-medium mb-1">Tittel</label>
               <input
-              type="text"
-              value={currentMinute?.title || ''}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setCurrentMinute((prev: Minute | null) =>
-                prev ? { ...prev, title: e.target.value } : null
-                )
-              }
-              className="w-full px-3 py-2 border rounded"
+                type="text"
+                value={currentMinute?.title || ''}
+                onChange={(e) =>
+                  setCurrentMinute((prev) =>
+                    prev ? { ...prev, title: e.target.value } : null
+                  )
+                }
+                className="w-full px-3 py-2 border rounded"
               />
             </div>
             <div className="mb-4">
               <label className="block text-sm font-medium mb-1">Beskrivelse</label>
               <textarea
-              value={currentMinute?.description || ''}
-              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
-                setCurrentMinute((prev: Minute | null) =>
-                prev ? { ...prev, description: e.target.value } : null
-                )
-              }
-              className="w-full px-3 py-2 border rounded"
+                value={currentMinute?.description || ''}
+                onChange={(e) =>
+                  setCurrentMinute((prev) =>
+                    prev ? { ...prev, description: e.target.value } : null
+                  )
+                }
+                className="w-full px-3 py-2 border rounded"
               />
             </div>
             <div className="mb-4">
               <label className="block text-sm font-medium mb-1">Tekst</label>
               <textarea
-              value={currentMinute?.text || ''}
-              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
-                setCurrentMinute((prev: Minute | null) =>
-                prev ? { ...prev, text: e.target.value } : null
-                )
-              }
-              className="w-full px-3 py-2 border rounded"
+                value={currentMinute?.text || ''}
+                onChange={(e) =>
+                  setCurrentMinute((prev) =>
+                    prev ? { ...prev, text: e.target.value } : null
+                  )
+                }
+                className="w-full px-3 py-2 border rounded"
               />
             </div>
             <div className="flex justify-end gap-2">

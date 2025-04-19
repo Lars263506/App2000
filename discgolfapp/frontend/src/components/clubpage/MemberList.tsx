@@ -83,15 +83,13 @@ const MemberList: React.FC<MemberListProps> = () => {
     }
   };
 
-
-
   return (
-    <div className="p-4 border rounded-lg shadow-md bg-white w-full h-full">
-      <h2 className="text-xl font-bold mb-2 text-black">{t('memberlist_title')}</h2>
+    <div className="w-full h-full p-4 border rounded-lg shadow-md bg-white">
+      <h2 className="mb-2 text-xl font-bold text-black">{t('memberlist_title')}</h2>
       {loading ? (
         <p className="text-gray-500">{t('memberlist_loading')}</p>
       ) : members.length > 0 ? (
-        <ul className="list-none pl-0 text-black">
+        <ul className="pl-0 list-none text-black">
           {members.map((member, index) => (
             <li
               key={member.displayName || index.toString()}
@@ -105,7 +103,7 @@ const MemberList: React.FC<MemberListProps> = () => {
                     : '/images/default-profile.png'
                 }
                 alt={member.displayName || t('memberlist_unknown')}
-                className="w-12 h-12 rounded-full object-cover mr-4"
+                className="w-12 h-12 mr-4 rounded-full object-cover"
               />
 
               {/* Member Info */}
@@ -123,18 +121,18 @@ const MemberList: React.FC<MemberListProps> = () => {
                 {userRole === 'Clubowner' ? (
                   <input
                     type="text"
-                    value={member.position|| ''}
+                    value={member.position || ''}
                     onChange={(e) => {
                       const updatedMembers = [...members];
                       updatedMembers[index].position = e.target.value;
                       setMembers(updatedMembers);
                     }}
                     onBlur={(e) => handlePositionChange(index, e.target.value)}
-                    className="text-sm text-gray-800 italic border border-gray-300 rounded px-2 py-1 mt-1"
+                    className="mt-1 px-2 py-1 text-sm text-gray-800 italic border border-gray-300 rounded"
                     placeholder="Skriv inn position"
                   />
                 ) : (
-                  <p className="text-sm text-gray-600 italic mt-1">
+                  <p className="mt-1 text-sm text-gray-600 italic">
                     {member.position ? `Position: ${member.position}` : ''}
                   </p>
                 )}

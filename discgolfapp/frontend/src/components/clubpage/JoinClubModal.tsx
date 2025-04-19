@@ -34,13 +34,13 @@ const JoinClubModal: React.FC<{ clubId: string; onClose: () => void }> = ({ club
 
     return (
       <Modal onClose={onClose}>
-        <h2 className="text-xl font-bold mb-4">Bli medlem</h2>
+        <h2 className="mb-4 text-xl font-bold">Bli medlem</h2>
         <div className="mb-4">
           <label className="block mb-2">Hvorfor vil du bli medlem? (valgfritt)</label>
           <textarea
             value={reason}
             onChange={(e) => setReason(e.target.value)}
-            className="border p-2 rounded w-full"
+            className="w-full p-2 border rounded"
           />
         </div>
         <button
