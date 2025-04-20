@@ -215,7 +215,7 @@ export default function StartGame() {
             <LoadScript googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string}>
               <GoogleMap
                 mapContainerStyle={{ width: '100%', height: '100%' }}
-                center={selectedCourse ? { lat: selectedCourse.latitude, lng: selectedCourse.longitude } : { lat: 59.9139, lng: 10.7522 }} // Default center
+                center={selectedCourse ? { lat: selectedCourse.latitude, lng: selectedCourse.longitude } : { lat: 59.9139, lng: 10.7522 }} 
                 zoom={selectedCourse ? 15 : 6} 
                 onLoad={(map) => {
                   mapRef.current = map; 
@@ -239,7 +239,6 @@ export default function StartGame() {
             </LoadScript>
           </div>
         ) : (
-          // Map for Active Game (Shown after clicking "Start Game")
           <div className="flex-grow sm:w-4/5 h-[300px] sm:h-auto transition-all duration-300 rounded-lg overflow-hidden">
             <LoadScript googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string}>
               <GoogleMap
