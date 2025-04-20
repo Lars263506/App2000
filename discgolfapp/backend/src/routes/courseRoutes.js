@@ -41,7 +41,6 @@ router.get('/:id',
 )
 
 router.get('/:id/pins',
-  passport.authenticate('jwt', { session: false }),
   getCoursePins
 );
 

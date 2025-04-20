@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/router";
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 import { toast } from "react-toastify";
@@ -15,7 +15,9 @@ export default function StartGame() {
   const [courses, setCourses] = useState<Course[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState<{ displayName: string; email: string }[]>([]);
+  const [pins, setPins] = useState<{ latitude: number; longitude: number }[]>([]);
   
+  const mapRef = useRef<google.maps.Map | null>(null);
 
   const baskets = 12;
 
@@ -39,6 +41,32 @@ export default function StartGame() {
       setScores(JSON.parse(savedScores));
     }
   }, []);
+
+  const fetchPins = async () => {
+    if (selectedCourse) {
+      try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/course/${selectedCourse._id}/pins`);
+        const data = await response.json();
+        setPins(data.pins);
+      } catch (error) {
+        toast.error("Failed to fetch pins: " + error);
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (gameStarted) {
+      fetchPins();
+    }
+  }, [gameStarted]);
+
+  useEffect(() => {
+    if (mapRef.current && pins.length > 0 && currentBasket > 0) {
+      const pin = pins[currentBasket - 1]; 
+      mapRef.current.setCenter({ lat: pin.latitude, lng: pin.longitude }); 
+      mapRef.current.setZoom(20);
+    }
+  }, [currentBasket, pins]);
 
   const startGame = () => {
     if (selectedCourse) {
@@ -182,118 +210,144 @@ export default function StartGame() {
       )}
 
       <div className={`flex-grow flex flex-col sm:flex-row rounded-lg`}>
-        {/* Map Section */}
-        <div className="flex-grow sm:w-4/5 h-[300px] sm:h-auto transition-all duration-300 rounded-lg overflow-hidden">
-          <LoadScript googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string}>
-            <GoogleMap
-              center={{
-                lat: selectedCourse?.latitude || 59.9139,
-                lng: selectedCourse?.longitude || 10.7522,
-              }}
-              zoom={selectedCourse ? 15 : 6}
-              mapContainerStyle={{ height: "100%", width: "100%" }}
-            >
-              {courses.map((course) => (
-                <Marker
-                  key={course.name}
-                  position={{
-                    lat: course.latitude,
-                    lng: course.longitude,
-                  }}
-                  onClick={() => setSelectedCourse(course)}
-                />
-              ))}
-            </GoogleMap>
-          </LoadScript>
-        </div>
-
-        {selectedCourse && !gameStarted && (
-          <div className="w-full sm:w-3/10 bg-[#E7EFFB] p-4 sm:p-10 rounded-lg shadow-lg">
-            <h2 className="text-lg font-semibold mb-3">Vanskelighetsgrad:</h2>
-            <p>{selectedCourse.difficulty}</p>
-            <h2 className="text-lg font-semibold mb-3">Antall hull:</h2>
-            <p>{selectedCourse.holes}</p>
-            <div className="mt-4">
-              <h2 className="text-base font-semibold mb-3">Legg til spillere</h2>
-
-              {localStorage.getItem('accessToken') ? (
-                <div className="flex justify-center mt-3 relative">
-                  <input
-                    type="text"
-                    className="w-full p-2 border rounded-lg text-base"
-                    placeholder="Søk etter registrerte brukere"
-                    value={searchQuery}
-                    onChange={(e) => handleSearchChange(e.target.value)}
+        {!gameStarted || (gameStarted && !selectedCourse) ? (
+          <div className="flex-grow sm:w-4/5 h-[300px] sm:h-auto transition-all duration-300 rounded-lg overflow-hidden">
+            <LoadScript googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string}>
+              <GoogleMap
+                mapContainerStyle={{ width: '100%', height: '100%' }}
+                center={selectedCourse ? { lat: selectedCourse.latitude, lng: selectedCourse.longitude } : { lat: 59.9139, lng: 10.7522 }} 
+                zoom={selectedCourse ? 15 : 6} 
+                onLoad={(map) => {
+                  mapRef.current = map; 
+                }}
+              >
+                {courses.map((course, index) => (
+                  <Marker
+                    key={index}
+                    position={{ lat: course.latitude, lng: course.longitude }}
+                    onClick={() => {
+                      setSelectedCourse(course); 
+                      if (mapRef.current) {
+                        const newCenter = new window.google.maps.LatLng(course.latitude, course.longitude);
+                        mapRef.current.setCenter(newCenter); 
+                        mapRef.current.setZoom(15); 
+                      }
+                    }}
                   />
-                  {searchResults.length > 0 && (
-                    <ul className="absolute top-full left-0 w-full bg-white border rounded-lg shadow-lg mt-1 max-h-40 overflow-y-auto text-sm">
-                      {searchResults.map((user) => (
-                        <li
-                          key={user.email}
-                          className="p-2 cursor-pointer hover:bg-gray-200"
-                          onClick={() => handleAddPlayer(user)}
-                        >
-                          {user.displayName} ({user.email})
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </div>
-              ) : (
-                <p className="text-sm text-gray-600 mt-2">
-                  Logg inn for å søke etter registrerte brukere.
-                </p>
-              )}
-
-              <div className="flex flex-col h-full">
-                <div className="overflow-y-auto max-h-40 mt-4">
-                  {players.map((player, index) => (
-                    <div key={index} className="flex items-center mb-4">
-                      <input
-                        type="text"
-                        className="w-full p-2 border rounded-lg text-base"
-                        value={player}
-                        onChange={(e) => handlePlayerNameChange(index, e.target.value)}
-                        placeholder={`Spiller ${index + 1}`}
-                      />
-                      <button
-                        className="ml-3 bg-red-600 text-white p-2 rounded"
-                        onClick={() => {
-                          const updatedPlayers = [...players];
-                          updatedPlayers.splice(index, 1);
-                          setPlayers(updatedPlayers);
-                        }}
-                        disabled={players.length <= 1}
-                      >
-                        -
-                      </button>
-                    </div>
-                  ))}
-                </div>
-                <div className="mt-1">
-                  <div className="flex justify-center mt-3">
-                    <button
-                      className="bg-green-600 text-white p-2 rounded-xl text-base"
-                      onClick={() => setPlayers([...players, `Spiller ${players.length + 1}`])}
-                    >
-                      Legg til spiller
-                    </button>
-                  </div>
-                </div>
-                <div className="mt-2">
-                  <button
-                    className="w-full bg-blue-600 text-white p-2 rounded-lg text-base hover:bg-blue-700"
-                    onClick={startGame}
-                    disabled={!selectedCourse || players.some(player => !player)}
-                  >
-                    Start spill
-                  </button>
-                </div>
-              </div>
-            </div>
+                ))}
+              </GoogleMap>
+            </LoadScript>
+          </div>
+        ) : (
+          <div className="flex-grow sm:w-4/5 h-[300px] sm:h-auto transition-all duration-300 rounded-lg overflow-hidden">
+            <LoadScript googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string}>
+              <GoogleMap
+                mapContainerStyle={{ width: '100%', height: '100%' }}
+                center={
+                  pins.length > 0 && currentBasket > 0
+                    ? { lat: pins[currentBasket - 1].latitude, lng: pins[currentBasket - 1].longitude }
+                    : { lat: 59.9139, lng: 10.7522 } 
+                }
+                zoom={22} 
+                onLoad={(map) => {
+                  mapRef.current = map;
+                }}
+              >
+                {pins.map((pin, index) => (
+                  <Marker key={index} position={{ lat: pin.latitude, lng: pin.longitude }} />
+                ))}
+              </GoogleMap>
+            </LoadScript>
           </div>
         )}
       </div>
+
+      {selectedCourse && !gameStarted && (
+        <div className="w-30 sm:w-3/10 bg-[#E7EFFB] p-4 sm:p-10 rounded-lg shadow-lg">
+          <h2 className="text-lg font-semibold mb-3">Vanskelighetsgrad:</h2>
+          <p>{selectedCourse.difficulty}</p>
+          <h2 className="text-lg font-semibold mb-3">Antall hull:</h2>
+          <p>{selectedCourse.holes}</p>
+          <div className="mt-4">
+            <h2 className="text-base font-semibold mb-3">Legg til spillere</h2>
+
+            {localStorage.getItem('accessToken') ? (
+              <div className="flex justify-center mt-3 relative">
+                <input
+                  type="text"
+                  className="w-full p-2 border rounded-lg text-base"
+                  placeholder="Søk etter registrerte brukere"
+                  value={searchQuery}
+                  onChange={(e) => handleSearchChange(e.target.value)}
+                />
+                {searchResults.length > 0 && (
+                  <ul className="absolute top-full left-0 w-full bg-white border rounded-lg shadow-lg mt-1 max-h-40 overflow-y-auto text-sm">
+                    {searchResults.map((user) => (
+                      <li
+                        key={user.email}
+                        className="p-2 cursor-pointer hover:bg-gray-200"
+                        onClick={() => handleAddPlayer(user)}
+                      >
+                        {user.displayName} ({user.email})
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            ) : (
+              <p className="text-sm text-gray-600 mt-2">
+                Logg inn for å søke etter registrerte brukere.
+              </p>
+            )}
+
+            <div className="flex flex-col h-full">
+              <div className="overflow-y-auto max-h-40 mt-4">
+                {players.map((player, index) => (
+                  <div key={index} className="flex items-center mb-4">
+                    <input
+                      type="text"
+                      className="w-full p-2 border rounded-lg text-base"
+                      value={player}
+                      onChange={(e) => handlePlayerNameChange(index, e.target.value)}
+                      placeholder={`Spiller ${index + 1}`}
+                    />
+                    <button
+                      className="ml-3 bg-red-600 text-white p-2 rounded"
+                      onClick={() => {
+                        const updatedPlayers = [...players];
+                        updatedPlayers.splice(index, 1);
+                        setPlayers(updatedPlayers);
+                      }}
+                      disabled={players.length <= 1}
+                    >
+                      -
+                    </button>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-1">
+                <div className="flex justify-center mt-3">
+                  <button
+                    className="bg-green-600 text-white p-2 rounded-xl text-base"
+                    onClick={() => setPlayers([...players, `Spiller ${players.length + 1}`])}
+                  >
+                    Legg til spiller
+                  </button>
+                </div>
+              </div>
+              <div className="mt-2">
+                <button
+                  className="w-full bg-blue-600 text-white p-2 rounded-lg text-base hover:bg-blue-700"
+                  onClick={startGame}
+                  disabled={!selectedCourse || players.some(player => !player)}
+                >
+                  Start spill
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       
       {gameStarted && !gameEnded && (
