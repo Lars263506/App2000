@@ -62,9 +62,9 @@ export default function StartGame() {
 
   useEffect(() => {
     if (mapRef.current && pins.length > 0 && currentBasket > 0) {
-      const pin = pins[currentBasket - 1]; // Get the current pin
-      mapRef.current.setCenter({ lat: pin.latitude, lng: pin.longitude }); // Center map on the current pin
-      mapRef.current.setZoom(20); // Adjust zoom level for a closer view
+      const pin = pins[currentBasket - 1]; 
+      mapRef.current.setCenter({ lat: pin.latitude, lng: pin.longitude }); 
+      mapRef.current.setZoom(20);
     }
   }, [currentBasket, pins]);
 
@@ -210,17 +210,15 @@ export default function StartGame() {
       )}
 
       <div className={`flex-grow flex flex-col sm:flex-row rounded-lg`}>
-        {/* Map Section */}
         {!gameStarted || (gameStarted && !selectedCourse) ? (
-          // Map for All Courses (Shown when managing players or no course is selected)
           <div className="flex-grow sm:w-4/5 h-[300px] sm:h-auto transition-all duration-300 rounded-lg overflow-hidden">
             <LoadScript googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string}>
               <GoogleMap
                 mapContainerStyle={{ width: '100%', height: '100%' }}
                 center={selectedCourse ? { lat: selectedCourse.latitude, lng: selectedCourse.longitude } : { lat: 59.9139, lng: 10.7522 }} // Default center
-                zoom={selectedCourse ? 15 : 6} // Zoom in if a course is selected
+                zoom={selectedCourse ? 15 : 6} 
                 onLoad={(map) => {
-                  mapRef.current = map; // Save map reference
+                  mapRef.current = map; 
                 }}
               >
                 {courses.map((course, index) => (
@@ -228,11 +226,11 @@ export default function StartGame() {
                     key={index}
                     position={{ lat: course.latitude, lng: course.longitude }}
                     onClick={() => {
-                      setSelectedCourse(course); // Select course on marker click
+                      setSelectedCourse(course); 
                       if (mapRef.current) {
                         const newCenter = new window.google.maps.LatLng(course.latitude, course.longitude);
-                        mapRef.current.setCenter(newCenter); // Center map on the course
-                        mapRef.current.setZoom(15); // Zoom in on the course
+                        mapRef.current.setCenter(newCenter); 
+                        mapRef.current.setZoom(15); 
                       }
                     }}
                   />
@@ -249,9 +247,9 @@ export default function StartGame() {
                 center={
                   pins.length > 0 && currentBasket > 0
                     ? { lat: pins[currentBasket - 1].latitude, lng: pins[currentBasket - 1].longitude }
-                    : { lat: 59.9139, lng: 10.7522 } // Fallback center
+                    : { lat: 59.9139, lng: 10.7522 } 
                 }
-                zoom={22} // Increased zoom level for closer view
+                zoom={22} 
                 onLoad={(map) => {
                   mapRef.current = map;
                 }}
