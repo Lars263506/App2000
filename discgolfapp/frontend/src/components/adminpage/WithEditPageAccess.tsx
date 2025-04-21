@@ -51,7 +51,7 @@ const WithPageEditAccess: React.FC<WithPageEditAccessProps> = ({ children }) => 
     };
 
     fetchData();
-  }, []);
+  }, [t]);
 
   if (isLoading) {
     return (

@@ -14,7 +14,6 @@ interface SettingsProps {
 const Settings: React.FC<SettingsProps> = ({ setSelectedPage }) => {
     const [settings, setSettings] = useState<Setting[] | null>();
     const [selectedSetting, setSelectedSetting] = useState<Setting | null>(null);
-    const [isClubOwner, setIsClubOwner] = useState(false);
 
     const settingComponents: { [key: string]: React.FC } = {
         'Klubbadministrasjon': () => <ClubAdminDetails setSelectedPage={setSelectedPage} />,

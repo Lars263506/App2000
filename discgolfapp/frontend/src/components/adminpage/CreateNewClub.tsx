@@ -67,6 +67,9 @@ const CreateNewClub: React.FC<CreateNewClubProps> = ({ onClose }) => {
         toast.error(errorData.error || 'Failed to create club. Please try again later.');
       }
     } catch (error) {
+      if (error instanceof Error) {
+        toast.error(error.message);
+      } else
       toast.error('An error occurred while creating the club. Please try again later.');
     }
   };
