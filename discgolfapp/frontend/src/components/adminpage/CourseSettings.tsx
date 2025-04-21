@@ -39,8 +39,6 @@ export default function CourseSettings() {
   const [editPinDistance, setEditPinDistance] = useState<number | null>(null);
   const [editPinPar, setEditPinPar] = useState<number | null>(null);
   const [editPinOutOfBounds, setEditPinOutOfBounds] = useState<string>("");
-  const [tempLat, setTempLat] = useState<number | null>(null);
-  const [tempLng, setTempLng] = useState<number | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [isDrawingLine, setIsDrawingLine] = useState(false);
   const [linePins, setLinePins] = useState<Pin[]>([]);
@@ -377,9 +375,6 @@ export default function CourseSettings() {
 
     const newLat = e.latLng.lat();
     const newLng = e.latLng.lng();
-
-    setTempLat(newLat);
-    setTempLng(newLng);
 
     const updatedPins = pins.map((p) =>
       p.id === selectedPin.id ? { ...p, latitude: newLat, longitude: newLng } : p
