@@ -17,7 +17,6 @@ interface NavBarProps {
 const Navbar: React.FC<NavBarProps> = ({ toggleLoginPopup, setSelectedPage }) => {
   const [selectedLanguage, setSelectedLanguage] = useState<string>('no');
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [availableLanguages, setAvailableLanguages] = useState<string[]>(["no", "en"]);
   const { t, i18n } = useTranslation();
 
   const handleLanguageChange = (language: string) => {
@@ -152,7 +151,6 @@ const Navbar: React.FC<NavBarProps> = ({ toggleLoginPopup, setSelectedPage }) =>
 
       {isModalOpen && (
         <LanguageModal
-          availableLanguages={availableLanguages}
           selectedLanguage={selectedLanguage}
           onSelectLanguage={handleLanguageChange}
           onClose={() => setIsModalOpen(false)}

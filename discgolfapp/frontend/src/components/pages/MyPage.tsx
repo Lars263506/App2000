@@ -14,7 +14,7 @@ interface MyPageProps {
 const MyPage: React.FC<MyPageProps> = ({ setSelectedPage }) => {
   const [user, setUser] = useState<User | null>(null);
   const [profileImage, setProfileImage] = useState<string | null>(null);
-  const [clubs, setClubs] = useState<any[]>([]);
+  const [clubs, setClubs] = useState<Club[]>([]);
   const [games, setGames] = useState<Game[] | null>([]);
   const [selectedGame, setSelectedGame] = useState<Game | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);

@@ -12,10 +12,6 @@ interface GameResultsModalProps {
   calculateTotalScore: (scores: number[]) => number;
 }
 
-const calculateTotalScore = (scores: number[] = []) => {
-  return scores.reduce((total, score) => total + score, 0);
-};
-
 const GameResultsModal: React.FC<GameResultsModalProps> = ({ game, isOpen, onClose, calculateTotalScore }) => {
   if (!isOpen) return null;
 
@@ -49,8 +45,8 @@ const GameResultsModal: React.FC<GameResultsModalProps> = ({ game, isOpen, onClo
                 {game.players.map((player) => (
                   <td key={player._id} className="p-2">
                     {game.scores[player.name]?.[index] === 0 && index >= game.scores[player.name]?.length
-                      ? '-' 
-                      : game.scores[player.name]?.[index] || '-'} 
+                      ? '-'
+                      : game.scores[player.name]?.[index] || '-'}
                   </td>
                 ))}
               </tr>

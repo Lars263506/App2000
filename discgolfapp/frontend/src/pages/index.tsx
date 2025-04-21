@@ -49,10 +49,10 @@ const Index = () => {
         const url = process.env.NEXT_PUBLIC_BACKEND_BASE_URL + '/translations/';
         const response = await fetch(url);
         if (response.status !== 200) throw new Error('Failed to fetch translations');
-        const data = await response.json();
+        const data: { language: string; key: string; translation: Record<string, string> | string }[] = await response.json();
 
-        // Transform the list into the correct format for i18next
-        const translations = data.reduce((acc: any, item: any) => {
+        // Define the type for the accumulator
+        const translations = data.reduce((acc: Record<string, { translation: Record<string, string> }>, item) => {
           if (!acc[item.language]) {
             acc[item.language] = { translation: {} };
           }
@@ -61,11 +61,11 @@ const Index = () => {
           if (typeof item.translation === 'object' && !Array.isArray(item.translation)) {
             // Flatten the object into individual keys
             Object.keys(item.translation).forEach((subKey) => {
-              acc[item.language].translation[`${item.key}.${subKey}`] = item.translation[subKey];
+              acc[item.language].translation[`${item.key}.${subKey}`] = (item.translation as Record<string, string>)[subKey];
             });
           } else {
             // Add the translation directly
-            acc[item.language].translation[item.key] = item.translation;
+            acc[item.language].translation[item.key] = item.translation as string;
           }
 
           return acc;

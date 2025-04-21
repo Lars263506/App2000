@@ -21,7 +21,6 @@ interface ClubpageProps {
 }
 
 const Clubpage: React.FC<ClubpageProps> = ({ setSelectedPage }) => {
-  const { t } = useTranslation()
 
   const [clubData, setClubData] = useState<Club | null>(null)
 

@@ -1,9 +1,8 @@
 import { useState, useEffect, useRef } from "react";
-import { useRouter } from "next/router";
 import { GoogleMap, LoadScript, Marker, Polyline, InfoWindow } from '@react-google-maps/api';
 import { toast } from "react-toastify";
 import Course from '@/types/course';
-import CourseList from '@/components/coursepage/CourseList'; 
+import CourseList from '@/components/coursepage/CourseList';
 
 export default function StartGame() {
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
@@ -17,7 +16,7 @@ export default function StartGame() {
   const [searchResults, setSearchResults] = useState<{ displayName: string; email: string }[]>([]);
   const [pins, setPins] = useState<{ id: string; latitude: number; longitude: number; name: string; type: string }[]>([]);
   const [lines, setLines] = useState<{ pinId1: string; pinId2: string }[]>([]);
-  
+
   const mapRef = useRef<google.maps.Map | null>(null);
 
   const baskets = 12;
@@ -64,8 +63,8 @@ export default function StartGame() {
 
   useEffect(() => {
     if (mapRef.current && pins.length > 0 && currentBasket > 0) {
-      const pin = pins[currentBasket - 1]; 
-      mapRef.current.setCenter({ lat: pin.latitude, lng: pin.longitude }); 
+      const pin = pins[currentBasket - 1];
+      mapRef.current.setCenter({ lat: pin.latitude, lng: pin.longitude });
       mapRef.current.setZoom(19);
     }
   }, [currentBasket, pins]);
@@ -154,10 +153,6 @@ export default function StartGame() {
     }
   };
 
-  const calculateTotalScore = (player: string) => {
-    return scores[player]?.reduce((total, score) => total + score, 0);
-  };
-
   const getScoreDescription = (player: string, basketIndex: number) => {
     const score = scores[player]?.[basketIndex];
     if (score === undefined) return '-';
@@ -217,10 +212,10 @@ export default function StartGame() {
             <LoadScript googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string}>
               <GoogleMap
                 mapContainerStyle={{ width: '100%', height: '100%' }}
-                center={selectedCourse ? { lat: selectedCourse.latitude, lng: selectedCourse.longitude } : { lat: 59.9139, lng: 10.7522 }} 
-                zoom={selectedCourse ? 15 : 6} 
+                center={selectedCourse ? { lat: selectedCourse.latitude, lng: selectedCourse.longitude } : { lat: 59.9139, lng: 10.7522 }}
+                zoom={selectedCourse ? 15 : 6}
                 onLoad={(map) => {
-                  mapRef.current = map; 
+                  mapRef.current = map;
                 }}
               >
                 {courses.map((course, index) => (
@@ -228,11 +223,11 @@ export default function StartGame() {
                     key={index}
                     position={{ lat: course.latitude, lng: course.longitude }}
                     onClick={() => {
-                      setSelectedCourse(course); 
+                      setSelectedCourse(course);
                       if (mapRef.current) {
                         const newCenter = new window.google.maps.LatLng(course.latitude, course.longitude);
-                        mapRef.current.setCenter(newCenter); 
-                        mapRef.current.setZoom(15); 
+                        mapRef.current.setCenter(newCenter);
+                        mapRef.current.setZoom(15);
                       }
                     }}
                   />
@@ -248,7 +243,7 @@ export default function StartGame() {
                 center={
                   pins.length > 0 && currentBasket > 0
                     ? { lat: pins[currentBasket - 1].latitude, lng: pins[currentBasket - 1].longitude }
-                    : { lat: 59.9139, lng: 10.7522 } 
+                    : { lat: 59.9139, lng: 10.7522 }
                 }
                 zoom={20}
                 onLoad={(map) => {
@@ -266,7 +261,7 @@ export default function StartGame() {
                     }}
                   >
                     <InfoWindow
-                      position={{ lat: pin.latitude + 0.00005, lng: pin.longitude }} 
+                      position={{ lat: pin.latitude + 0.00005, lng: pin.longitude }}
                     >
                       <div>
                         <p>{pin.name}</p>
@@ -390,7 +385,7 @@ export default function StartGame() {
         </div>
       )}
 
-      
+
       {gameStarted && !gameEnded && (
         <div className="bg-[#E7EFFB] rounded-lg shadow-lg p-4 sm:p-10">
           <h2 className="text-lg font-semibold text-center mb-4">Kurv {currentBasket}</h2>
