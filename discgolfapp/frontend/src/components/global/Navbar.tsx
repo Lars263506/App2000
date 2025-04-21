@@ -54,6 +54,8 @@ const Navbar: React.FC<NavBarProps> = ({ toggleLoginPopup, setSelectedPage }) =>
       }
 
       toast.success(t('navbar_testdata_reset_success'));
+      setSelectedPage('Home');
+      window.location.reload();
     } catch (error) {
       if (error instanceof Error)
         toast.error(error.message);

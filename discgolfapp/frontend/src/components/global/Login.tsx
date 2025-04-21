@@ -5,6 +5,7 @@ interface LoginProps {
   togglePopup: () => void
   toggleRegisterPopup: () => void
   closePopup: () => void
+  selectedPage: string
   setSelectedPage: (page: string) => void
 }
 
@@ -15,7 +16,7 @@ interface LoginResponseData {
   message?: string
 }
 
-const Login: React.FC<LoginProps> = ({ togglePopup, toggleRegisterPopup, closePopup, setSelectedPage }) => {
+const Login: React.FC<LoginProps> = ({ togglePopup, toggleRegisterPopup, closePopup, selectedPage, setSelectedPage }) => {
   const [locked, setLocked] = useState(false)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -75,6 +76,12 @@ const Login: React.FC<LoginProps> = ({ togglePopup, toggleRegisterPopup, closePo
     localStorage.removeItem('accessToken')
     localStorage.removeItem('refreshToken')
     toast.success('Du er logget ut.')
+    if (selectedPage === 'Admin')
+      setSelectedPage('Home')
+    else if (selectedPage === 'MyPage')
+      setSelectedPage('Home')
+    else if (selectedPage === 'Club')
+      setSelectedPage('Home')
     window.location.reload()
 
     setIsLoggedIn(false)

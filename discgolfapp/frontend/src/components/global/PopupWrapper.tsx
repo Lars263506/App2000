@@ -5,10 +5,11 @@ interface PopupWrapperProps {
   popupType: 'login' | 'register' | 'mypage' | null
   closePopup: () => void
   toggleRegisterPopup: () => void
+  selectedPage: string
   setSelectedPage: (page: string) => void
 }
 
-const PopupWrapper: React.FC<PopupWrapperProps> = ({ popupType, toggleRegisterPopup, closePopup, setSelectedPage}) => {
+const PopupWrapper: React.FC<PopupWrapperProps> = ({ popupType, toggleRegisterPopup, closePopup, selectedPage, setSelectedPage}) => {
   return (
     <>
       {popupType === 'login' && (
@@ -16,6 +17,7 @@ const PopupWrapper: React.FC<PopupWrapperProps> = ({ popupType, toggleRegisterPo
           togglePopup={closePopup}
           toggleRegisterPopup={toggleRegisterPopup}
           closePopup={closePopup}
+          selectedPage={selectedPage}
           setSelectedPage={setSelectedPage}
         />
       )}
