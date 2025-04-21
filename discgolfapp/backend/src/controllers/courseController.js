@@ -89,16 +89,12 @@ const createNewCourse = async (req, res) => {
       location,
       town,
       postCode,
-      url,
-      latitude,
-      longitude,
       difficulty,
       familyFriendly,
-      holes,
-      courseOwner,
+      courseOwner
     } = req.body;
 
-    if (!name || !location || !town || !postCode || !difficulty || holes === undefined || !courseOwner) {
+    if (!name || !location || !town || !postCode || !difficulty || familyFriendly === undefined) {
       return res.status(400).json({ error: 'Missing required fields' });
     }
 
@@ -107,13 +103,13 @@ const createNewCourse = async (req, res) => {
       location,
       town,
       postCode,
-      url,
-      latitude,
-      longitude,
       difficulty,
       familyFriendly,
-      holes,
-      courseOwner,
+      courseOwner: courseOwner || undefined, // Include courseOwner if provided
+      url: req.body.url,
+      latitude: req.body.latitude,
+      longitude: req.body.longitude,
+      holes: req.body.holes
     });
 
     await newCourse.save();

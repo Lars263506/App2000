@@ -12,7 +12,7 @@ const schema = new mongoose.Schema(
     },
     courseOwner: {
       type: String,
-      required: true,
+      default: 'Unknown', 
     },
     location: {
       type: String,
@@ -28,7 +28,6 @@ const schema = new mongoose.Schema(
     },
     url: {
       type: String,
-      required: true,
     },
     latitude: {
       type: Number,
@@ -47,7 +46,6 @@ const schema = new mongoose.Schema(
     },
     holes: {
       type: Number,
-      required: true,
     },
     pins: {
       type: [Pin.schema],

@@ -123,12 +123,14 @@ const CreateCourse: React.FC = () => {
       const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/course/${courseId}`, {
         method: 'DELETE',
         headers: {
+          'Content-Type': 'application/json',
           Authorization: `Bearer ${accessToken}`,
         },
       });
 
       if (!response.ok) {
-        throw new Error('Kunne ikke slette banen: Status ' + response.status);
+        const errorData = await response.json();
+        throw new Error(errorData.error || `Kunne ikke slette banen: Status ${response.status}`);
       }
 
       setCourses((prev) => prev.filter((c) => c.id !== courseId));
@@ -283,7 +285,7 @@ const CourseForm: React.FC<{
       longitude: longitude || undefined,
       url: url || undefined,
       holes: holes || undefined,
-      courseOwner: courseOwner || userId || undefined, // Fallback til userId
+      courseOwner: courseOwner || undefined, // Include courseOwner if provided
     };
 
     try {
@@ -301,7 +303,7 @@ const CourseForm: React.FC<{
       );
 
       if (!response.ok) {
-        throw new Error('Kunne ikke lagre banen: Status ' + response.status);
+        throw new Error('Kunne ikke lagre banen.');
       }
 
       const saved = await response.json();
