@@ -1,8 +1,8 @@
 import { useState } from 'react'
 
-import CourseList from '@/components/coursepage/courselist'
-import CourseDetails from '@/components/coursepage/coursedetails'
-import CourseMap from '@/components/coursepage/coursemap'
+import CourseList from '@/components/coursepage/CourseList'
+import CourseDetails from '@/components/coursepage/CourseDetails'
+import CourseMap from '@/components/coursepage/CourseMap'
 import Course from '@/types/course'
 
 const CoursePage = () => {
