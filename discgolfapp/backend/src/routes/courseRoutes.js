@@ -48,7 +48,19 @@ router.post('/',
   passport.authenticate('jwt', { session: false }),
   authorizeClubowner,
   createNewCourse
-)
+);
+
+router.post('/create',
+  passport.authenticate('jwt', { session: false }),
+  authorizeClubowner,
+  createNewCourse
+);
+
+router.put('/:id',
+  passport.authenticate('jwt', { session: false }),
+  authorizeClubowner,
+  updateCourse
+);
 
 router.delete('/:id',
   passport.authenticate('jwt', { session: false }),

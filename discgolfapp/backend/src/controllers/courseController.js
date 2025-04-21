@@ -55,15 +55,23 @@ const getCoursePins = async (req, res) => {
 };
 
 const getCoursesForOwner = async (req, res) => {
-  const { id } = req.user;
+  const { id, role } = req.user;
 
   try {
-    const courses = await courseService.getCoursesForOwner(id);
+    let courses;
+
+    if (role === 'admin') {
+      // Admins can view all courses
+      courses = await courseService.getAllCourses();
+    } else {
+      // Club owners can view courses they own
+      courses = await courseService.getCoursesForOwner(id);
+    }
 
     res.status(200).json({ data: courses });
   } catch (error) {
-    console.error("Feil ved henting av baner for klubbeier:", error);
-    res.status(500).json({ message: "En feil oppstod under henting av baner." });
+    console.error("Error fetching courses for owner or admin:", error);
+    res.status(500).json({ message: "An error occurred while fetching courses." });
   }
 };
 
@@ -72,14 +80,48 @@ const getCoursesForOwner = async (req, res) => {
  * @description This function handles the request to create a new course.
  * It creates a new course in the database and sends it as a response.
  * If successful, it sends a 201 status code and the course data.
- * If there is an error, it sends a 404 status code and the error message.
+ * If there is an error, it sends a 500 status code and the error message.
  */
 const createNewCourse = async (req, res) => {
   try {
-    const response = await courseService.createNewCourse(req.body);
-    res.status(201).json({ data: response });
-  } catch (err) {
-    res.status(404).json({ error: err.message });
+    const {
+      name,
+      location,
+      town,
+      postCode,
+      url,
+      latitude,
+      longitude,
+      difficulty,
+      familyFriendly,
+      holes,
+      courseOwner,
+    } = req.body;
+
+    if (!name || !location || !town || !postCode || !difficulty || holes === undefined || !courseOwner) {
+      return res.status(400).json({ error: 'Missing required fields' });
+    }
+
+    const newCourse = new Course({
+      name,
+      location,
+      town,
+      postCode,
+      url,
+      latitude,
+      longitude,
+      difficulty,
+      familyFriendly,
+      holes,
+      courseOwner,
+    });
+
+    await newCourse.save();
+
+    res.status(201).json({ data: newCourse });
+  } catch (error) {
+    console.error('Error creating course:', error);
+    res.status(500).json({ error: error.message });
   }
 };
 

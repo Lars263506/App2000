@@ -25,7 +25,7 @@ const Settings: React.FC<SettingsProps> = ({ setSelectedPage }) => {
         'Brukeradministrasjon': <UserAdminDetails />,
         'Oversettelser': <header>Oversettelser</header>,
         'Banetegningadministrasjon': <CourseSettings />,
-        'Baneadministrasjon': <CreateCourse />, 
+        'Lage baner': <CreateCourse />, 
     };
 
     useEffect(() => {
