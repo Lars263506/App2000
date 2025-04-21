@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useRouter } from 'next/router'
+import { toast } from 'react-toastify'
 
 const ContactPage = () => {
   const router = useRouter()
@@ -29,7 +30,11 @@ const ContactPage = () => {
         router.push('/')
       }, 1000)
     } catch (error) {
-      alert('Noe gikk galt, prøv igjen senere.')
+      if (error instanceof Error) {
+        toast.error(error.message)
+      } else {
+        toast.error('Det oppstod en feil. Vennligst prøv igjen senere.')
+      }
     } finally {
       setIsSubmitting(false)
     }

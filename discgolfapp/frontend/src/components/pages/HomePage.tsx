@@ -1,4 +1,3 @@
-import DiscgolfInfo from '../frontpage/DiscgolfInfo';
 import Navigation from '../frontpage/Navigation';
 
 interface HomeProps {

@@ -1,5 +1,4 @@
 import React from 'react'
-import WithAdminAccess from '../adminpage/WithAdminAccess';
 import Settings from '@/components/adminpage/Settings'
 import WithPageEditAccess from '../adminpage/WithEditPageAccess';
 

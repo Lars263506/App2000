@@ -1,20 +1,17 @@
 import React, { useEffect, useRef } from 'react';
 
-import Button from '../Button';
-
 interface LanguageModalProps {
-  availableLanguages: string[];
   selectedLanguage: string;
   onSelectLanguage: (language: string) => void;
   onClose: () => void;
 }
 
 const LanguageModal: React.FC<LanguageModalProps> = ({
-  availableLanguages,
   selectedLanguage,
   onSelectLanguage,
   onClose,
 }) => {
+  const availableLanguages = [ 'no', 'en'];
   const modalRef = useRef<HTMLDivElement>(null);
 
   // Close the modal if clicking outside of it
