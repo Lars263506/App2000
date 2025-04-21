@@ -34,7 +34,11 @@ const MyPage: React.FC<MyPageProps> = ({ setSelectedPage }) => {
         setUser(data);
 
         if (data.displayName) {
-          const imageUrl = `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/users/profile-image/${data.profileImage}`;
+          let imageUrl = `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/users/profile-image/${data.profileImage}`;
+          if (!data.profileImage) {
+            imageUrl = "/images/default-profile.png"
+          }
+
           setProfileImage(imageUrl);
         }
       } catch (error) {
