@@ -24,7 +24,12 @@ const GetStartedPage = () => {
         const data = await response.json();
         setIsAdmin(data.isAdmin);
       } catch (error) {
-        toast.error('Kunne ikke sjekke admin-status.');
+        if (error instanceof Error) {
+          toast.error(error.message);
+        }
+        else {
+          toast.error('Kunne ikke sjekke admin-status.');
+        }
       }
     };
 
@@ -70,7 +75,12 @@ const GetStartedPage = () => {
       });
       setHasChanges(true);
     } catch (error) {
-      toast.error('Kunne ikke fjerne listepunkt.');
+      if (error instanceof Error) {
+        toast.error(error.message);
+      }
+      else {
+        toast.error('Kunne ikke fjerne punkt.');
+      }
     }
   };
 

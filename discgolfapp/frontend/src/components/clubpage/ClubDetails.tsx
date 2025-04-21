@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import Club from '../../types/club';
 import { toast } from 'react-toastify';
 
-import { useTranslation } from 'react-i18next';
 import MemberList from './MemberList';
 import Announcements from './Announcements';
 import Meetings from './Meetings';
@@ -15,7 +14,6 @@ interface ClubDetailsProps {
 }
 
 const ClubDetails: React.FC<ClubDetailsProps> = ({ clubData, setSelectedPage }) => {
-  const { t } = useTranslation();
   const selectedClub = localStorage.getItem('selectedClub');
   const isLoggedIn = !!localStorage.getItem('accessToken');
   const [isModalOpen, setIsModalOpen] = useState(false);

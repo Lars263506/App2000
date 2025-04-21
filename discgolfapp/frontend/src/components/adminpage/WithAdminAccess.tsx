@@ -52,7 +52,7 @@ const WithAdminAccess: React.FC<WithAdminAccessProps> = ({ children }) => {
     };
 
     fetchData();
-  }, []);
+  }, [t]);
 
   if (isLoading) {
     return (

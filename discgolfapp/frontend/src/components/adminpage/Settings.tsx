@@ -15,17 +15,13 @@ interface SettingsProps {
 const Settings: React.FC<SettingsProps> = ({ setSelectedPage }) => {
     const [settings, setSettings] = useState<Setting[] | null>();
     const [selectedSetting, setSelectedSetting] = useState<Setting | null>(null);
-    const [isClubOwner, setIsClubOwner] = useState(false);
-
-    const userId = localStorage.getItem('userId'); // Fetch user ID from localStorage
-    const isAdmin = localStorage.getItem('role') === 'admin'; // Check if the user is an admin
 
     const settingComponents: { [key: string]: React.ReactNode } = {
         'Klubbadministrasjon': <ClubAdminDetails setSelectedPage={setSelectedPage} />,
         'Brukeradministrasjon': <UserAdminDetails />,
         'Oversettelser': <header>Oversettelser</header>,
         'Banetegningadministrasjon': <CourseSettings />,
-        'Lage baner': <CreateCourse />, 
+        'Lage baner': <CreateCourse />,
     };
 
     useEffect(() => {

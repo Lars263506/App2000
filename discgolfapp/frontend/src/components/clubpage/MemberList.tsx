@@ -45,7 +45,7 @@ const MemberList: React.FC<MemberListProps> = () => {
     };
 
     fetchMembers();
-  }, []);
+  }, [t]);
 
   const handlePositionChange = async (index: number, newPosition: string) => {
     const updatedMembers = [...members];

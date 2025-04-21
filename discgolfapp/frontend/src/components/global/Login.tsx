@@ -1,4 +1,3 @@
-import { set } from 'mongoose'
 import React, { useState, useEffect } from 'react'
 import { toast } from 'react-toastify'
 
@@ -97,7 +96,7 @@ const Login: React.FC<LoginProps> = ({ togglePopup, toggleRegisterPopup, closePo
       onClick={closePopup}
     >
       <div
-        className='bg-white p-8 rounded shadow-md w-full max-w-md relative'
+        className='bg-white p-8 rounded-xl shadow-md w-full max-w-md relative'
         onClick={(e) => e.stopPropagation()}
       >
         <button
@@ -113,7 +112,7 @@ const Login: React.FC<LoginProps> = ({ togglePopup, toggleRegisterPopup, closePo
            <div className="flex flex-col items-center">
            <button
              onClick={() => goToMyPage()}
-             className="px-4 py-2 rounded hover:bg-blue-700 mb-2"
+             className="px-4 py-2 rounded bg-blue-600 hover:bg-blue-700 mb-2"
            >
              Min Side
            </button>

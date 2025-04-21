@@ -36,12 +36,20 @@ const validateSession = async () => {
             return;
         }
         } catch (error) {
-        toast.error('Error validating session. Please try again later.');
+            if (error instanceof Error) {
+                toast.error(error.message);
+            } else {
+                toast.error('Error refreshing session. Please try again later.');
+            }
         }
         return;
     }
     } catch (error) {
-    toast.error('Error validating session. Please try again later.');
+        if (error instanceof Error) {
+            toast.error(error.message);
+        } else {
+            toast.error('Error validating session. Please try again later.');
+        }
     }
 };
 

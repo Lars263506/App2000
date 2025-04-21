@@ -2,9 +2,7 @@ import React, { useState } from 'react';
 import Invitations from './Invitations'
 import Minutes from './Minutes'
 
-interface MeetingsProps {}
-
-const Meetings: React.FC<MeetingsProps> = () => {
+const Meetings = () => {
   const [activeTab, setActiveTab] = useState<'invitations' | 'minutes'>('invitations');
 
   return (

@@ -67,13 +67,16 @@ const CreateNewClub: React.FC<CreateNewClubProps> = ({ onClose }) => {
         toast.error(errorData.error || 'Failed to create club. Please try again later.');
       }
     } catch (error) {
+      if (error instanceof Error) {
+        toast.error(error.message);
+      } else
       toast.error('An error occurred while creating the club. Please try again later.');
     }
   };
 
   return (
     <div className="flex justify-center items-center fixed inset-0 bg-black bg-opacity-50">
-      <div ref={modalRef} className="bg-white p-6 rounded shadow-lg w-96">
+      <div ref={modalRef} className="bg-white p-6 rounded shadow-lg w-96 max-h-[80vh] overflow-y-auto">
         <h2 className="text-xl mb-4">Create New Club</h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">

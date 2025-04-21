@@ -11,9 +11,20 @@ interface CourseDetailsProps {
   setSelectedCourse: (course: Course | null) => void
 }
 
+interface WeatherData {
+  current: {
+    condition: {
+      icon: string;
+      text: string;
+    };
+    temp_c: number;
+    wind_kph: number;
+  };
+}
+
 const CourseDetails: React.FC<CourseDetailsProps> = ({ selectedCourse, setSelectedCourse }) => {
   const [activeTab, setActiveTab] = useState<'details' | 'weather' | 'reviews'>('details')
-  const [weatherData, setWeatherData] = useState<any>(null)
+  const [weatherData, setWeatherData] = useState<WeatherData | null>(null)
   const [reviews, setReviews] = useState<Review[]>([])
   const [comment, setComment] = useState('')
   const [rating, setRating] = useState(0)
@@ -32,6 +43,7 @@ const CourseDetails: React.FC<CourseDetailsProps> = ({ selectedCourse, setSelect
 
         try {
           const response = await axios.get(url)
+          console.log('Weather data:', response.data)
           setWeatherData(response.data)
         } catch (error) {
           toast.error('Error fetching weather data: ' + error)
@@ -144,29 +156,13 @@ const CourseDetails: React.FC<CourseDetailsProps> = ({ selectedCourse, setSelect
                 <div className='bg-blue-50 p-4 rounded-lg shadow-lg flex flex-col items-center mb-6'>
                   <p className='text-md font-semibold mb-2'>Værmelding for i dag:</p>
                   <img
-                    src={`https:${weatherData.current.condition.icon}`}
-                    alt={weatherData.current.condition.text}
+                    src={`https:${(weatherData).current.condition.icon}`}
+                    alt={(weatherData).current.condition.text}
                     className='w-12 h-12 mb-2'
                   />
-                  <p className='text-lg font-semibold'>{weatherData.current.condition.text}</p>
-                  <p className='text-xl font-bold'>{weatherData.current.temp_c}°C</p>
-                  <p className='text-sm mt-2'>Vind: {weatherData.current.wind_kph} km/h</p>
-                </div>
-
-                <div className='flex justify-between space-x-4'>
-                  {weatherData.forecast.forecastday.slice(1, 3).map((day: any) => (
-                    <div key={day.date} className='bg-blue-50 p-4 rounded-lg shadow-lg flex flex-col items-center w-1/2'>
-                      <p className='text-md font-semibold mb-2'>{new Date(day.date).toLocaleDateString()}</p>
-                      <img
-                        src={`https:${day.day.condition.icon}`}
-                        alt={day.day.condition.text}
-                        className='w-12 h-12 mb-2'
-                      />
-                      <p className='text-sm'>{day.day.condition.text}</p>
-                      <p className='mt-2 text-xl font-bold'>{day.day.maxtemp_c}°C / {day.day.mintemp_c}°C</p>
-                      <p className='text-sm mt-1'>Vind: {day.day.maxwind_kph} km/h</p>
-                    </div>
-                  ))}
+                  <p className='text-lg font-semibold'>{(weatherData).current.condition.text}</p>
+                  <p className='text-xl font-bold'>{(weatherData).current.temp_c}°C</p>
+                  <p className='text-sm mt-2'>Vind: {(weatherData).current.wind_kph} km/h</p>
                 </div>
               </div>
             )}
@@ -181,7 +177,7 @@ const CourseDetails: React.FC<CourseDetailsProps> = ({ selectedCourse, setSelect
                         <p>
                           <span className='font-medium'>{review.username}:</span> {review.comment}
                         </p>
-                        <p>Rating: {Array.from({ length: review.rating }).map((_, i) => '⭐').join('')}</p>
+                        <p>Rating: {'⭐'.repeat(review.rating)}</p>
                       </div>
                     ))
                   ) : (
