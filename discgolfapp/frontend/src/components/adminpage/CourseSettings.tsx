@@ -1,14 +1,7 @@
 import { useState, useEffect } from "react";
 import { GoogleMap, LoadScript, Marker, OverlayView, Polyline } from "@react-google-maps/api";
 
-type Course = {
-  id: string;
-  name: string;
-  latitude: number;
-  longitude: number;
-  difficulty: string;
-  par: number;
-}
+import Course from "../../types/course";
 
 type Pin = {
   id: string;
@@ -50,6 +43,8 @@ export default function CourseSettings() {
     lng: 10.7522,
   });
 
+  const [zoomLevel, setZoomLevel] = useState(2);
+
   const handlePinTypeChange = (value: string) => {
     if (value === "kurv" || value === "Utslagspunkt") {
       setSelectedPinType(value);
@@ -77,7 +72,7 @@ export default function CourseSettings() {
         }
 
         const result = await response.json();
-        const mappedCourses = result.data.map((course: any) => ({
+        const mappedCourses = result.data.map((course: Course) => ({
           ...course,
           id: course._id,
         }));
@@ -124,7 +119,7 @@ export default function CourseSettings() {
     const course = courses.find((c) => c.name === selectedCourse);
     if (!course) return;
 
-    const url = `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/course/${course.id}/pins`;
+    const url = `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/course/${course._id}/pins`;
     const token = localStorage.getItem("accessToken");
 
     try {
@@ -182,7 +177,7 @@ export default function CourseSettings() {
 
         const course = courses.find((c) => c.name === selectedCourse);
         if (course) {
-          const url = `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/course/${course.id}/pins`;
+          const url = `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/course/${course._id}/pins`;
           const token = localStorage.getItem("accessToken");
           try {
             const response = await fetch(url, {
@@ -241,7 +236,7 @@ export default function CourseSettings() {
       const course = courses.find((c) => c.name === selectedCourse);
       if (!course) return;
 
-      const url = `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/course/${course.id}/pins`;
+      const url = `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/course/${course._id}/pins`;
       const token = localStorage.getItem("accessToken");
 
       const response = await fetch(url, {
@@ -287,7 +282,7 @@ export default function CourseSettings() {
         // Lagre sletting til databasen umiddelbart
         const course = courses.find((c) => c.name === selectedCourse);
         if (course) {
-          const url = `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/course/${course.id}/pins`;
+          const url = `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/course/${course._id}/pins`;
           const token = localStorage.getItem("accessToken");
           try {
             const response = await fetch(url, {
@@ -336,7 +331,7 @@ export default function CourseSettings() {
       const course = courses.find((c) => c.name === selectedCourse);
       if (!course) return;
 
-      const url = `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/course/${course.id}/pins`;
+      const url = `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/course/${course._id}/pins`;
       const token = localStorage.getItem("accessToken");
 
       const response = await fetch(url, {
@@ -394,9 +389,7 @@ export default function CourseSettings() {
 
     const course = courses.find((c) => c.name === courseName);
     if (course) {
-      setMapCenter({ lat: course.latitude, lng: course.longitude });
-
-      const url = `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/course/${course.id}/pins`;
+      const url = `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/course/${course._id}/pins`;
       const token = localStorage.getItem("accessToken");
 
       try {
@@ -415,6 +408,11 @@ export default function CourseSettings() {
         const result = await response.json();
         setPins(Array.isArray(result.pins) ? result.pins : []);
         setLines(Array.isArray(result.lines) ? result.lines : []);
+        setMapCenter({
+          lat: course.latitude,
+          lng: course.longitude,
+        });
+        setZoomLevel(15);
       } catch (error) {
         console.error("Error fetching pins:", error);
         alert("Kunne ikke hente pins for banen. Vennligst prøv igjen senere.");
@@ -495,7 +493,7 @@ export default function CourseSettings() {
                   <LoadScript googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string}>
                     <GoogleMap
                       center={mapCenter}
-                      zoom={15}
+                      zoom={zoomLevel}
                       mapContainerStyle={{ height: "900px", width: "75%", borderRadius: "1rem" }}
                       onClick={handleMapClick}
                     >
@@ -617,6 +615,7 @@ export default function CourseSettings() {
                                 },
                               ],
                             }}
+                            onClick={() => handleLineClick(line, index)}
                           />
                         );
                       })}
