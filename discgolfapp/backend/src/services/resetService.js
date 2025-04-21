@@ -46,7 +46,7 @@ const resetTestData = async (userId) => {
                     { name: 'Klubbadministrasjon', description: 'Administrer klubbene dine' },
                     { name: 'Brukeradministrasjon', description: 'Administrer brukerne dine' },
                     { name: 'Banetegningadministrasjon', description: 'Redigere og slette pins og linjer fra kartet' },
-                    { name: 'Lage baner', description: 'Lage, redigere og slette baner' },
+                    { name: 'Baneadministrasjon', description: 'Lage, redigere og slette baner' },
                 ],
                 games: [],
             },
@@ -60,7 +60,7 @@ const resetTestData = async (userId) => {
                 roleChangedAt: new Date(),
                 profileImage: '',
                 settings: [
-                    { name: 'Lage baner', description: 'Lage, redigere og slette baner' },
+                    { name: 'Baneadministrasjon', description: 'Lage, redigere og slette baner' },
                     { name: 'Banetegningadministrasjon', description: 'Redigere og slette pins og linjer fra kartet' },
                 ],
                 games: [],

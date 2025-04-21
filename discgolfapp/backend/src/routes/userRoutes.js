@@ -25,7 +25,8 @@ import {
   changePassword,
   changeRole,
   changeUser,
-  deleteUser
+  deleteUser,
+  getAllClubOwners
 } from '../controllers/userController.js'
 
 /**
@@ -86,6 +87,12 @@ router.get('/search',
     next();
   },
   searchUsers
+);
+
+router.get('/clubowners',
+  passport.authenticate('jwt', { session: false }),
+  authorizeAdmin,
+  getAllClubOwners
 );
 
 router.get('/:id',

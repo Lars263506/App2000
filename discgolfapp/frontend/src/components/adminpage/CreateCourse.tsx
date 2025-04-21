@@ -27,6 +27,7 @@ const CreateCourse: React.FC = () => {
   const [isCreating, setIsCreating] = useState(false);
   const [isAuthorized, setIsAuthorized] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [users, setUsers] = useState<User[]>([]);
   const userRole = localStorage.getItem('role');
   const userId = localStorage.getItem('userId');
 
@@ -70,7 +71,7 @@ const CreateCourse: React.FC = () => {
         console.log('Fetched courses:', coursesData); // Logg rådata
         
         // Map baner og sikre id
-        const mappedCourses = (coursesData.data || coursesData).map((course: any) => ({
+        const mappedCourses = (coursesData.data || coursesData).map((course: { _id?: string; id?: string; name: string; location: string; town: string; postCode: string; [key: string]: unknown }) => ({
           ...course,
           id: course._id || course.id,
         }));
@@ -87,6 +88,33 @@ const CreateCourse: React.FC = () => {
 
     fetchData();
   }, [userRole, userId]);
+
+  useEffect(() => {
+    const fetchClubOwners = async () => {
+      try {
+        const accessToken = localStorage.getItem('accessToken');
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/users/clubowners`, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error(`Failed to fetch club owners: ${response.status}`);
+        }
+
+        const data: { data: User[] } = await response.json();
+        setUsers(data.data);
+      } catch (error) {
+        console.error('Error fetching club owners:', error);
+        toast.error('Kunne ikke hente klubb-eiere: ' + error);
+      }
+    };
+
+    if (userRole === 'admin') {
+      fetchClubOwners();
+    }
+  }, [userRole]);
 
   const handleCreateNew = () => {
     setSelectedCourse(null);
@@ -123,12 +151,14 @@ const CreateCourse: React.FC = () => {
       const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/course/${courseId}`, {
         method: 'DELETE',
         headers: {
+          'Content-Type': 'application/json',
           Authorization: `Bearer ${accessToken}`,
         },
       });
 
       if (!response.ok) {
-        throw new Error('Kunne ikke slette banen: Status ' + response.status);
+        const errorData = await response.json();
+        throw new Error(errorData.error || `Kunne ikke slette banen: Status ${response.status}`);
       }
 
       setCourses((prev) => prev.filter((c) => c.id !== courseId));
@@ -243,7 +273,13 @@ const CourseForm: React.FC<{
               }
               const usersData = await usersRes.json();
               console.log('Fetched users:', usersData); // Logg for debugging
-              setUsers(Array.isArray(usersData) ? usersData.map((u: any) => ({ id: u._id || u.id, name: u.name })) : []);
+              setUsers(
+                Array.isArray(usersData)
+                  ? usersData
+                      .map((u: { _id?: string; id?: string; name: string }) => ({ id: u._id || u.id, name: u.name }))
+                      .filter((u) => u.id !== undefined) as User[]
+                  : []
+              );
             } else if (userRole === 'clubowner' && !course?.courseOwner) {
               // For klubb-eier, sett courseOwner til userId for nye baner
               setCourseOwner(userId || '');
@@ -271,7 +307,7 @@ const CourseForm: React.FC<{
       return;
     }
 
-    const newCourse: Course = {
+    const newCourse = {
       id: course?.id,
       name,
       location,
@@ -283,7 +319,7 @@ const CourseForm: React.FC<{
       longitude: longitude || undefined,
       url: url || undefined,
       holes: holes || undefined,
-      courseOwner: courseOwner || userId || undefined, // Fallback til userId
+      courseOwner: userRole === 'admin' ? courseOwner : course?.courseOwner, // Allow admin to set courseOwner
     };
 
     try {
@@ -301,7 +337,7 @@ const CourseForm: React.FC<{
       );
 
       if (!response.ok) {
-        throw new Error('Kunne ikke lagre banen: Status ' + response.status);
+        throw new Error('Kunne ikke lagre banen.');
       }
 
       const saved = await response.json();

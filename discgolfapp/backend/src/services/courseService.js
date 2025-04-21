@@ -62,9 +62,10 @@ const getCoursesForOwner = async (clubOwnerId) => {
   return courses;
 };
 
-const createNewCourse = async (courseData) => {
-  const newCourse = new Course(courseData);
+const createNewCourse = async (course) => {
+  const newCourse = new Course(course);
   await newCourse.save();
+
   return newCourse;
 };
 
