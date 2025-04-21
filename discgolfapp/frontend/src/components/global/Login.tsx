@@ -30,48 +30,55 @@ const Login: React.FC<LoginProps> = ({ togglePopup, toggleRegisterPopup, closePo
   }, [])
 
   const handleLogin = async (event: React.FormEvent) => {
-    event.preventDefault()
-    if (locked) return
+    event.preventDefault();
+    if (locked) return;
 
-    setLocked(true)
-    const url = process.env.NEXT_PUBLIC_BACKEND_BASE_URL + '/users/login/'
+    setLocked(true);
+    const url = process.env.NEXT_PUBLIC_BACKEND_BASE_URL + '/users/login/';
 
     try {
       const response = await fetch(url, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email, password })
-      })
+        body: JSON.stringify({ email, password }),
+      });
 
-      const data: LoginResponseData = await response.json()
+      if (response.status === 429) {
+        toast.error('For mange forespørsler. Vennligst vent litt før du prøver igjen.');
+        return;
+      }
 
       if (response.status !== 200) {
-        toast.error(data.message)
-
-      } else {
-        localStorage.setItem('accessToken', data.accessToken)
-        localStorage.setItem('refreshToken', data.refreshToken)
-        localStorage.setItem('displayName', data.displayName)
-        setIsLoggedIn(true)
-        toast.success('Logget inn med bruker: ' + data.displayName);
-        setLoggedInUser(data.displayName)
-        closePopup()
-        window.location.reload()
+        const errorData = await response.json();
+        toast.error(errorData.message || 'Et problem oppstod. Vennligst prøv igjen senere.');
+        return;
       }
+
+      const data: LoginResponseData = await response.json();
+
+      // Handle successful login
+      localStorage.setItem('accessToken', data.accessToken);
+      localStorage.setItem('refreshToken', data.refreshToken);
+      localStorage.setItem('displayName', data.displayName);
+      setIsLoggedIn(true);
+      toast.success('Logget inn med bruker: ' + data.displayName);
+      setLoggedInUser(data.displayName);
+      closePopup();
+      window.location.reload();
     } catch (error: unknown) {
       if (error instanceof Error) {
-        toast.error(error.message)
+        toast.error(error.message);
       } else {
-        toast.error('Et problem oppstod. Vennligst prøv igjen senere.')
+        toast.error('Et problem oppstod. Vennligst prøv igjen senere.');
       }
     } finally {
-      setLocked(false)
-      setEmail('')
-      setPassword('')
+      setLocked(false);
+      setEmail('');
+      setPassword('');
     }
-  }
+  };
 
   const handleLogout = async () => {
     localStorage.removeItem('accessToken')
