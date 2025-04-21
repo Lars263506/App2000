@@ -131,6 +131,7 @@ const Index = () => {
           popupType={popupType}
           closePopup={closePopup}
           toggleRegisterPopup={toggleRegisterPopup}
+          selectedPage={selectedPage}
           setSelectedPage={setSelectedPage}
         />
 
