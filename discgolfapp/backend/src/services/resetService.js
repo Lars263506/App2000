@@ -45,6 +45,7 @@ const resetTestData = async (userId) => {
                 settings: [
                     { name: 'Klubbadministrasjon', description: 'Administrer klubbene dine' },
                     { name: 'Brukeradministrasjon', description: 'Administrer brukerne dine' },
+                    { name: 'Banetegningadministrasjon', description: 'Redigere og slette pins og linjer fra kartet' },
                     { name: 'Lage baner', description: 'Lage, redigere og slette baner' },
                 ],
                 games: [],
@@ -139,8 +140,8 @@ const resetTestData = async (userId) => {
                 town: 'Bø i Telemark',
                 postCode: '3800',
                 url: 'http://usn.no',
-                latitude: 59.24338,
-                longitude: 9.03309,
+                latitude: 59.40915,
+                longitude: 9.05836,
                 difficulty: 'Medium',
                 familyFriendly: false,
                 holes: 9,
