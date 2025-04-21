@@ -54,7 +54,7 @@ const CreateCourse: React.FC = () => {
         // Hent baner
         const baseUrl = process.env.NEXT_PUBLIC_BACKEND_BASE_URL;
         const coursesUrl = userRole === 'admin' ? `${baseUrl}/course` : `${baseUrl}/course/owner`;
-        
+
         const coursesResponse = await fetch(coursesUrl, {
           method: 'GET',
           headers: {
@@ -69,7 +69,7 @@ const CreateCourse: React.FC = () => {
 
         const coursesData = await coursesResponse.json();
         console.log('Fetched courses:', coursesData); // Logg rådata
-        
+
         // Map baner og sikre id
         const mappedCourses = (coursesData.data || coursesData).map((course: { _id?: string; id?: string; name: string; location: string; town: string; postCode: string; [key: string]: unknown }) => ({
           ...course,
@@ -105,6 +105,7 @@ const CreateCourse: React.FC = () => {
 
         const data: { data: User[] } = await response.json();
         setUsers(data.data);
+        console.log(users);
       } catch (error) {
         console.error('Error fetching club owners:', error);
         toast.error('Kunne ikke hente klubb-eiere: ' + error);
@@ -272,7 +273,6 @@ const CourseForm: React.FC<{
                 throw new Error(`Kunne ikke hente brukere: Status ${usersRes.status}`);
               }
               const usersData = await usersRes.json();
-              console.log('Fetched users:', usersData); // Logg for debugging
               setUsers(
                 Array.isArray(usersData)
                   ? usersData
@@ -281,7 +281,6 @@ const CourseForm: React.FC<{
                   : []
               );
             } else if (userRole === 'clubowner' && !course?.courseOwner) {
-              // For klubb-eier, sett courseOwner til userId for nye baner
               setCourseOwner(userId || '');
             }
           } else {
