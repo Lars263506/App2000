@@ -56,7 +56,8 @@ const ClubList: React.FC<ClubListProps> = ({ selectedClub, setSelectedClub, sear
                   onClick={() => {
                     localStorage.setItem("selectedClub", JSON.stringify(club));
                     setSelectedClub(club);
-                    setSelectedPage('Club');
+                    if(localStorage.getItem("selectedPage") === "ClubLanding")
+                      setSelectedPage('Club');
                   }}
                 >
                   {club.name}
