@@ -177,7 +177,7 @@ const CourseDetails: React.FC<CourseDetailsProps> = ({ selectedCourse, setSelect
                         <p>
                           <span className='font-medium'>{review.username}:</span> {review.comment}
                         </p>
-                        <p>Rating: {Array.from({ length: review.rating }).map((_, i) => '⭐').join('')}</p>
+                        <p>Rating: {'⭐'.repeat(review.rating)}</p>
                       </div>
                     ))
                   ) : (
