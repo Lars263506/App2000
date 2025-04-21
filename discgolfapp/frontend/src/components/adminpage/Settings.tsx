@@ -4,7 +4,8 @@ import { toast } from 'react-toastify'
 import ClubAdminDetails from './ClubAdminDetails'
 import UserAdminDetails from './UserAdminDetails'
 import CourseSettings from './CourseSettings'
-import Setting  from '../../types/setting';
+import CreateCourse from './CreateCourse'
+import Setting from '../../types/setting';
 import SelectButton from '../global/SelectButton'
 
 interface SettingsProps {
@@ -15,11 +16,15 @@ const Settings: React.FC<SettingsProps> = ({ setSelectedPage }) => {
     const [settings, setSettings] = useState<Setting[] | null>();
     const [selectedSetting, setSelectedSetting] = useState<Setting | null>(null);
 
-    const settingComponents: { [key: string]: React.FC } = {
-        'Klubbadministrasjon': () => <ClubAdminDetails setSelectedPage={setSelectedPage} />,
-        'Brukeradministrasjon': UserAdminDetails,
-        'Oversettelser': () => <header>Oversettelser</header>,
-        'Banetegningadministrasjon': CourseSettings,
+    const userId = localStorage.getItem('userId'); // Fetch user ID from localStorage
+    const isAdmin = localStorage.getItem('role') === 'admin'; // Check if the user is an admin
+
+    const settingComponents: { [key: string]: React.ReactNode } = {
+        'Klubbadministrasjon': <ClubAdminDetails setSelectedPage={setSelectedPage} />,
+        'Brukeradministrasjon': <UserAdminDetails />,
+        'Oversettelser': <header>Oversettelser</header>,
+        'Banetegningadministrasjon': <CourseSettings />,
+        'Lage baner': <CreateCourse />, 
     };
 
     useEffect(() => {
@@ -56,8 +61,7 @@ const Settings: React.FC<SettingsProps> = ({ setSelectedPage }) => {
             <div className="flex flex-col w-1/5 p-2 rounded-md bg-[#E7EFFB] overflow-y-auto">
                 {settings && settings.length > 0 ? (
                     settings.map((setting, index) => (
-                        <SelectButton key={index} onClick={() => setSelectedSetting(setting)}
-                            >
+                        <SelectButton key={index} onClick={() => setSelectedSetting(setting)}>
                             {setting.name}
                         </SelectButton>
                     ))
@@ -69,7 +73,7 @@ const Settings: React.FC<SettingsProps> = ({ setSelectedPage }) => {
             {/* Setting component */}
             <div className="flex flex-col w-4/5 p-2 rounded-md bg-[#E7EFFB]">
                 {selectedSetting ? (
-                    React.createElement(settingComponents[selectedSetting.name])
+                    settingComponents[selectedSetting.name]
                 ) : (
                     <header>Velg en innstilling fra listen til venstre.</header>
                 )}
