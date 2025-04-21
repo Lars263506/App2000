@@ -53,7 +53,6 @@ const Login: React.FC<LoginProps> = ({ togglePopup, toggleRegisterPopup, closePo
       } else {
         localStorage.setItem('accessToken', data.accessToken)
         localStorage.setItem('refreshToken', data.refreshToken)
-        localStorage.setItem('displayName', data.displayName)
         setIsLoggedIn(true)
         toast.success('Logget inn med bruker: ' + data.displayName);
         setLoggedInUser(data.displayName)
@@ -107,18 +106,18 @@ const Login: React.FC<LoginProps> = ({ togglePopup, toggleRegisterPopup, closePo
         >
           &times;
         </button>
-        <header className='text-2xl font-bold text-center mb-8'>
+        <header className='text-2xl font-bold text-black text-center mb-8'>
           {isLoggedIn && loggedInUser ? 'Logget inn med bruker ' + loggedInUser : 'Logg inn'}
         </header>
         {isLoggedIn ? (
            <div className="flex flex-col items-center">
            <button
              onClick={() => goToMyPage()}
-             className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 mb-2"
+             className="px-4 py-2 rounded hover:bg-blue-700 mb-2"
            >
              Min Side
            </button>
-            <button onClick={handleLogout} className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-800">
+            <button onClick={handleLogout} className="bg-red-600 px-4 py-2 rounded hover:bg-red-800">
               Logg ut
             </button>
           </div>
@@ -145,7 +144,7 @@ const Login: React.FC<LoginProps> = ({ togglePopup, toggleRegisterPopup, closePo
                 <button
                 type="button"
                 onClick={handleForgotPassword}
-                className="hover:underline mt-2 text-sm text-center"
+                className="hover:underline text-black mt-2 text-sm text-center"
               >
                 Glemt passord?
               </button>

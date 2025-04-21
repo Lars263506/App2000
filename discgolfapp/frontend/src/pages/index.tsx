@@ -19,7 +19,7 @@ import Footer from '@/components/global/Footer';
 import PopupWrapper from '@/components/global/PopupWrapper';
 import { usePopup } from '@/components/global/UsePopup';
 
-import validateSession from '@/utils/validatesession';
+import validateSession from '@/utils/validate-session';
 
 const Index = () => {
   const { popupType, toggleLoginPopup, toggleRegisterPopup, closePopup } = usePopup();
@@ -109,7 +109,7 @@ const Index = () => {
 
   return (
     <I18nextProvider i18n={i18next}>
-      <div aria-label="Index root" className="flex flex-col min-h-screen"
+      <div aria-label="Index root" className="flex flex-col min-h-screen overflow-x-hidden"
         onLoad={() => setSelectedPage(localStorage.getItem('selectedPage') || 'Home')}>
         <div aria-label="Navbar container" className="h-auto">
           <Navbar toggleLoginPopup={toggleLoginPopup} setSelectedPage={setSelectedPage} />

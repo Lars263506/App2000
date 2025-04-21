@@ -41,24 +41,6 @@ const getClubPage = async (req, res) => {
   }
 }
 
-/**
- * @author Lars Andreas Strand
- * @description This function handles the request to get the view based on the user's role.
- * It checks the user's role and sends the appropriate view as a response.
- * If there is an error, it sends a 404 status code and the error message.
- */
-
-const getView = async (req, res) => {
-  try {
-    const role = req.user.role
-    if (role === 'member') {
-      res.json({ view: 'member' })
-    } else res.json({ view: 'nonmember' })
-  } catch (err) {
-    res.status(404).json({ error: 'No role found' })
-  }
-}
-
 const isMember = async (req, res) => {
   try {
     res.json({ isMember: req.user.role === "member" })
@@ -270,7 +252,6 @@ const updatePosition = async (req, res) => {
 export {
   getAllClubPages,
   getClubPage,
-  getView,
   isMember,
   isOwner,
   getMembers,

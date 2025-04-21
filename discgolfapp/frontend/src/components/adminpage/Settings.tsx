@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 
-import ClubAdminDetails from './clubadmindetails'
-import CourseAdminDetails from './CreateCourse'
-import UserAdminDetails from './useradmindetails'
+import ClubAdminDetails from './ClubAdminDetails'
+import UserAdminDetails from './UserAdminDetails'
 import CourseSettings from './CourseSettings'
 import CreateCourse from './CreateCourse'
 import Setting from '../../types/setting';
@@ -55,14 +54,6 @@ const Settings: React.FC<SettingsProps> = ({ setSelectedPage }) => {
         };
         fetchSettings();
     }, []);
-
-    if (isClubOwner) {
-        return (
-            <div className="flex flex-col w-full p-4 rounded-md min-h-[100vh] bg-white">
-                <CourseAdminDetails />
-            </div>
-        );
-    }
 
     return (
         <div className="flex flex-row gap-4 p-4 rounded-md min-h-[100vh] bg-white">

@@ -13,9 +13,8 @@ const Footer: React.FC<FooterProps> = ({ setSelectedPage }) => {
   const { t } = useTranslation()
 
   return (
-    <footer className='text-center py-2 bg-[#1B365D] text-white'>
-      <div className='max-w-6xl mx-auto flex flex-col sm:flex-row justify-between items-center'>
-
+    <footer className='text-center py-4 bg-[#1B365D] text-white'>
+      <div className='max-w-6xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4 px-4'>
         {/* Kontakt oss-knapp */}
         <button
           onClick={() => setSelectedPage('Contact')}
@@ -25,7 +24,7 @@ const Footer: React.FC<FooterProps> = ({ setSelectedPage }) => {
         </button>
 
         {/* Sosiale medier */}
-        <div className='flex space-x-6 my-4 sm:my-0'>
+        <div className='flex space-x-4'>
           <a href='https://facebook.com' target='_blank' rel='noopener noreferrer'>
             <Image src='/svg/bxl-facebook-circle.svg' alt='Facebook' width={24} height={24} className='w-6 h-6 invert' />
           </a>
@@ -47,7 +46,6 @@ const Footer: React.FC<FooterProps> = ({ setSelectedPage }) => {
         >
           {t("footer_privacy")}
         </button>
-
       </div>
     </footer>
   )

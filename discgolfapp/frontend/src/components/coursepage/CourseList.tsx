@@ -7,7 +7,6 @@ import { FaStar } from 'react-icons/fa';
 import Course from '@/types/course';
 import Review from '@/types/review';
 
-
 interface CourseListProps {
   courses: Course[];
   setCourses: (courses: Course[]) => void;
@@ -79,13 +78,14 @@ const CourseList: React.FC<CourseListProps> = ({ courses, setCourses, setSelecte
   };
 
   return (
-    <div className="min-w-[400px]">
+    <div className="min-w-[250px] sm:min-w-[300px] w-full">
       <div className="h-[100vh] p-4 rounded-xl shadow bg-[#E7EFFB]">
-        <div className="relative">
+        {/* Filter Bar */}
+        <div className="relative mb-4">
           <input
             type="text"
             placeholder={t('course_search')}
-            className="border p-2 rounded w-full mb-4"
+            className="border p-2 rounded w-full text-sm sm:text-base"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
@@ -106,8 +106,9 @@ const CourseList: React.FC<CourseListProps> = ({ courses, setCourses, setSelecte
             <ChevronDown size={20} />
           </button>
 
+          {/* Dropdown for Filters */}
           {showDropdownBox && (
-            <div className="absolute top-12 right-0 bg-white border rounded shadow-lg w-full z-10 p-4 bg-opacity-90 ">
+            <div className="absolute top-12 right-0 bg-white border rounded shadow-lg w-full z-10 p-4 bg-opacity-90">
               <div className="mb-4">
                 <label className="block text-gray-700 font-semibold mb-2">{t("courselist_town")}</label>
                 <div className="flex flex-col gap-2">
@@ -144,19 +145,20 @@ const CourseList: React.FC<CourseListProps> = ({ courses, setCourses, setSelecte
             </div>
           )}
         </div>
-        <ul className="space-y-2 mt-4">
-  {filteredCourses.map((course) => (
-    <li key={course._id}>
-      <button
-        onClick={() => setSelectedCourse(course)}
-        className="block w-full text-left bg-white hover:bg-blue-100 text-black px-4 py-2 rounded-lg shadow transition"
-      >
-        {course.name}
-      </button>
-    </li>
-  ))}
-</ul>
 
+        {/* Course List */}
+        <ul className="space-y-2 mt-4">
+          {filteredCourses.map((course) => (
+            <li key={course._id}>
+              <button
+                onClick={() => setSelectedCourse(course)}
+                className="block w-full text-left bg-white hover:bg-blue-100 text-black px-4 py-2 rounded-lg shadow transition"
+              >
+                {course.name}
+              </button>
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
   );

@@ -64,8 +64,8 @@ const Navbar: React.FC<NavBarProps> = ({ toggleLoginPopup, setSelectedPage }) =>
   }
 
   return (
-    <nav aria-label="Navbar root" className='bg-[#1B365D] text-white py-4 px-6 flex justify-center'>
-      <div className='w-full max-w-5xl flex items-center justify-between'>
+    <nav aria-label="Navbar root" className='bg-[#1B365D] py-4 justify-center w-[100%]'>
+      <div className='w-full flex flex-wrap items-center justify-center gap-4'>
         <div
           className='flex items-center gap-2 cursor-pointer'
           onClick={async () => setSelectedPage('Home')}
@@ -76,7 +76,7 @@ const Navbar: React.FC<NavBarProps> = ({ toggleLoginPopup, setSelectedPage }) =>
             width={50}
             height={50}
           />
-          <h1 className='text-xl font-bold leading-tight'>
+          <h1 className='text-xl text-white font-bold leading-tight'>
             <span className='block'>{t("navbar_logotext_norways")}</span>
             <span className='block'>{t("navbar_logotext_association")}</span>
           </h1>

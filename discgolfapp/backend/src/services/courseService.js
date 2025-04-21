@@ -1,23 +1,34 @@
-import Course from '../models/Course.js'
-import User from '../models/User.js'
+import Course from '../models/Course.js';
+import User from '../models/User.js';
 
 const getAllCourses = async () => {
-  const courses = await Course.find().populate('reviews');
-  if (!courses) {
+  const courses = await Course.aggregate([
+    {
+      $lookup: {
+        from: 'reviews',
+        localField: '_id',
+        foreignField: 'courseId',
+        as: 'reviews',
+      },
+    },
+  ]);
+
+  if (!courses || courses.length === 0) {
     throw new Error('No courses found');
   }
+
   return courses;
 };
 
 const getCourse = async (id) => {
-  const course = await Course.findById(id)
+  const course = await Course.findById(id);
 
   if (!course) {
-    throw new Error('Course not found')
+    throw new Error('Course not found');
   }
 
-  return course
-}
+  return course;
+};
 
 const getCoursePins = async (id) => {
   const course = await Course.findById(id).select('pins lines');
@@ -29,6 +40,7 @@ const getCoursePins = async (id) => {
 
 const getCoursesForOwner = async (clubOwnerId) => {
   const user = await User.findById(clubOwnerId).select('displayName');
+
   if (!user) {
     throw new Error('User not found');
   }
@@ -43,24 +55,32 @@ const getCoursesForOwner = async (clubOwnerId) => {
 };
 
 const createNewCourse = async (course) => {
-  const newCourse = new Course(course)
-  await newCourse.save()
+  const newCourse = new Course(course);
+  await newCourse.save();
 
-  return newCourse
-}
+  return newCourse;
+};
 
 const deleteCourse = async (id) => {
-  const course = await Course.findByIdAndDelete(id)
+  const course = await Course.findByIdAndDelete(id);
 
   if (!course) {
-    throw new Error('Course not found')
+    throw new Error('Course not found');
   }
 
-  return course
-}
+  return course;
+};
 
 const updateCourse = async (id, request) => {
-  await Course.findByIdAndUpdate(id, request, { new: true })
-}
+  await Course.findByIdAndUpdate(id, request, { new: true });
+};
 
-export { getAllCourses, getCourse, getCoursePins, getCoursesForOwner, createNewCourse, deleteCourse, updateCourse }
+export {
+  getAllCourses,
+  getCourse,
+  getCoursePins,
+  getCoursesForOwner,
+  createNewCourse,
+  deleteCourse,
+  updateCourse,
+};
