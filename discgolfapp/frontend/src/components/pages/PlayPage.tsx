@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/router";
-import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
+import { GoogleMap, LoadScript, Marker, Polyline, InfoWindow } from '@react-google-maps/api';
 import { toast } from "react-toastify";
 import Course from '@/types/course';
 import CourseList from '@/components/coursepage/CourseList'; 
@@ -15,7 +15,8 @@ export default function StartGame() {
   const [courses, setCourses] = useState<Course[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState<{ displayName: string; email: string }[]>([]);
-  const [pins, setPins] = useState<{ latitude: number; longitude: number }[]>([]);
+  const [pins, setPins] = useState<{ id: string; latitude: number; longitude: number; name: string; type: string }[]>([]);
+  const [lines, setLines] = useState<{ pinId1: string; pinId2: string }[]>([]);
   
   const mapRef = useRef<google.maps.Map | null>(null);
 
@@ -48,6 +49,7 @@ export default function StartGame() {
         const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/course/${selectedCourse._id}/pins`);
         const data = await response.json();
         setPins(data.pins);
+        setLines(data.lines || []);
       } catch (error) {
         toast.error("Failed to fetch pins: " + error);
       }
@@ -64,7 +66,7 @@ export default function StartGame() {
     if (mapRef.current && pins.length > 0 && currentBasket > 0) {
       const pin = pins[currentBasket - 1]; 
       mapRef.current.setCenter({ lat: pin.latitude, lng: pin.longitude }); 
-      mapRef.current.setZoom(20);
+      mapRef.current.setZoom(19);
     }
   }, [currentBasket, pins]);
 
@@ -248,14 +250,53 @@ export default function StartGame() {
                     ? { lat: pins[currentBasket - 1].latitude, lng: pins[currentBasket - 1].longitude }
                     : { lat: 59.9139, lng: 10.7522 } 
                 }
-                zoom={22} 
+                zoom={20}
                 onLoad={(map) => {
                   mapRef.current = map;
                 }}
               >
+                {}
                 {pins.map((pin, index) => (
-                  <Marker key={index} position={{ lat: pin.latitude, lng: pin.longitude }} />
+                  <Marker
+                    key={index}
+                    position={{ lat: pin.latitude, lng: pin.longitude }}
+                    icon={{
+                      url: pin.type === "Utslagspunkt" ? "/svg/start-point.png" : "/svg/basket.png",
+                      scaledSize: new google.maps.Size(30, 30),
+                    }}
+                  >
+                    <InfoWindow
+                      position={{ lat: pin.latitude + 0.00005, lng: pin.longitude }} 
+                    >
+                      <div>
+                        <p>{pin.name}</p>
+                      </div>
+                    </InfoWindow>
+                  </Marker>
                 ))}
+
+                {}
+                {lines.map((line, index) => {
+                  const pin1 = pins.find((pin) => pin.id === line.pinId1);
+                  const pin2 = pins.find((pin) => pin.id === line.pinId2);
+
+                  if (!pin1 || !pin2) return null;
+
+                  return (
+                    <Polyline
+                      key={index}
+                      path={[
+                        { lat: pin1.latitude, lng: pin1.longitude },
+                        { lat: pin2.latitude, lng: pin2.longitude },
+                      ]}
+                      options={{
+                        strokeColor: '#FF0000',
+                        strokeOpacity: 0.8,
+                        strokeWeight: 2,
+                      }}
+                    />
+                  );
+                })}
               </GoogleMap>
             </LoadScript>
           </div>
