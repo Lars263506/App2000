@@ -381,6 +381,30 @@ const deleteUser = async (req, res) => {
   }
 }
 
+/**
+ * @author Lars Andreas Strand
+ * @description This function handles the request to get all club owners.
+ * It retrieves all users with the role 'clubowner' and sends their ID, displayName, and email as a response.
+ * If successful, it sends a 200 status code and the club owners data.
+ * If there are no club owners, it sends a 404 status code and an error message.
+ * If there is an error, it sends a 500 status code and the error message.
+ */
+
+const getAllClubOwners = async (req, res) => {
+  try {
+    const clubOwners = await User.find({ role: 'clubowner' }).select('id displayName email');
+
+    if (!clubOwners || clubOwners.length === 0) {
+      return res.status(404).json({ error: 'No club owners found' });
+    }
+
+    res.status(200).json({ data: clubOwners });
+  } catch (error) {
+    console.error('Error fetching club owners:', error);
+    res.status(500).json({ error: 'An error occurred while fetching club owners' });
+  }
+};
+
 export {
   getAllUsers,
   getPermissions,
@@ -401,5 +425,6 @@ export {
   changePassword,
   changeRole,
   changeUser,
-  deleteUser
+  deleteUser,
+  getAllClubOwners
 }

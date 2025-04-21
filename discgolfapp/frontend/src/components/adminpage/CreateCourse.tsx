@@ -27,6 +27,7 @@ const CreateCourse: React.FC = () => {
   const [isCreating, setIsCreating] = useState(false);
   const [isAuthorized, setIsAuthorized] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [users, setUsers] = useState<User[]>([]);
   const userRole = localStorage.getItem('role');
   const userId = localStorage.getItem('userId');
 
@@ -87,6 +88,33 @@ const CreateCourse: React.FC = () => {
 
     fetchData();
   }, [userRole, userId]);
+
+  useEffect(() => {
+    const fetchClubOwners = async () => {
+      try {
+        const accessToken = localStorage.getItem('accessToken');
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/users/clubowners`, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error(`Failed to fetch club owners: ${response.status}`);
+        }
+
+        const data = await response.json();
+        setUsers(data.data.map((user: { id: string; displayName: string }) => ({ id: user.id, name: user.displayName })));
+      } catch (error) {
+        console.error('Error fetching club owners:', error);
+        toast.error('Kunne ikke hente klubb-eiere: ' + error);
+      }
+    };
+
+    if (userRole === 'admin') {
+      fetchClubOwners();
+    }
+  }, [userRole]);
 
   const handleCreateNew = () => {
     setSelectedCourse(null);
@@ -273,7 +301,7 @@ const CourseForm: React.FC<{
       return;
     }
 
-    const newCourse: Course = {
+    const newCourse = {
       id: course?.id,
       name,
       location,
@@ -285,7 +313,7 @@ const CourseForm: React.FC<{
       longitude: longitude || undefined,
       url: url || undefined,
       holes: holes || undefined,
-      courseOwner: courseOwner || undefined, // Include courseOwner if provided
+      courseOwner: userRole === 'admin' ? courseOwner : course?.courseOwner, // Allow admin to set courseOwner
     };
 
     try {
