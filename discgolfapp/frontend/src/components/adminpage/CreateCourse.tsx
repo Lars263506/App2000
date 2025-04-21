@@ -71,7 +71,7 @@ const CreateCourse: React.FC = () => {
         console.log('Fetched courses:', coursesData); // Logg rådata
         
         // Map baner og sikre id
-        const mappedCourses = (coursesData.data || coursesData).map((course: { _id?: string; id?: string; [key: string]: any }) => ({
+        const mappedCourses = (coursesData.data || coursesData).map((course: { _id?: string; id?: string; name: string; location: string; town: string; postCode: string; [key: string]: unknown }) => ({
           ...course,
           id: course._id || course.id,
         }));
@@ -273,7 +273,13 @@ const CourseForm: React.FC<{
               }
               const usersData = await usersRes.json();
               console.log('Fetched users:', usersData); // Logg for debugging
-              setUsers(Array.isArray(usersData) ? usersData.map((u: { _id?: string; id?: string; name: string }) => ({ id: u._id || u.id, name: u.name })) : []);
+              setUsers(
+                Array.isArray(usersData)
+                  ? usersData
+                      .map((u: { _id?: string; id?: string; name: string }) => ({ id: u._id || u.id, name: u.name }))
+                      .filter((u) => u.id !== undefined) as User[]
+                  : []
+              );
             } else if (userRole === 'clubowner' && !course?.courseOwner) {
               // For klubb-eier, sett courseOwner til userId for nye baner
               setCourseOwner(userId || '');
