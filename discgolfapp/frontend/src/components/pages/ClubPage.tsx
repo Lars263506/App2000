@@ -1,13 +1,11 @@
 
 import { useState, useEffect } from "react"
 import { toast } from "react-toastify"
-import { useTranslation } from "react-i18next"
 
 import Club from "@/types/club"
 
 import ClubHeader from "@/components/clubpage/ClubHeader"
 import ClubDetails from "@/components/clubpage/ClubDetails"
-
 
 /**
  * @author Lars Andreas Strand
