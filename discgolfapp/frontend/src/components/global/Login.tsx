@@ -127,11 +127,11 @@ const Login: React.FC<LoginProps> = ({ togglePopup, toggleRegisterPopup, closePo
            <div className="flex flex-col items-center">
            <button
              onClick={() => goToMyPage()}
-             className="px-4 py-2 rounded bg-blue-600 hover:bg-blue-700 mb-2"
+             className="px-4 py-2 mb-2 rounded bg-[#E7EFFB] hover:bg-blue-700 hover:text-white"
            >
              Min Side
            </button>
-            <button onClick={handleLogout} className="bg-red-600 px-4 py-2 rounded hover:bg-red-800">
+            <button onClick={handleLogout} className="px-4 py-2 rounded bg-[#E7EFFB] hover:bg-red-800 hover:text-white">
               Logg ut
             </button>
           </div>
