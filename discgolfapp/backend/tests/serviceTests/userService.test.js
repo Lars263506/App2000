@@ -8,6 +8,7 @@ import {
     registerUser,
     loginUser,
     deleteUser,
+    getAllClubOwners,
     searchUsers,
 } from '../../src/services/userService.js';
 import User from '../../src/models/User.js';
@@ -320,6 +321,33 @@ describe('userService', () => {
                 ],
             });
             expect(result).toEqual([]);
+        });
+    });
+
+    describe('getAllClubOwners', () => {
+        it('should return a list of club owners with displayName, email, and _id', async () => {
+            const mockClubOwners = [
+                { displayName: 'Owner1', email: 'owner1@example.com', _id: 'id1' },
+                { displayName: 'Owner2', email: 'owner2@example.com', _id: 'id2' },
+            ];
+
+            User.find.mockReturnValue({
+                select: jest.fn().mockResolvedValue(mockClubOwners),
+            });
+
+            const result = await getAllClubOwners();
+
+            expect(User.find).toHaveBeenCalledWith({ role: 'clubowner' });
+            expect(User.find().select).toHaveBeenCalledWith('displayName email _id');
+            expect(result).toEqual(mockClubOwners);
+        });
+
+        it('should throw an error if there is an issue fetching club owners', async () => {
+            User.find.mockImplementation(() => {
+                throw new Error('Database error');
+            });
+
+            await expect(getAllClubOwners()).rejects.toThrow('Error fetching club owners: Database error');
         });
     });
 });

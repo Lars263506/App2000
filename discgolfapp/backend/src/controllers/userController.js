@@ -350,7 +350,7 @@ const searchUsers = async (req, res) => {
   }
 
   try {
-    const users = await userService.searchUsers(query); 
+    const users = await userService.searchUsers(query);
     res.status(200).json(users);
   } catch (error) {
     res.status(500).json({ message: 'Error fetching users', error });
@@ -392,7 +392,7 @@ const deleteUser = async (req, res) => {
 
 const getAllClubOwners = async (req, res) => {
   try {
-    const clubOwners = await User.find({ role: 'clubowner' }).select('id displayName email');
+    const clubOwners = await userService.getAllClubOwners();
 
     if (!clubOwners || clubOwners.length === 0) {
       return res.status(404).json({ error: 'No club owners found' });

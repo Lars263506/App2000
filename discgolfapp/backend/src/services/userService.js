@@ -343,6 +343,15 @@ const deleteUser = async (email) => {
   return { success: true }
 }
 
+const getAllClubOwners = async () => {
+  try {
+    const clubOwners = await User.find({ role: 'clubowner' }).select('displayName email _id');
+    return clubOwners;
+  } catch (error) {
+    throw new Error('Error fetching club owners: ' + error.message);
+  }
+}
+
 /**
  * @param - Search against user display names or emails.
  * @returns - A list of matching users with `displayName` and `email`.
@@ -380,5 +389,6 @@ export {
   changeRole,
   changeUser,
   deleteUser,
+  getAllClubOwners,
   searchUsers
 }
