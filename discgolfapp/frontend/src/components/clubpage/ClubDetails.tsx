@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Club from '../../types/club';
 import { toast } from 'react-toastify';
+import { useTranslation } from 'react-i18next';
 
 import MemberList from './MemberList';
 import Announcements from './Announcements';
@@ -14,6 +15,7 @@ interface ClubDetailsProps {
 }
 
 const ClubDetails: React.FC<ClubDetailsProps> = ({ clubData, setSelectedPage }) => {
+  const { t } = useTranslation();
   const selectedClub = localStorage.getItem('selectedClub');
   const isLoggedIn = !!localStorage.getItem('accessToken');
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -45,7 +47,7 @@ const ClubDetails: React.FC<ClubDetailsProps> = ({ clubData, setSelectedPage }) 
       } catch (error) {
         if (error instanceof Error) {
           toast.error(error.message);
-        } else toast.error('Det oppstod en feil med å sjekke medlemskap.');
+        } else toast.error(t('clubdetails_ error_fetching_membership_status'));
         setIsMember(false);
       }
     };
@@ -56,7 +58,7 @@ const ClubDetails: React.FC<ClubDetailsProps> = ({ clubData, setSelectedPage }) 
   const handleJoinClubClick = () => {
     const accessToken = localStorage.getItem('accessToken');
     if (!accessToken) {
-      toast.error('Du må logge inn før du kan bli medlem av klubben.');
+      toast.error(t('clubdetails_ please_login'));
       return;
     }
     setIsModalOpen(true);
@@ -102,23 +104,23 @@ const ClubDetails: React.FC<ClubDetailsProps> = ({ clubData, setSelectedPage }) 
             <h2
               className="text-xl font-bold mb-4"
             >
-              Bli medlem i {
+              {t('clubdetails_become_member')} {
               selectedClub
               ? JSON.parse(selectedClub).name
-              : "den valgte klubben"} for å se mer informasjon!
+              : "den valgte klubben"} {t('clubdetails_for_more_info')}
             </h2>
             <div aria-label="Button container" className="flex flex-row gap-6 items-center">
               <button
                 onClick={handleJoinClubClick}
                 className="px-6 py-3 bg-blue-500 text-white text-lg font-semibold rounded hover:bg-blue-700"
               >
-                Bli medlem
+                {t('clubdetails_join_club')}
               </button>
               <button
                 className="px-6 py-3 bg-gray-500 text-white text-lg font-semibold rounded hover:bg-gray-700"
                 onClick={() => setSelectedPage('ClubLanding')}
               >
-                Gå tilbake
+                {t('clubdetails_back')}
               </button>
             </div>
 
@@ -136,12 +138,12 @@ const ClubDetails: React.FC<ClubDetailsProps> = ({ clubData, setSelectedPage }) 
         )
       ) : (
         <div className="flex flex-col items-center min-h-screen">
-          <p className="text-lg">Du er ikke logget inn. Vennligst logg inn for å se klubbsiden.</p>
+          <p className="text-lg">{t('clubdetails_sign_in_to_access')}</p>
           <button
             className="px-6 py-3 mt-4 bg-gray-500 text-white text-lg font-semibold rounded hover:bg-gray-700"
             onClick={() => setSelectedPage('ClubLanding')}
           >
-            Gå tilbake
+            {t('clubdetails_back')}
           </button>
         </div>
       )}

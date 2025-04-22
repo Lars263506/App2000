@@ -69,20 +69,21 @@ const MemberList: React.FC<MemberListProps> = () => {
       });
 
       if (response.status === 204 || response.status === 200) {
-        toast.success('Position oppdatert!');
+        toast.success(t('memberlist_position_updated'));
       } else if (response.status === 404) {
-        toast.error('Endepunktet ble ikke funnet (404). Sjekk backend-konfigurasjonen.');
+        toast.error(t('memberlist_endpoint_not_found'));
       } else {
-        throw new Error(`Server svarte med status: ${response.status}`);
+        throw new Error(`${t('memberlist_server_answered')} ${response.status}`);
       }
 
     } catch (error) {
-      console.error(error);
-      toast.error('Feil ved lagring av position.');
+      if (error instanceof Error) {
+        toast.error(error.message || t('memberlist_error'));
+      } else {
+        toast.error(t('memberlist_error'));
+      }
     }
   };
-
-
 
   return (
     <div className="p-4 border rounded-lg shadow-md bg-white w-full h-full">
