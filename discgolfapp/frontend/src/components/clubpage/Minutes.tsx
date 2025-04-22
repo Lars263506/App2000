@@ -5,9 +5,12 @@ import { toast } from 'react-toastify';
 import Minute from '../../types/minute';
 import Club from '../../types/club';
 
+import { useTranslation } from 'react-i18next';
+
 const backendUrl = `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/minutes/`;
 
 const Minutes: React.FC = () => {
+  const { t } = useTranslation();
   const [minutes, setMinutes] = useState<Minute[]>([]);
   const [selectedClub, setSelectedClub] = useState<Club | null>(null);
   const [isClubOwner, setIsClubOwner] = useState(false);
@@ -29,7 +32,12 @@ const Minutes: React.FC = () => {
         const data: Minute[] = await response.json();
         setMinutes(data);
       } catch (error) {
-        console.error(error);
+        if (error instanceof Error) {
+          toast.error(error.message);
+        }
+        else {
+          toast.error(t("minutes_toast_error_fetch_minutes"));
+        }
       }
     };
 
@@ -61,7 +69,7 @@ const Minutes: React.FC = () => {
           if (error instanceof Error) {
             toast.error(error.message);
           } else {
-            toast.error('Det oppstod en feil med å sjekke klubbens eierskap.');
+            toast.error(t("minutes_toast_error_check_owner"));
             setIsClubOwner(false);
           }
         }
@@ -116,10 +124,15 @@ const Minutes: React.FC = () => {
           clubId: selectedClub?._id || 0
         }),
       });
-      if (response.status !== 200) throw new Error('Failed to delete minute');
+      if (response.status !== 200) throw new Error(t("minutes_error_delete"));
       setMinutes((prev) => prev.filter((meeting) => meeting.id !== id));
     } catch (error) {
-      console.error(error);
+      if (error instanceof Error) {
+        toast.error(error.message);
+      }
+      else {
+        toast.error(t("minutes_toast_error_delete"));
+      }
     }
   };
 
@@ -140,7 +153,7 @@ const Minutes: React.FC = () => {
             },
             body: JSON.stringify(currentMinute),
           });
-          if (response.status !== 201) throw new Error('Failed to create minute');
+          if (response.status !== 201) throw new Error(t("minutes_toast_error_create"));
           setMinutes((prev) => [...prev, currentMinute]);
         } else {
           const response = await fetch(backendUrl, {
@@ -155,7 +168,7 @@ const Minutes: React.FC = () => {
               request: currentMinute,
             }),
           });
-          if (response.status !== 200) throw new Error('Failed to update minute');
+          if (response.status !== 200) throw new Error(t("minutes_toast_error_update"));
           setMinutes((prev) =>
             prev.map((minute) =>
               minute.id === currentMinute.id ? currentMinute : minute
@@ -166,7 +179,7 @@ const Minutes: React.FC = () => {
         if (error instanceof Error) {
           toast.error(error.message);
         } else {
-          toast.error('Det oppstod en feil med å lagre møtereferatet.');
+          toast.error(t("minutes_toast_error_save"));
         }
       }
     }
@@ -182,7 +195,7 @@ const Minutes: React.FC = () => {
             onClick={handleAddMinute}
             className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
           >
-            Legg til møtereferat
+            {t('minutes_add_new_minute')}
           </button>
         </div>
       )}
@@ -197,7 +210,7 @@ const Minutes: React.FC = () => {
                 onClick={() => handleDownloadPDF(minute)}
                 className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
               >
-                Last ned som PDF
+                {t('minutes_download_pdf')}
               </button>
               {isClubOwner && (
                 <>
@@ -205,13 +218,13 @@ const Minutes: React.FC = () => {
                     onClick={() => handleEditMinute(minute)}
                     className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
                   >
-                    Rediger
+                    {t('minutes_edit')}
                   </button>
                   <button
                     onClick={() => handleDeleteMinute(minute.id)}
                     className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
                   >
-                    Slett
+                    {t('minutes_delete')}
                   </button>
                 </>
               )}
@@ -219,17 +232,17 @@ const Minutes: React.FC = () => {
           </div>
         ))
       ) : (
-        <p className="text-gray-500">Ingen møtereferater funnet.</p>
+        <p className="text-gray-500">{t("minutes_no_minutes_found")}</p>
       )}
 
       {showModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
           <div className="bg-white p-6 rounded-lg shadow-lg w-96">
             <h2 className="text-lg font-bold mb-4">
-              Alle felter er påkrevd
+              {t("minutes_all_fields_required")}
             </h2>
             <div className="mb-4">
-              <label className="block text-sm font-medium mb-1">Tittel</label>
+              <label className="block text-sm font-medium mb-1">{t("minutes_title")}</label>
               <input
               type="text"
               value={currentMinute?.title || ''}
@@ -242,7 +255,7 @@ const Minutes: React.FC = () => {
               />
             </div>
             <div className="mb-4">
-              <label className="block text-sm font-medium mb-1">Beskrivelse</label>
+              <label className="block text-sm font-medium mb-1">{t("minutes_description")}</label>
               <textarea
               value={currentMinute?.description || ''}
               onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
@@ -254,7 +267,7 @@ const Minutes: React.FC = () => {
               />
             </div>
             <div className="mb-4">
-              <label className="block text-sm font-medium mb-1">Tekst</label>
+              <label className="block text-sm font-medium mb-1">{t("minutes_text")}</label>
               <textarea
               value={currentMinute?.text || ''}
               onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
@@ -270,13 +283,13 @@ const Minutes: React.FC = () => {
                 onClick={() => setShowModal(false)}
                 className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
               >
-                Avbryt
+                {t("minutes_cancel")}
               </button>
               <button
                 onClick={handleSaveMinute}
                 className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
               >
-                Lagre
+                {t("minutes_save")}
               </button>
             </div>
           </div>
