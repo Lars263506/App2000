@@ -5,9 +5,12 @@ import { toast } from 'react-toastify';
 import Invitation from '../../types/invitation';
 import Club from '../../types/club';
 
+import { useTranslation } from 'react-i18next';
+
 const backendUrl = `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/invitations/`;
 
 const Invitations: React.FC = () => {
+  const { t } = useTranslation();
   const [invitations, setInvitations] = useState<Invitation[]>([]);
   const [selectedClub, setSelectedClub] = useState<Club | null>(null);
   const [isClubOwner, setIsClubOwner] = useState(false);
@@ -25,11 +28,16 @@ const Invitations: React.FC = () => {
             Authorization: `Bearer ${accessToken}`,
           },
         });
-        if (response.status !== 200) throw new Error('Failed to fetch invitations');
+        if (response.status !== 200) throw new Error(t('invitations_error_fetch_invitations'));
         const data: Invitation[] = await response.json();
         setInvitations(data);
       } catch (error) {
-        console.error(error);
+        if (error instanceof Error) {
+          toast.error(error.message);
+        }
+        else {
+          toast.error(t('invitations_toast_error_fetch_invitations'));
+        }
       }
     };
 
@@ -61,7 +69,7 @@ const Invitations: React.FC = () => {
           if (error instanceof Error) {
             toast.error(error.message);
           } else {
-            toast.error('Det oppstod en feil med å sjekke klubbens eierskap.');
+            toast.error(t('invitations_toast_error_check_owner'));
             setIsClubOwner(false);
           }
         }
@@ -116,10 +124,15 @@ const Invitations: React.FC = () => {
           clubId: selectedClub?._id || 0
         }),
       });
-      if (response.status !== 200) throw new Error('Failed to delete invitation');
+      if (response.status !== 200) throw new Error(t('invitations_error_delete_invitation'));
       setInvitations((prev) => prev.filter((invitation) => invitation.id !== id));
     } catch (error) {
-      console.error(error);
+      if (error instanceof Error) {
+        toast.error(error.message);
+      }
+      else {
+        toast.error(t('invitations_toast_error_delete_invitation'));
+      }
     }
   };
 
@@ -140,7 +153,7 @@ const Invitations: React.FC = () => {
             },
             body: JSON.stringify(currentInvitation),
           });
-          if (response.status !== 201) throw new Error('Failed to create invitation');
+          if (response.status !== 201) throw new Error(t('invitations_error_create_invitation'));
           setInvitations((prev) => [...prev, currentInvitation]);
         } else {
           const response = await fetch(backendUrl, {
@@ -155,7 +168,7 @@ const Invitations: React.FC = () => {
               request: currentInvitation
             }),
           });
-          if (response.status !== 200) throw new Error('Failed to update invitation');
+          if (response.status !== 200) throw new Error(t('invitations_error_update_invitation'));
           setInvitations((prev) =>
             prev.map((invitation) =>
               invitation.id === currentInvitation.id ? currentInvitation : invitation
@@ -183,7 +196,7 @@ const Invitations: React.FC = () => {
             onClick={handleAddInvitation}
             className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
           >
-            Legg til møteinnkalling
+            {t('invitations_add_invitation')}
           </button>
         </div>
       )}
@@ -198,7 +211,7 @@ const Invitations: React.FC = () => {
                 onClick={() => handleDownloadPDF(invitation)}
                 className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
               >
-                Last ned som PDF
+                {t('invitations_download_pdf')}
               </button>
               {isClubOwner && (
                 <>
@@ -206,13 +219,13 @@ const Invitations: React.FC = () => {
                     onClick={() => handleEditInvitation(invitation)}
                     className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
                   >
-                    Rediger
+                    {t('invitations_edit_invitation')}
                   </button>
                   <button
                     onClick={() => handleDeleteInvitation(invitation.id)}
                     className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
                   >
-                    Slett
+                    {t('invitations_delete_invitation')}
                   </button>
                 </>
               )}
@@ -220,17 +233,17 @@ const Invitations: React.FC = () => {
           </div>
         ))
       ) : (
-        <p className="text-gray-500">Ingen møteinnkallinger funnet.</p>
+        <p className="text-gray-500">{t("invitations_no_invitations_found")}</p>
       )}
 
       {showModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
           <div className="bg-white p-6 rounded-lg shadow-lg w-96">
             <h2 className="text-lg font-bold mb-4">
-              Alle felter er påkrevd
+              {t('invitations_all_fields_required')}
             </h2>
             <div className="mb-4">
-              <label className="block text-sm font-medium mb-1">Tittel</label>
+              <label className="block text-sm font-medium mb-1">{t("invitations_title")}</label>
               <input
                 type="text"
                 value={currentInvitation?.title || ''}
@@ -243,7 +256,7 @@ const Invitations: React.FC = () => {
               />
             </div>
             <div className="mb-4">
-              <label className="block text-sm font-medium mb-1">Beskrivelse</label>
+              <label className="block text-sm font-medium mb-1">{t("invitations_description")}</label>
               <textarea
                 value={currentInvitation?.description || ''}
                 onChange={(e) =>
@@ -255,7 +268,7 @@ const Invitations: React.FC = () => {
               />
             </div>
             <div className="mb-4">
-              <label className="block text-sm font-medium mb-1">Tekst</label>
+              <label className="block text-sm font-medium mb-1">{t("invitations_text")}</label>
               <textarea
                 value={currentInvitation?.text || ''}
                 onChange={(e) =>
@@ -271,13 +284,13 @@ const Invitations: React.FC = () => {
                 onClick={() => setShowModal(false)}
                 className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
               >
-                Avbryt
+                {t('invitations_cancel')}
               </button>
               <button
                 onClick={handleSaveInvitation}
                 className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
               >
-                Lagre
+                {t('invitations_save')}
               </button>
             </div>
           </div>
