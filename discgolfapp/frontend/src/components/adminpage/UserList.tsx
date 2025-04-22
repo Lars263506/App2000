@@ -3,7 +3,10 @@ import User from '../../types/user';
 import UserEditModal from './UserEditModal'
 import { toast } from 'react-toastify';
 
+import { useTranslation } from 'react-i18next';
+
 const UserList: React.FC = () => {
+  const { t } = useTranslation()
   const [users, setUsers] = useState<User[]>([]);
   const [filter, setFilter] = useState<string>('');
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
@@ -19,12 +22,12 @@ const UserList: React.FC = () => {
           }
         });
         if (response.status !== 200) {
-            toast.error('Failed to fetch users');
+            toast.error(t('userlist_toast_error_failed_to_fetch_users'));
         }
         const data = await response.json();
         setUsers(data);
       } catch (error) {
-        toast.error('Error fetching users:');
+        toast.error(t('userlist_toast_error_error_fetching_users'));
       }
     };
 
@@ -55,16 +58,16 @@ const UserList: React.FC = () => {
             user.email === updatedUser.oldEmail ? updatedUser : user
           )
         );
-        toast.success('User details updated successfully!');
+        toast.success(t('userlist_toast_success_user_details_updated_successfully'));
       } else {
         const errorData = await response.json();
-        toast.error('Error updating user: ' + errorData.message);
+        toast.error(t('userlist_toast_error_updating_user') + errorData.message);
       }
     } catch (error) {
       if (error instanceof Error) {
-        toast.error('Error updating user: ' + error.message);
+        toast.error(t('userlist_toast_error_updating_user') + error.message);
       } else {
-        toast.error('Error updating user');
+        toast.error(t('userlist_toast_error_updating_user'));
       }
     }
   };
@@ -77,7 +80,7 @@ const UserList: React.FC = () => {
 
   return (
     <div className='p-4'>
-      <h2 className='text-2xl font-bold mb-4'>User Administration</h2>
+      <h2 className='text-2xl font-bold mb-4'>{t('userlist_title_user_administration')}</h2>
       <input
         type='text'
         placeholder='Filter users...'
@@ -91,21 +94,21 @@ const UserList: React.FC = () => {
           {filteredUsers.map((user, index) => (
             <li key={index} className='mb-2 p-4 border-2 border-gray-600 rounded-lg flex justify-between items-center shadow-md'>
               <div>
-                <p><strong>Display Name:</strong> {user.displayName}</p>
-                <p><strong>Email:</strong> {user.email}</p>
-                <p><strong>Role:</strong> {user.role}</p>
+                <p><strong>{t('userlist_display_name')}:</strong> {user.displayName}</p>
+                <p><strong>{t('userlist_email')}:</strong> {user.email}</p>
+                <p><strong>{t('userlist_role')}:</strong> {user.role}</p>
               </div>
               <button
                 onClick={() => handleEditUser(user)}
                 className='bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700'
               >
-                Edit
+                {t('userlist_edit_button')}
               </button>
             </li>
           ))}
         </ul>
         ) : (
-          <p>No users found.</p>
+          <p>{t('userlist_no_users_found')}</p>
         )}
       </div>
       {selectedUser && (

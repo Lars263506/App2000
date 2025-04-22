@@ -5,11 +5,14 @@ import ClubList from '../global/ClubList';
 import ClubSettings from '../global/ClubSettings';
 import CreateNewClub from './CreateNewClub';
 
+import { useTranslation } from 'react-i18next';
+
 interface ClubAdminDetailsProps {
   setSelectedPage: (page: string) => void;
 }
 
 const ClubAdminDetails: React.FC<ClubAdminDetailsProps> = ({ setSelectedPage }) => {
+  const { t } = useTranslation();
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedClub, setSelectedClub] = useState<Club | null>(null);
   const [selectedAction, setSelectedAction] = useState<'create' | 'update' | null>(null);
@@ -23,13 +26,13 @@ const ClubAdminDetails: React.FC<ClubAdminDetailsProps> = ({ setSelectedPage }) 
             className="p-4 bg-black text-white rounded shadow hover:bg-blue-600"
             onClick={() => setSelectedAction('create')}
           >
-            Create New Club
+            {t('adminpage_create_new_club')}
           </button>
           <button
             className="p-4 bg-black text-white rounded shadow hover:bg-green-600"
             onClick={() => setSelectedAction('update')}
           >
-            Update Existing Club
+            {t('adminpage_update_existing_club')}
           </button>
         </div>
       )}

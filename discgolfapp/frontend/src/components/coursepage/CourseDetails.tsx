@@ -6,6 +6,8 @@ import Review from '@/types/review'
 import axios from 'axios'
 import Button from '../global/Button'
 
+import { useTranslation } from 'react-i18next'
+
 interface CourseDetailsProps {
   selectedCourse: Course | null
   setSelectedCourse: (course: Course | null) => void
@@ -23,6 +25,7 @@ interface WeatherData {
 }
 
 const CourseDetails: React.FC<CourseDetailsProps> = ({ selectedCourse, setSelectedCourse }) => {
+  const { t } = useTranslation()
   const [activeTab, setActiveTab] = useState<'details' | 'weather' | 'reviews'>('details')
   const [weatherData, setWeatherData] = useState<WeatherData | null>(null)
   const [reviews, setReviews] = useState<Review[]>([])
@@ -46,7 +49,7 @@ const CourseDetails: React.FC<CourseDetailsProps> = ({ selectedCourse, setSelect
           console.log('Weather data:', response.data)
           setWeatherData(response.data)
         } catch (error) {
-          toast.error('Error fetching weather data: ' + error)
+          toast.error(t("coursedetails_toast_error_fetch_weather_data") + error)
         }
       }
 
@@ -63,7 +66,7 @@ const CourseDetails: React.FC<CourseDetailsProps> = ({ selectedCourse, setSelect
           );
           setReviews(response.data);
         } catch (error) {
-          toast.error('Error fetching reviews: ' + error);
+          toast.error(t("coursedetails_toast_error_fetching_reviews") + error);
         }
       };
 
@@ -99,7 +102,7 @@ const CourseDetails: React.FC<CourseDetailsProps> = ({ selectedCourse, setSelect
       setComment('');
       setUsername('');
     } catch (error) {
-      toast.error('Error submitting review: ' + error);
+      toast.error(t("coursedetails_toast_error_fetching_reviews") + error);
     } finally {
       setIsSubmitting(false);
     }
@@ -114,19 +117,19 @@ const CourseDetails: React.FC<CourseDetailsProps> = ({ selectedCourse, setSelect
               className={`flex-1 py-1 text-center rounded-l-lg ${activeTab === 'details' ? 'bg-gray-700 text-white' : 'bg-gray-200 text-gray-700'}`}
               onClick={() => setActiveTab('details')}
             >
-              Bane
+              {t("coursedetails_course")}
             </button>
             <button
               className={`flex-1 py-1 text-center ${activeTab === 'weather' ? 'bg-gray-700 text-white' : 'bg-gray-200 text-gray-700'}`}
               onClick={() => setActiveTab('weather')}
             >
-              Vær
+              {t("coursedetails_weather")}
             </button>
             <button
               className={`flex-1 py-1 text-center rounded-r-lg ${activeTab === 'reviews' ? 'bg-gray-700 text-white' : 'bg-gray-200 text-gray-700'}`}
               onClick={() => setActiveTab('reviews')}
             >
-              Anmeldelser
+              {t("coursedetails_reviews")}
             </button>
           </div>
 
@@ -137,14 +140,14 @@ const CourseDetails: React.FC<CourseDetailsProps> = ({ selectedCourse, setSelect
           <div className='space-y-6 text-gray-700 flex-grow mt-4 overflow-y-auto'>
             {activeTab === 'details' && (
               <>
-                <p><span className='font-medium'>🏡 By:</span> {selectedCourse.town}</p>
-                <p><span className='font-medium'>📍 Lokasjon:</span> {selectedCourse.location}</p>
-                <p><span className='font-medium'>🏙️ Post Kode:</span> {selectedCourse.postCode}</p>
-                <p><span className='font-medium'>🌍 Breddegrad:</span> {selectedCourse.latitude}</p>
-                <p><span className='font-medium'>🌏 Lengegrad:</span> {selectedCourse.longitude}</p>
-                <p><span className='font-medium'>🎯 Vanskelighetsgrad:</span> {selectedCourse.difficulty}</p>
+                <p><span className='font-medium'>🏡 {t("coursedetails_city")}:</span> {selectedCourse.town}</p>
+                <p><span className='font-medium'>📍 {t("coursedetails_location")}:</span> {selectedCourse.location}</p>
+                <p><span className='font-medium'>🏙️ {t("coursedetails_postcode")}:</span> {selectedCourse.postCode}</p>
+                <p><span className='font-medium'>🌍 {t("coursedetails_latitude")}:</span> {selectedCourse.latitude}</p>
+                <p><span className='font-medium'>🌏 {t("coursedetails_longitude")}:</span> {selectedCourse.longitude}</p>
+                <p><span className='font-medium'>🎯 {t("coursedetails_difficulty")}:</span> {selectedCourse.difficulty}</p>
                 {selectedCourse.familyFriendly && (
-                  <p><span className='font-medium'>👨‍👩‍👧‍👦 Familievennlig:</span> Ja</p>
+                  <p><span className='font-medium'>👨‍👩‍👧‍👦 {t("coursedetails_family_friendly")}:</span> {selectedCourse.familyFriendly}</p>
                 )}
               </>
             )}
@@ -154,7 +157,7 @@ const CourseDetails: React.FC<CourseDetailsProps> = ({ selectedCourse, setSelect
                 <h3 className='text-md font-semibold mb-4'>Vær for {selectedCourse.location}</h3>
 
                 <div className='bg-blue-50 p-4 rounded-lg shadow-lg flex flex-col items-center mb-6'>
-                  <p className='text-md font-semibold mb-2'>Værmelding for i dag:</p>
+                  <p className='text-md font-semibold mb-2'>{t("coursedetails_weather_for_today")}:</p>
                   <img
                     src={`https:${(weatherData).current.condition.icon}`}
                     alt={(weatherData).current.condition.text}
@@ -162,14 +165,14 @@ const CourseDetails: React.FC<CourseDetailsProps> = ({ selectedCourse, setSelect
                   />
                   <p className='text-lg font-semibold'>{(weatherData).current.condition.text}</p>
                   <p className='text-xl font-bold'>{(weatherData).current.temp_c}°C</p>
-                  <p className='text-sm mt-2'>Vind: {(weatherData).current.wind_kph} km/h</p>
+                  <p className='text-sm mt-2'>{t("coursedetails_wind")}: {(weatherData).current.wind_kph} km/h</p>
                 </div>
               </div>
             )}
 
             {activeTab === 'reviews' && (
               <div>
-                <h3 className='text-lg font-semibold mb-4'>Anmeldelser</h3>
+                <h3 className='text-lg font-semibold mb-4'>{t("coursedetails_title_reviews")}</h3>
                 <div className='space-y-4'>
                   {reviews.length > 0 ? (
                     reviews.map((review, index) => (
@@ -177,20 +180,20 @@ const CourseDetails: React.FC<CourseDetailsProps> = ({ selectedCourse, setSelect
                         <p>
                           <span className='font-medium'>{review.username}:</span> {review.comment}
                         </p>
-                        <p>Rating: {'⭐'.repeat(review.rating)}</p>
+                        <p>{t("coursedetails_rating")}: {'⭐'.repeat(review.rating)}</p>
                       </div>
                     ))
                   ) : (
-                    <p>Ingen anmeldelser ennå. Bli den første til å legge til en!</p>
+                    <p>{t("coursedetails_no_reviews_yet")}</p>
                   )}
                 </div>
 
                 {isLoggedIn ? (
                   <div className='mt-4'>
-                    <h3 className='text-lg font-semibold mb-2'>Legg til din anmeldelse</h3>
+                    <h3 className='text-lg font-semibold mb-2'>{t("coursedetails_add_your_review")}</h3>
                     <input
                       type='text'
-                      placeholder='Ditt navn (valgfritt)'
+                      placeholder={t("coursedetails_your_name")}
                       value={username}
                       onChange={(e) => setUsername(e.target.value)}
                       className='w-full p-2 border rounded mb-2'
@@ -198,12 +201,12 @@ const CourseDetails: React.FC<CourseDetailsProps> = ({ selectedCourse, setSelect
                     <textarea
                       className='w-full p-2 border rounded mb-2'
                       rows={3}
-                      placeholder='Skriv din anmeldelse...'
+                      placeholder={t("coursedetails_your_review")}
                       value={comment}
                       onChange={(e) => setComment(e.target.value)}
                     />
                     <div className='flex items-center mb-2'>
-                      <span className='mr-2'>Rating:</span>
+                      <span className='mr-2'>{t("coursedetails_rating")}:</span>
                       <div className='flex'>
                         {Array.from({ length: 5 }).map((_, i) => (
                           <span
@@ -226,7 +229,7 @@ const CourseDetails: React.FC<CourseDetailsProps> = ({ selectedCourse, setSelect
                   </div>
                 ) : (
                   <p className='text-gray-600 mt-4'>
-                    Logg inn for å skrive en anmeldelse.
+                    {t("coursedetails_login_to_review")}
                   </p>
                 )}
               </div>
@@ -234,7 +237,7 @@ const CourseDetails: React.FC<CourseDetailsProps> = ({ selectedCourse, setSelect
           </div>
 
           <Button onClick={() => setSelectedCourse(null)}>
-            Lukk
+          {t("coursedetails_close")}
           </Button>
         </div>
       )}

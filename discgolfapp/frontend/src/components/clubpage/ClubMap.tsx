@@ -26,7 +26,7 @@ const ClubMap: React.FC<ClubMapProps> = ({ selectedClub, setSelectedPage }) => {
         const data = await response.json()
         if (Array.isArray(data.data)) setClubs(data.data)
       } catch (error) {
-        toast.error('Feil ved henting av klubber: ' + error)
+        toast.error(t('toast_error_fetching_clubs') + ': ' + error);
       }
     }
     fetchClubs()
@@ -38,8 +38,8 @@ const ClubMap: React.FC<ClubMapProps> = ({ selectedClub, setSelectedPage }) => {
         if (status === 'OK' && results && results[0]) {
           resolve(results[0].geometry.location)
         } else {
-          toast.error(`Geocoding failed for address: ${address}, status: ${status}`)
-          reject('Geocoding failed')
+          toast.error(t('toast_error_geocoding_failed', { address, status }));
+          reject(t('toast_error_geocoding_failed'));
         }
       })
     })
