@@ -404,7 +404,6 @@ export default function CourseSettings() {
         });
         setZoomLevel(15);
       } catch (error) {
-        console.error("Error fetching pins:", error);
         alert("Kunne ikke hente pins for banen. Vennligst prøv igjen senere.");
       }
     }

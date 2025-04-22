@@ -21,7 +21,10 @@ import { usePopup } from '@/components/global/UsePopup';
 
 import validateSession from '@/utils/validate-session';
 
+import { useTranslation } from 'react-i18next';
+
 const Index = () => {
+  const { t } = useTranslation();
   const { popupType, toggleLoginPopup, toggleRegisterPopup, closePopup } = usePopup();
   const [selectedPage, setSelectedPage] = useState('Home');
   const [loading, setLoading] = useState(true);
@@ -81,7 +84,7 @@ const Index = () => {
         if (error instanceof Error) {
           toast.error(error.message);
         } else {
-          toast.error('Failed to fetch translations');
+          toast.error(t('index_failed_to_fetch_translations'));
         }
         setLoading(false);
       }
@@ -102,7 +105,7 @@ const Index = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <p>Loading translations...</p>
+        <p>{t('loading_translations')}</p>
       </div>
     );
   }

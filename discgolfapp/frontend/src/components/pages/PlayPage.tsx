@@ -3,8 +3,10 @@ import { GoogleMap, LoadScript, Marker, Polyline, InfoWindow } from '@react-goog
 import { toast } from "react-toastify";
 import Course from '@/types/course';
 import CourseList from '@/components/coursepage/CourseList';
+import { useTranslation } from "react-i18next";
 
 export default function StartGame() {
+  const { t } = useTranslation();
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
   const [players, setPlayers] = useState(["Spiller 1"]);
   const [scores, setScores] = useState<{ [key: string]: number[] }>({});
@@ -32,7 +34,7 @@ export default function StartGame() {
         const result = await response.json();
         setCourses(result.data);
       } catch (error) {
-        toast.error("Feil ved henting av baner: " + error);
+        toast.error(t("playpage_failed_to_fetch_course" + error));
       }
     };
     fetchCourses();
@@ -58,7 +60,7 @@ export default function StartGame() {
         setPins(sortedPins); 
         setLines(data.lines || []);
       } catch (error) {
-        toast.error("Failed to fetch pins: " + error);
+        toast.error(t("playpage_toast_error_failed_to_fetch_pins" + error));
       }
     }
   };
@@ -205,12 +207,10 @@ export default function StartGame() {
           throw new Error('Failed to save game result');
         }
       } catch (error) {
-        toast.error('Error saving game result: ' + error);
+        toast.error(t('playpage_toast_error_saving_game' + error));
         if (error instanceof Error) {
-          toast.error(`Error: ${error.message}`);
-        } else {
-          toast.error('An unknown error occurred');
-        }
+          toast.error(t("playpage_toast_error_unknown" + error.message));
+        } 
       }
     }
   };
@@ -234,7 +234,7 @@ export default function StartGame() {
         });
 
         if (response.status !== 200) {
-          toast.error('Failed to fetch users');
+          toast.error(t('playpage_toast_error_fetching_users'));
           setSearchResults([]);
           return;
         }
@@ -242,7 +242,7 @@ export default function StartGame() {
         const users = await response.json();
         setSearchResults(users);
       } catch (error) {
-        toast.error('Error fetching users: ' + error);
+        toast.error(t('playpage_toast_error_fetching' + error));
         setSearchResults([]);
       }
     } else {
@@ -373,12 +373,12 @@ export default function StartGame() {
 
       {selectedCourse && !gameStarted && (
         <div className="w-30 sm:w-3/10 bg-[#E7EFFB] p-4 sm:p-10 rounded-lg shadow-lg">
-          <h2 className="text-lg font-semibold mb-3">Vanskelighetsgrad:</h2>
+          <h2 className="text-lg font-semibold mb-3">{t('playpage_difficulty')}</h2>
           <p>{selectedCourse.difficulty}</p>
-          <h2 className="text-lg font-semibold mb-3">Antall hull:</h2>
+          <h2 className="text-lg font-semibold mb-3">{t('playpage_hole')}</h2>
           <p>{selectedCourse.holes}</p>
           <div className="mt-4">
-            <h2 className="text-base font-semibold mb-3">Legg til spillere</h2>
+            <h2 className="text-base font-semibold mb-3">{t('playpage_add')}</h2>
 
             {localStorage.getItem('accessToken') ? (
               <div className="flex justify-center mt-3 relative">
@@ -405,7 +405,7 @@ export default function StartGame() {
               </div>
             ) : (
               <p className="text-sm text-gray-600 mt-2">
-                Logg inn for å søke etter registrerte brukere.
+                {t('playpage_login_to_add_players')}
               </p>
             )}
 
@@ -440,7 +440,7 @@ export default function StartGame() {
                     className="bg-green-600 text-white p-2 rounded-xl text-base"
                     onClick={() => setPlayers([...players, `Spiller ${players.length + 1}`])}
                   >
-                    Legg til spiller
+                    {t('playpage_add_player')}
                   </button>
                 </div>
               </div>
@@ -450,7 +450,7 @@ export default function StartGame() {
                   onClick={startGame}
                   disabled={!selectedCourse || players.some(player => !player)}
                 >
-                  Start spill
+                  {t('playpage_start_game')}
                 </button>
               </div>
               <div className="mt-2">
@@ -461,7 +461,7 @@ export default function StartGame() {
                     setShowCourseList(true);
                   }}
                 >
-                  Tilbake til baner
+                  {t('playpage_back_to_course_list')}
                 </button>
               </div>
             </div>
@@ -472,13 +472,13 @@ export default function StartGame() {
 
       {gameStarted && !gameEnded && (
         <div className="bg-[#E7EFFB] rounded-lg shadow-lg p-4 sm:p-10">
-          <h2 className="text-lg font-semibold text-center mb-4">Kurv {currentBasket}</h2>
+          <h2 className="text-lg font-semibold text-center mb-4">{t('playpage_basket')} {currentBasket}</h2>
           <div className="mt-4 bg-[#E7EFFB] rounded-lg p-4">
             <table className="w-full rounded-lg mb-4">
               <thead>
                 <tr>
-                  <th className="p-2 text-base">Navn</th>
-                  <th className="p-2 text-base">Score</th>
+                  <th className="p-2 text-base">{t('playpage_name')}</th>
+                  <th className="p-2 text-base">{t('playpage_score')}</th>
                 </tr>
               </thead>
               <tbody>
@@ -518,7 +518,7 @@ export default function StartGame() {
               ◀
             </button>
             <div className="flex gap-3">
-              <span>Kurv {currentBasket}</span>
+              <span>{t('playpage_basket')} {currentBasket}</span>
             </div>
             <button
               className="bg-gray-300 p-1 rounded-lg"
@@ -533,7 +533,7 @@ export default function StartGame() {
               className="bg-red-600 text-white p-2 rounded-lg text-base hover:bg-red-700"
               onClick={finishGame}
             >
-              Avslutt spill
+              {t('playpage_finish_game')}
             </button>
           </div>
         </div>
@@ -541,7 +541,7 @@ export default function StartGame() {
 
       {gameEnded && (
         <div className="bg-[#E7EFFB] rounded-lg shadow-lg p-4 sm:p-10">
-          <h2 className="text-xl font-bold text-center mb-4">Resultater</h2>
+          <h2 className="text-xl font-bold text-center mb-4">{t('playgame_results')}</h2>
           <div className="bg-[#E7EFFB] rounded-lg p-4">
             <table className="w-full border rounded-lg mb-4">
               <thead>
@@ -555,7 +555,7 @@ export default function StartGame() {
               <tbody>
                 {Array.from({ length: selectedCourse?.holes || 12 }, (_, index) => (
                   <tr key={index} className="text-center border-b text-base">
-                    <td className="p-3">Kurv {index + 1}:</td>
+                    <td className="p-3">{t('playpage_basket')} {index + 1}:</td>
                     {players.map((player) => (
                       <td key={player} className="p-3">
                         {index + 1 > currentBasket
@@ -569,7 +569,7 @@ export default function StartGame() {
                   <tr key={player} className="text-center border-t font-semibold">
                     <td colSpan={players.length + 1} className="p-3 text-left">
                       <div className="flex justify-between">
-                        <span>Totalt score for {player}:</span>
+                        <span>{t('playpage_total_score')} {player}:</span>
                         <span className="mr-6">
                           {scores[player]
                             ? scores[player]

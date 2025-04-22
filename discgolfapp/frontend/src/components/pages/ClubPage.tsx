@@ -1,6 +1,7 @@
 
 import { useState, useEffect } from "react"
 import { toast } from "react-toastify"
+import { useTranslation } from "react-i18next"
 
 import Club from "@/types/club"
 
@@ -19,6 +20,7 @@ interface ClubpageProps {
 }
 
 const Clubpage: React.FC<ClubpageProps> = ({ setSelectedPage }) => {
+  const { t } = useTranslation()
 
   const [clubData, setClubData] = useState<Club | null>(null)
 
@@ -29,7 +31,7 @@ const Clubpage: React.FC<ClubpageProps> = ({ setSelectedPage }) => {
       const parsedClub = JSON.parse(selectedClub)
       setClubData(parsedClub)
     } else {
-      toast.error("No club data found in localStorage")
+      toast.error(t("clubpage_toast_error_no_club_selected"))
     }
   } , [])
 

@@ -28,7 +28,7 @@ const GetStartedPage = () => {
           toast.error(error.message);
         }
         else {
-          toast.error('Kunne ikke sjekke admin-status.');
+          toast.error(t('getstarted_toast_error_checking_admin_status'));
         }
       }
     };
@@ -79,7 +79,7 @@ const GetStartedPage = () => {
         toast.error(error.message);
       }
       else {
-        toast.error('Kunne ikke fjerne punkt.');
+        toast.error(t('getstarted_toast_error_removing_tip'));
       }
     }
   };
@@ -109,13 +109,13 @@ const GetStartedPage = () => {
       if (response.status !== 200)
         throw new Error('Kunne ikke lagre endringer.');
 
-      toast.success('Endringer lagret!');
+      toast.success(t('getstarted_toast_success_saved_changes'));
       setHasChanges(false);
     } catch (error) {
       if (error instanceof Error)
         toast.error(error.message);
       else
-        toast.error('Kunne ikke lagre endringer.');
+        toast.error(t('getstarted_toast_error_saving_changes'));
     }
   };
 
@@ -174,7 +174,7 @@ const GetStartedPage = () => {
                             onClick={() => removeTip('beginner', index)}
                             className="text-red-500 hover:text-red-700"
                           >
-                            Fjern
+                            {t('getstarted_remove')}
                           </button>
                         </>
                       ) : (
@@ -188,7 +188,7 @@ const GetStartedPage = () => {
                     onClick={() => addTip('beginner')}
                     className="mt-4 bg-[#1B365D] text-white px-4 py-2 rounded-lg shadow-md"
                   >
-                    Legg til punkt
+                    {t('getstarted_add')}
                   </button>
                 )}
               </div>
@@ -212,7 +212,7 @@ const GetStartedPage = () => {
                             onClick={() => removeTip('advanced', index)}
                             className="text-red-500 hover:text-red-700"
                           >
-                            Fjern
+                            {t('getstarted_remove')}
                           </button>
                         </>
                       ) : (
@@ -226,7 +226,7 @@ const GetStartedPage = () => {
                     onClick={() => addTip('advanced')}
                     className="mt-4 bg-[#1B365D] text-white px-4 py-2 rounded-lg shadow-md"
                   >
-                    Legg til punkt
+                    {t('getstarted_add')}
                   </button>
                 )}
               </div>
@@ -250,7 +250,7 @@ const GetStartedPage = () => {
                             onClick={() => removeTip('rules', index)}
                             className="text-red-500 hover:text-red-700"
                           >
-                            Fjern
+                            {t('getstarted_remove')}
                           </button>
                         </>
                       ) : (
@@ -264,7 +264,7 @@ const GetStartedPage = () => {
                     onClick={() => addTip('rules')}
                     className="mt-4 bg-[#1B365D] text-white px-4 py-2 rounded-lg shadow-md"
                   >
-                    Legg til punkt
+                    {t('getstarted_add')}
                   </button>
                 )}
               </div>
@@ -279,7 +279,7 @@ const GetStartedPage = () => {
           onClick={saveChanges}
           className="fixed bottom-4 right-4 bg-[#1B365D] text-white px-6 py-2 rounded-lg shadow-lg"
         >
-          Lagre endringer
+          {t('getstarted_save')}
         </button>
       )}
     </div>

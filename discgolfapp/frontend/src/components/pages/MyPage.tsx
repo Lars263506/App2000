@@ -6,12 +6,14 @@ import User from "../../types/user";
 import Game from "../../types/game";
 import Club from "../../types/club";
 import GameResultsModal from '../myprofile/GameResultsModal';
+import { useTranslation } from "react-i18next";
 
 interface MyPageProps {
     setSelectedPage: (page: string) => void;
 }
 
 const MyPage: React.FC<MyPageProps> = ({ setSelectedPage }) => {
+  const { t } = useTranslation();
   const [user, setUser] = useState<User | null>(null);
   const [profileImage, setProfileImage] = useState<string | null>(null);
   const [clubs, setClubs] = useState<Club[]>([]);
@@ -29,7 +31,7 @@ const MyPage: React.FC<MyPageProps> = ({ setSelectedPage }) => {
             "Authorization": `Bearer ${accessToken}`
           }
         });
-        if (res.status !== 200) throw new Error("Could not find user");
+        if (res.status !== 200) throw new Error(t('mypage_user_not_found'));
         const data = await res.json();
         setUser(data);
 
@@ -42,7 +44,7 @@ const MyPage: React.FC<MyPageProps> = ({ setSelectedPage }) => {
           setProfileImage(imageUrl);
         }
       } catch (error) {
-        toast.error("Error fetching user data: " + error);
+        toast.error(t('mypage_fetching_user_data'));
       }
     };
     fetchUser();
@@ -60,11 +62,11 @@ const MyPage: React.FC<MyPageProps> = ({ setSelectedPage }) => {
             "Authorization": `Bearer ${accessToken}`
           }
         });
-        if (clubsRes.status !== 200) throw new Error("Could not fetch clubs");
+        if (clubsRes.status !== 200) throw new Error(t('mypage_fetching_clubs'));
         const clubsData = await clubsRes.json();
         setClubs(clubsData);
       } catch (error) {
-        toast.error("Error fetching clubs: " + error);
+        toast.error(t('mypage_fetching_clubs'));
       }
     };
 
@@ -93,7 +95,7 @@ const MyPage: React.FC<MyPageProps> = ({ setSelectedPage }) => {
           setGames([]);
         }
       } catch (error) {
-        toast.error("Error fetching games: " + error);
+        toast.error(t('mypage_fetching_games'));
       }
     };
 
@@ -131,10 +133,10 @@ const MyPage: React.FC<MyPageProps> = ({ setSelectedPage }) => {
       });
 
       const data = await res.json();
-      toast.success("Bilde er lagret!");
+      toast.success(t("mypage_profile_image_updated"));
       setProfileImage(`${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/users/profile-image/${data.profileImage}`);
     } catch (error) {
-      toast.error("Error updating profile image: " + error);
+      toast.error(t('mypage_saving_image'));
     }
   };
 
@@ -160,12 +162,12 @@ const MyPage: React.FC<MyPageProps> = ({ setSelectedPage }) => {
   if (!user) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen">
-        <p className="text-lg">Du er ikke logget inn. Vennligst logg inn først.</p>
+        <p className="text-lg">{t('mypage_not_logged_in')}</p>
         <button
           onClick={() => setSelectedPage("Home")}
           className="mt-4 px-6 py-3 bg-blue-500 text-white text-lg font-semibold rounded hover:bg-blue-700"
         >
-          Logg inn
+          {t('mypage_go_to_home')}
         </button>
       </div>
     );
@@ -174,15 +176,15 @@ const MyPage: React.FC<MyPageProps> = ({ setSelectedPage }) => {
   return (
     <div className="flex flex-col min-h-screen">
       <div className="flex-grow bg-gray-100 p-8 flex flex-col items-center">
-        <h1 className="text-4xl font-extrabold mt-6 text-gray-800">Min Side</h1>
-        <h2 className="text-2xl text-gray-700 mb-8">Velkommen, {user.displayName ?? "Ukjent"}!</h2>
+        <h1 className="text-4xl font-extrabold mt-6 text-gray-800">{t('mypage_my')}</h1>
+        <h2 className="text-2xl text-gray-700 mb-8">{t('mypage_welcome')}, {user.displayName ?? "Ukjent"}!</h2>
 
         <div className="relative">
           {profileImage ? (
             <img src={profileImage} alt="Profilbilde" className="w-52 h-52 rounded-full object-cover mb-4" />
           ) : (
             <div className="w-52 h-52 bg-gray-200 rounded-full mb-4 flex items-center justify-center">
-              <span className="text-black">Ingen bilde</span>
+              <span className="text-black">{t('mypage_picture')}</span>
             </div>
           )}
 
@@ -204,13 +206,13 @@ const MyPage: React.FC<MyPageProps> = ({ setSelectedPage }) => {
 
         <div className="grid grid-cols-1 md:grid-cols-3 text-black gap-4 mt-8 w-full max-w-4xl">
           <div className="bg-white p-6 rounded-lg shadow-lg max-h-80 overflow-y-auto">
-            <h3 className="text-lg text-black mb-6 font-semibold">Brukerinformasjon:</h3>
-            <p><strong>Brukernavn:</strong> {user.displayName ?? "Ukjent"}</p>
-            <p><strong>E-post:</strong> {user.email ?? "Ukjent"}</p>
-            <p><strong>Rolle:</strong> {user.role ?? "Ukjent"}</p>
+            <h3 className="text-lg text-black mb-6 font-semibold">{t('mypage_information')}:</h3>
+            <p><strong>{t('mypage_username')}:</strong> {user.displayName ?? "Ukjent"}</p>
+            <p><strong>{t('mypage_epost')}:</strong> {user.email ?? "Ukjent"}</p>
+            <p><strong>{t('mypage_rolle')}:</strong> {user.role ?? "Ukjent"}</p>
           </div>
           <div className="text-lg bg-white p-6 rounded-lg shadow-lg max-h-80 overflow-y-auto">
-            <h3 className="text-lg text-black mb-6 font-semibold">Mine spill:</h3>
+            <h3 className="text-lg text-black mb-6 font-semibold">{t('mypage_mygames')}:</h3>
             {games !== null && games.length > 0 ? (
               <ul>
                 {games.map((game) => (
@@ -222,11 +224,11 @@ const MyPage: React.FC<MyPageProps> = ({ setSelectedPage }) => {
                 ))}
               </ul>
             ) : (
-              <p>Du har ingen spill.</p>
+              <p>{t('mypage_nogames')}</p>
             )}
           </div>
           <div className="bg-white p-6 rounded-lg shadow-lg">
-            <h3 className="text-lg text-black mb-6 font-semibold max-h-80 overflow-y-auto">Mine klubber:</h3>
+            <h3 className="text-lg text-black mb-6 font-semibold max-h-80 overflow-y-auto">{t('mypage_clubs')}:</h3>
             {clubs.length > 0 ? (
               <ul>
                 {clubs.map((club) => (
@@ -240,7 +242,7 @@ const MyPage: React.FC<MyPageProps> = ({ setSelectedPage }) => {
                 ))}
               </ul>
             ) : (
-              <p>Du er ikke medlem av noen klubber.</p>
+              <p>{t('mypage_noclubs')}</p>
             )}
           </div>
         </div>
