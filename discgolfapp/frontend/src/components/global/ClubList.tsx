@@ -22,7 +22,7 @@ const ClubList: React.FC<ClubListProps> = ({ selectedClub, setSelectedClub, sear
       const data = await response.json()
       if (Array.isArray(data.data)) setClubs(data.data)
     } catch (error) {
-      toast.error('Feil ved henting av klubber: ' + error)
+      toast.error(t("clublist_toast_error_fetching_clubs") + error)
     }
   }
 
