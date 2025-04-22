@@ -8,11 +8,14 @@ import CreateCourse from './CreateCourse'
 import Setting from '../../types/setting';
 import SelectButton from '../global/SelectButton'
 
+import { useTranslation } from 'react-i18next'
+
 interface SettingsProps {
     setSelectedPage: (page: string) => void;
 }
 
 const Settings: React.FC<SettingsProps> = ({ setSelectedPage }) => {
+    const { t } = useTranslation()
     const [settings, setSettings] = useState<Setting[] | null>();
     const [selectedSetting, setSelectedSetting] = useState<Setting | null>(null);
 
@@ -40,12 +43,12 @@ const Settings: React.FC<SettingsProps> = ({ setSelectedPage }) => {
                 if (Array.isArray(data)) {
                     setSettings(data);
                 } else {
-                    toast.error('Responsen fra serveren var ikke en liste med innstillinger.');
+                    toast.error(t('settings_toast_error_not_array'));
                 }
 
             } catch (error: unknown) {
                 if (error instanceof Error) toast.error(error.message);
-                else toast.error('Det var en feil med å hente innstillingene. Prøv igjen senere.');
+                else toast.error(t('settings_toast_error_unknown'));
             }
         };
         fetchSettings();
@@ -63,7 +66,7 @@ const Settings: React.FC<SettingsProps> = ({ setSelectedPage }) => {
                         </SelectButton>
                     ))
                 ) : (
-                    <header>Ingen innstillinger å vise.</header>
+                    <header>{t("settings_no_settings")}</header>
                 )}
             </div>
 
@@ -72,7 +75,7 @@ const Settings: React.FC<SettingsProps> = ({ setSelectedPage }) => {
                 {selectedSetting ? (
                     settingComponents[selectedSetting.name]
                 ) : (
-                    <header>Velg en innstilling fra listen til venstre.</header>
+                    <header>{t("settings_prompt")}</header>
                 )}
             </div>
         </div>
