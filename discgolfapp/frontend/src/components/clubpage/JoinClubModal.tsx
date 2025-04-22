@@ -26,11 +26,11 @@ const JoinClubModal: React.FC<{ clubId: string; onClose: () => void }> = ({ club
           onClose();
           window.location.reload();
         } else {
-          toast.error('joinclubmodal_error');
+          toast.error(t('joinclubmodal_error'));
         }
       } catch (error) {
         if (error instanceof Error)
-          toast.error(error.message || 'joinclubmodal_error');
+          toast.error(error.message || t('joinclubmodal_error'));
       }
     };
 
