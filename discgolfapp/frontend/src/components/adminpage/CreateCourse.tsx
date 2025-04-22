@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
+import { useTranslation } from 'react-i18next';
 import CourseForm from './CourseForm';
 import Course from '../../types/course';
 
@@ -17,6 +18,7 @@ const CreateCourse: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
   const userRole = localStorage.getItem('role');
   const userId = localStorage.getItem('userId');
+  const { t } = useTranslation();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -65,7 +67,7 @@ const CreateCourse: React.FC = () => {
 
         setCourses(mappedCourses);
       } catch (error) {
-        toast.error('Feil ved henting av baner: ' + error);
+        toast.error(t('createcourse_toast_error_fetch_courses' + error));
         setIsAuthorized(false);
       } finally {
         setIsLoading(false);
@@ -93,8 +95,7 @@ const CreateCourse: React.FC = () => {
         setUsers(data.data);
         console.log(users);
       } catch (error) {
-        console.error('Error fetching club owners:', error);
-        toast.error('Kunne ikke hente klubb-eiere: ' + error);
+        toast.error(t('createcourse_toast_error_fetch_clubowners' + error));
       }
     };
 
@@ -149,18 +150,18 @@ const CreateCourse: React.FC = () => {
       }
 
       setCourses((prev) => prev.filter((c) => c.id !== courseId));
-      toast.success('Banen ble slettet!');
+      toast.success(t('createcourse_toast_success_deleted_course'));
     } catch (error) {
-      toast.error('Feil ved sletting av banen: ' + error);
+      toast.error(t('createcourse_toast_error_delete_course' + error));
     }
   };
 
   if (isLoading) {
-    return <div className="p-4">Laster baner...</div>;
+    return <div className="p-4">{t('loading_courses')}</div>;
   }
 
   if (!isAuthorized) {
-    return <div className="p-4 text-red-600">Du har ikke tilgang til å administrere baner.</div>;
+    return <div className="p-4 text-red-600">{t('no_access')}</div>;
   }
 
   if (isCreating || selectedCourse) {
@@ -175,15 +176,15 @@ const CreateCourse: React.FC = () => {
 
   return (
     <div className="p-4 bg-white rounded-md shadow-md min-h-[100vh]">
-      <h2 className="text-xl font-bold mb-4">Administrer baner</h2>
+      <h2 className="text-xl font-bold mb-4">{t('createcourse_manage_courses')}</h2>
       <button
         onClick={handleCreateNew}
         className="mb-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
       >
-        Lag ny bane
+        {t('createcourse_create_new_course')}
       </button>
       {courses.length === 0 ? (
-        <p>Ingen baner tilgjengelig.</p>
+        <p>{t('no_courses_available')}</p>
       ) : (
         <ul className="space-y-2">
           {courses.map((course) => (
@@ -201,7 +202,7 @@ const CreateCourse: React.FC = () => {
                 onClick={() => handleDeleteCourse(course.id!)}
                 className="bg-red-600 text-white px-2 py-1 rounded hover:bg-red-700"
               >
-                Slett
+                {t('createcourse_delete')}
               </button>
             </li>
           ))}
