@@ -62,8 +62,7 @@ const Announcements = () => {
         setEditRights(false);
       }
     } catch (error) {
-      toast.error(t('toast_error_error_fetching_edit_rights:' + error));
-    }
+      toast.error(t('toast_error_error_fetching_edit_rights') + ': ' + error);
   };
 
   const handleCreateAnnouncement = () => {
