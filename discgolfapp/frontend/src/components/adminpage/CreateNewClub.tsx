@@ -2,11 +2,14 @@ import React, { useRef, useState, useEffect } from 'react';
 
 import { toast } from 'react-toastify';
 
+import { useTranslation } from 'react-i18next';
+
 interface CreateNewClubProps {
   onClose: () => void;
 }
 
 const CreateNewClub: React.FC<CreateNewClubProps> = ({ onClose }) => {
+  const { t } = useTranslation()
   const modalRef = useRef<HTMLDivElement>(null);
 
   const [formData, setFormData] = useState({
@@ -60,28 +63,28 @@ const CreateNewClub: React.FC<CreateNewClubProps> = ({ onClose }) => {
       });
 
       if (response.status === 201) {
-        toast.success('Club created successfully!');
+        toast.success(t('createnewclub_toast_success_club_created'));
         onClose();
       } else {
         const errorData = await response.json();
-        toast.error(errorData.error || 'Failed to create club. Please try again later.');
+        toast.error(errorData.error || t('createnewclub_toast_error_club_creation_failed'));
       }
     } catch (error) {
       if (error instanceof Error) {
         toast.error(error.message);
       } else
-      toast.error('An error occurred while creating the club. Please try again later.');
+      toast.error(t('createnewclub_toast_error_club_creation_failed'));
     }
   };
 
   return (
     <div className="flex justify-center items-center fixed inset-0 bg-black bg-opacity-50">
       <div ref={modalRef} className="bg-white p-6 rounded shadow-lg w-96 max-h-[80vh] overflow-y-auto">
-        <h2 className="text-xl mb-4">Create New Club</h2>
+        <h2 className="text-xl mb-4">{t('createnewclub_title')}</h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label className="block text-sm font-medium mb-1" htmlFor="name">
-              Club Name
+              {t('createnewclub_label_name')}
             </label>
             <input
               type="text"
@@ -96,7 +99,7 @@ const CreateNewClub: React.FC<CreateNewClubProps> = ({ onClose }) => {
           </div>
           <div className="mb-4">
             <label className="block text-sm font-medium mb-1" htmlFor="clubOwner">
-              Club Owner
+              {t('createnewclub_label_club_owner')}
             </label>
             <input
               type="text"
@@ -111,7 +114,7 @@ const CreateNewClub: React.FC<CreateNewClubProps> = ({ onClose }) => {
           </div>
           <div className="mb-4">
             <label className="block text-sm font-medium mb-1" htmlFor="description">
-              Description
+              {t('createnewclub_label_description')}
             </label>
             <textarea
               id="description"
@@ -126,7 +129,7 @@ const CreateNewClub: React.FC<CreateNewClubProps> = ({ onClose }) => {
           </div>
           <div className="mb-4">
             <label className="block text-sm font-medium mb-1" htmlFor="address">
-              Address
+              {t('createnewclub_label_address')}
             </label>
             <input
               type="text"
@@ -141,7 +144,7 @@ const CreateNewClub: React.FC<CreateNewClubProps> = ({ onClose }) => {
           </div>
           <div className="mb-4">
             <label className="block text-sm font-medium mb-1" htmlFor="zipCode">
-              Zip Code
+              {t('createnewclub_label_zip_code')}
             </label>
             <input
               type="text"
@@ -156,7 +159,7 @@ const CreateNewClub: React.FC<CreateNewClubProps> = ({ onClose }) => {
           </div>
           <div className="mb-4">
             <label className="block text-sm font-medium mb-1" htmlFor="websiteURL">
-              Website URL
+              {t('createnewclub_label_website_url')}
             </label>
             <input
               type="url"
@@ -170,7 +173,7 @@ const CreateNewClub: React.FC<CreateNewClubProps> = ({ onClose }) => {
           </div>
           <div className="mb-4">
             <label className="block text-sm font-medium mb-1" htmlFor="email">
-              Email
+              {t('createnewclub_label_email')}
             </label>
             <input
               type="email"
@@ -185,7 +188,7 @@ const CreateNewClub: React.FC<CreateNewClubProps> = ({ onClose }) => {
           </div>
           <div className="mb-4">
             <label className="block text-sm font-medium mb-1" htmlFor="phone">
-              Phone
+              {t('createnewclub_label_phone')}
             </label>
             <input
               type="tel"
@@ -203,10 +206,10 @@ const CreateNewClub: React.FC<CreateNewClubProps> = ({ onClose }) => {
               className="p-2 bg-gray-500 text-white rounded mr-2"
               onClick={onClose}
             >
-              Cancel
+              {t('createnewclub_button_cancel')}
             </button>
             <button type="submit" className="p-2 bg-blue-600 text-white rounded">
-              Create Club
+              {t('createnewclub_button_create')}
             </button>
           </div>
         </form>

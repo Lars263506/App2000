@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import Button from '../global/Button';
 import { toast } from 'react-toastify';
+import { useTranslation } from 'react-i18next';
 
 const Announcements = () => {
+  const { t } = useTranslation();
   const [content, setContent] = useState<string[]>([]); // Array of announcements
   const [editRights, setEditRights] = useState<boolean>(false);
   const [isEditing, setIsEditing] = useState<number | null>(null); // Index of the announcement being edited
@@ -36,10 +38,10 @@ const Announcements = () => {
           setContent(data.filter((announcement) => typeof announcement === 'string')); // Filter out invalid values
         }
       } else {
-        toast.error('Error fetching announcements:');
+        toast.error(t('toast_error_fetching_announcements'));
       }
     } catch (error) {
-      toast.error('Error fetching announcements:' + error);
+      toast.error(t('toast_error_fetching_announcements' + error));
     }
   };
 
@@ -61,7 +63,7 @@ const Announcements = () => {
         setEditRights(false);
       }
     } catch (error) {
-      toast.error('Error fetching edit rights:' + error);
+      toast.error(t('toast_error_error_fetching_edit_rights:' + error));
     }
   };
 
@@ -87,10 +89,10 @@ const Announcements = () => {
         setIsCreating(false);
         fetchAnnouncements();
       } else {
-        toast.error('Failed to create announcement.');
+        toast.error(t('toast_error_failed_to_create_announcement.'));
       }
     } catch (error) {
-      toast.error('Failed to create announcement.');
+      toast.error(t('toast_error_failed_to_create_announcement.'));
     }
   };
 
@@ -121,10 +123,10 @@ const Announcements = () => {
         setIsEditing(null);
         fetchAnnouncements();
       } else {
-        toast.error('Failed to update announcement.');
+        toast.error(t('toast_error_failed_to_update_announcement'))
       }
     } catch (error) {
-      toast.error('Failed to update announcement.');
+      toast.error(t('toast_error_failed_to_update_announcement'))
     }
   };
 
@@ -137,7 +139,7 @@ const Announcements = () => {
           className="mb-4 p-2 text-white"
           onClick={handleCreateAnnouncement}
         >
-          Ny kunngjøring
+          {t('announcements_new_announcement')}
         </Button>
       )}
 
@@ -160,7 +162,7 @@ const Announcements = () => {
             onClick={handleSubmitNewAnnouncement}
             disabled={!content[content.length - 1]?.trim()}
           >
-            Send inn
+            {t('announcements_submit')}
           </Button>
         </>
       ) : (
@@ -184,7 +186,7 @@ const Announcements = () => {
                   className="mt-2 p-2 text-white"
                   onClick={() => handleSubmitEdit(index)}
                 >
-                  Oppdater
+                  {t('announcements_update')}
                 </Button>
               </>
             ) : (
