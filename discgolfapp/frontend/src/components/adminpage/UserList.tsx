@@ -24,7 +24,7 @@ const UserList: React.FC = () => {
         const data = await response.json();
         setUsers(data);
       } catch (error) {
-        console.error('Error fetching users:', error);
+        toast.error('Error fetching users:');
       }
     };
 

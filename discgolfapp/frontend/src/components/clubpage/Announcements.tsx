@@ -39,7 +39,7 @@ const Announcements = () => {
         toast.error('Error fetching announcements:');
       }
     } catch (error) {
-      console.error('Error fetching announcements:', error);
+      toast.error('Error fetching announcements:' + error);
     }
   };
 
@@ -61,7 +61,7 @@ const Announcements = () => {
         setEditRights(false);
       }
     } catch (error) {
-      console.error('Error fetching edit rights:', error);
+      toast.error('Error fetching edit rights:' + error);
     }
   };
 
@@ -87,11 +87,9 @@ const Announcements = () => {
         setIsCreating(false);
         fetchAnnouncements();
       } else {
-        console.error('Error creating announcement:', response.statusText);
         toast.error('Failed to create announcement.');
       }
     } catch (error) {
-      console.error('Error creating announcement:', error);
       toast.error('Failed to create announcement.');
     }
   };
@@ -123,11 +121,9 @@ const Announcements = () => {
         setIsEditing(null);
         fetchAnnouncements();
       } else {
-        console.error('Error updating announcement:', response.statusText);
         toast.error('Failed to update announcement.');
       }
     } catch (error) {
-      console.error('Error updating announcement:', error);
       toast.error('Failed to update announcement.');
     }
   };
