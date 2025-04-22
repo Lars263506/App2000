@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import User from '../../types/user';
 
+import { useTranslation } from 'react-i18next';
+
 interface UserEditModalProps {
   user: User;
   isOpen: boolean;
@@ -9,6 +11,7 @@ interface UserEditModalProps {
 }
 
 const UserEditModal: React.FC<UserEditModalProps> = ({ user, isOpen, onClose, onSave }) => {
+  const { t } = useTranslation();
   const [displayName, setDisplayName] = useState(user.displayName);
   const [email, setEmail] = useState(user.email);
   const [role, setRole] = useState(user.role);
@@ -39,9 +42,9 @@ const UserEditModal: React.FC<UserEditModalProps> = ({ user, isOpen, onClose, on
           &times;
         </button>
 
-        <h2 className="text-xl font-bold mb-4">Edit User</h2>
+        <h2 className="text-xl font-bold mb-4">{t("usereditmodal_edit_user")}</h2>
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">Display Name</label>
+          <label className="block text-sm font-medium text-gray-700">{t("usereditmodal_display_name")}</label>
           <input
             type="text"
             value={displayName}
@@ -50,7 +53,7 @@ const UserEditModal: React.FC<UserEditModalProps> = ({ user, isOpen, onClose, on
           />
         </div>
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">Email</label>
+          <label className="block text-sm font-medium text-gray-700">{t("usereditmodal_email")}</label>
           <input
             type="email"
             value={email}
@@ -59,14 +62,14 @@ const UserEditModal: React.FC<UserEditModalProps> = ({ user, isOpen, onClose, on
           />
         </div>
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">Role</label>
+          <label className="block text-sm font-medium text-gray-700">{t("usereditmodal_role")}</label>
           <select
             value={role}
             onChange={(e) => setRole(e.target.value)}
             className="mt-1 p-2 border rounded w-full"
           >
-            <option value="user">User</option>
-            <option value="admin">Admin</option>
+            <option value="user">{t("usereditmodal_user")}</option>
+            <option value="admin">{t("usereditmodal_admin")}</option>
           </select>
         </div>
         <div className="flex justify-end">
@@ -74,7 +77,7 @@ const UserEditModal: React.FC<UserEditModalProps> = ({ user, isOpen, onClose, on
             onClick={handleSave}
             className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700"
           >
-            Save
+            {t("usereditmodal_save")}
           </button>
         </div>
       </div>
