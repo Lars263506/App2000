@@ -334,12 +334,37 @@ export default function StartGame() {
                     </InfoWindow>
                   </Marker>
                 ))}
+
                 {pins.length === 0 && selectedCourse && (
                   <Marker
                     position={{ lat: selectedCourse.latitude, lng: selectedCourse.longitude }}
-                  >
-                  </Marker>
+                    icon={{
+                      url: "http://maps.google.com/mapfiles/ms/icons/red-dot.png",
+                    }}
+                  />
                 )}
+
+                {lines.map((line, index) => {
+                  const pin1 = pins.find((p) => p.id === line.pinId1);
+                  const pin2 = pins.find((p) => p.id === line.pinId2);
+                  if (!pin1 || !pin2) return null;
+
+                  return (
+                    <Polyline
+                      key={`line-${index}`}
+                      path={[
+                        { lat: pin1.latitude, lng: pin1.longitude },
+                        { lat: pin2.latitude, lng: pin2.longitude },
+                      ]}
+                      options={{
+                        strokeColor: "#808080",
+                        strokeOpacity: 0.8,
+                        strokeWeight: 2,
+                        geodesic: true,
+                      }}
+                    />
+                  );
+                })}
               </GoogleMap>
             </LoadScript>
           </div>
