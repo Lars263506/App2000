@@ -209,7 +209,7 @@ const CourseForm: React.FC<CourseFormProps> = ({ course = null, onCancel, onSave
             onClick={onCancel}
             className="bg-gray-300 text-gray-800 px-4 py-2 rounded hover:bg-gray-400"
           >
-            {t('cancel')}
+            {t('courseform_cancel')}
           </button>
         )}
       </div>

@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { GoogleMap, LoadScript, Marker, OverlayView, Polyline } from "@react-google-maps/api";
+import { useTranslation } from "react-i18next";
+import { toast } from "react-toastify";
 
 import Course from "../../types/course";
 
@@ -12,14 +14,15 @@ type Pin = {
   distance?: number;
   par?: number;
   outOfBounds?: string;
-}
+};
 
 type Line = {
   pinId1: string;
   pinId2: string;
-}
+};
 
 export default function CourseSettings() {
+  const { t } = useTranslation();
   const [selectedCourse, setSelectedCourse] = useState("");
   const [courses, setCourses] = useState<Course[]>([]);
   const [filteredCourses, setFilteredCourses] = useState<Course[]>([]);
@@ -49,7 +52,7 @@ export default function CourseSettings() {
     if (value === "kurv" || value === "Utslagspunkt") {
       setSelectedPinType(value);
     } else {
-      console.warn("Ugyldig pin type valgt:", value);
+      toast.error(t("coursesettings_toast_error_invalid_pin_type"));
     }
   };
 
@@ -68,7 +71,7 @@ export default function CourseSettings() {
         });
 
         if (response.status !== 200) {
-          throw new Error("Kunne ikke hente baner. Sjekk autentisering.");
+          throw new Error(t("coursesettings_error_fetch_courses"));
         }
 
         const result = await response.json();
@@ -79,7 +82,7 @@ export default function CourseSettings() {
 
         setCourses(mappedCourses);
       } catch (error) {
-        console.error("Feil ved henting av baner:", error);
+        toast.error(t("coursesettings_toast_error_fetch_courses"));
       }
     };
     fetchCourses();
@@ -100,13 +103,13 @@ export default function CourseSettings() {
         });
 
         if (response.status !== 200) {
-          throw new Error("Kunne ikke hente baner for klubbeieren.");
+          throw new Error(t("coursesettings_error_fetch_courses_for_owner"));
         }
 
         const result = await response.json();
         setFilteredCourses(result.data);
       } catch (error) {
-        console.error("Feil ved henting av baner for klubbeier:", error);
+        toast.error(t("coursesettings_toast_error_fetch_courses_for_owner"));
       }
     };
 
@@ -124,25 +127,25 @@ export default function CourseSettings() {
 
     try {
       const response = await fetch(url, {
-        method: 'PUT',
+        method: "PUT",
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({ pins, lines }),
       });
 
       if (response.status !== 200) {
         const errorText = await response.text();
-        throw new Error(`Failed to save pins and lines: ${errorText}`);
+        throw new Error(t("coursesettings_error_pins_lines") + errorText);
       }
 
       const updatedData = await response.json();
       setPins(updatedData.pins || []);
       setLines(updatedData.lines || []);
-      alert("Pins og linjer lagret i databasen!");
+      toast.success(t("coursesettings_toast_success_pins_lines_saved"));
     } catch (error) {
-      console.error("Error saving pins and lines:", error);
+      toast.error(t("coursesettings_toast_error_save_pins_lines"));
     }
   };
 
@@ -165,8 +168,8 @@ export default function CourseSettings() {
 
   const handlePinClick = async (pin: Pin) => {
     if (isDeleteMode) {
-      const pinName = pin.name || "Ukjent pin";
-      if (window.confirm(`Er du sikker på at du vil slette pinnen "${pinName}"?`)) {
+      const pinName = pin.name || t("coursesettings_unknown_pin");
+      if (window.confirm(t("coursesettings_confirm_delete") + ` "${pinName}"?`)) {
         const updatedPins = pins.filter((p) => p.id !== pin.id);
         const updatedLines = lines.filter(
           (line) => line.pinId1 !== pin.id && line.pinId2 !== pin.id
@@ -190,12 +193,11 @@ export default function CourseSettings() {
             });
             if (response.status !== 200) {
               const errorText = await response.text();
-              throw new Error(`Failed to save pin deletion: ${errorText}`);
+              throw new Error(t("coursesettings_error_failed_savedS") + errorText);
             }
-            console.log(`Pin "${pinName}" deleted permanently`);
+            toast.success(t('coursesettings_toast_success_pin') + pinName + t('coursesettings_toast_success_pin_deleted'));
           } catch (error) {
-            console.error("Error saving pin deletion:", error);
-            // Gjenopprett pinnen lokalt hvis sletting feiler
+            toast.error(t("coursesettings_toast_error_failed_save_pin") + error);
             setPins(pins);
             setLines(lines);
           }
@@ -243,7 +245,7 @@ export default function CourseSettings() {
       });
 
       if (response.status !== 200) {
-        throw new Error("Failed to fetch pins from database");
+        throw new Error(t("Failed to fetch pins from database"));
       }
 
       const updatedData = await response.json();
@@ -258,8 +260,7 @@ export default function CourseSettings() {
         setEditPinOutOfBounds(selectedPinData.outOfBounds || "");
       }
     } catch (error) {
-      console.error("Error fetching pin data:", error);
-      alert("Kunne ikke hente pin-data. Prøv igjen senere.");
+      toast.error(t("coursesettings_toast_error_fetch_pin") + error);
     }
 
     setMapCenter({ lat: pin.latitude, lng: pin.longitude });
@@ -269,12 +270,11 @@ export default function CourseSettings() {
     if (isDeleteMode) {
       const pin1 = pins.find((p) => p.id === line.pinId1);
       const pin2 = pins.find((p) => p.id === line.pinId2);
-      const lineName = `linje mellom "${pin1?.name || "Ukjent"}" og "${pin2?.name || "Ukjent"}"`;
-      if (window.confirm(`Er du sikker på at du vil slette ${lineName}?`)) {
+      const lineName = t("coursesettings_line_between") + ` "${pin1?.name || t("coursesettings_unknown")}" ${t("coursesettings_and")} "${pin2?.name || t("coursesettings_unknown")}"`;
+      if (window.confirm(t("coursesettings_confirm_delete") + ` ${lineName}?`)) {
         const updatedLines = lines.filter((_, i) => i !== index);
         setLines(updatedLines);
 
-        // Lagre sletting til databasen umiddelbart
         const course = courses.find((c) => c.name === selectedCourse);
         if (course) {
           const url = `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/course/${course._id}/pins`;
@@ -290,12 +290,11 @@ export default function CourseSettings() {
             });
             if (response.status !== 200) {
               const errorText = await response.text();
-              throw new Error(`Failed to save line deletion: ${errorText}`);
+              throw new Error(t("coursesettings_failed_to_save_lines") + errorText);
             }
-            console.log(`Line "${lineName}" deleted permanently`);
+            toast.success(t('coursesettings_toast_success_line') + lineName + t('coursesettings_toast_success_line_deleted'));
           } catch (error) {
-            console.error("Error saving line deletion:", error);
-            // Gjenopprett linjen lokalt hvis sletting feiler
+            toast.error(t("coursesettings_toast_error_failed_save_line") + error);
             setLines(lines);
           }
         }
@@ -340,13 +339,12 @@ export default function CourseSettings() {
       });
 
       if (response.status !== 200) {
-        throw new Error("Failed to save pins to database");
+        throw new Error(t("coursesettings_error_failed_save_pin"));
       }
 
-      alert("Endringer lagret!");
+      toast.success(t("coursesettings_toast_success_pin_saved"));
     } catch (error) {
-      console.error("Error saving pins:", error);
-      alert("Kunne ikke lagre endringer. Prøv igjen senere.");
+      toast.error(t("coursesettings_toast_error_save_pin") + error);
     }
 
     setEditPinDistance(null);
@@ -398,7 +396,7 @@ export default function CourseSettings() {
         });
 
         if (response.status !== 200) {
-          throw new Error("Kunne ikke hente pins for banen. Sjekk autentisering.");
+          throw new Error(t("coursesettings_error_fetch_pins"));
         }
 
         const result = await response.json();
@@ -410,8 +408,7 @@ export default function CourseSettings() {
         });
         setZoomLevel(15);
       } catch (error) {
-        console.error("Error fetching pins:", error);
-        alert("Kunne ikke hente pins for banen. Vennligst prøv igjen senere.");
+        toast.error(t("coursesettings_toast_error_fetch_pins") + error);
       }
     }
   };
@@ -463,13 +460,17 @@ export default function CourseSettings() {
           {!isCourseSelected && (
             <div className="grid grid-cols-3 gap-8">
               <div className="col-span-1">
-                <h1 className="text-xl font-bold text-center mb-4">Velg Bane</h1>
+                <h1 className="text-xl font-bold text-center mb-4">{t("coursesettings_title")}</h1>
                 <div className="w-full mt-6">
                   <ul className="space-y-6">
                     {filteredCourses.map((course) => (
                       <li
                         key={course.name}
-                        className={`block w-full text-left px-4 py-2 rounded-lg shadow transition ${selectedCourse === course.name ? 'bg-blue-600 text-white' : 'bg-white hover:bg-blue-100 text-black'}`}
+                        className={`block w-full text-left px-4 py-2 rounded-lg shadow transition ${
+                          selectedCourse === course.name
+                            ? "bg-blue-600 text-white"
+                            : "bg-white hover:bg-blue-100 text-black"
+                        }`}
                         onClick={() => handleCourseSelection(course.name)}
                       >
                         {course.name}
@@ -485,47 +486,54 @@ export default function CourseSettings() {
             <div className="relative flex">
               <div className="flex-grow">
                 {selectedCourse && (
-                  <LoadScript googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string}>
+                  <LoadScript
+                    googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string}
+                  >
                     <GoogleMap
                       center={mapCenter}
                       zoom={zoomLevel}
-                      mapContainerStyle={{ height: "900px", width: "75%", borderRadius: "1rem" }}
+                      mapContainerStyle={{
+                        height: "900px",
+                        width: "75%",
+                        borderRadius: "1rem",
+                      }}
                       onClick={handleMapClick}
                     >
-                      {Array.isArray(pins) && pins.map((pin) => (
-                        <>
-                          <Marker
-                            key={pin.id}
-                            position={{ lat: pin.latitude, lng: pin.longitude }}
-                            draggable={isDragging && selectedPin?.id === pin.id}
-                            onDragStart={handleDragStart}
-                            onDragEnd={handleDragEnd}
-                            onClick={() => handlePinClick(pin)}
-                          />
-                          <OverlayView
-                            position={{ lat: pin.latitude, lng: pin.longitude }}
-                            mapPaneName={"floatPane"}
-                          >
-                            <div
-                              style={{
-                                position: "absolute",
-                                transform: "translate(-50%, -250%)",
-                                backgroundColor: "rgba(255, 255, 255, 1)",
-                                padding: "4px 8px",
-                                borderRadius: "4px",
-                                border: "1px solid black",
-                                fontSize: "14px",
-                                fontWeight: "bold",
-                                color: "black",
-                                whiteSpace: "nowrap",
-                                boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2)",
-                              }}
+                      {Array.isArray(pins) &&
+                        pins.map((pin) => (
+                          <>
+                            <Marker
+                              key={pin.id}
+                              position={{ lat: pin.latitude, lng: pin.longitude }}
+                              draggable={isDragging && selectedPin?.id === pin.id}
+                              onDragStart={handleDragStart}
+                              onDragEnd={handleDragEnd}
+                              onClick={() => handlePinClick(pin)}
+                            />
+                            <OverlayView
+                              position={{ lat: pin.latitude, lng: pin.longitude }}
+                              mapPaneName={"floatPane"}
                             >
-                              {pin.name}
-                            </div>
-                          </OverlayView>
-                        </>
-                      ))}
+                              <div
+                                style={{
+                                  position: "absolute",
+                                  transform: "translate(-50%, -250%)",
+                                  backgroundColor: "rgba(255, 255, 255, 1)",
+                                  padding: "4px 8px",
+                                  borderRadius: "4px",
+                                  border: "1px solid black",
+                                  fontSize: "14px",
+                                  fontWeight: "bold",
+                                  color: "black",
+                                  whiteSpace: "nowrap",
+                                  boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2)",
+                                }}
+                              >
+                                {pin.name}
+                              </div>
+                            </OverlayView>
+                          </>
+                        ))}
                       {selectedPin && (
                         <OverlayView
                           position={{ lat: selectedPin.latitude, lng: selectedPin.longitude }}
@@ -549,17 +557,17 @@ export default function CourseSettings() {
                           >
                             {selectedPin.distance && (
                               <div>
-                                <strong>Distanse:</strong> {selectedPin.distance} meter
+                                <strong>{t("coursesettings_distance")}:</strong> {selectedPin.distance} {t("coursesettings_meters")}
                               </div>
                             )}
                             {selectedPin.par && (
                               <div>
-                                <strong>Par:</strong> {selectedPin.par}
+                                <strong>{t("coursesettings_par")}:</strong> {selectedPin.par}
                               </div>
                             )}
                             {selectedPin.outOfBounds && (
                               <div>
-                                <strong>OB:</strong> {selectedPin.outOfBounds}
+                                <strong>{t("coursesettings_ob")}:</strong> {selectedPin.outOfBounds}
                               </div>
                             )}
                           </div>
@@ -620,9 +628,9 @@ export default function CourseSettings() {
               </div>
 
               <div className="edit-panel absolute top-0 right-0 w-1/4 bg-gray-100 p-4 h-[850px] flex flex-col justify-between">
-                <h2 className="text-xl font-semibold">Rediger bane</h2>
+                <h2 className="text-xl font-semibold">{t("Edit Course")}</h2>
                 <div>
-                  <label className="block mt-4">Navn:</label>
+                  <label className="block mt-4">{t("coursesettings_name")}:</label>
                   <input
                     type="text"
                     value={newPinName}
@@ -631,28 +639,28 @@ export default function CourseSettings() {
                   />
                 </div>
                 <div className="mt-4">
-                  <label className="block">Velg Pin Type:</label>
+                  <label className="block">{t("coursesettings_select_pin_type")}:</label>
                   <select
                     value={selectedPinType}
                     onChange={(e) => handlePinTypeChange(e.target.value)}
                     className="w-full p-2 border rounded-lg"
                   >
-                    <option value="kurv">Kurv</option>
-                    <option value="Utslagspunkt">Utslagspunkt</option>
+                    <option value="kurv">{t("coursesettings_basket")}</option>
+                    <option value="Utslagspunkt">{t("coursesettings_tee_point")}</option>
                   </select>
                   <button
                     onClick={savePinsToDatabase}
                     className="bg-green-600 text-white px-4 py-2 rounded-lg mt-4"
                   >
-                    Lagre alle pins
+                    {t("coursesettings_save_all_pins")}
                   </button>
                   <button
                     onClick={toggleDrawLine}
-                    className={`px-4 py-2 rounded-lg mt-2 ${
+                    className={`px-4 py-2 rounded-lg mt-2 block ${
                       isDrawingLine ? "bg-gray-400 text-black" : "bg-blue-600 text-white"
                     }`}
                   >
-                    {isDrawingLine ? "Avslutt tegne linje" : "Tegn linje mellom pins"}
+                    {isDrawingLine ? t("coursesettings_end_draw_line") : t("coursesettings_draw_line")}
                   </button>
                   <button
                     onClick={toggleDeleteMode}
@@ -660,15 +668,15 @@ export default function CourseSettings() {
                       isDeleteMode ? "bg-gray-400 text-black" : "bg-red-600 text-white"
                     }`}
                   >
-                    {isDeleteMode ? "Avslutt slettemodus" : "Slettemodus"}
+                    {isDeleteMode ? t("coursesettings_end_delete_mode") : t("coursesettings_delete_mode")}
                   </button>
                 </div>
 
                 {selectedPin && (
                   <div className="mt-4 p-4 border rounded-lg bg-gray-200">
-                    <h3 className="text-lg font-semibold mb-2">Rediger Pin</h3>
+                    <h3 className="text-lg font-semibold mb-2">{t("coursesettings_edit_pin")}</h3>
                     <div className="mb-2">
-                      <label className="block text-sm font-medium">Navn:</label>
+                      <label className="block text-sm font-medium">{t("coursesettings_name")}:</label>
                       <input
                         type="text"
                         value={editPinName}
@@ -677,7 +685,7 @@ export default function CourseSettings() {
                       />
                     </div>
                     <div className="mb-2">
-                      <label className="block text-sm font-medium">Distanse (meter):</label>
+                      <label className="block text-sm font-medium">{t("coursesettings_distance")}</label>
                       <input
                         type="number"
                         value={editPinDistance || ""}
@@ -686,7 +694,7 @@ export default function CourseSettings() {
                       />
                     </div>
                     <div className="mb-2">
-                      <label className="block text-sm font-medium">Par:</label>
+                      <label className="block text-sm font-medium">{t("coursesettings_par")}:</label>
                       <input
                         type="number"
                         value={editPinPar || ""}
@@ -695,7 +703,7 @@ export default function CourseSettings() {
                       />
                     </div>
                     <div className="mb-2">
-                      <label className="block text-sm font-medium">Out-of-Bounds (OB):</label>
+                      <label className="block text-sm font-medium">{t("coursesettings_ob")}</label>
                       <textarea
                         value={editPinOutOfBounds}
                         onChange={(e) => setEditPinOutOfBounds(e.target.value)}
@@ -708,13 +716,13 @@ export default function CourseSettings() {
                         isDragging ? "bg-gray-400 text-black" : "bg-blue-600 text-white"
                       }`}
                     >
-                      {isDragging ? "Flyttemodus aktivert" : "Flytt kurv"}
+                      {isDragging ? t("coursesettings_move_mode_enabled") : t("coursesettings_move_basket")}
                     </button>
                     <button
                       onClick={handleSavePinChanges}
                       className="bg-green-600 text-white px-4 py-2 rounded-lg mt-2"
                     >
-                      Lagre endringer
+                      {t("coursesettings_save_changes")}
                     </button>
                   </div>
                 )}
@@ -724,7 +732,7 @@ export default function CourseSettings() {
                     onClick={handleGoBack}
                     className="bg-blue-600 text-white p-2 rounded-lg w-full mt-4"
                   >
-                    Gå tilbake til velg bane
+                    {t("coursesettings_go_back")}
                   </button>
                 </div>
               </div>
