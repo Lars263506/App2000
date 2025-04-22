@@ -61,13 +61,13 @@ const UserList: React.FC = () => {
         toast.success(t('userlist_toast_success_user_details_updated_successfully'));
       } else {
         const errorData = await response.json();
-        toast.error(t('userlist_toast_error_error updating user: ' + errorData.message));
+        toast.error(t('userlist_toast_error_updating_user') + errorData.message);
       }
     } catch (error) {
       if (error instanceof Error) {
-        toast.error(t('userlist_toast_error_error_updating_user: ' + error.message));
+        toast.error(t('userlist_toast_error_updating_user') + error.message);
       } else {
-        toast.error('userlist_toast_error_error_updating_user: ');
+        toast.error(t('userlist_toast_error_updating_user'));
       }
     }
   };
