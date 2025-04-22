@@ -1,8 +1,10 @@
 import React, { useState } from 'react'
 import { useRouter } from 'next/router'
 import { toast } from 'react-toastify'
+import { useTranslation } from 'react-i18next'
 
 const ContactPage = () => {
+  const { t } = useTranslation()
   const router = useRouter()
   const [formData, setFormData] = useState({
     name: '',
@@ -26,14 +28,14 @@ const ContactPage = () => {
 
     try {
       setTimeout(() => {
-        alert('Takk for din henvendelse! Vi svarer deg snart.')
+        toast.success(t('contactpage_toast_success_form_success'))
         router.push('/')
       }, 1000)
     } catch (error) {
       if (error instanceof Error) {
         toast.error(error.message)
       } else {
-        toast.error('Det oppstod en feil. Vennligst prøv igjen senere.')
+        toast.error(t('contactpage_toast_error_form_failed'))
       }
     } finally {
       setIsSubmitting(false)
@@ -44,12 +46,12 @@ const ContactPage = () => {
     <div className="flex justify-center items-center min-h-screen p-8">
       <div className="bg-[#E7EFFB] p-8 rounded-lg shadow-lg w-full max-w-3xl">
         <h1 className="text-2xl font-semibold text-center text-[#1B365D] mb-8">
-          Kontakt oss
+          {t('contactpage_header_text1')}
         </h1>
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="flex flex-col">
-            <label htmlFor="name" className="text-[#1B365D] text-lg mb-2">Navn</label>
+            <label htmlFor="name" className="text-[#1B365D] text-lg mb-2">{t('contactpage_name')}</label>
             <input
               type="text"
               id="name"
@@ -62,7 +64,7 @@ const ContactPage = () => {
           </div>
 
           <div className="flex flex-col">
-            <label htmlFor="email" className="text-[#1B365D] text-lg mb-2">E-post</label>
+            <label htmlFor="email" className="text-[#1B365D] text-lg mb-2">{t('contactpage_epost')}</label>
             <input
               type="email"
               id="email"
@@ -75,7 +77,7 @@ const ContactPage = () => {
           </div>
 
           <div className="flex flex-col">
-            <label htmlFor="subject" className="text-[#1B365D] text-lg mb-2">Emne</label>
+            <label htmlFor="subject" className="text-[#1B365D] text-lg mb-2">{t('contactpage_emne')}</label>
             <input
               type="text"
               id="subject"
@@ -88,7 +90,7 @@ const ContactPage = () => {
           </div>
 
           <div className="flex flex-col">
-            <label htmlFor="message" className="text-[#1B365D] text-lg mb-2">Meldingen din</label>
+            <label htmlFor="message" className="text-[#1B365D] text-lg mb-2">{t('contactpage_mesage')}</label>
             <textarea
               id="message"
               name="message"
@@ -106,7 +108,7 @@ const ContactPage = () => {
               className="bg-[#1B365D] text-white py-2 px-6 rounded-md hover:bg-[#5A8FCC] transition-colors duration-300"
               disabled={isSubmitting}
             >
-              {isSubmitting ? 'Sender...' : 'Send inn'}
+              {isSubmitting ? t('contactpage_sending') : t('contactpage_submit')}
             </button>
           </div>
         </form>

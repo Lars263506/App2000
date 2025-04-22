@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import '../../app/globals.css'
+import { useTranslation } from 'react-i18next'
 
 /**
  * @author Andreas Nilsen
@@ -14,6 +15,7 @@ interface RegisterProps {
 }
 
 const Register: React.FC<RegisterProps> = ({ togglePopup, closePopup }) => {
+  const { t } = useTranslation()
   const [locked, setLocked] = useState(false)
   const [displayName, setDisplayName] = useState('')
   const [email, setEmail] = useState('')
@@ -42,13 +44,13 @@ const Register: React.FC<RegisterProps> = ({ togglePopup, closePopup }) => {
       if (response.status !== 201) {
         toast.error(data.message)
       } else {
-        toast.success('Brukeren ble opprettet!')
+        toast.success(t('register_toast_success_user_created'))
       }
     } catch (error: unknown) {
       if (error instanceof Error) {
         toast.error(error.message)
       } else {
-        toast.error('Et problem oppstod. Prøv igjen senere.')
+        toast.error(t('register_toast_error_user_creation'))
       }
     } finally {
       setLocked(false)
@@ -74,8 +76,8 @@ const Register: React.FC<RegisterProps> = ({ togglePopup, closePopup }) => {
           >
             &times;
           </button>
-          <h2 className='text-2xl font-bold mb-12 text-center'>Registrer deg</h2>
-          <h2 className='font-bold mb-2 text-left'>Lag bruker i disse feltene:</h2>
+          <h2 className='text-2xl font-bold mb-12 text-center'>{t('register_register')}</h2>
+          <h2 className='font-bold mb-2 text-left'>{t('register_make_user')}</h2>
           <form onSubmit={handleSubmit} className='flex flex-col'>
             <div className='flex flex-col mb-3'>
               <input
@@ -108,14 +110,14 @@ const Register: React.FC<RegisterProps> = ({ togglePopup, closePopup }) => {
               type='submit'
               className='bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-600 mt-2'
             >
-              Registrer
+              {t('register_register')}
             </button>
             <button
               type='button'
               className='bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-600 mt-12'
               onClick={togglePopup}
             >
-              Tilbake til logg inn
+              {t('register_already_have_account')}
             </button>
             <ToastContainer />
           </form>

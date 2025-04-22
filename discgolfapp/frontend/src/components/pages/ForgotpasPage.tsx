@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { toast } from 'react-toastify';
+import { useTranslation } from 'react-i18next';
 
 interface ForgotpasPageProps {
   togglePopup: () => void;
@@ -7,6 +8,7 @@ interface ForgotpasPageProps {
 }
 
 const ForgotpasPage: React.FC<ForgotpasPageProps> = ({ togglePopup, setSelectedPage }) => {
+  const { t } = useTranslation();
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -16,13 +18,13 @@ const ForgotpasPage: React.FC<ForgotpasPageProps> = ({ togglePopup, setSelectedP
 
     // Simulerer en "tilbakestillingslink" som sendes til e-post
     setTimeout(() => {
-      toast.success('En tilbakestillingslenke har blitt sendt til din e-post.');
+      toast.success(t('forgotpaspage_forgot_password_success'));
       setLoading(false);
 
       // Legg til en ekstra toast-melding før du blir sendt til login-siden
-      toast.info('Du blir nå sendt tilbake til innloggingssiden...', {
+      toast.info(t('forgotpaspage_sendt_back', {
         autoClose: 2000, // Denne meldingen vises i 2 sekunder før navigering
-      });
+      }));
 
       // Etter at toast-meldingen er vist, gå tilbake til hjem og åpne login-popupen
       setTimeout(() => {
@@ -38,7 +40,7 @@ const ForgotpasPage: React.FC<ForgotpasPageProps> = ({ togglePopup, setSelectedP
       <div className="bg-gray-300 p-16 rounded-lg shadow-lg w-full max-w-2xl">
         <div className="bg-white p-10 rounded-lg">
           {/* Plasserer overskriften til venstre */}
-          <h2 className="text-3xl font-bold text-left mb-12">Glemt passord?</h2>
+          <h2 className="text-3xl font-bold text-left mb-12">{t('forgotpaspage_password')}</h2>
           <form onSubmit={handlePasswordReset} className="flex flex-col space-y-4">
             <input
               type="email"
@@ -59,18 +61,18 @@ const ForgotpasPage: React.FC<ForgotpasPageProps> = ({ togglePopup, setSelectedP
 
           {/* Legger til tekst under boksen */}
           <p className="mt-12 text-center text-base">
-            Har du glemt e-postadressen din?{' '}
+           {t('forgotpaspage_email')}{' '}
             <span
               className="text-blue-500 cursor-pointer"
               onClick={() => setSelectedPage('Contact')}
             >
-              Kontakt oss
+              {t('forgotpaspage_contact')}
             </span>
           </p>
 
           {/* Legger til lenke tilbake til innlogging */}
           <p className="mt-4 text-center text-base">
-          Tilbake til {' '} 
+          {t('forgotpaspage_backto')} {' '} 
             <span
               className="text-blue-500 cursor-pointer"
               onClick={() => {
@@ -78,7 +80,7 @@ const ForgotpasPage: React.FC<ForgotpasPageProps> = ({ togglePopup, setSelectedP
                 togglePopup(); // Åpner login-popupen
               }}
             >
-                innlogging
+              {t('forgotpaspage_back')}
             </span>
           </p>
         </div>

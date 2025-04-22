@@ -1,4 +1,6 @@
 import React from 'react';
+import { toast } from 'react-toastify';
+import { useTranslation } from 'react-i18next';
 
 interface GameResultsModalProps {
   game: {
@@ -13,6 +15,7 @@ interface GameResultsModalProps {
 }
 
 const GameResultsModal: React.FC<GameResultsModalProps> = ({ game, isOpen, onClose, calculateTotalScore }) => {
+  const { t } = useTranslation();
   if (!isOpen) return null;
 
   return (
@@ -22,17 +25,17 @@ const GameResultsModal: React.FC<GameResultsModalProps> = ({ game, isOpen, onClo
           &times;
         </button>
         <h2 className="text-xl font-bold mb-2">{game.course} - {new Date(game.date).toLocaleDateString("no-NO")}</h2>
-        <p className="text-sm"><strong>Spillere:</strong></p>
+        <p className="text-sm"><strong>{t('gameresults_players')}:</strong></p>
         <ul className="text-sm mb-2">
           {game.players.map((player, index) => (
             <li key={index}>• {player.name || "Unknown Player"}</li>
           ))}
         </ul>
-        <p className="text-sm"><strong>Poeng:</strong></p>
+        <p className="text-sm"><strong>{t('gameresults_points')}:</strong></p>
         <table className="w-full border rounded-lg mb-2 text-sm">
           <thead>
             <tr className="bg-gray-300">
-              <th className="p-2">Kurv</th>
+              <th className="p-2">{t('gameresults_basket')}</th>
               {game.players.map((player, index) => (
                 <th key={index} className="p-2">{player.name || "Unknown Player"}</th>
               ))}
@@ -41,7 +44,7 @@ const GameResultsModal: React.FC<GameResultsModalProps> = ({ game, isOpen, onClo
           <tbody>
             {Array.from({ length: game.scores[game.players[0]?.name]?.length || 0 }, (_, index) => (
               <tr key={index} className="text-center border-b">
-                <td className="p-2">Kurv {index + 1}:</td>
+                <td className="p-2">{t('gameresults_basket')} {index + 1}:</td>
                 {game.players.map((player) => (
                   <td key={player._id} className="p-2">
                     {game.scores[player.name]?.[index] === 0 && index >= game.scores[player.name]?.length
@@ -55,7 +58,7 @@ const GameResultsModal: React.FC<GameResultsModalProps> = ({ game, isOpen, onClo
               <tr key={player._id} className="text-center border-t font-semibold">
                 <td colSpan={game.players.length + 1} className="p-2 text-left">
                   <div className="flex justify-between">
-                    <span>Totalt score for {player.name || "Unknown Player"}:</span>
+                    <span>{t('gameresults_total')} {player.name || "Unknown Player"}:</span>
                     <span>{calculateTotalScore(game.scores[player.name] || [])}</span>
                   </div>
                 </td>

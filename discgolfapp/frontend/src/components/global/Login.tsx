@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { toast } from 'react-toastify'
+import { useTranslation } from 'react-i18next'
 
 interface LoginProps {
   togglePopup: () => void
@@ -17,6 +18,7 @@ interface LoginResponseData {
 }
 
 const Login: React.FC<LoginProps> = ({ togglePopup, toggleRegisterPopup, closePopup, selectedPage, setSelectedPage }) => {
+  const { t } = useTranslation()
   const [locked, setLocked] = useState(false)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -46,13 +48,13 @@ const Login: React.FC<LoginProps> = ({ togglePopup, toggleRegisterPopup, closePo
       });
 
       if (response.status === 429) {
-        toast.error('For mange forespørsler. Vennligst vent litt før du prøver igjen.');
+        toast.error(t('login_toast_error_too_many_requests'));
         return;
       }
 
       if (response.status !== 200) {
         const errorData = await response.json();
-        toast.error(errorData.message || 'Et problem oppstod. Vennligst prøv igjen senere.');
+        toast.error(errorData.message ? t(errorData.message) : t('login_toast_error_generic'));
         return;
       }
 
@@ -63,7 +65,7 @@ const Login: React.FC<LoginProps> = ({ togglePopup, toggleRegisterPopup, closePo
       localStorage.setItem('refreshToken', data.refreshToken);
       localStorage.setItem('displayName', data.displayName);
       setIsLoggedIn(true);
-      toast.success('Logget inn med bruker: ' + data.displayName);
+      toast.success(t('login_toast_success_login', { displayName: data.displayName }));
       setLoggedInUser(data.displayName);
       closePopup();
       window.location.reload();
@@ -71,7 +73,7 @@ const Login: React.FC<LoginProps> = ({ togglePopup, toggleRegisterPopup, closePo
       if (error instanceof Error) {
         toast.error(error.message);
       } else {
-        toast.error('Et problem oppstod. Vennligst prøv igjen senere.');
+        toast.error(t('login_toast_error_tryagain'));
       }
     } finally {
       setLocked(false);
@@ -83,7 +85,7 @@ const Login: React.FC<LoginProps> = ({ togglePopup, toggleRegisterPopup, closePo
   const handleLogout = async () => {
     localStorage.removeItem('accessToken')
     localStorage.removeItem('refreshToken')
-    toast.success('Du er logget ut.')
+    toast.success(t('login_toast_success_logout'))
     if (selectedPage === 'Admin')
       setSelectedPage('Home')
     else if (selectedPage === 'MyPage')
@@ -129,10 +131,10 @@ const Login: React.FC<LoginProps> = ({ togglePopup, toggleRegisterPopup, closePo
              onClick={() => goToMyPage()}
              className="px-4 py-2 mb-2 rounded bg-[#E7EFFB] hover:bg-blue-700 hover:text-white"
            >
-             Min Side
+             {t('login_goto_mypage')}
            </button>
             <button onClick={handleLogout} className="px-4 py-2 rounded bg-[#E7EFFB] hover:bg-red-800 hover:text-white">
-              Logg ut
+              {t('login_logout')}
             </button>
           </div>
             )
@@ -160,17 +162,17 @@ const Login: React.FC<LoginProps> = ({ togglePopup, toggleRegisterPopup, closePo
                 onClick={handleForgotPassword}
                 className="hover:underline text-black mt-2 text-sm text-center"
               >
-                Glemt passord?
+                {t('login_forgot_password')}
               </button>
               </div>
               <button
                 type='submit'
                 className='bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700 mb-4'
               >
-                Logg inn
+                {t('login_login')}
               </button>
 
-              <h2 className='text-center mt-8'>Har du ikke bruker?</h2>
+              <h2 className='text-center mt-8'>{t('login_no_user')}</h2>
               <button
                 type='button'
                 className='bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700 mt-2'
@@ -179,7 +181,7 @@ const Login: React.FC<LoginProps> = ({ togglePopup, toggleRegisterPopup, closePo
                   toggleRegisterPopup()
                 }}
               >
-                Registrer deg
+                {t('login_create_user')}
               </button>
             </form>
             )}
