@@ -22,7 +22,7 @@ type Line = {
 };
 
 export default function CourseSettings() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [selectedCourse, setSelectedCourse] = useState("");
   const [courses, setCourses] = useState<Course[]>([]);
   const [filteredCourses, setFilteredCourses] = useState<Course[]>([]);
@@ -484,6 +484,7 @@ export default function CourseSettings() {
                 {selectedCourse && (
                   <LoadScript
                     googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string}
+                    language={i18n.language}
                   >
                     <GoogleMap
                       center={mapCenter}
