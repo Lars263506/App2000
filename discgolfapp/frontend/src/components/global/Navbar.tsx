@@ -50,7 +50,7 @@ const Navbar: React.FC<NavBarProps> = ({ toggleLoginPopup, setSelectedPage }) =>
       });
 
       if (response.status !== 200) {
-        throw new Error(response.statusText);
+        throw new Error(t('navbar_testdata_reset_failed', { statusText: response.statusText }));
       }
 
       toast.success(t('navbar_testdata_reset_success'));
