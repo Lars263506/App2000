@@ -41,8 +41,7 @@ const Announcements = () => {
         toast.error(t('toast_error_fetching_announcements'));
       }
     } catch (error) {
-      toast.error(t('toast_error_fetching_announcements' + error));
-    }
+      toast.error(t('toast_error_fetching_announcements') + error);
   };
 
   const checkEditRights = async () => {
