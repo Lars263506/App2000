@@ -9,6 +9,7 @@ export default function StartGame() {
   const [players, setPlayers] = useState(["Spiller 1"]);
   const [scores, setScores] = useState<{ [key: string]: number[] }>({});
   const [currentBasket, setCurrentBasket] = useState(1);
+  const [currentBasketIndex, setCurrentBasketIndex] = useState(0);
   const [gameStarted, setGameStarted] = useState(false);
   const [gameEnded, setGameEnded] = useState(false);
   const [courses, setCourses] = useState<Course[]>([]);
@@ -16,6 +17,8 @@ export default function StartGame() {
   const [searchResults, setSearchResults] = useState<{ displayName: string; email: string }[]>([]);
   const [pins, setPins] = useState<{ id: string; latitude: number; longitude: number; name: string; type: string }[]>([]);
   const [lines, setLines] = useState<{ pinId1: string; pinId2: string }[]>([]);
+  const [showCourseList, setShowCourseList] = useState(true);
+  const [mapInitialized, setMapInitialized] = useState(false);
 
   const mapRef = useRef<google.maps.Map | null>(null);
 
@@ -47,7 +50,12 @@ export default function StartGame() {
       try {
         const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/course/${selectedCourse._id}/pins`);
         const data = await response.json();
-        setPins(data.pins);
+
+        const sortedPins = data.pins.sort((a: { name: string }, b: { name: string }) => 
+          a.name.localeCompare(b.name, undefined, { numeric: true })
+        );
+
+        setPins(sortedPins); 
         setLines(data.lines || []);
       } catch (error) {
         toast.error("Failed to fetch pins: " + error);
@@ -62,16 +70,45 @@ export default function StartGame() {
   }, [gameStarted]);
 
   useEffect(() => {
-    if (mapRef.current && pins.length > 0 && currentBasket > 0) {
-      const pin = pins[currentBasket - 1];
-      mapRef.current.setCenter({ lat: pin.latitude, lng: pin.longitude });
-      mapRef.current.setZoom(19);
+    if (mapRef.current && gameStarted && !mapInitialized) {
+      const basketPins = pins
+        .filter((pin) => pin.type === "kurv")
+        .sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }));
+
+      if (basketPins.length > 0) {
+        const firstPin = basketPins[0];
+        mapRef.current.setCenter({ lat: firstPin.latitude, lng: firstPin.longitude });
+        mapRef.current.setZoom(19);
+        setMapInitialized(true);
+      } else if (selectedCourse) {
+        mapRef.current.setCenter({ lat: selectedCourse.latitude, lng: selectedCourse.longitude });
+        mapRef.current.setZoom(16);
+        setMapInitialized(true); 
+      }
     }
-  }, [currentBasket, pins]);
+  }, [pins, gameStarted, selectedCourse, mapInitialized]);
+
+  useEffect(() => {
+    if (mapRef.current && gameStarted) {
+      const basketPins = pins
+        .filter((pin) => pin.type === "kurv")
+        .sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }));
+
+      if (basketPins.length > 0 && currentBasket > 0) {
+        const currentPin = basketPins[currentBasket - 1];
+        mapRef.current.setCenter({ lat: currentPin.latitude, lng: currentPin.longitude });
+        mapRef.current.setZoom(18);
+      }
+    }
+  }, [currentBasket, pins, gameStarted]);
 
   const startGame = () => {
     if (selectedCourse) {
       setGameStarted(true);
+      setCurrentBasket(1); 
+      setCurrentBasketIndex(0); 
+      setMapInitialized(false); 
+
       const initialScores = players.reduce<{ [key: string]: number[] }>((acc, player) => {
         acc[player] = Array(selectedCourse.holes).fill(0);
         return acc;
@@ -99,14 +136,39 @@ export default function StartGame() {
   };
 
   const handleNextBasket = () => {
+    const basketPins = pins
+      .filter((pin) => pin.type === "kurv")
+      .sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true })); 
+
     if (currentBasket < (selectedCourse?.holes || 12)) {
-      setCurrentBasket(currentBasket + 1);
+      if (basketPins.length > 0 && currentBasketIndex >= basketPins.length - 1) {
+        toast.error("Det finnes ikke flere kurver for denne banen. Spillet avsluttes.");
+        finishGame(); 
+      } else {
+        setCurrentBasket(currentBasket + 1);
+        setCurrentBasketIndex(currentBasketIndex + 1); 
+        if (mapRef.current && basketPins[currentBasketIndex + 1]) {
+          const nextPin = basketPins[currentBasketIndex + 1]; 
+          mapRef.current.setCenter({ lat: nextPin.latitude, lng: nextPin.longitude });
+          mapRef.current.setZoom(15);
+        }
+      }
     }
   };
 
   const handlePreviousBasket = () => {
+    const basketPins = pins
+      .filter((pin) => pin.type === "kurv")
+      .sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true })); 
+
     if (currentBasket > 1) {
       setCurrentBasket(currentBasket - 1);
+      setCurrentBasketIndex(currentBasketIndex - 1); 
+      if (mapRef.current && basketPins[currentBasketIndex - 1]) {
+        const previousPin = basketPins[currentBasketIndex - 1]; 
+        mapRef.current.setCenter({ lat: previousPin.latitude, lng: previousPin.longitude });
+        mapRef.current.setZoom(19);
+      }
     }
   };
 
@@ -196,12 +258,15 @@ export default function StartGame() {
 
   return (
     <div className="min-h-screen flex flex-col sm:flex-row text-black">
-      {!gameStarted && (
+      {showCourseList && !gameStarted && (
         <div className="w-full sm:w-1/4 h-full">
           <CourseList
             courses={courses}
             setCourses={setCourses}
-            setSelectedCourse={setSelectedCourse}
+            setSelectedCourse={(course) => {
+              setSelectedCourse(course);
+              setShowCourseList(false);
+            }}
           />
         </div>
       )}
@@ -224,6 +289,7 @@ export default function StartGame() {
                     position={{ lat: course.latitude, lng: course.longitude }}
                     onClick={() => {
                       setSelectedCourse(course);
+                      setShowCourseList(false);
                       if (mapRef.current) {
                         const newCenter = new window.google.maps.LatLng(course.latitude, course.longitude);
                         mapRef.current.setCenter(newCenter);
@@ -243,14 +309,15 @@ export default function StartGame() {
                 center={
                   pins.length > 0 && currentBasket > 0
                     ? { lat: pins[currentBasket - 1].latitude, lng: pins[currentBasket - 1].longitude }
-                    : { lat: 59.9139, lng: 10.7522 }
+                    : selectedCourse
+                    ? { lat: selectedCourse.latitude, lng: selectedCourse.longitude }
+                    : { lat: 59.9139, lng: 10.7522 } 
                 }
-                zoom={20}
+                zoom={pins.length > 0 ? 19 : 15}
                 onLoad={(map) => {
                   mapRef.current = map;
                 }}
               >
-                {}
                 {pins.map((pin, index) => (
                   <Marker
                     key={index}
@@ -260,38 +327,19 @@ export default function StartGame() {
                       scaledSize: new google.maps.Size(30, 30),
                     }}
                   >
-                    <InfoWindow
-                      position={{ lat: pin.latitude + 0.00005, lng: pin.longitude }}
-                    >
+                    <InfoWindow position={{ lat: pin.latitude + 0.00005, lng: pin.longitude }}>
                       <div>
                         <p>{pin.name}</p>
                       </div>
                     </InfoWindow>
                   </Marker>
                 ))}
-
-                {}
-                {lines.map((line, index) => {
-                  const pin1 = pins.find((pin) => pin.id === line.pinId1);
-                  const pin2 = pins.find((pin) => pin.id === line.pinId2);
-
-                  if (!pin1 || !pin2) return null;
-
-                  return (
-                    <Polyline
-                      key={index}
-                      path={[
-                        { lat: pin1.latitude, lng: pin1.longitude },
-                        { lat: pin2.latitude, lng: pin2.longitude },
-                      ]}
-                      options={{
-                        strokeColor: '#FF0000',
-                        strokeOpacity: 0.8,
-                        strokeWeight: 2,
-                      }}
-                    />
-                  );
-                })}
+                {pins.length === 0 && selectedCourse && (
+                  <Marker
+                    position={{ lat: selectedCourse.latitude, lng: selectedCourse.longitude }}
+                  >
+                  </Marker>
+                )}
               </GoogleMap>
             </LoadScript>
           </div>
@@ -378,6 +426,17 @@ export default function StartGame() {
                   disabled={!selectedCourse || players.some(player => !player)}
                 >
                   Start spill
+                </button>
+              </div>
+              <div className="mt-2">
+                <button
+                  className="w-full bg-gray-600 text-white p-2 rounded-lg text-base hover:bg-gray-700"
+                  onClick={() => {
+                    setSelectedCourse(null); 
+                    setShowCourseList(true);
+                  }}
+                >
+                  Tilbake til baner
                 </button>
               </div>
             </div>
