@@ -142,7 +142,7 @@ export default function StartGame() {
 
     if (currentBasket < (selectedCourse?.holes || 12)) {
       if (basketPins.length > 0 && currentBasketIndex >= basketPins.length - 1) {
-        toast.error("Det finnes ikke flere kurver for denne banen. Spillet avsluttes.");
+        toast.success("Det finnes ikke flere kurver for denne banen. Spillet avsluttes.");
         finishGame(); 
       } else {
         setCurrentBasket(currentBasket + 1);
