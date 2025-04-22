@@ -1,7 +1,5 @@
 import { useState, useEffect } from "react";
 import { GoogleMap, LoadScript, Marker, OverlayView, Polyline } from "@react-google-maps/api";
-import { useTranslation } from "react-i18next";
-import { toast } from "react-toastify";
 
 import Course from "../../types/course";
 
@@ -143,7 +141,7 @@ export default function CourseSettings() {
       const updatedData = await response.json();
       setPins(updatedData.pins || []);
       setLines(updatedData.lines || []);
-      toast.success(t("coursesettings_toast_success_pins_lines_saved"));
+      alert("Pins og linjer lagret i databasen!");
     } catch (error) {
       toast.error(t("coursesettings_toast_error_save_pins_lines"));
     }
@@ -208,23 +206,17 @@ export default function CourseSettings() {
 
     if (isDrawingLine) {
       setLinePins((prev) => {
-        if (prev.length < 2) {
-          const newLinePins = [...prev, pin];
-          if (newLinePins.length === 2) {
-            setLines((prevLines) => [
-              ...prevLines,
-              { pinId1: newLinePins[0].id, pinId2: newLinePins[1].id },
-            ]);
-          }
-          return newLinePins;
-        } else {
-          const newLinePins = [prev[1], pin];
+        const newLinePins = [...prev, pin];
+        if (newLinePins.length === 2) {
+          // Add the new line to the lines state
           setLines((prevLines) => [
             ...prevLines,
             { pinId1: newLinePins[0].id, pinId2: newLinePins[1].id },
           ]);
-          return newLinePins;
+          // Reset linePins for the next line
+          return [];
         }
+        return newLinePins;
       });
       return;
     }
@@ -260,7 +252,8 @@ export default function CourseSettings() {
         setEditPinOutOfBounds(selectedPinData.outOfBounds || "");
       }
     } catch (error) {
-      toast.error(t("coursesettings_toast_error_fetch_pin") + error);
+      console.error("Error fetching pin data:", error);
+      alert("Kunne ikke hente pin-data. Prøv igjen senere.");
     }
 
     setMapCenter({ lat: pin.latitude, lng: pin.longitude });
@@ -342,9 +335,10 @@ export default function CourseSettings() {
         throw new Error(t("coursesettings_error_failed_save_pin"));
       }
 
-      toast.success(t("coursesettings_toast_success_pin_saved"));
+      alert("Endringer lagret!");
     } catch (error) {
-      toast.error(t("coursesettings_toast_error_save_pin") + error);
+      console.error("Error saving pins:", error);
+      alert("Kunne ikke lagre endringer. Prøv igjen senere.");
     }
 
     setEditPinDistance(null);
@@ -408,7 +402,8 @@ export default function CourseSettings() {
         });
         setZoomLevel(15);
       } catch (error) {
-        toast.error(t("coursesettings_toast_error_fetch_pins") + error);
+        console.error("Error fetching pins:", error);
+        alert("Kunne ikke hente pins for banen. Vennligst prøv igjen senere.");
       }
     }
   };
@@ -426,7 +421,7 @@ export default function CourseSettings() {
   };
 
   const handleContainerClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (e.target instanceof HTMLElement && !e.target.closest(".edit-panel")) {
+    if (e.target instanceof HTMLElement && !e.target.closest(".edit-panel") && !e.target.closest(".gm-style")) {
       setSelectedPin(null);
       setIsDrawingLine(false);
       setLinePins([]);
@@ -435,7 +430,7 @@ export default function CourseSettings() {
   };
 
   const toggleDrawLine = () => {
-    setIsDrawingLine(!isDrawingLine);
+    setIsDrawingLine((prev) => !prev);
     if (!isDrawingLine) {
       setLinePins([]);
     }
