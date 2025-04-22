@@ -37,7 +37,6 @@ const MemberList: React.FC<MemberListProps> = () => {
           setMembers(data);
         }
       } catch (error) {
-        console.error('Error fetching members:', error);
         toast.error(t('error_fetch_members'));
       } finally {
         setLoading(false);

@@ -29,7 +29,7 @@ const Invitations: React.FC = () => {
         const data: Invitation[] = await response.json();
         setInvitations(data);
       } catch (error) {
-        console.error(error);
+        toast.error('Det oppstod en feil med å hente møteinnkallinger.');
       }
     };
 
@@ -119,7 +119,7 @@ const Invitations: React.FC = () => {
       if (response.status !== 200) throw new Error('Failed to delete invitation');
       setInvitations((prev) => prev.filter((invitation) => invitation.id !== id));
     } catch (error) {
-      console.error(error);
+      toast.error('Det oppstod en feil med å slette møteinnkallingen.');
     }
   };
 

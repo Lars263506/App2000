@@ -29,7 +29,7 @@ const Minutes: React.FC = () => {
         const data: Minute[] = await response.json();
         setMinutes(data);
       } catch (error) {
-        console.error(error);
+        toast.error('Det oppstod en feil med å hente møtereferater.');
       }
     };
 
@@ -119,7 +119,7 @@ const Minutes: React.FC = () => {
       if (response.status !== 200) throw new Error('Failed to delete minute');
       setMinutes((prev) => prev.filter((meeting) => meeting.id !== id));
     } catch (error) {
-      console.error(error);
+      toast.error('Det oppstod en feil med å slette møtereferatet.');
     }
   };
 
