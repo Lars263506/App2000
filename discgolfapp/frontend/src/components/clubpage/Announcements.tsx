@@ -42,6 +42,7 @@ const Announcements = () => {
       }
     } catch (error) {
       toast.error(t('toast_error_fetching_announcements') + error);
+    }
   };
 
   const checkEditRights = async () => {
@@ -63,6 +64,7 @@ const Announcements = () => {
       }
     } catch (error) {
       toast.error(t('toast_error_error_fetching_edit_rights') + ': ' + error);
+    }
   };
 
   const handleCreateAnnouncement = () => {
@@ -83,14 +85,14 @@ const Announcements = () => {
       });
 
       if (response.status === 201) {
-        toast.success('Announcement created successfully!');
+        toast.success(t('toast_success_announcement_created'));
         setIsCreating(false);
         fetchAnnouncements();
       } else {
-        toast.error(t('toast_error_failed_to_create_announcement.'));
+        toast.error(t('toast_error_failed_to_create_announcement'));
       }
     } catch (error) {
-      toast.error(t('toast_error_failed_to_create_announcement.'));
+      toast.error(t('toast_error_failed_to_create_announcement'));
     }
   };
 
@@ -130,7 +132,7 @@ const Announcements = () => {
 
   return (
     <div className="p-4 border rounded-lg shadow-md bg-white w-full h-full max-h-100 overflow-y-auto">
-      <h2 className="text-xl font-bold mb-2 text-black">Kunngjøringer</h2>
+      <h2 className="text-xl font-bold mb-2 text-black">{t("announcements_announcements")}</h2>
 
       {editRights && !isCreating && (
         <Button
