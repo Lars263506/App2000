@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { GoogleMap, LoadScript, Marker, OverlayView, Polyline } from "@react-google-maps/api";
 
 import Course from "../../types/course";
+import { toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
 
 type Pin = {
   id: string;
