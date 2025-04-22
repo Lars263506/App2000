@@ -6,7 +6,7 @@ import CourseList from '@/components/coursepage/CourseList';
 import { useTranslation } from "react-i18next";
 
 export default function StartGame() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
   const [players, setPlayers] = useState(["Spiller 1"]);
   const [scores, setScores] = useState<{ [key: string]: number[] }>({});
@@ -53,11 +53,11 @@ export default function StartGame() {
         const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/course/${selectedCourse._id}/pins`);
         const data = await response.json();
 
-        const sortedPins = data.pins.sort((a: { name: string }, b: { name: string }) => 
+        const sortedPins = data.pins.sort((a: { name: string }, b: { name: string }) =>
           a.name.localeCompare(b.name, undefined, { numeric: true })
         );
 
-        setPins(sortedPins); 
+        setPins(sortedPins);
         setLines(data.lines || []);
       } catch (error) {
         toast.error(t("playpage_toast_error_failed_to_fetch_pins" + error));
@@ -85,7 +85,7 @@ export default function StartGame() {
       } else if (selectedCourse) {
         mapRef.current.setCenter({ lat: selectedCourse.latitude, lng: selectedCourse.longitude });
         mapRef.current.setZoom(16);
-        setMapInitialized(true); 
+        setMapInitialized(true);
       }
     }
   }, [pins, gameStarted, selectedCourse, mapInitialized]);
@@ -107,9 +107,9 @@ export default function StartGame() {
   const startGame = () => {
     if (selectedCourse) {
       setGameStarted(true);
-      setCurrentBasket(1); 
-      setCurrentBasketIndex(0); 
-      setMapInitialized(false); 
+      setCurrentBasket(1);
+      setCurrentBasketIndex(0);
+      setMapInitialized(false);
 
       const initialScores = players.reduce<{ [key: string]: number[] }>((acc, player) => {
         acc[player] = Array(selectedCourse.holes).fill(0);
@@ -140,17 +140,17 @@ export default function StartGame() {
   const handleNextBasket = () => {
     const basketPins = pins
       .filter((pin) => pin.type === "kurv")
-      .sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true })); 
+      .sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }));
 
     if (currentBasket < (selectedCourse?.holes || 12)) {
       if (basketPins.length > 0 && currentBasketIndex >= basketPins.length - 1) {
         toast.success("Det finnes ikke flere kurver for denne banen. Spillet avsluttes.");
-        finishGame(); 
+        finishGame();
       } else {
         setCurrentBasket(currentBasket + 1);
-        setCurrentBasketIndex(currentBasketIndex + 1); 
+        setCurrentBasketIndex(currentBasketIndex + 1);
         if (mapRef.current && basketPins[currentBasketIndex + 1]) {
-          const nextPin = basketPins[currentBasketIndex + 1]; 
+          const nextPin = basketPins[currentBasketIndex + 1];
           mapRef.current.setCenter({ lat: nextPin.latitude, lng: nextPin.longitude });
           mapRef.current.setZoom(15);
         }
@@ -161,13 +161,13 @@ export default function StartGame() {
   const handlePreviousBasket = () => {
     const basketPins = pins
       .filter((pin) => pin.type === "kurv")
-      .sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true })); 
+      .sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }));
 
     if (currentBasket > 1) {
       setCurrentBasket(currentBasket - 1);
-      setCurrentBasketIndex(currentBasketIndex - 1); 
+      setCurrentBasketIndex(currentBasketIndex - 1);
       if (mapRef.current && basketPins[currentBasketIndex - 1]) {
-        const previousPin = basketPins[currentBasketIndex - 1]; 
+        const previousPin = basketPins[currentBasketIndex - 1];
         mapRef.current.setCenter({ lat: previousPin.latitude, lng: previousPin.longitude });
         mapRef.current.setZoom(19);
       }
@@ -210,7 +210,7 @@ export default function StartGame() {
         toast.error(t('playpage_toast_error_saving_game' + error));
         if (error instanceof Error) {
           toast.error(t("playpage_toast_error_unknown" + error.message));
-        } 
+        }
       }
     }
   };
@@ -274,7 +274,9 @@ export default function StartGame() {
       <div className={`flex-grow flex flex-col sm:flex-row rounded-lg`}>
         {!gameStarted || (gameStarted && !selectedCourse) ? (
           <div className="flex-grow sm:w-4/5 h-[300px] sm:h-auto transition-all duration-300 rounded-lg overflow-hidden">
-            <LoadScript googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string}>
+            <LoadScript
+              googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string}
+              language={i18n.language}>
               <GoogleMap
                 mapContainerStyle={{ width: '100%', height: '100%' }}
                 center={selectedCourse ? { lat: selectedCourse.latitude, lng: selectedCourse.longitude } : { lat: 59.9139, lng: 10.7522 }}
@@ -303,7 +305,10 @@ export default function StartGame() {
           </div>
         ) : (
           <div className="flex-grow sm:w-4/5 h-[300px] sm:h-auto transition-all duration-300 rounded-lg overflow-hidden">
-            <LoadScript googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string}>
+            <LoadScript
+              googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string}
+              language={i18n.language}
+            >
               <GoogleMap
                 mapContainerStyle={{ width: '100%', height: '100%' }}
                 center={
@@ -311,7 +316,7 @@ export default function StartGame() {
                     ? { lat: pins[currentBasket - 1].latitude, lng: pins[currentBasket - 1].longitude }
                     : selectedCourse
                     ? { lat: selectedCourse.latitude, lng: selectedCourse.longitude }
-                    : { lat: 59.9139, lng: 10.7522 } 
+                    : { lat: 59.9139, lng: 10.7522 }
                 }
                 zoom={pins.length > 0 ? 19 : 15}
                 onLoad={(map) => {
@@ -457,7 +462,7 @@ export default function StartGame() {
                 <button
                   className="w-full bg-gray-600 text-white p-2 rounded-lg text-base hover:bg-gray-700"
                   onClick={() => {
-                    setSelectedCourse(null); 
+                    setSelectedCourse(null);
                     setShowCourseList(true);
                   }}
                 >

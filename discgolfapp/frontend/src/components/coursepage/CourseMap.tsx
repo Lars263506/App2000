@@ -12,7 +12,7 @@ interface CourseMapProps {
 }
 
 const CourseMap: React.FC<CourseMapProps> = ({ selectedCourse, courses, setSelectedCourse }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const mapRef = useRef<google.maps.Map | null>(null);
   const [selectedMarker, setSelectedMarker] = useState<Course | null>(null);
   const [difficultyFilter, setDifficultyFilter] = useState('');

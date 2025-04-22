@@ -11,7 +11,7 @@ interface ClubMapProps {
 }
 
 const ClubMap: React.FC<ClubMapProps> = ({ selectedClub, setSelectedPage }) => {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const [clubs, setClubs] = useState<Club[]>([])
   const [markers, setMarkers] = useState<google.maps.LatLng[]>([])
   const [selectedMarker, setSelectedMarker] = useState<google.maps.LatLng | null>(null)
@@ -98,6 +98,7 @@ const ClubMap: React.FC<ClubMapProps> = ({ selectedClub, setSelectedPage }) => {
         <h2>{t("clubmap_prompt_action")}</h2>
         <LoadScript
           googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string}
+          language={i18n.language}
           onLoad={() => setIsGoogleMapsLoaded(true)}
         >
           {!isGoogleMapsLoaded ? (
