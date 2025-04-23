@@ -82,7 +82,11 @@ export default function CourseSettings() {
 
         setCourses(mappedCourses);
       } catch (error) {
-        toast.error(t("coursesettings_toast_error_fetch_courses"));
+        if (error instanceof Error) {
+          toast.error(error.message);
+        } else {
+          toast.error(t("coursesettings_toast_error_fetch_courses"));
+        }
       }
     };
     fetchCourses();
@@ -109,7 +113,11 @@ export default function CourseSettings() {
         const result = await response.json();
         setFilteredCourses(result.data);
       } catch (error) {
-        toast.error(t("coursesettings_toast_error_fetch_courses_for_owner"));
+        if (error instanceof Error) {
+          toast.error(error.message);
+        } else {
+          toast.error(t("coursesettings_toast_error_fetch_courses_for_owner"));
+        }
       }
     };
 
@@ -145,7 +153,12 @@ export default function CourseSettings() {
       setLines(updatedData.lines || []);
       alert("Pins og linjer lagret i databasen!");
     } catch (error) {
-      toast.error(t("coursesettings_toast_error_save_pins_lines"));
+      if (error instanceof Error) {
+        toast.error(error.message);
+      }
+      else {
+        toast.error(t("coursesettings_toast_error_save_pins_lines"));
+      }
     }
   };
 
@@ -404,7 +417,11 @@ export default function CourseSettings() {
         });
         setZoomLevel(15);
       } catch (error) {
-        alert("Kunne ikke hente pins for banen. Vennligst prøv igjen senere.");
+        if (error instanceof Error) {
+          toast.error(error.message);
+        } else {
+          toast.error(t("coursesettings_toast_error_fetch_pins"));
+        }
       }
     }
   };

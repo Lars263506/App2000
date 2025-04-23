@@ -44,7 +44,7 @@ const CourseMap: React.FC<CourseMapProps> = ({ selectedCourse, courses, setSelec
 
       <LoadScript
         googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string}
-        language={i18next.language}
+        language={i18n.language}
       >
         <GoogleMap
           onLoad={(map) => { mapRef.current = map; }}

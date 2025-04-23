@@ -92,7 +92,12 @@ const Announcements = () => {
         toast.error(t('toast_error_failed_to_create_announcement'));
       }
     } catch (error) {
-      toast.error(t('toast_error_failed_to_create_announcement'));
+      if (error instanceof Error) {
+        toast.error(t('toast_error_failed_to_create_announcement') + error.message);
+      }
+      else {
+        toast.error(t('toast_error_failed_to_create_announcement'));
+      }
     }
   };
 
@@ -126,7 +131,11 @@ const Announcements = () => {
         toast.error(t('toast_error_failed_to_update_announcement'))
       }
     } catch (error) {
-      toast.error(t('toast_error_failed_to_update_announcement'))
+      if (error instanceof Error) {
+        toast.error(t('toast_error_failed_to_update_announcement') + error.message);
+      } else {
+        toast.error(t('toast_error_failed_to_update_announcement'))
+      }
     }
   };
 

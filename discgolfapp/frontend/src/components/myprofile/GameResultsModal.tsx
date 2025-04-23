@@ -1,5 +1,4 @@
 import React from 'react';
-import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 
 interface GameResultsModalProps {

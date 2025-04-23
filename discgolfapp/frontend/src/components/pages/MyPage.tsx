@@ -44,7 +44,11 @@ const MyPage: React.FC<MyPageProps> = ({ setSelectedPage }) => {
           setProfileImage(imageUrl);
         }
       } catch (error) {
-        toast.error(t('mypage_fetching_user_data'));
+        if (error instanceof Error) {
+          toast.error(t('mypage_fetching_user_data') + error.message);
+        } else {
+          toast.error(t('mypage_fetching_user_data'));
+        }
       }
     };
     fetchUser();
@@ -66,7 +70,11 @@ const MyPage: React.FC<MyPageProps> = ({ setSelectedPage }) => {
         const clubsData = await clubsRes.json();
         setClubs(clubsData);
       } catch (error) {
-        toast.error(t('mypage_fetching_clubs'));
+        if (error instanceof Error) {
+          toast.error(t('mypage_fetching_clubs') + error.message);
+        } else {
+          toast.error(t('mypage_fetching_clubs'));
+        }
       }
     };
 
@@ -95,7 +103,11 @@ const MyPage: React.FC<MyPageProps> = ({ setSelectedPage }) => {
           setGames([]);
         }
       } catch (error) {
-        toast.error(t('mypage_fetching_games'));
+        if (error instanceof Error) {
+          toast.error(t('mypage_fetching_games') + error.message);
+        } else {
+          toast.error(t('mypage_fetching_games'));
+        }
       }
     };
 
@@ -136,7 +148,12 @@ const MyPage: React.FC<MyPageProps> = ({ setSelectedPage }) => {
       toast.success(t("mypage_profile_image_updated"));
       setProfileImage(`${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/users/profile-image/${data.profileImage}`);
     } catch (error) {
-      toast.error(t('mypage_saving_image'));
+      if (error instanceof Error) {
+        toast.error(t('mypage_saving_image') + error.message);
+      }
+      else {
+        toast.error(t('mypage_saving_image'));
+      }
     }
   };
 

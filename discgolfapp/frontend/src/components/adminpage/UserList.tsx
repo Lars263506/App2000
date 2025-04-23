@@ -27,7 +27,11 @@ const UserList: React.FC = () => {
         const data = await response.json();
         setUsers(data);
       } catch (error) {
-        toast.error(t('userlist_toast_error_error_fetching_users'));
+        if (error instanceof Error) {
+          toast.error(t('userlist_toast_error_error_fetching_users') + error.message);
+        } else {
+          toast.error(t('userlist_toast_error_error_fetching_users'));
+        }
       }
     };
 
