@@ -5,6 +5,15 @@ import Course from '@/types/course'
 import { useTranslation } from 'react-i18next';
 import i18next from 'i18next';
 
+/**
+ * @author Adrian Johansen
+ * @description This component displays a map of disc golf courses using Google Maps.
+ * It allows users to filter courses by difficulty and view course details by clicking on markers.
+ * The map dynamically centers on the selected course and adjusts zoom levels.
+ * Users can navigate to a course using a link to Google Maps.
+ * Translations are used for all text, and the map supports responsiveness and interactivity.
+ */
+
 interface CourseMapProps {
   selectedCourse: Course | null;
   courses: Course[];

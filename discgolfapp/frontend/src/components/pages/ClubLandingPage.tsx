@@ -5,6 +5,14 @@ import ClubMap from '@/components/clubpage/ClubMap'
 
 import Club from '@/types/club'
 
+/**
+ * @author Adrian Johansen
+ * @description This component serves as the landing page for clubs.
+ * It displays a list of clubs and a map with club locations.
+ * Users can search for clubs, select a club from the list, or interact with the map to view club details.
+ * The page dynamically updates based on the selected club and search term.
+ */
+
 interface ClubLandingPageProps {
   setSelectedPage: (page: string) => void
 }

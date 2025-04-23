@@ -5,10 +5,12 @@ import '../../app/globals.css'
 import { useTranslation } from 'react-i18next'
 
 /**
- * @author Andreas Nilsen
- * @description Line: 62-103, Tailwind CSS has been assisted by Copilot. I wrote it myself but asked how to style in Tailwind.
+ * @author Adrian Johansen and Andreas Nilsen
+ * @description This component handles user registration for the application.
+ * It provides a form for users to create an account by entering a display name, email, and password.
+ * The component validates input, sends the data to the backend, and displays success or error notifications.
+ * It also includes options to close the popup or switch to the login form.
  */
-
 interface RegisterProps {
   togglePopup: () => void
   closePopup: () => void

@@ -2,6 +2,14 @@ import React from 'react';
 
 import { useTranslation } from 'react-i18next';
 
+/**
+ * @author 
+ * @description This component renders the Privacy Policy page for the application.
+ * It displays detailed information about data usage, user rights, and privacy practices.
+ * The page uses translations for all text and includes a button to navigate to the Contact page.
+ * The content is styled for readability and responsiveness.
+ */
+
 interface PrivacyProps {
   setSelectedPage: (page: string) => void;
 }
