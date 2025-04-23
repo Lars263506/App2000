@@ -1,3 +1,6 @@
+/**
+ * @description Translated by Ibrahim Queeum using i18next.
+ */
 import React, { useState } from 'react';
 import Invitations from './Invitations'
 import Minutes from './Minutes'
