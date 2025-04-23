@@ -5,6 +5,26 @@ import Course from '../models/Course.js';
 import Game from '../models/Game.js';
 import bcrypt from 'bcrypt';
 
+/**
+ * @author Lars Andreas Strand
+ * @description This file contains the resetService, which is responsible for resetting test data in the database.
+ * It includes a function for resetting the test data to a known state.
+ * Copilot was used to structure the code and provide suggestions, but the logic and implementation were done by the author.
+ */
+
+/**
+ * @author Lars Andreas Strand
+ * @description This function resets the test data in the database.
+ * It takes a userId as input and checks if the user is an admin.
+ * If the user is an admin, it deletes all existing data and inserts new test data.
+ * If the user is not an admin, it throws an error.
+ * If an error occurs during the transaction, it aborts the transaction and logs the error.
+ * It uses a session to ensure that all operations are atomic.
+ * @param {string} userId - The ID of the user who is requesting the reset.
+ * @return {Promise<void>} - A promise that resolves when the reset is complete.
+ * @throws {Error} - If the user is not an admin or if there was an error during the transaction.
+ */
+
 const resetTestData = async (userId) => {
     const session = await mongoose.startSession();
     session.startTransaction();

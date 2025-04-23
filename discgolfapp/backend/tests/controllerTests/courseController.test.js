@@ -65,8 +65,23 @@ describe('Course Controller', () => {
 
     describe('createNewCourse', () => {
         it('should create a new course and return it with status 201', async () => {
-            const mockCourse = { id: 1, name: 'New Course' };
-            mockReq.body = { name: 'New Course' };
+            const mockCourse = {
+                id: 1,
+                name: 'New Course',
+                location: 'Test Location',
+                town: 'Test Town',
+                postCode: '12345',
+                difficulty: 'Medium',
+                familyFriendly: true,
+            };
+            mockReq.body = {
+                name: 'New Course',
+                location: 'Test Location',
+                town: 'Test Town',
+                postCode: '12345',
+                difficulty: 'Medium',
+                familyFriendly: true,
+            };
             courseService.createNewCourse.mockResolvedValue(mockCourse);
 
             await courseController.createNewCourse(mockReq, mockRes);
@@ -75,14 +90,32 @@ describe('Course Controller', () => {
             expect(mockRes.json).toHaveBeenCalledWith({ data: mockCourse });
         });
 
-        it('should return error with status 404 if creation fails', async () => {
-            const errorMessage = 'Error creating course';
-            mockReq.body = { name: 'New Course' };
+        it('should return error with status 400 if required fields are missing', async () => {
+            const errorMessage = 'Missing required fields';
+            mockReq.body = { name: 'New Course' }; // Missing other required fields
             courseService.createNewCourse.mockRejectedValue(new Error(errorMessage));
 
             await courseController.createNewCourse(mockReq, mockRes);
 
-            expect(mockRes.status).toHaveBeenCalledWith(404);
+            expect(mockRes.status).toHaveBeenCalledWith(400);
+            expect(mockRes.json).toHaveBeenCalledWith({ error: errorMessage });
+        });
+
+        it('should return error with status 500 if creation fails', async () => {
+            const errorMessage = 'Error creating course';
+            mockReq.body = {
+                name: 'New Course',
+                location: 'Test Location',
+                town: 'Test Town',
+                postCode: '12345',
+                difficulty: 'Medium',
+                familyFriendly: true,
+            };
+            courseService.createNewCourse.mockRejectedValue(new Error(errorMessage));
+
+            await courseController.createNewCourse(mockReq, mockRes);
+
+            expect(mockRes.status).toHaveBeenCalledWith(500);
             expect(mockRes.json).toHaveBeenCalledWith({ error: errorMessage });
         });
     });

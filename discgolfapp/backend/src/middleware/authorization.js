@@ -3,6 +3,7 @@
  * @description Middleware for authorizing users with different roles
  * Protects routes based on user roles, implementing role-based access control.
  * It uses the Passport JWT strategy to authenticate users and check their roles.
+ * Copilot was used for code and comment structure and some code generation, but the logic is based on my own knowledge.
  */
 
 /**

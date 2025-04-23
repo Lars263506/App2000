@@ -7,9 +7,10 @@ import User from '../models/User.js'
 /**
  * @author Lars Andreas Strand
  * @description Gets all settings available to logged in admin user.
- * @param admin
- * @returns Array of settings for the user
- * @throws Error if no settings
+ * @param {String} admin - The ID of the admin user
+ * @returns {Array} - An array of settings available to the admin user
+ * @throws {Error} - If no admin found or if no settings found on the user
+ * @throws {Error} - If no settings found on this user. Ask superadmin for access.
  */
 
 const getSettings = async (admin) => {
@@ -34,11 +35,10 @@ const getSettings = async (admin) => {
 /**
  * @author Lars Andreas Strand
  * @description Grants a setting to the admin user
- * @param admin
- * @param setting
- * @returns Whether the setting was granted or not
- * @throws Error if no admin found
- * @throws Error if setting could not be granted
+ * @param {String} displayName - The ID of the admin user
+ * @param {String} setting - The setting to grant
+ * @returns {Object} - The updated user object
+ * @throws {Error} - If not successful in granting the setting
  */
 
 const grantSetting = async (displayName, setting) => {
@@ -59,11 +59,10 @@ const grantSetting = async (displayName, setting) => {
 /**
  * @author Lars Andreas Strand
  * @description Revokes a setting from the admin user
- * @param admin
- * @param setting
- * @returns Whether the setting was revoked or not
- * @throws Error if no admin found
- * @throws Error if setting could not be revoked
+ * @param {String} displayName - The ID of the admin user
+ * @param {String} setting - The setting to revoke
+ * @returns {Object} - The removed user object
+ * @throws {Error} - If not successful in revoking the setting
  */
 
 const revokeSetting = async (displayName, setting) => {

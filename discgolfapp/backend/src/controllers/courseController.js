@@ -82,6 +82,7 @@ const getCoursesForOwner = async (req, res) => {
  * If successful, it sends a 201 status code and the course data.
  * If there is an error, it sends a 500 status code and the error message.
  */
+
 const createNewCourse = async (req, res) => {
   try {
     const newCourseData = req.body;

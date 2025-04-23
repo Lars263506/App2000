@@ -3,6 +3,7 @@ import mongoose from 'mongoose'
 /**
  * @description This is the schema for the Translation model.
  * It defines the structure of the Translation document in the database.
+ * Copilot was used for code and comment structure and some code generation, but the logic is based on my own knowledge.
  */
 
 const schema = new mongoose.Schema(
