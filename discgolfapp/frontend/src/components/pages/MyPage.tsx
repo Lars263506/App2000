@@ -1,3 +1,11 @@
+/**
+ * MyPage Component
+ * Displays user profile information, including games, clubs, and profile image management.
+ * Includes translated text using i18next for localization support.
+ * 
+ * @author Andreas Nilsen and 
+ */
+
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { PencilIcon } from '@heroicons/react/20/solid'
@@ -21,6 +29,14 @@ const MyPage: React.FC<MyPageProps> = ({ setSelectedPage }) => {
   const [selectedGame, setSelectedGame] = useState<Game | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  /**
+   * Fetches the logged-in user's data from the backend and updates the state.
+   * Displays an error toast if the fetch operation fails.
+   * 
+   * @function fetchUser
+   * @returns {Promise<void>}
+   * @author Andreas Nilsen
+   */
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -50,6 +66,14 @@ const MyPage: React.FC<MyPageProps> = ({ setSelectedPage }) => {
     fetchUser();
   }, []);
 
+  /**
+   * Fetches the clubs associated with the logged-in user from the backend and updates the state.
+   * Displays an error toast if the fetch operation fails.
+   * 
+   * @function fetchClubs
+   * @returns {Promise<void>}
+   * @author Andreas Nilsen
+   */
   useEffect(() => {
     const fetchClubs = async () => {
       if (!user) return;
@@ -73,6 +97,14 @@ const MyPage: React.FC<MyPageProps> = ({ setSelectedPage }) => {
     fetchClubs();
   }, [user]);
 
+  /**
+   * Fetches the games associated with the logged-in user from the backend and updates the state.
+   * Displays an error toast if the fetch operation fails.
+   * 
+   * @function fetchGames
+   * @returns {Promise<void>}
+   * @author 
+   */
   useEffect(() => {
     const fetchGames = async () => {
       if (!user) return;
@@ -102,6 +134,15 @@ const MyPage: React.FC<MyPageProps> = ({ setSelectedPage }) => {
     fetchGames();
   }, [user]);
 
+  /**
+   * Handles the change of the profile image by uploading a new image to the backend.
+   * Updates the profile image state on success.
+   * 
+   * @function handleImageChange
+   * @param {React.ChangeEvent<HTMLInputElement>} e - The file input change event.
+   * @returns {void}
+   * @author Andreas Nilsen
+   */
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -116,6 +157,15 @@ const MyPage: React.FC<MyPageProps> = ({ setSelectedPage }) => {
     }
   };
 
+  /**
+   * Saves the uploaded profile image to the backend.
+   * Displays a success or error toast based on the outcome.
+   * 
+   * @function handleSaveProfileImage
+   * @param {File} file - The uploaded image file.
+   * @returns {Promise<void>}
+   * @author Andreas Nilsen
+   */
   const handleSaveProfileImage = async (file: File) => {
     if (!file || !user) return;
     try {
@@ -140,20 +190,51 @@ const MyPage: React.FC<MyPageProps> = ({ setSelectedPage }) => {
     }
   };
 
+  /**
+   * Handles navigation to a selected club's page.
+   * 
+   * @function handleClubClick
+   * @param {Club | null} club - The selected club.
+   * @returns {void}
+   * @author Andreas Nilsen
+   */
   const handleClubClick = (club: Club | null) => {
     localStorage.setItem("selectedClub", JSON.stringify(club));
     setSelectedPage("Club");
   };
 
+  /**
+   * Calculates the total score for a game based on the scores array.
+   * 
+   * @function calculateTotalScore
+   * @param {number[]} scores - The array of scores.
+   * @returns {number} The total score.
+   * @author 
+   */
   const calculateTotalScore = (scores: number[]) => {
     return scores.reduce((total, score) => total + score, 0);
   };
 
+  /**
+   * Opens the game results modal for a selected game.
+   * 
+   * @function openModal
+   * @param {Game} game - The selected game.
+   * @returns {void}
+   * @author 
+   */
   const openModal = (game: Game) => {
     setSelectedGame(game);
     setIsModalOpen(true);
   };
 
+  /**
+   * Closes the game results modal.
+   * 
+   * @function closeModal
+   * @returns {void}
+   * @author
+   */
   const closeModal = () => {
     setSelectedGame(null);
     setIsModalOpen(false);

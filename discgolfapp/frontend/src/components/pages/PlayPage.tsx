@@ -1,3 +1,9 @@
+/**
+ * PlayPage Component
+ * This file has been translated using i18next for localization support.
+ * 
+ * @author Andreas Nilsen
+ */
 import { useState, useEffect, useRef } from "react";
 import { GoogleMap, LoadScript, Marker, Polyline, InfoWindow } from '@react-google-maps/api';
 import { toast } from "react-toastify";

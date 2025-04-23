@@ -4,8 +4,18 @@ import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 
 /**
- * @author Lars Andreas Strand
- * @description Wrapper for components that require admin access.
+ * WithPageEditAccess Component
+ * A wrapper component that ensures only users with edit access can view the wrapped content.
+ * Displays a loading state while checking access and hides content if the user lacks edit privileges.
+ * 
+ * @author Andreas Nilsen
+ */
+
+/**
+ * Props for the WithPageEditAccess component
+ * @typedef {Object} WithPageEditAccessProps
+ * @property {React.ReactNode} children - The content to display if the user has edit access.
+ * @author Andreas Nilsen
  */
 
 interface WithPageEditAccessProps {
@@ -17,6 +27,15 @@ const WithPageEditAccess: React.FC<WithPageEditAccessProps> = ({ children }) => 
   const [isLoading, setIsLoading] = useState(true);
   const [hasAccess, setHasAccess] = useState(false);
 
+  /**
+     * Fetches edit access status from the backend.
+     * Updates the state to reflect whether the user has edit access.
+     * Displays an error toast if the fetch operation fails.
+     * 
+     * @function fetchData
+     * @returns {Promise<void>}
+     * @author Andreas Nilsen
+     */
   useEffect(() => {
     const fetchData = async () => {
       const accessToken = localStorage.getItem('accessToken');
