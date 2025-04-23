@@ -9,7 +9,7 @@ import {
 } from '../controllers/settingsController.js'
 
 /**
- * @author Lars Andreas Strand
+ * @author Lars Andreas Strand and Andreas Nilsen
  * @description Router for settings requests
  * This router handles all the requests related to settings.
  * It also handles middleware for authentication and authorization.

@@ -3,7 +3,7 @@ import User from '../models/User.js'; // Legg til denne linjen
 
 
 /**
- * @author Lars Andreas Strand
+ * @author Lars Andreas Strand and Andreas Nilsen
  * @description This controller contains request handlers for user registration, authentication and user data management
  */
 
@@ -165,6 +165,18 @@ const checkIfAdmin = async (req, res) => {
   }
 }
 
+/**
+ * Handles the request to check if a user has access based on their role.
+ * Determines if the user is a club owner or an admin and sends the access status as a response.
+ * If successful, sends a 200 status code with the access status.
+ * If there is an error, sends a 500 status code with an error message.
+ * 
+ * @function hasAccess
+ * @param {Object} req - The request object containing the user's role.
+ * @param {Object} res - The response object to send the access status or error message.
+ * @returns {Promise<void>}
+ * @author Andreas Nilsen
+ */
 const hasAccess = async (req, res) => {
   try {
     const hasAccess = req.user.role === 'clubowner' || req.user.role === 'admin'
