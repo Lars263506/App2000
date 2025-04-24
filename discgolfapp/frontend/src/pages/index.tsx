@@ -1,7 +1,7 @@
 /**
  * Index Page Component
  * This file has been translated using i18next for localization support.
- * 
+ *
  * @author Andreas Nilsen
  */
 
@@ -9,6 +9,7 @@ import React, { useEffect, useState } from 'react';
 import { I18nextProvider } from 'react-i18next';
 import i18next from '@/i18n';
 import { toast, ToastContainer } from 'react-toastify';
+import Image from 'next/image';
 
 import HomePage from '@/components/pages/HomePage';
 import AdminPage from '@/components/pages/AdminPage';
@@ -120,7 +121,13 @@ const Index = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <p>{t('loading_translations')}</p>
+        <Image
+          src="/images/spinner.gif"
+          alt="Loading spinner"
+          width={100}
+          height={100}
+          className="animate-spin"
+        />
       </div>
     );
   }
