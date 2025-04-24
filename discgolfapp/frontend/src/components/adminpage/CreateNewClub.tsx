@@ -4,6 +4,15 @@ import { toast } from 'react-toastify';
 
 import { useTranslation } from 'react-i18next';
 
+/**
+ * @author Adrian Johansen
+ * @description This component provides a form for creating a new club.
+ * It allows users to input club details such as name, owner, description, and contact information.
+ * The form validates required fields and submits the data to the backend.
+ * If the creation is successful, a success toast is displayed; otherwise, an error toast is shown.
+ * The component also handles closing the modal when clicking outside of it.
+ */
+
 interface CreateNewClubProps {
   onClose: () => void;
 }

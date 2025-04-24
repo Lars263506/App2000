@@ -30,6 +30,14 @@ import validateSession from '@/utils/validate-session';
 
 import { useTranslation } from 'react-i18next';
 
+/**
+ * @author Adrian Johansen
+ * @description This is the main entry point for the application.
+ * It manages the navigation between pages, handles translations, and initializes global components like the navbar, footer, and popups.
+ * The component dynamically renders pages based on the selected state and fetches translations from the backend.
+ * It also ensures session validation and persists the selected page across reloads.
+ */
+
 const Index = () => {
   const { t } = useTranslation();
   const { popupType, toggleLoginPopup, toggleRegisterPopup, closePopup } = usePopup();

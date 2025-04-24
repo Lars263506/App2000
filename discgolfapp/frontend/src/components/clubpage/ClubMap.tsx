@@ -5,6 +5,15 @@ import { toast } from 'react-toastify'
 import Club from '../../types/club'
 import { useTranslation } from 'react-i18next'
 
+/**
+ * @author Adrian Johansen
+ * @description This component displays a map of clubs using Google Maps.
+ * It fetches club data from the backend and geocodes their addresses to display markers on the map.
+ * Users can click on markers to view club details and navigate to the club page.
+ * The map dynamically adjusts to fit all markers and supports selecting a specific club.
+ * Success and error notifications are shown for geocoding and data fetching.
+ */
+
 interface ClubMapProps {
   selectedClub: Club | null
   setSelectedPage: ( page: string ) => void

@@ -5,6 +5,11 @@ import '../../app/globals.css'
 import { useTranslation } from 'react-i18next'
 
 /**
+ * @author Adrian Johansen and Andreas Nilsen
+ * @description This component handles user registration for the application.
+ * It provides a form for users to create an account by entering a display name, email, and password.
+ * The component validates input, sends the data to the backend, and displays success or error notifications.
+ * It also includes options to close the popup or switch to the login form.
  * Register Component
  * Provides a registration interface for users, including functionality for creating a new account.
  * Includes translated text using i18next for localization support.
@@ -19,7 +24,6 @@ import { useTranslation } from 'react-i18next'
  * @property {function(): void} closePopup - Function to close the popup.
  * @author Andreas Nilsen
  */
-
 interface RegisterProps {
   togglePopup: () => void
   closePopup: () => void

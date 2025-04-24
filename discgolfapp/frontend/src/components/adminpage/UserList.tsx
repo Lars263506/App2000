@@ -5,6 +5,14 @@ import { toast } from 'react-toastify';
 
 import { useTranslation } from 'react-i18next';
 
+/**
+ * @author Adrian Johansen
+ * @description This component displays a list of users for administration purposes.
+ * It allows filtering, editing user details, and updating the user list.
+ * Users can be filtered by name, email, or role, and edits are saved to the backend.
+ * A modal is used for editing user details, with success and error notifications.
+ */
+
 const UserList: React.FC = () => {
   const { t } = useTranslation()
   const [users, setUsers] = useState<User[]>([]);

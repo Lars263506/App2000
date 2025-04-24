@@ -16,6 +16,14 @@ import LanguageModal from './utils/LanguageModal';
 import WithAdminAccess from '../adminpage/WithAdminAccess';
 import WithPageEditAccess from '../adminpage/WithEditPageAccess';
 
+/**
+ * @author Adrian Johansen
+ * @description This component renders the navigation bar for the application.
+ * It includes links to the home page, profile, language selection, and admin pages.
+ * The navbar supports language switching, test data reset, and displays a logo with the app's name.
+ * Translations are used for all tooltips and text, and success/error notifications are shown for actions.
+ */
+
 interface NavBarProps {
   toggleLoginPopup: () => void;
   setSelectedPage: (page: string) => void;

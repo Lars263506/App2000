@@ -1,6 +1,14 @@
 import React from 'react';
 import { useTranslation, Trans } from 'react-i18next';
 
+/**
+ * @author Adrian Johansen
+ * @description This component displays the benefits of being a club member.
+ * It uses translations to dynamically render a list of member benefits.
+ * The benefits include discounts, exclusive training, networking opportunities, priority booking, and competitions.
+ * The content is styled for readability and responsiveness.
+ */
+
 const MemberBenefit = () => {
   const { t } = useTranslation();
 

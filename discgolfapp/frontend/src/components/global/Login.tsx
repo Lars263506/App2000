@@ -10,6 +10,14 @@ import React, { useState, useEffect } from 'react'
 import { toast } from 'react-toastify'
 import { useTranslation } from 'react-i18next'
 
+/**
+ * @author Adrian Johansen
+ * @description This component handles the login functionality for the application.
+ * It allows users to log in, log out, navigate to their profile, or reset their password.
+ * The component displays a login form or user options based on the login state.
+ * Success and error notifications are shown for login and logout actions.
+ */
+
 interface LoginProps {
   togglePopup: () => void
   toggleRegisterPopup: () => void
