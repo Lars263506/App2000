@@ -102,9 +102,9 @@ const MyPage: React.FC<MyPageProps> = ({ setSelectedPage }) => {
    * Displays an error toast if the fetch operation fails.
    * 
    * @function fetchGames
-   * @returns {Promise<void>}
-   * @author 
+   * @author Ibrahim Queeum
    */
+
   useEffect(() => {
     const fetchGames = async () => {
       if (!user) return;
@@ -209,32 +209,35 @@ const MyPage: React.FC<MyPageProps> = ({ setSelectedPage }) => {
    * @function calculateTotalScore
    * @param {number[]} scores - The array of scores.
    * @returns {number} The total score.
-   * @author 
+
+   * @author Ibrahim Queeum
    */
   const calculateTotalScore = (scores: number[]) => {
     return scores.reduce((total, score) => total + score, 0);
   };
+
 
   /**
    * Opens the game results modal for a selected game.
    * 
    * @function openModal
    * @param {Game} game - The selected game.
-   * @returns {void}
-   * @author 
+   * @author Ibrahim Queeum
    */
+
   const openModal = (game: Game) => {
     setSelectedGame(game);
     setIsModalOpen(true);
   };
 
+
   /**
    * Closes the game results modal.
    * 
    * @function closeModal
-   * @returns {void}
-   * @author
+   * @author Ibrahim Queeum
    */
+
   const closeModal = () => {
     setSelectedGame(null);
     setIsModalOpen(false);

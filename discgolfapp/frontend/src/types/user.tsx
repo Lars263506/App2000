@@ -1,8 +1,7 @@
 /**
  * User Type Definition
  * Represents a user with their details, including name, email, and role.
- * 
- * @author Andreas Nilsen
+ * @author Andreas Nilsen & Ibrahim Queeum
  */
 type User = {
     id: string

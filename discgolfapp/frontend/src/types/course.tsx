@@ -1,6 +1,5 @@
 import Review from './review';
-
-/**
+ /**
  * Course Type Definition
  * Represents a golf course with its details, including location, difficulty, and reviews.
  * 
@@ -19,9 +18,8 @@ import Review from './review';
  * @property {boolean} familyFriendly - Indicates if the course is family-friendly.
  * @property {number} holes - Number of holes in the course.
  * @property {Review[]} reviews - List of reviews for the course.
- * @author Andreas Nilsen
+ * @author Andreas Nilsen & Ibrahim Queeum
  */
-
 type Course = {
     id: string;
     _id: string;
