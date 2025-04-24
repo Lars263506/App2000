@@ -7,6 +7,13 @@ import './globals.css'
 import i18next from 'i18next'
 import { I18nextProvider } from 'react-i18next'
 
+/**
+ * @author Adrian Johansen
+ * @description This file defines the root layout for the Discgolf App.
+ * It sets up global fonts, styles, and internationalization using i18next.
+ * The layout wraps the application with the I18nextProvider and renders child components.
+ */
+
 const geistSans = Geist({
   variable: '--font-geist-sans',
   subsets: ['latin']

@@ -2,7 +2,7 @@ import * as courseService from '../services/courseService.js';
 import Course from '../models/Course.js';
 
 /**
- * @author Lars Andreas Strand
+ * @author Lars Andreas Strand and Andreas Nilsen
  * @description This file contains the controller functions for the course routes.
  */
 
@@ -38,6 +38,19 @@ const getCourse = async (req, res) => {
   }
 };
 
+/**
+ * Handles the request to get pins and lines for a specific course by ID.
+ * Retrieves the pins and lines associated with the course from the database.
+ * If successful, sends a 200 status code with the pins and lines data.
+ * If the course is not found, sends a 404 status code with an error message.
+ * If there is an internal server error, sends a 500 status code with an error message.
+ * 
+ * @function getCoursePins
+ * @param {Object} req - The request object containing the course ID in params.
+ * @param {Object} res - The response object to send the data or error message.
+ * @returns {Promise<void>}
+ * @author Andreas Nilsen
+ */
 const getCoursePins = async (req, res) => {
   try {
     const { id } = req.params;
@@ -54,6 +67,18 @@ const getCoursePins = async (req, res) => {
   }
 };
 
+/**
+ * Handles the request to get courses for a specific owner or admin.
+ * Admins can view all courses, while club owners can view only their owned courses.
+ * If successful, sends a 200 status code with the courses data.
+ * If there is an error, sends a 500 status code with an error message.
+ * 
+ * @function getCoursesForOwner
+ * @param {Object} req - The request object containing user ID and role.
+ * @param {Object} res - The response object to send the data or error message.
+ * @returns {Promise<void>}
+ * @author Andreas Nilsen
+ */
 const getCoursesForOwner = async (req, res) => {
   const { id, role } = req.user;
 
@@ -131,6 +156,20 @@ const updateCourse = async (req, res) => {
   }
 };
 
+/**
+ * Handles the request to update pins and lines for a specific course by ID.
+ * Validates the pins and lines data, ensuring lines refer to existing pins.
+ * Updates the course in the database with the new pins and lines data.
+ * If successful, sends a 200 status code with the updated pins and lines data.
+ * If the course is not found, sends a 404 status code with an error message.
+ * If there is an error, sends a 500 status code with an error message.
+ * 
+ * @function updateCoursePins
+ * @param {Object} req - The request object containing the course ID in params and pins/lines data in the body.
+ * @param {Object} res - The response object to send the data or error message.
+ * @returns {Promise<void>}
+ * @author Andreas Nilsen
+ */
 const updateCoursePins = async (req, res) => {
   try {
     const { id } = req.params;

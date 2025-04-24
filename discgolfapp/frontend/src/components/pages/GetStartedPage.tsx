@@ -1,8 +1,23 @@
 'use client';
 
+/**
+ * GetStartedPage Component
+ * This file has been translated using i18next for localization support.
+ * 
+ * @author Andreas Nilsen
+ */
+
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
+
+/**
+ * @author Adrian Johansen
+ * @description This component serves as the "Get Started" page for the application.
+ * It provides beginner and advanced tips, as well as rules for disc golf.
+ * Admin users can edit, add, or remove tips and save changes to the backend.
+ * The page dynamically updates content based on user selection and supports translations for all text.
+ */
 
 const GetStartedPage = () => {
   const { t, i18n } = useTranslation();

@@ -1,9 +1,23 @@
 'use client'
 
+/**
+ * Footer Component
+ * This file has been translated using i18next for localization support.
+ * 
+ * @author Andreas Nilsen
+ */
+
 import React from 'react'
 import Image from 'next/image'
 
 import { useTranslation } from 'react-i18next'
+
+/**
+ * @author Adrian Johansen
+ * @description This component renders the footer for the application.
+ * It includes navigation buttons for "Contact" and "Privacy" pages, as well as links to social media platforms.
+ * The footer uses translations for text and includes hover effects for interactivity.
+ */
 
 interface FooterProps {
   setSelectedPage: (page: string) => void

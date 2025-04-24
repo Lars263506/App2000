@@ -1,6 +1,22 @@
+/**
+ * Login Component
+ * Provides a login interface for users, including functionality for login, logout, and navigation to other pages.
+ * Includes translated text using i18next for localization support.
+ * 
+ * @author Andreas Nilsen
+ */
+
 import React, { useState, useEffect } from 'react'
 import { toast } from 'react-toastify'
 import { useTranslation } from 'react-i18next'
+
+/**
+ * @author Adrian Johansen
+ * @description This component handles the login functionality for the application.
+ * It allows users to log in, log out, navigate to their profile, or reset their password.
+ * The component displays a login form or user options based on the login state.
+ * Success and error notifications are shown for login and logout actions.
+ */
 
 interface LoginProps {
   togglePopup: () => void
@@ -31,6 +47,15 @@ const Login: React.FC<LoginProps> = ({ togglePopup, toggleRegisterPopup, closePo
     setIsLoggedIn(!!token)
   }, [])
 
+  /**
+   * Handles the login process, including API calls and state updates.
+   * Displays success or error messages based on the response.
+   * 
+   * @function handleLogin
+   * @param {React.FormEvent} event - The form submission event.
+   * @returns {Promise<void>}
+   * @author Andreas Nilsen
+   */
   const handleLogin = async (event: React.FormEvent) => {
     event.preventDefault();
     if (locked) return;
@@ -82,6 +107,14 @@ const Login: React.FC<LoginProps> = ({ togglePopup, toggleRegisterPopup, closePo
     }
   };
 
+  /**
+   * Handles the logout process, including clearing local storage and updating state.
+   * Redirects the user to the home page if necessary.
+   * 
+   * @function handleLogout
+   * @returns {void}
+   * @author Andreas Nilsen
+   */
   const handleLogout = async () => {
     localStorage.removeItem('accessToken')
     localStorage.removeItem('refreshToken')
@@ -97,11 +130,25 @@ const Login: React.FC<LoginProps> = ({ togglePopup, toggleRegisterPopup, closePo
     setIsLoggedIn(false)
   }
 
+  /**
+   * Navigates the user to the "My Page" section.
+   * 
+   * @function goToMyPage
+   * @returns {void}
+   * @author Andreas Nilsen
+   */
   const goToMyPage = () => {
     setSelectedPage('MyPage')
     closePopup()
   }
 
+  /**
+   * Navigates the user to the "Forgot Password" page.
+   * 
+   * @function handleForgotPassword
+   * @returns {void}
+   * @author Andreas Nilsen
+   */
   const handleForgotPassword = () => {
     setSelectedPage('ForgotpasPage');
     closePopup();

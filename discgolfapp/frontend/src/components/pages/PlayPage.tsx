@@ -1,12 +1,10 @@
-<<<<<<< Updated upstream
-=======
 /**
  * PlayPage Component
  * This file has been translated using i18next for localization support.
  * 
  * @author Andreas Nilsen
  * 
- * ----
+ * ----------
  * 
  *   @author Ibrahim Queeum
  * * @description 
@@ -16,7 +14,6 @@
  * - Saves game progress locally and submits results to the backend.
  * - Provides a summary of the game results upon completion.
  */
->>>>>>> Stashed changes
 import { useState, useEffect, useRef } from "react";
 import { GoogleMap, LoadScript, Marker, Polyline, InfoWindow } from '@react-google-maps/api';
 import { toast } from "react-toastify";
@@ -144,7 +141,7 @@ export default function StartGame() {
     }
   }, [currentBasket, pins, gameStarted]);
 
-  /**
+/**
  * Starts the game by initializing the state for scores, baskets, and map.
  * 
  * @function startGame
@@ -165,7 +162,7 @@ export default function StartGame() {
     }
   };
 
-  /**
+ /**
  * Updates the score for a specific player and basket.
  * Saves the updated scores to local storage.
  * 
@@ -187,7 +184,7 @@ export default function StartGame() {
     localStorage.setItem("gameScores", JSON.stringify(updatedScores));
   };
 
-/**
+ /**
  * Updates the name of a player in the players list.
  * 
  * @function handlePlayerNameChange
@@ -201,7 +198,7 @@ export default function StartGame() {
     setPlayers(updatedPlayers);
   };
 
-/**
+ /**
  * Moves to the next basket in the game.
  * Updates the map view to center on the next basket.
  * 
@@ -229,7 +226,7 @@ export default function StartGame() {
     }
   };
 
-  /**
+ /**
  * Moves to the previous basket in the game.
  * Updates the map view to center on the previous basket.
  * 
@@ -252,7 +249,7 @@ export default function StartGame() {
     }
   };
 
-  /**
+ /**
  * Ends the game and submits the game results to the backend.
  * Displays a success or error toast based on the outcome.
  * 
@@ -306,7 +303,7 @@ export default function StartGame() {
     return `${score || '-'} `;
   };
 
-  /**
+ /**
  * Searches for users based on the query and updates the search results.
  * 
  * @function handleSearchChange
@@ -342,7 +339,7 @@ export default function StartGame() {
     }
   };
 
-  /**
+ /**
  * Adds a player to the game based on the selected user from the search results.
  * 
  * @function handleAddPlayer

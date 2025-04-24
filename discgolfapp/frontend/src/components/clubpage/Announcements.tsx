@@ -1,7 +1,23 @@
+/**
+ * Announcements Component
+ * This file has been translated using i18next for localization support.
+ * 
+ * @author Andreas Nilsen
+ */
+
 import React, { useEffect, useState } from 'react';
 import Button from '../global/Button';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
+
+/**
+ * @author Adrian Johansen
+ * @description This component manages announcements for a club.
+ * It allows users with edit rights to create, edit, and update announcements.
+ * Announcements are fetched from the backend and displayed in a list.
+ * Users can edit announcements inline or create new ones using a form.
+ * Success and error notifications are shown for all actions.
+ */
 
 const Announcements = () => {
   const { t } = useTranslation();

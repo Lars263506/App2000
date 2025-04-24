@@ -1,8 +1,5 @@
 import Review from './review';
-
-<<<<<<< Updated upstream
-=======
-/**
+ /**
  * Course Type Definition
  * Represents a golf course with its details, including location, difficulty, and reviews.
  * 
@@ -23,8 +20,6 @@ import Review from './review';
  * @property {Review[]} reviews - List of reviews for the course.
  * @author Andreas Nilsen & Ibrahim Queeum
  */
-
->>>>>>> Stashed changes
 type Course = {
     id: string;
     _id: string;

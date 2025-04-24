@@ -1,12 +1,8 @@
-<<<<<<< Updated upstream
-=======
 /**
  * User Type Definition
  * Represents a user with their details, including name, email, and role.
- * 
  * @author Andreas Nilsen & Ibrahim Queeum
  */
->>>>>>> Stashed changes
 type User = {
     id: string
     displayName: string

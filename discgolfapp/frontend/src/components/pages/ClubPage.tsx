@@ -1,3 +1,9 @@
+/**
+ * ClubPage Component
+ * This file has been translated using i18next for localization support.
+ * 
+ * @author Andreas Nilsen
+ */
 
 import { useState, useEffect } from "react"
 import { toast } from "react-toastify"

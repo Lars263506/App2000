@@ -1,5 +1,4 @@
-<<<<<<< Updated upstream
-=======
+
 /**
  * GameResultsModal Component
  * This file has been translated using i18next for localization support.
@@ -25,9 +24,7 @@
  * @param {(scores: number[]) => number} props.calculateTotalScore - A function to calculate the total score for a player.
  */
 
->>>>>>> Stashed changes
 import React from 'react';
-import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 
 interface GameResultsModalProps {

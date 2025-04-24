@@ -1,3 +1,10 @@
+/**
+ * Index Page Component
+ * This file has been translated using i18next for localization support.
+ * 
+ * @author Andreas Nilsen
+ */
+
 import React, { useEffect, useState } from 'react';
 import { I18nextProvider } from 'react-i18next';
 import i18next from '@/i18n';
@@ -22,6 +29,14 @@ import { usePopup } from '@/components/global/UsePopup';
 import validateSession from '@/utils/validate-session';
 
 import { useTranslation } from 'react-i18next';
+
+/**
+ * @author Adrian Johansen
+ * @description This is the main entry point for the application.
+ * It manages the navigation between pages, handles translations, and initializes global components like the navbar, footer, and popups.
+ * The component dynamically renders pages based on the selected state and fetches translations from the backend.
+ * It also ensures session validation and persists the selected page across reloads.
+ */
 
 const Index = () => {
   const { t } = useTranslation();

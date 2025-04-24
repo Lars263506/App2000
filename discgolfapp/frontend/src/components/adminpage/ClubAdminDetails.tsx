@@ -7,6 +7,16 @@ import CreateNewClub from './CreateNewClub';
 
 import { useTranslation } from 'react-i18next';
 
+/**
+ * @author Adrian Johansen
+ * @description This component handles the admin interface for managing clubs.
+ * It allows admins to create new clubs or update existing ones.
+ * Depending on the selected action, it renders the appropriate UI:
+ * - Buttons for selecting "Create New Club" or "Update Existing Club".
+ * - A form for creating a new club.
+ * - A list of clubs and settings for updating an existing club.
+ */
+
 interface ClubAdminDetailsProps {
   setSelectedPage: (page: string) => void;
 }

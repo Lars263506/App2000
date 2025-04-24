@@ -1,4 +1,26 @@
+/**
+ * Navigation Component
+ * Provides a navigation interface for the front page, allowing users to select different sections of the application.
+ * Includes translated text using i18next for localization support.
+ * 
+ * @author Andreas Nilsen
+ */
+
+/**
+ * Props for the Navigation component
+ * @typedef {Object} NavigationProps
+ * @property {function(string): void} setSelectedPage - Function to set the selected page.
+ * @author Andreas Nilsen
+ */
+
 import { useTranslation } from 'react-i18next';
+
+/**
+ * @author Adrian Johansen
+ * @description This component provides the main navigation for the front page.
+ * It displays clickable cards for navigating to different sections of the app, such as Play, Courses, Get Started, and Clubs.
+ * Each card uses translations for its title and description and includes hover effects for interactivity.
+ */
 
 interface NavigationProps {
   setSelectedPage: (page: string) => void;
