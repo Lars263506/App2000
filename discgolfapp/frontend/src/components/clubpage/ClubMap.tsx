@@ -6,7 +6,7 @@ import Club from '../../types/club'
 import { useTranslation } from 'react-i18next'
 
 /**
- * @author Adrian Johansen
+ * @author Adrian Johansen & Ibrahim Queeum
  * @description This component displays a map of clubs using Google Maps.
  * It fetches club data from the backend and geocodes their addresses to display markers on the map.
  * Users can click on markers to view club details and navigate to the club page.
@@ -28,6 +28,13 @@ const ClubMap: React.FC<ClubMapProps> = ({ selectedClub, setSelectedPage }) => {
   const [isGoogleMapsLoaded, setIsGoogleMapsLoaded] = useState(false)
   const mapRef = useRef<google.maps.Map | null>(null)
 
+/**
+ * Fetches the list of clubs from the backend and updates the state.
+ * Displays an error toast if the fetch operation fails.
+ * 
+ * @function fetchClubs
+ * @author Ibrahim Queeum
+ */
   useEffect(() => {
     const fetchClubs = async () => {
       try {
@@ -41,6 +48,15 @@ const ClubMap: React.FC<ClubMapProps> = ({ selectedClub, setSelectedPage }) => {
     fetchClubs()
   }, [])
 
+  /**
+ * Geocodes a given address to retrieve its latitude and longitude.
+ * Displays an error toast if the geocoding operation fails.
+ * 
+ * @author Ibrahim Queeum
+ * @function geocodeAddress
+ * @param {string} address - The address to geocode.
+ * @returns {Promise<google.maps.LatLng>}
+ */
   const geocodeAddress = useCallback(async (address: string) => {
     return await new Promise<google.maps.LatLng>((resolve, reject) => {
       new window.google.maps.Geocoder().geocode({ address }, (results, status) => {
@@ -54,6 +70,13 @@ const ClubMap: React.FC<ClubMapProps> = ({ selectedClub, setSelectedPage }) => {
     })
   }, [])
 
+  /**
+ * Fetches markers for all clubs by geocoding their addresses.
+ * Updates the markers state with the geocoded locations.
+ * 
+ * @author Ibrahim Queeum
+ * @function fetchMarkers
+ */
   useEffect(() => {
     const fetchMarkers = async () => {
       if (!isGoogleMapsLoaded) return
@@ -74,6 +97,12 @@ const ClubMap: React.FC<ClubMapProps> = ({ selectedClub, setSelectedPage }) => {
     if (clubs.length > 0) fetchMarkers()
   }, [clubs, geocodeAddress, isGoogleMapsLoaded])
 
+/**
+ * Geocodes the selected club's address and updates the map view to center on the club's location.
+ * 
+ * @author Ibrahim Queeum
+ * @function updateSelectedClubLocation
+ */
   useEffect(() => {
     if (selectedClub) {
       geocodeAddress(selectedClub.address)
@@ -88,6 +117,14 @@ const ClubMap: React.FC<ClubMapProps> = ({ selectedClub, setSelectedPage }) => {
     }
   }, [selectedClub, geocodeAddress])
 
+/**
+ * Handles the click event on a marker, setting the active club and selected marker.
+ * 
+ * @author Ibrahim Queeum
+ * @function handleMarkerClick
+ * @param {Club} club - The club associated with the clicked marker.
+ * @param {google.maps.LatLng} marker - The location of the clicked marker.
+ */
   const handleMarkerClick = (club: Club, marker: google.maps.LatLng) => {
     setActiveClub(club)
     setSelectedMarker(marker)

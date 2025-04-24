@@ -3,7 +3,7 @@
  * Displays user profile information, including games, clubs, and profile image management.
  * Includes translated text using i18next for localization support.
  * 
- * @author Andreas Nilsen and 
+ * @author Andreas Nilsen, Ibrahim Queeum & Lars Andreas
  */
 
 import React, { useEffect, useState } from "react";

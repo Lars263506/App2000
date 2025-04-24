@@ -2,11 +2,21 @@ import React from 'react';
 import { useTranslation, Trans } from 'react-i18next';
 
 /**
- * @author Adrian Johansen
- * @description This component displays the benefits of being a club member.
- * It uses translations to dynamically render a list of member benefits.
- * The benefits include discounts, exclusive training, networking opportunities, priority booking, and competitions.
- * The content is styled for readability and responsiveness.
+ * @author Adrian Johansen, Ibrahim Queeum & Lars Andreas
+ /**
+ * @description The MemberBenefit component displays the benefits of being a club member.
+ * It uses translations from i18next to dynamically render a list of member benefits.
+ * 
+ * Features:
+ - Displays a title and introduction about member benefits.
+ - Renders a list of benefits, including:
+ - Discounts
+ - Exclusive training
+ - Networking opportunities
+ - Priority booking
+ - Competitions
+ - Styled for readability and responsiveness.
+ - It uses translations to dynamically render a list of member benefits.
  */
 
 const MemberBenefit = () => {

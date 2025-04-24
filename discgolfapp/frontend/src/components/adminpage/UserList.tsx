@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 
 /**
- * @author Adrian Johansen
+ * @author Adrian Johansen & Ibrahim Queeum & Lars Andreas
  * @description This component displays a list of users for administration purposes.
  * It allows filtering, editing user details, and updating the user list.
  * Users can be filtered by name, email, or role, and edits are saved to the backend.
@@ -19,6 +19,13 @@ const UserList: React.FC = () => {
   const [filter, setFilter] = useState<string>('');
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+ /**
+ * Fetches the list of users from the backend and updates the state.
+ * Displays an error toast if the fetch operation fails.
+ * @author Ibrahim Queeum
+ * @function fetchUsers
+ */
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -46,11 +53,24 @@ const UserList: React.FC = () => {
     fetchUsers();
   }, []);
 
+/**
+ * Opens the user edit modal for the selected user.
+ * @author Ibrahim Queeum
+ * @function handleEditUser
+ * @param {User} user - The user object to be edited.
+ */
   const handleEditUser = (user: User) => {
     setSelectedUser(user);
     setIsModalOpen(true);
   };
 
+/**
+ * Saves the updated user details to the backend and updates the user list.
+ * Displays success or error toasts based on the outcome.
+ * @author Ibrahim Queeum
+ * @function handleSaveUser
+ * @param {User} updatedUser - The updated user object.
+ */
   const handleSaveUser = async (updatedUser: User) => {
     try {
       const accessToken = localStorage.getItem('accessToken');
@@ -64,7 +84,7 @@ const UserList: React.FC = () => {
       });
 
       if (response.status === 200) {
-        // Update the user list in the frontend
+    
         setUsers((prevUsers) =>
           prevUsers.map((user) =>
             user.email === updatedUser.oldEmail ? updatedUser : user

@@ -4,7 +4,7 @@ import passport from '../config/passportConfig.js';
 import { saveGameResult } from '../controllers/gameController.js';
 
 /**
- * @author Lars Andreas Strand
+ * @author Lars Andreas Strand & Ibrahim Queeum
  * @description Router for game requests
  * This router handles all the requests related to game results.
  * It also handles middleware for authentication and authorization.
