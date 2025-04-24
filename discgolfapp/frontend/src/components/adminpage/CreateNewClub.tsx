@@ -99,7 +99,7 @@ const CreateNewClub: React.FC<CreateNewClubProps> = ({ onClose }) => {
               type="text"
               id="name"
               name="name"
-              placeholder="Must be unique and not empty"
+              placeholder={t('createnewclub_placeholder_name')}
               value={formData.name}
               onChange={handleInputChange}
               className="w-full border p-2 rounded"
@@ -114,7 +114,7 @@ const CreateNewClub: React.FC<CreateNewClubProps> = ({ onClose }) => {
               type="text"
               id="clubOwner"
               name="clubOwner"
-              placeholder="Insert club owner's display name"
+              placeholder={t('createnewclub_placeholder_clubowner')}
               value={formData.clubOwner}
               onChange={handleInputChange}
               className="w-full border p-2 rounded"
@@ -128,7 +128,7 @@ const CreateNewClub: React.FC<CreateNewClubProps> = ({ onClose }) => {
             <textarea
               id="description"
               name="description"
-              placeholder="Insert a short description of the club"
+              placeholder={t('createnewclub_placeholder_description')}
               value={formData.description}
               onChange={handleInputChange}
               className="w-full border p-2 rounded"
@@ -144,7 +144,7 @@ const CreateNewClub: React.FC<CreateNewClubProps> = ({ onClose }) => {
               type="text"
               id="address"
               name="address"
-              placeholder="Insert the club's address"
+              placeholder={t('createnewclub_placeholder_address')}
               value={formData.address}
               onChange={handleInputChange}
               className="w-full border p-2 rounded"
@@ -159,7 +159,7 @@ const CreateNewClub: React.FC<CreateNewClubProps> = ({ onClose }) => {
               type="text"
               id="zipCode"
               name="zipCode"
-              placeholder="Insert the club's zip code"
+              placeholder={t('createnewclub_placeholder_zip_code')}
               value={formData.zipCode}
               onChange={handleInputChange}
               className="w-full border p-2 rounded"
@@ -174,7 +174,7 @@ const CreateNewClub: React.FC<CreateNewClubProps> = ({ onClose }) => {
               type="url"
               id="websiteURL"
               name="websiteURL"
-              placeholder="Insert the club's website URL"
+              placeholder={t('createnewclub_placeholder_website_url')}
               value={formData.websiteURL}
               onChange={handleInputChange}
               className="w-full border p-2 rounded"
@@ -188,7 +188,7 @@ const CreateNewClub: React.FC<CreateNewClubProps> = ({ onClose }) => {
               type="email"
               id="email"
               name="email"
-              placeholder="Insert the club's email address"
+              placeholder={t('createnewclub_placeholder_email')}
               value={formData.email}
               onChange={handleInputChange}
               className="w-full border p-2 rounded"
@@ -203,7 +203,7 @@ const CreateNewClub: React.FC<CreateNewClubProps> = ({ onClose }) => {
               type="tel"
               id="phone"
               name="phone"
-              placeholder="Insert the club's phone number"
+              placeholder={t('createnewclub_placeholder_phone')}
               value={formData.phone}
               onChange={handleInputChange}
               className="w-full border p-2 rounded"
