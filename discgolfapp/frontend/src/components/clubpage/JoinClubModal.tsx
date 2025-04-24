@@ -1,3 +1,6 @@
+/**
+ * @description Translated by Ibrahim Queeum using i18next.
+ */
 import Modal from "../global/Modal";
 import { useState } from "react";
 import { toast } from "react-toastify";

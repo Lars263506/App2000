@@ -1,3 +1,6 @@
+/**
+ * @description Translated by Ibrahim Queeum using i18next.
+ */
 import React, { useState, useEffect } from 'react';
 import Club from '../../types/club';
 import { toast } from 'react-toastify';

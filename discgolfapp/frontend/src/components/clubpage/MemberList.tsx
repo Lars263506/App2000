@@ -1,3 +1,6 @@
+/**
+ * @description Translated by Ibrahim Queeum using i18next.
+ */
 import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 
