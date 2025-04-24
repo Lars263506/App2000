@@ -155,12 +155,19 @@ const createNewClubPage = async (name, clubOwner, description, address, zipCode,
     websiteURL,
     email,
     phone,
-    members: [],
+    members: [
+      {
+        displayName: clubOwner,
+        role: 'clubowner',
+        profilePicture: ''
+      }
+    ],
     events: []
   }
 
   try {
     const createdClubPage = await ClubPage.create(newClubPage)
+
     return createdClubPage
   } catch (error) {
     if (error.code === 11000) {
