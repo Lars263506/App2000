@@ -4,12 +4,15 @@ import { toast, ToastContainer } from 'react-toastify'
 import Club from '../../types/club'
 import SelectButton from './SelectButton'
 
+import { useTranslation } from 'react-i18next'
+
 interface ClubDetailsProps {
   selectedClub: Club | null;
   setSelectedClub: (club: Club | null) => void;
 }
 
 const ClubSettings: React.FC<ClubDetailsProps> = ({ selectedClub, setSelectedClub }) => {
+    const { t } = useTranslation()
     const changeClubInformation = async () => {
       if (!selectedClub) {
         toast.error('Klubben eksisterer ikke');
@@ -29,15 +32,15 @@ const ClubSettings: React.FC<ClubDetailsProps> = ({ selectedClub, setSelectedClu
           body: JSON.stringify(selectedClub),
         });
         if (response.status === 200) {
-          toast.success('Klubbinformasjonen ble endret!');
+          toast.success(t('clubsettings_toast_success_club_information_changed'));
         } else {
-          toast.error('Klubbinformasjonen ble ikke endret. Prøv igjen senere.');
+          toast.error(t('clubsettings_toast_error_club_information_changed'));
         }
       } catch (error: unknown) {
         if (error instanceof Error) {
           toast.error(error.message);
         } else {
-          toast.error('Et problem oppstod. Prøv igjen senere.');
+          toast.error(t('clubsettings_toast_error_club_information_changed'));
         }
       }
     };
@@ -60,16 +63,16 @@ const ClubSettings: React.FC<ClubDetailsProps> = ({ selectedClub, setSelectedClu
         });
 
         if (response.status === 200) {
-          toast.success('Klubben ble slettet!');
+          toast.success(t('clubsettings_toast_success_club_deleted'));
           setSelectedClub(null);
         } else {
-          toast.error('Klubben ble ikke slettet. Prøv igjen senere.');
+          toast.error(t('clubsettings_toast_error_club_deleted'));
         }
       } catch (error: unknown) {
         if (error instanceof Error) {
           toast.error(error.message);
         } else {
-          toast.error('Et problem oppstod. Prøv igjen senere.');
+          toast.error(t('clubsettings_toast_error_club_deleted'));
         }
       }
     };
@@ -79,7 +82,7 @@ const ClubSettings: React.FC<ClubDetailsProps> = ({ selectedClub, setSelectedClu
         {selectedClub ? (
           <div className="flex flex-col gap-2 p-4 text-black">
             <div className="flex flex-col">
-              <strong>Endre klubbnavn</strong>
+              <strong>{t('clubsettings_change_club_name')}</strong>
               <input
                 type="text"
                 className="border p-2 rounded"
@@ -88,7 +91,7 @@ const ClubSettings: React.FC<ClubDetailsProps> = ({ selectedClub, setSelectedClu
               />
             </div>
             <div className="flex flex-col">
-              <strong>Endre addresse</strong>
+              <strong>{t('clubsettings_change_address')}</strong>
               <input
                 type="text"
                 className="border p-2 rounded"
@@ -97,7 +100,7 @@ const ClubSettings: React.FC<ClubDetailsProps> = ({ selectedClub, setSelectedClu
               />
             </div>
             <div className="flex flex-col">
-              <strong>Endre postnummer</strong>
+              <strong>{t('clubsettings_change_post_code')}</strong>
               <input
                 type="text"
                 className="border p-2 rounded"
@@ -106,7 +109,7 @@ const ClubSettings: React.FC<ClubDetailsProps> = ({ selectedClub, setSelectedClu
               />
             </div>
             <div className="flex flex-col">
-              <strong>Endre nettside</strong>
+              <strong>{t('clubsettings_change_webpage')}</strong>
               <input
                 type="text"
                 className="border p-2 rounded"
@@ -115,7 +118,7 @@ const ClubSettings: React.FC<ClubDetailsProps> = ({ selectedClub, setSelectedClu
               />
             </div>
             <div className="flex flex-col">
-              <strong>Endre e-post</strong>
+              <strong>{t('clubsettings_change_email')}</strong>
               <input
                 type="text"
                 className="border p-2 rounded"
@@ -124,7 +127,7 @@ const ClubSettings: React.FC<ClubDetailsProps> = ({ selectedClub, setSelectedClu
               />
             </div>
             <div className="flex flex-col">
-              <strong>Endre telefonnummer</strong>
+              <strong>{t('clubsettings_change_phone')}</strong>
               <input
                 type="text"
                 className="border p-2 rounded"
@@ -134,19 +137,19 @@ const ClubSettings: React.FC<ClubDetailsProps> = ({ selectedClub, setSelectedClu
             </div>
 
             <SelectButton onClick={() => changeClubInformation()}>
-              Lagre klubbinformasjon
+              {t('clubsettings_save_club_information')}
             </SelectButton>
 
             <SelectButton onClick={() => deleteClub(selectedClub._id)}>
-              Slett klubb
+            {t('clubsettings_delete_club')}
             </SelectButton>
 
             <SelectButton onClick={() => setSelectedClub(null)}>
-              Tilbake til klubbvalg
+            {t('clubsettings_back_to_club_list')}
             </SelectButton>
           </div>
         ) : (
-          <header>Ingen klubb valgt.</header>
+          <header>{t('clubsettings_no_club_selected')}</header>
         )}
 
         <ToastContainer />
