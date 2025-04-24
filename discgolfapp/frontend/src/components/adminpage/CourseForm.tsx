@@ -1,16 +1,36 @@
+/**
+ * CourseForm Component
+ * Allows users to create or edit a golf course.
+ * Shows appropriate fields and handles save/cancel logic.
+ * 
+ * @author Andreas Nilsen
+ */
+
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import Course from '@/types/course'; 
 
+/**
+ * Props for the CourseForm component
+ * @author Andreas Nilsen
+ */
 interface CourseFormProps {
   course?: Course | null;
   onCancel?: () => void;
   onSave?: (course: Course) => void;
 }
 
+/**
+ * CourseForm functional component
+ * @param {CourseFormProps} props - Contains optional course object, and handlers for save/cancel
+ * @returns JSX.Element
+ * @author Andreas Nilsen
+ */
 const CourseForm: React.FC<CourseFormProps> = ({ course = null, onCancel, onSave }) => {
   const { t } = useTranslation();
+
+  // State management for all course fields
   const [name, setName] = useState(course?.name || '');
   const [location, setLocation] = useState(course?.location || '');
   const [town, setTown] = useState(course?.town || '');
@@ -23,15 +43,21 @@ const CourseForm: React.FC<CourseFormProps> = ({ course = null, onCancel, onSave
   const [holes, setHoles] = useState<number | ''>(course?.holes || '');
   const [courseOwner, setCourseOwner] = useState(course?.courseOwner || '');
   const [isAuthorized, setIsAuthorized] = useState(false);
+
   const userRole = localStorage.getItem('role');
   const userId = localStorage.getItem('userId');
 
+  /**
+   * useEffect hook to check user authorization
+   * Sets `isAuthorized` if user has the right access
+   * @author Andreas Nilsen
+   */
   useEffect(() => {
     const checkAuthorization = async () => {
       try {
         const accessToken = localStorage.getItem('accessToken');
         if (!accessToken) {
-          throw new Error('Ingen tilgangstoken funnet');
+          throw new Error('No access token found');
         }
 
         const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/users/has-access`, {
@@ -61,6 +87,12 @@ const CourseForm: React.FC<CourseFormProps> = ({ course = null, onCancel, onSave
     checkAuthorization();
   }, [userRole, userId, course]);
 
+  /**
+   * Handles saving the course
+   * Validates input fields and sends POST/PUT request to backend
+   * Calls `onSave` on success
+   * @author Andreas Nilsen
+   */
   const handleSaveCourse = async () => {
     if (!name || !location || !town || !postCode || !difficulty || familyFriendly === undefined) {
       toast.error(t('courseform_toast_error_missing_fields'));
@@ -97,7 +129,7 @@ const CourseForm: React.FC<CourseFormProps> = ({ course = null, onCancel, onSave
       );
 
       if (response.status !== 200 && response.status !== 201) {
-        throw new Error('Kunne ikke lagre banen.');
+        throw new Error('Failed to save course.');
       }
 
       const saved = await response.json();
@@ -108,14 +140,17 @@ const CourseForm: React.FC<CourseFormProps> = ({ course = null, onCancel, onSave
     }
   };
 
+  // If user is not authorized, display error message
   if (!isAuthorized) {
-    return <div className="p-4 text-red-600">Du har ikke tilgang til å administrere baner.</div>;
+    return <div className="p-4 text-red-600">You do not have access to manage courses.</div>;
   }
 
+  // Main form JSX
   return (
     <div className="p-4 bg-white rounded-md shadow-md">
       <h2 className="text-xl font-bold mb-4">{course ? t('courseform_edit_course') : t('courseform_create_new_course')}</h2>
       <div className="grid grid-cols-2 gap-4">
+        {/* All form fields below, no logic comments needed since controlled by hooks above */}
         <input
           type="text"
           placeholder={t('courseform_name')}

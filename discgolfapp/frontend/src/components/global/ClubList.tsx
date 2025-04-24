@@ -4,6 +4,14 @@ import { toast } from 'react-toastify'
 import Club from '../../types/club'
 import { useTranslation } from 'react-i18next'
 
+/**
+ * ClubList Component
+ * Provides a list of clubs with search and selection functionality.
+ * Includes translated text using i18next for localization support.
+ * 
+ * @author Lars Andreas Strand and Andreas Nilsen
+ */
+
 interface ClubListProps {
   selectedClub: Club | null
   setSelectedClub: (club: Club | null) => void
@@ -11,6 +19,15 @@ interface ClubListProps {
   setSearchTerm: (searchTerm: string) => void
   setSelectedPage: (page: string) => void
 }
+
+/**
+ * Fetches the list of clubs from the backend and updates the state.
+ * Displays an error toast if the fetch operation fails.
+ * 
+ * @function fetchClubs
+ * @returns {Promise<void>}
+ * @author Lars Andreas Strand and Andreas Nilsen
+ */
 
 const ClubList: React.FC<ClubListProps> = ({ selectedClub, setSelectedClub, searchTerm, setSearchTerm, setSelectedPage }) => {
   const { t } = useTranslation()
@@ -29,6 +46,15 @@ const ClubList: React.FC<ClubListProps> = ({ selectedClub, setSelectedClub, sear
   useEffect(() => {
     fetchClubs()
   }, [selectedClub])
+
+  /**
+   * Renders the ClubList component, including search functionality and club selection.
+   * 
+   * @function ClubList
+   * @param {ClubListProps} props - Contains selected club, search term, and handlers for state updates.
+   * @returns {JSX.Element}
+   * @author Lars Andreas Strand and Andreas Nilsen
+   */
 
   return (
     <div className='flex p-4 text-black'>

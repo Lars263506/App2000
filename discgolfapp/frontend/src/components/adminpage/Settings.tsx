@@ -10,9 +10,24 @@ import SelectButton from '../global/SelectButton'
 
 import { useTranslation } from 'react-i18next'
 
+/**
+ * Props for the Settings component
+ * @typedef {Object} SettingsProps
+ * @property {function(string): void} setSelectedPage - Function to set the selected page.
+ * @author Lars Andreas Strand and Andreas Nilsen
+ */
+
 interface SettingsProps {
     setSelectedPage: (page: string) => void;
 }
+
+/**
+ * Settings Component
+ * Provides an interface for managing various settings, including club administration, user administration, translations, course drawing, and course management.
+ * Dynamically loads the appropriate component based on the selected setting.
+ * 
+ * @author Lars Andreas Strand and Andreas Nilsen
+ */
 
 const Settings: React.FC<SettingsProps> = ({ setSelectedPage }) => {
     const { t } = useTranslation()
@@ -27,6 +42,14 @@ const Settings: React.FC<SettingsProps> = ({ setSelectedPage }) => {
         'Baneadministrasjon': <CreateCourse />,
     };
 
+     /**
+         * Fetches settings from the backend and updates the state.
+         * Displays an error toast if the fetch operation fails.
+         * 
+         * @function fetchSettings
+         * @returns {Promise<void>}
+         * @author Lars Andreas Strand
+         */
     useEffect(() => {
         const fetchSettings = async () => {
             try {
@@ -54,6 +77,15 @@ const Settings: React.FC<SettingsProps> = ({ setSelectedPage }) => {
         fetchSettings();
     }, []);
 
+    /**
+     * Renders the list of settings and the selected setting's component.
+     * Displays a prompt if no setting is selected.
+     * 
+     * @function Settings
+     * @param {SettingsProps} props - Contains the setSelectedPage function.
+     * @returns {JSX.Element}
+     * @author Lars Andreas Strand
+     */
     return (
         <div className="flex flex-row gap-4 p-4 rounded-md min-h-[100vh] bg-white">
 

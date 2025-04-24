@@ -1,3 +1,18 @@
+/**
+ * PrivacyPage Component
+ * Displays the privacy policy information for the application.
+ * Includes translated text using i18next for localization support.
+ * 
+ * @author Andreas Nilsen
+ */
+
+/**
+ * Props for the PrivacyPage component
+ * @typedef {Object} PrivacyProps
+ * @property {function(string): void} setSelectedPage - Function to set the selected page.
+ * @author Andreas Nilsen
+ */
+
 import React from 'react';
 
 import { useTranslation } from 'react-i18next';

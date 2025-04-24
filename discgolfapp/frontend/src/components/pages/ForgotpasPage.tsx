@@ -1,6 +1,22 @@
+/**
+ * ForgotpasPage Component
+ * Provides a password reset interface for users, including functionality to send a reset link to the user's email.
+ * Includes translated text using i18next for localization support.
+ * 
+ * @author Andreas Nilsen
+ */
+
 import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
+
+/**
+ * Props for the ForgotpasPage component
+ * @typedef {Object} ForgotpasPageProps
+ * @property {function(): void} togglePopup - Function to toggle the login popup.
+ * @property {function(string): void} setSelectedPage - Function to set the selected page.
+ * @author Andreas Nilsen
+ */
 
 interface ForgotpasPageProps {
   togglePopup: () => void;
@@ -12,34 +28,38 @@ const ForgotpasPage: React.FC<ForgotpasPageProps> = ({ togglePopup, setSelectedP
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
 
+  /**
+   * Handles the password reset process, including simulating an email reset link and navigation.
+   * Displays success and informational messages during the process.
+   * 
+   * @function handlePasswordReset
+   * @param {React.FormEvent} event - The form submission event.
+   * @returns {Promise<void>}
+   * @author Andreas Nilsen
+   */
   const handlePasswordReset = async (event: React.FormEvent) => {
     event.preventDefault();
     setLoading(true);
 
-    // Simulerer en "tilbakestillingslink" som sendes til e-post
     setTimeout(() => {
       toast.success(t('forgotpaspage_forgot_password_success'));
       setLoading(false);
 
-      // Legg til en ekstra toast-melding før du blir sendt til login-siden
       toast.info(t('forgotpaspage_sendt_back', {
-        autoClose: 2000, // Denne meldingen vises i 2 sekunder før navigering
+        autoClose: 2000, 
       }));
 
-      // Etter at toast-meldingen er vist, gå tilbake til hjem og åpne login-popupen
       setTimeout(() => {
-        setSelectedPage('Home'); // Går til hjemmesiden
-        togglePopup(); // Åpner login-popupen
-      }, 2000); // Forsinkelse for at toast-meldingen skal vises før popupen åpnes
+        setSelectedPage('Home'); 
+        togglePopup(); 
+      }, 2000); 
     }, 2000);
   };
 
   return (
     <div className="flex justify-center items-start min-h-screen pt-16 overflow-hidden">
-      {/* Grå bakgrunnsboks med avrundede hjørner */}
       <div className="bg-gray-300 p-16 rounded-lg shadow-lg w-full max-w-2xl">
         <div className="bg-white p-10 rounded-lg">
-          {/* Plasserer overskriften til venstre */}
           <h2 className="text-3xl font-bold text-left mb-12">{t('forgotpaspage_password')}</h2>
           <form onSubmit={handlePasswordReset} className="flex flex-col space-y-4">
             <input
@@ -59,7 +79,6 @@ const ForgotpasPage: React.FC<ForgotpasPageProps> = ({ togglePopup, setSelectedP
             </button>
           </form>
 
-          {/* Legger til tekst under boksen */}
           <p className="mt-12 text-center text-base">
            {t('forgotpaspage_email')}{' '}
             <span
@@ -70,14 +89,13 @@ const ForgotpasPage: React.FC<ForgotpasPageProps> = ({ togglePopup, setSelectedP
             </span>
           </p>
 
-          {/* Legger til lenke tilbake til innlogging */}
           <p className="mt-4 text-center text-base">
           {t('forgotpaspage_backto')} {' '} 
             <span
               className="text-blue-500 cursor-pointer"
               onClick={() => {
-                setSelectedPage('Home'); // Går til hjemmesiden
-                togglePopup(); // Åpner login-popupen
+                setSelectedPage('Home'); 
+                togglePopup(); 
               }}
             >
               {t('forgotpaspage_back')}

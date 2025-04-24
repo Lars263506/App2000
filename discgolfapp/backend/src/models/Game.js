@@ -1,5 +1,11 @@
 import mongoose from 'mongoose';
 
+/**
+ * @author Ibrahim Queeum
+ * @description This is the schema for the Game model.
+ * It defines the structure of the Game document in the database.
+ */
+
 const playerSchema = new mongoose.Schema({
   name: { type: String, required: true },
   email: { type: String, default: null },

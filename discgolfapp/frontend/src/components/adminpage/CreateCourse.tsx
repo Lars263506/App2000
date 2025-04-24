@@ -1,3 +1,11 @@
+/**
+ * CreateCourse Component
+ * Manages the creation, editing, and deletion of golf courses.
+ * Displays a list of courses and provides options to create or edit them.
+ * 
+ * @author Andreas Nilsen
+ */
+
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
@@ -20,6 +28,14 @@ const CreateCourse: React.FC = () => {
   const userId = localStorage.getItem('userId');
   const { t } = useTranslation();
 
+  /**
+   * Fetches courses and user authorization status from the backend.
+   * Updates the state with the fetched data.
+   * 
+   * @function fetchData
+   * @returns {Promise<void>}
+   * @author Andreas Nilsen
+   */
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -77,6 +93,14 @@ const CreateCourse: React.FC = () => {
     fetchData();
   }, [userRole, userId]);
 
+  /**
+   * Fetches club owners from the backend if the user is an admin.
+   * Updates the state with the fetched data.
+   * 
+   * @function fetchClubOwners
+   * @returns {Promise<void>}
+   * @author Andreas Nilsen
+   */
   useEffect(() => {
     const fetchClubOwners = async () => {
       try {
@@ -104,21 +128,55 @@ const CreateCourse: React.FC = () => {
     }
   }, [userRole]);
 
+  /**
+   * Handles the creation of a new course.
+   * Resets the selected course and sets the creation mode.
+   * 
+   * @function handleCreateNew
+   * @returns {void}
+   * @author Andreas Nilsen
+   */
   const handleCreateNew = () => {
     setSelectedCourse(null);
     setIsCreating(true);
   };
 
+  /**
+   * Handles editing an existing course.
+   * Sets the selected course and exits the creation mode.
+   * 
+   * @function handleEditCourse
+   * @param {Course} course - The course to edit.
+   * @returns {void}
+   * @author Andreas Nilsen
+   */
   const handleEditCourse = (course: Course) => {
     setSelectedCourse(course);
     setIsCreating(false);
   };
 
+  /**
+   * Handles canceling the creation or editing of a course.
+   * Resets the selected course and exits the creation mode.
+   * 
+   * @function handleCancel
+   * @returns {void}
+   * @author Andreas Nilsen
+   */
   const handleCancel = () => {
     setSelectedCourse(null);
     setIsCreating(false);
   };
 
+  /**
+   * Handles saving a course.
+   * Updates the state with the saved course and exits the creation mode.
+   * 
+   * @function handleSave
+   * @param {Course} savedCourse - The course that was saved.
+   * @returns {void}
+   * @author Andreas Nilsen
+   */
   const handleSave = (savedCourse: Course) => {
     setCourses((prev) =>
       savedCourse.id
@@ -129,6 +187,15 @@ const CreateCourse: React.FC = () => {
     setIsCreating(false);
   };
 
+  /**
+   * Handles deleting a course.
+   * Sends a delete request to the backend and updates the state.
+   * 
+   * @function handleDeleteCourse
+   * @param {string} courseId - The ID of the course to delete.
+   * @returns {Promise<void>}
+   * @author Andreas Nilsen
+   */
   const handleDeleteCourse = async (courseId: string) => {
     if (!window.confirm('Er du sikker på at du vil slette denne banen?')) {
       return;

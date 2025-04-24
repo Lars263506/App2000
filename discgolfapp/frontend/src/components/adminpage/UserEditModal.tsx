@@ -3,6 +3,19 @@ import User from '../../types/user';
 
 import { useTranslation } from 'react-i18next';
 
+/**
+ * author: Ibrahim Queeum
+ * @description This component represents a modal for editing user details. 
+ * It allows administrators to update a user's display name, email, and role.
+ * 
+ * @component
+ * @param {UserEditModalProps} props - The props for the UserEditModal component.
+ * @param {User} props.user - The user object containing the current user details.
+ * @param {boolean} props.isOpen - A flag indicating whether the modal is open.
+ * @param {() => void} props.onClose - A function to close the modal.
+ * @param {(updatedUser: User) => void} props.onSave - A function to save the updated user details.
+ */
+
 interface UserEditModalProps {
   user: User;
   isOpen: boolean;
@@ -22,8 +35,12 @@ const UserEditModal: React.FC<UserEditModalProps> = ({ user, isOpen, onClose, on
     setRole(user.role);
   }, [user]);
 
+  /**
+   * @description Handles saving the updated user details.
+   */
+
   const handleSave = () => {
-    const updatedUser = { ...user, displayName, email, role, oldEmail: user.email }; // Include oldEmail
+    const updatedUser = { ...user, displayName, email, role, oldEmail: user.email }; 
     onSave(updatedUser);
     onClose();
   };
@@ -33,7 +50,6 @@ const UserEditModal: React.FC<UserEditModalProps> = ({ user, isOpen, onClose, on
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
       <div className="bg-white p-6 rounded-lg shadow-lg max-w-lg w-full relative">
-        {/* Close Icon */}
         <button
           onClick={onClose}
           className="absolute top-2 right-2 text-gray-500 hover:text-gray-800"

@@ -10,6 +10,19 @@ import { useTranslation } from 'react-i18next'
  * It provides a form for users to create an account by entering a display name, email, and password.
  * The component validates input, sends the data to the backend, and displays success or error notifications.
  * It also includes options to close the popup or switch to the login form.
+ * Register Component
+ * Provides a registration interface for users, including functionality for creating a new account.
+ * Includes translated text using i18next for localization support.
+ * 
+ * @author Andreas Nilsen
+ */
+
+/**
+ * Props for the Register component
+ * @typedef {Object} RegisterProps
+ * @property {function(): void} togglePopup - Function to toggle the register popup.
+ * @property {function(): void} closePopup - Function to close the popup.
+ * @author Andreas Nilsen
  */
 interface RegisterProps {
   togglePopup: () => void
@@ -23,6 +36,15 @@ const Register: React.FC<RegisterProps> = ({ togglePopup, closePopup }) => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
+  /**
+   * Handles the registration process, including API calls and state updates.
+   * Displays success or error messages based on the response.
+   * 
+   * @function handleSubmit
+   * @param {React.FormEvent} event - The form submission event.
+   * @returns {Promise<void>}
+   * @author Andreas Nilsen
+   */
   const handleSubmit = async (event: React.FormEvent) => {
     if (locked) return
 
