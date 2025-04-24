@@ -8,6 +8,7 @@ import Minute from './Minute.js'
  * @author Lars Andreas Strand
  * @description This is the schema for the ClubPage model.
  * It defines the structure of the ClubPage document in the database.
+ * Copilot was used for code and comment structure and some code generation, but the logic is based on my own knowledge.
  */
 
 const schema = new mongoose.Schema(

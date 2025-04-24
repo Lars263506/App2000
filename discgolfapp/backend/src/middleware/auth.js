@@ -8,6 +8,7 @@ import jwt from 'jsonwebtoken';
  * @description This file contains the middleware functions for authentication and authorization.
  * It uses the Passport JWT strategy to authenticate users and check their roles.
  * Each function returns a middleware function that can be used in the routes to protect them or provide role-based access control.
+ * Copilot was used for code and comment structure and some code generation, but the logic is based on my own knowledge.
  */
 
 /**
@@ -75,12 +76,30 @@ const optionalAuth = (req, res, next) => {
   }
 }
 
+/**
+ * @author Lars Andreas Strand
+ * @description This middleware function checks if the user is authenticated and has a valid session.
+ * It checks if passport returned a user object in the request.
+ * If the user exists in the request, it means the session is valid and it returns a 200 status code with a message.
+ * If the user does not exist, it means the session is invalid and it returns a 401 status code with a message.
+ */
+
 const validateSession = (req, res) => {
   if (req.user) {
     return res.status(200).json({ message: 'Session is valid' })
   }
   return res.status(401).json({ message: 'Session is invalid' })
 }
+
+/**
+ * @author Lars Andreas Strand
+ * @description This middleware function checks if the refresh token is valid.
+ * It checks if the authorization header is present and starts with 'Bearer '.
+ * If not, it returns a 401 status code with an error message.
+ * If the token is present, it verifies the token using the JWT refresh secret.
+ * If the token is valid, it decodes the token and sets the user ID in the request object.
+ * If the token is invalid, it returns a 401 status code with an error message.
+ */
 
 const validateRefreshToken = (req, res, next) => {
   const authHeader = req.headers.authorization;

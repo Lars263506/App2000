@@ -5,6 +5,7 @@ import * as clubpageService from '../services/clubpageService.js'
  * @description This file contains the controller functions for the club page routes.
  * It handles the requests and responses for the club page API endpoints.
  * It uses the clubpageService to interact with the database and perform CRUD operations on club pages.
+ * Copilot was used for code and comment structure and some code generation, but the logic is based on my own knowledge.
  */
 
 /**
@@ -41,6 +42,15 @@ const getClubPage = async (req, res) => {
   }
 }
 
+/**
+ * @author Lars Andreas Strand
+ * @description This function handles the request to check if the user is a member of a club page.
+ * It retrieves the user ID from the request and checks if the user is a member.
+ * If the user is a member, it sends a response with isMember set to true.
+ * If the user is not a member, it sends a response with isMember set to false.
+ * If there is an error, it sends a 404 status code and the error message.
+ */
+
 const isMember = async (req, res) => {
   try {
     res.json({ isMember: req.user.role === "member" })
@@ -48,6 +58,16 @@ const isMember = async (req, res) => {
     res.status(404).json({ error: err.message })
   }
 }
+
+/**
+ * @author Lars Andreas Strand
+ * @description This function handles the request to check if the user is the owner of a club page.
+ * It retrieves the club ID from the request parameters and the user ID from the request.
+ * It checks if the user is the owner of the club page.
+ * If the user is the owner, it sends a response with isOwner set to true.
+ * If the user is not the owner, it sends a response with isOwner set to false.
+ * If there is an error, it sends a 404 status code and the error message.
+ */
 
 const isOwner = async (req, res) => {
   try {
@@ -236,6 +256,15 @@ const updateClubPage = async (req, res) => {
     res.status(500).json({ error: err.message })
   }
 };
+
+/**
+ * @author Lars Andreas Strand
+ * @description This function handles the request to update the position of a member in a club page.
+ * It retrieves the display name and position from the request body.
+ * It calls the service to update the position.
+ * If successful, it sends a 200 status code and the updated members.
+ * If there is an error, it sends a 500 status code and the error message.
+ */
 
 const updatePosition = async (req, res) => {
   try {

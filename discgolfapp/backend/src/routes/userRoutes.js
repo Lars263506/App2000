@@ -36,6 +36,7 @@ import {
  * It also handles middleware for authentication and authorization.
  * It uses the passport middleware for authentication
  * and it uses the authorization middleware for authorization.
+ * Copilot was used for code and comment structure and some code generation, but the logic is based on my own knowledge.
  */
 
 const router = express.Router()
@@ -65,7 +66,7 @@ router.get('/my-clubs',
   getUserClubs
 )
 
-router.get('/my-games', 
+router.get('/my-games',
   passport.authenticate('jwt', { session: false }),
   getUserGames
 )
@@ -83,9 +84,6 @@ router.get('/has-access',
 
 router.get('/search',
   passport.authenticate('jwt', { session: false }),
-  (req, res, next) => {
-    next();
-  },
   searchUsers
 );
 
@@ -155,6 +153,5 @@ router.delete('/',
   authorizeAdmin,
   deleteUser
 )
-
 
 export default router

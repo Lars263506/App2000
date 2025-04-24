@@ -4,6 +4,7 @@ import { rateLimit } from 'express-rate-limit'
  * @author Lars Andreas Strand
  * @description This file contains the rate limiter middleware for the server.
  * It limits the number of requests from a single IP address to prevent abuse and DDoS attacks.
+ * Copilot was used for code and comment structure and some code generation, but the logic is based on my own knowledge.
  */
 
 /**
