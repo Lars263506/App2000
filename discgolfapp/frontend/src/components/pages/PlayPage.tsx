@@ -1,3 +1,22 @@
+<<<<<<< Updated upstream
+=======
+/**
+ * PlayPage Component
+ * This file has been translated using i18next for localization support.
+ * 
+ * @author Andreas Nilsen
+ * 
+ * ----
+ * 
+ *   @author Ibrahim Queeum
+ * * @description 
+ * - Fetches and displays available courses.
+ * - Allows users to add players and manage their scores.
+ * - Tracks the current basket and updates the map view accordingly.
+ * - Saves game progress locally and submits results to the backend.
+ * - Provides a summary of the game results upon completion.
+ */
+>>>>>>> Stashed changes
 import { useState, useEffect, useRef } from "react";
 import { GoogleMap, LoadScript, Marker, Polyline, InfoWindow } from '@react-google-maps/api';
 import { toast } from "react-toastify";
@@ -26,6 +45,13 @@ export default function StartGame() {
 
   const baskets = 12;
 
+
+  /**
+ * Fetches the list of courses from the backend and updates the state.
+ * Displays an error toast if the fetch operation fails.
+ * 
+ * @function fetchCourses
+ */
   useEffect(() => {
     const fetchCourses = async () => {
       const url = process.env.NEXT_PUBLIC_BACKEND_BASE_URL + '/course';
@@ -40,12 +66,26 @@ export default function StartGame() {
     fetchCourses();
   }, []);
 
+  /**
+ * Loads saved scores from local storage and updates the state.
+ * 
+ * @function loadSavedScores
+ */
+
   useEffect(() => {
     const savedScores = localStorage.getItem("gameScores");
     if (savedScores) {
       setScores(JSON.parse(savedScores));
     }
   }, []);
+
+  /**
+ * Fetches the pins and lines for the selected course from the backend.
+ * Updates the pins and lines state.
+ * Displays an error toast if the fetch operation fails.
+ * 
+ * @function fetchPins
+ */
 
   const fetchPins = async () => {
     if (selectedCourse) {
@@ -104,6 +144,12 @@ export default function StartGame() {
     }
   }, [currentBasket, pins, gameStarted]);
 
+  /**
+ * Starts the game by initializing the state for scores, baskets, and map.
+ * 
+ * @function startGame
+ */
+
   const startGame = () => {
     if (selectedCourse) {
       setGameStarted(true);
@@ -119,6 +165,16 @@ export default function StartGame() {
     }
   };
 
+  /**
+ * Updates the score for a specific player and basket.
+ * Saves the updated scores to local storage.
+ * 
+ * @function handleScoreChange
+ * @param {string} player - The name of the player.
+ * @param {number} basket - The basket number.
+ * @param {number} value - The new score value.
+ */
+
   const handleScoreChange = (player: string, basket: number, value: number) => {
     const updatedScores = { ...scores };
 
@@ -131,11 +187,26 @@ export default function StartGame() {
     localStorage.setItem("gameScores", JSON.stringify(updatedScores));
   };
 
+/**
+ * Updates the name of a player in the players list.
+ * 
+ * @function handlePlayerNameChange
+ * @param {number} index - The index of the player in the players array.
+ * @param {string} name - The new name for the player.
+ */
+
   const handlePlayerNameChange = (index: number, name: string) => {
     const updatedPlayers = [...players];
     updatedPlayers[index] = name;
     setPlayers(updatedPlayers);
   };
+
+/**
+ * Moves to the next basket in the game.
+ * Updates the map view to center on the next basket.
+ * 
+ * @function handleNextBasket
+ */
 
   const handleNextBasket = () => {
     const basketPins = pins
@@ -158,6 +229,13 @@ export default function StartGame() {
     }
   };
 
+  /**
+ * Moves to the previous basket in the game.
+ * Updates the map view to center on the previous basket.
+ * 
+ * @function handlePreviousBasket
+ */
+
   const handlePreviousBasket = () => {
     const basketPins = pins
       .filter((pin) => pin.type === "kurv")
@@ -173,6 +251,13 @@ export default function StartGame() {
       }
     }
   };
+
+  /**
+ * Ends the game and submits the game results to the backend.
+ * Displays a success or error toast based on the outcome.
+ * 
+ * @function finishGame
+ */
 
   const finishGame = async () => {
     setGameEnded(true);
@@ -221,6 +306,13 @@ export default function StartGame() {
     return `${score || '-'} `;
   };
 
+  /**
+ * Searches for users based on the query and updates the search results.
+ * 
+ * @function handleSearchChange
+ * @param {string} query - The search query.
+ */
+
   const handleSearchChange = async (query: string) => {
     setSearchQuery(query);
 
@@ -249,6 +341,15 @@ export default function StartGame() {
       setSearchResults([]);
     }
   };
+
+  /**
+ * Adds a player to the game based on the selected user from the search results.
+ * 
+ * @function handleAddPlayer
+ * @param {Object} player - The selected player object.
+ * @param {string} player.displayName - The display name of the player.
+ * @param {string} player.email - The email of the player.
+ */
 
   const handleAddPlayer = (player: { displayName: string; email: string }) => {
     setPlayers([...players, player.displayName]);

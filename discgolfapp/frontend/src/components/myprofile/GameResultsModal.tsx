@@ -1,3 +1,31 @@
+<<<<<<< Updated upstream
+=======
+/**
+ * GameResultsModal Component
+ * This file has been translated using i18next for localization support.
+ * 
+ * @author Andreas Nilsen
+ * 
+ * --------
+ * 
+ * @author Ibrahim Queeum
+ * @description The GameResultsModal component displays the results of a disc golf game in a modal. 
+ * 
+ * Features:
+ * - Displays game details such as course name and date.
+ * - Lists all players who participated in the game.
+ * - Shows scores for each basket in a table format.
+ * - Calculates and displays the total score for each player.
+ * 
+ * @component
+ * @param {GameResultsModalProps} props - The props for the GameResultsModal component.
+ * @param {Object} props.game - The game object containing course, date, players, and scores.
+ * @param {boolean} props.isOpen - A flag indicating whether the modal is open.
+ * @param {() => void} props.onClose - A function to close the modal.
+ * @param {(scores: number[]) => number} props.calculateTotalScore - A function to calculate the total score for a player.
+ */
+
+>>>>>>> Stashed changes
 import React from 'react';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';

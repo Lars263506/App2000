@@ -73,6 +73,17 @@ const MyPage: React.FC<MyPageProps> = ({ setSelectedPage }) => {
     fetchClubs();
   }, [user]);
 
+<<<<<<< Updated upstream
+=======
+  /**
+   * Fetches the games associated with the logged-in user from the backend and updates the state.
+   * Displays an error toast if the fetch operation fails.
+   * 
+   * @function fetchGames
+   * @returns {Promise<void>}
+   * @author Ibrahim Queeum
+   */
+>>>>>>> Stashed changes
   useEffect(() => {
     const fetchGames = async () => {
       if (!user) return;
@@ -145,15 +156,47 @@ const MyPage: React.FC<MyPageProps> = ({ setSelectedPage }) => {
     setSelectedPage("Club");
   };
 
+<<<<<<< Updated upstream
+=======
+  /**
+   * Calculates the total score for a game based on the scores array.
+   * 
+   * @function calculateTotalScore
+   * @param {number[]} scores - The array of scores.
+   * @returns {number} The total score.
+   * @author Ibrahim Queeum
+   */
+>>>>>>> Stashed changes
   const calculateTotalScore = (scores: number[]) => {
     return scores.reduce((total, score) => total + score, 0);
   };
 
+<<<<<<< Updated upstream
+=======
+  /**
+   * Opens the game results modal for a selected game.
+   * 
+   * @function openModal
+   * @param {Game} game - The selected game.
+   * @returns {void}
+   * @author Ibrahim Queeum
+   */
+>>>>>>> Stashed changes
   const openModal = (game: Game) => {
     setSelectedGame(game);
     setIsModalOpen(true);
   };
 
+<<<<<<< Updated upstream
+=======
+  /**
+   * Closes the game results modal.
+   * 
+   * @function closeModal
+   * @returns {void}
+   * @author Ibrahim Queeum
+   */
+>>>>>>> Stashed changes
   const closeModal = () => {
     setSelectedGame(null);
     setIsModalOpen(false);
