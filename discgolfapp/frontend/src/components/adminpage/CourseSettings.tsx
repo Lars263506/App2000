@@ -1,3 +1,11 @@
+/**
+ * CourseSettings Component
+ * Allows users to manage course settings, including adding, editing, and deleting pins and lines on a map.
+ * Provides functionality for drawing lines, saving pins, and interacting with Google Maps.
+ * 
+ * @author Lars Andreas Strand and Andreas Nilsen
+ */
+
 import { useState, useEffect } from "react";
 import { GoogleMap, LoadScript, Marker, OverlayView, Polyline } from "@react-google-maps/api";
 
@@ -56,6 +64,14 @@ export default function CourseSettings() {
     }
   };
 
+  /**
+   * Fetches all courses from the backend and updates the state.
+   * Displays an error toast if the fetch operation fails.
+   * 
+   * @function fetchCourses
+   * @returns {Promise<void>}
+   * @author Lars Andreas Strand
+   */
   useEffect(() => {
     const fetchCourses = async () => {
       const url = process.env.NEXT_PUBLIC_BACKEND_BASE_URL + "/course";
@@ -88,6 +104,14 @@ export default function CourseSettings() {
     fetchCourses();
   }, []);
 
+  /**
+   * Fetches courses owned by the current user from the backend and updates the state.
+   * Displays an error toast if the fetch operation fails.
+   * 
+   * @function fetchCoursesForOwner
+   * @returns {Promise<void>}
+   * @author Lars Andreas Strand
+   */
   useEffect(() => {
     const fetchCoursesForOwner = async () => {
       const url = `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/course/owner`;
@@ -116,6 +140,14 @@ export default function CourseSettings() {
     fetchCoursesForOwner();
   }, []);
 
+  /**
+   * Saves pins and lines to the database for the selected course.
+   * Displays an error toast if the save operation fails.
+   * 
+   * @function savePinsToDatabase
+   * @returns {Promise<void>}
+   * @author Andreas Nilsen
+   */
   const savePinsToDatabase = async () => {
     if (!selectedCourse) return;
 
@@ -149,6 +181,16 @@ export default function CourseSettings() {
     }
   };
 
+  /**
+   * Handles adding a new pin to the map.
+   * Updates the pins state with the new pin.
+   * 
+   * @function handleAddPin
+   * @param {number} lat - Latitude of the new pin.
+   * @param {number} lng - Longitude of the new pin.
+   * @returns {void}
+   * @author Andreas Nilsen
+   */
   const handleAddPin = (lat: number, lng: number) => {
     if (!newPinName) {
       return;
@@ -166,6 +208,15 @@ export default function CourseSettings() {
     setSelectedPin(null);
   };
 
+  /**
+   * Handles clicking on a pin on the map.
+   * Supports delete mode, drawing lines, and fetching pin data from the backend.
+   * 
+   * @function handlePinClick
+   * @param {Pin} pin - The pin that was clicked.
+   * @returns {Promise<void>}
+   * @author Andreas Nilsen
+   */
   const handlePinClick = async (pin: Pin) => {
     if (isDeleteMode) {
       const pinName = pin.name || t("coursesettings_unknown_pin");
@@ -261,6 +312,16 @@ export default function CourseSettings() {
     setMapCenter({ lat: pin.latitude, lng: pin.longitude });
   };
 
+  /**
+   * Handles clicking on a line on the map.
+   * Supports delete mode for lines.
+   * 
+   * @function handleLineClick
+   * @param {Line} line - The line that was clicked.
+   * @param {number} index - The index of the line in the lines array.
+   * @returns {Promise<void>}
+   * @author Andreas Nilsen and Lars Andreas Strand
+   */
   const handleLineClick = async (line: Line, index: number) => {
     if (isDeleteMode) {
       const pin1 = pins.find((p) => p.id === line.pinId1);
@@ -297,6 +358,14 @@ export default function CourseSettings() {
     }
   };
 
+  /**
+   * Saves changes made to a selected pin.
+   * Updates the pins state and sends the updated data to the backend.
+   * 
+   * @function handleSavePinChanges
+   * @returns {Promise<void>}
+   * @author Andreas Nilsen
+   */
   const handleSavePinChanges = async () => {
     if (!selectedPin) return;
 
@@ -349,10 +418,26 @@ export default function CourseSettings() {
     setSelectedPin(null);
   };
 
+  /**
+   * Handles the start of a drag operation for a pin.
+   * 
+   * @function handleDragStart
+   * @returns {void}
+   * @author Andreas Nilsen
+   */
   const handleDragStart = () => {
     setIsDragging(true);
   };
 
+  /**
+   * Handles the end of a drag operation for a pin.
+   * Updates the pin's coordinates in the state.
+   * 
+   * @function handleDragEnd
+   * @param {google.maps.MapMouseEvent} e - The drag end event.
+   * @returns {void}
+   * @author Andreas Nilsen
+   */
   const handleDragEnd = (e: google.maps.MapMouseEvent) => {
     if (!e.latLng) return;
 
@@ -373,6 +458,15 @@ export default function CourseSettings() {
     setSelectedCourse("");
   };
 
+  /**
+   * Handles selecting a course from the list.
+   * Fetches pins and lines for the selected course from the backend.
+   * 
+   * @function handleCourseSelection
+   * @param {string} courseName - The name of the selected course.
+   * @returns {Promise<void>}
+   * @author Andreas Nilsen
+   */
   const handleCourseSelection = async (courseName: string) => {
     setSelectedCourse(courseName);
     setIsCourseSelected(true);
@@ -409,6 +503,14 @@ export default function CourseSettings() {
     }
   };
 
+  /**
+   * Handles clicking on the map to add a new pin.
+   * 
+   * @function handleMapClick
+   * @param {google.maps.MapMouseEvent} e - The map click event.
+   * @returns {void}
+   * @author Andreas Nilsen
+   */
   const handleMapClick = (e: google.maps.MapMouseEvent) => {
     if (isDeleteMode) {
       return;
@@ -421,6 +523,14 @@ export default function CourseSettings() {
     setLinePins([]);
   };
 
+  /**
+   * Handles clicking outside of interactive elements to reset selection states.
+   * 
+   * @function handleContainerClick
+   * @param {React.MouseEvent<HTMLDivElement>} e - The container click event.
+   * @returns {void}
+   * @author Andreas Nilsen
+   */
   const handleContainerClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.target instanceof HTMLElement && !e.target.closest(".edit-panel") && !e.target.closest(".gm-style")) {
       setSelectedPin(null);
@@ -430,6 +540,13 @@ export default function CourseSettings() {
     }
   };
 
+  /**
+   * Toggles the line drawing mode.
+   * 
+   * @function toggleDrawLine
+   * @returns {void}
+   * @author Andreas Nilsen
+   */
   const toggleDrawLine = () => {
     setIsDrawingLine((prev) => !prev);
     if (!isDrawingLine) {
@@ -439,6 +556,13 @@ export default function CourseSettings() {
     setIsDeleteMode(false);
   };
 
+  /**
+   * Toggles the delete mode.
+   * 
+   * @function toggleDeleteMode
+   * @returns {void}
+   * @author Andreas Nilsen
+   */
   const toggleDeleteMode = () => {
     setIsDeleteMode(!isDeleteMode);
     setSelectedPin(null);

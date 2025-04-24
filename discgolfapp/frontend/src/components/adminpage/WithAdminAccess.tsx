@@ -4,8 +4,18 @@ import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 
 /**
+ * WithAdminAccess Component
+ * A wrapper component that ensures only users with admin access can view the wrapped content.
+ * Displays a loading state while checking access and hides content if the user lacks admin privileges.
+ * 
+ * @author Lars Andreas Strand and Andreas Nilsen
+ */
+
+/**
+ * Props for the WithAdminAccess component
+ * @typedef {Object} WithAdminAccessProps
+ * @property {React.ReactNode} children - The content to display if the user has admin access.
  * @author Lars Andreas Strand
- * @description Wrapper for components that require admin access.
  */
 
 interface WithAdminAccessProps {
@@ -18,6 +28,15 @@ const WithAdminAccess: React.FC<WithAdminAccessProps> = ({ children }) => {
   const [hasAccess, setHasAccess] = useState(false);
 
   useEffect(() => {
+    /**
+     * Fetches admin access status from the backend.
+     * Updates the state to reflect whether the user has admin access.
+     * Displays an error toast if the fetch operation fails.
+     * 
+     * @function fetchData
+     * @returns {Promise<void>}
+     * @author Lars Andreas Strand and Andreas Nilsen
+     */
     const fetchData = async () => {
       const accessToken = localStorage.getItem('accessToken');
       if (!accessToken) {

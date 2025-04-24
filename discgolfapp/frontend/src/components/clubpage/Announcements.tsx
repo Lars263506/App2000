@@ -1,3 +1,10 @@
+/**
+ * Announcements Component
+ * This file has been translated using i18next for localization support.
+ * 
+ * @author Andreas Nilsen
+ */
+
 import React, { useEffect, useState } from 'react';
 import Button from '../global/Button';
 import { toast } from 'react-toastify';

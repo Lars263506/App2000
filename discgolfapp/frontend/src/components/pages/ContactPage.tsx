@@ -3,6 +3,24 @@ import { useRouter } from 'next/router'
 import { toast } from 'react-toastify'
 import { useTranslation } from 'react-i18next'
 
+/**
+ * ContactPage Component
+ * Provides a contact form for users to submit inquiries or feedback.
+ * Includes translated text using i18next for localization support.
+ * 
+ * @author Andreas Nilsen
+ */
+
+/**
+ * Form data structure for the contact form
+ * @typedef {Object} FormData
+ * @property {string} name - The name of the user submitting the form.
+ * @property {string} email - The email address of the user.
+ * @property {string} subject - The subject of the inquiry.
+ * @property {string} message - The message content of the inquiry.
+ * @author Andreas Nilsen
+ */
+
 const ContactPage = () => {
   const { t } = useTranslation()
   const router = useRouter()
@@ -14,6 +32,14 @@ const ContactPage = () => {
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
 
+  /**
+   * Handles changes to the form fields and updates the state.
+   * 
+   * @function handleChange
+   * @param {React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>} e - The change event from the input or textarea.
+   * @returns {void}
+   * @author Andreas Nilsen
+   */
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
     setFormData({
@@ -22,6 +48,15 @@ const ContactPage = () => {
     })
   }
 
+  /**
+   * Handles the form submission process, including validation and feedback.
+   * Displays success or error messages based on the outcome.
+   * 
+   * @function handleSubmit
+   * @param {React.FormEvent} e - The form submission event.
+   * @returns {Promise<void>}
+   * @author Andreas Nilsen
+   */
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsSubmitting(true)

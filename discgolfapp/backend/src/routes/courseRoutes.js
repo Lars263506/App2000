@@ -14,7 +14,7 @@ import {
 } from '../controllers/courseController.js'
 
 /**
- * @author Ibrahim Queeum and Lars Andreas Strand
+ * @author Ibrahim Queeum and Lars Andreas Strand and Andreas Nilsen
  * @description Router for course requests
  * This router handles all the requests related to courses.
  * It also handles middleware for authentication and authorization.

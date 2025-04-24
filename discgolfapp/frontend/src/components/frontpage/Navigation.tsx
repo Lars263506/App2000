@@ -1,3 +1,18 @@
+/**
+ * Navigation Component
+ * Provides a navigation interface for the front page, allowing users to select different sections of the application.
+ * Includes translated text using i18next for localization support.
+ * 
+ * @author Andreas Nilsen
+ */
+
+/**
+ * Props for the Navigation component
+ * @typedef {Object} NavigationProps
+ * @property {function(string): void} setSelectedPage - Function to set the selected page.
+ * @author Andreas Nilsen
+ */
+
 import { useTranslation } from 'react-i18next';
 
 interface NavigationProps {
