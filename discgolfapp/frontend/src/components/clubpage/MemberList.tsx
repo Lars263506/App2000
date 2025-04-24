@@ -40,7 +40,11 @@ const MemberList: React.FC<MemberListProps> = () => {
           setMembers(data);
         }
       } catch (error) {
-        toast.error(t('error_fetch_members'));
+        if (error instanceof Error) {
+          toast.error(t('error_fetch_members') + error.message);
+        } else {
+          toast.error(t('error_fetch_members'));
+        }
       } finally {
         setLoading(false);
       }
