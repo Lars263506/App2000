@@ -3,7 +3,6 @@ import { GoogleMap, LoadScript, Marker, InfoWindow } from '@react-google-maps/ap
 import Course from '@/types/course'
 
 import { useTranslation } from 'react-i18next';
-import i18next from 'i18next';
 
 /**
  * @author Adrian Johansen

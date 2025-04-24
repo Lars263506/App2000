@@ -14,12 +14,13 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 const Button: React.FC<ButtonProps> = ({ children, ...props }) => {
   return (
     <button
+      {...props} // Spread props to include standard button attributes
       className="text-white font-bold py-2 px-4 rounded transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-[#5A8FCC]"
       style={{
-        backgroundColor: "#5DBB63", 
+        backgroundColor: "#5DBB63",
       }}
-      onMouseOver={(e) => (e.currentTarget.style.backgroundColor = "#4CA454")} 
-      onMouseOut={(e) => (e.currentTarget.style.backgroundColor = "#5DBB63")} 
+      onMouseOver={(e) => (e.currentTarget.style.backgroundColor = "#4CA454")}
+      onMouseOut={(e) => (e.currentTarget.style.backgroundColor = "#5DBB63")}
     >
       {children}
     </button>
