@@ -6,12 +6,20 @@ import { useTranslation } from 'react-i18next';
 import i18next from 'i18next';
 
 /**
- * @author Adrian Johansen
- * @description This component displays a map of disc golf courses using Google Maps.
+ * @author Adrian Johansen, Ibrahim Queeum & Lars Andreas
+ * @description The CourseMap component displays a map of disc golf courses using Google Maps.
  * It allows users to filter courses by difficulty and view course details by clicking on markers.
  * The map dynamically centers on the selected course and adjusts zoom levels.
  * Users can navigate to a course using a link to Google Maps.
  * Translations are used for all text, and the map supports responsiveness and interactivity.
+ 
+    Features:
+  - Displays a map with markers for all courses.
+  - Allows filtering courses by difficulty.
+  - Displays course details in an InfoWindow when a marker is clicked.
+  - Provides a link to navigate to the course using Google Maps.
+  - Dynamically centers and zooms the map based on the selected course.
+  - Translations are used for all text, and the map supports responsiveness and interactivity.
  */
 
 interface CourseMapProps {
@@ -26,6 +34,11 @@ const CourseMap: React.FC<CourseMapProps> = ({ selectedCourse, courses, setSelec
   const [selectedMarker, setSelectedMarker] = useState<Course | null>(null);
   const [difficultyFilter, setDifficultyFilter] = useState('');
 
+  /**
+ * Centers the map on the selected course and adjusts the zoom level.
+ * 
+ * @function centerMapOnSelectedCourse
+ */
   useEffect(() => {
     if (mapRef.current && selectedCourse) {
       const newCenter = new window.google.maps.LatLng(selectedCourse.latitude, selectedCourse.longitude);
@@ -34,6 +47,12 @@ const CourseMap: React.FC<CourseMapProps> = ({ selectedCourse, courses, setSelec
     }
   }, [selectedCourse]);
 
+/**
+ * Filters the list of courses based on the selected difficulty.
+ * 
+ * @function filteredCourses
+ * @returns {Course[]} The filtered list of courses.
+ */
   const filteredCourses = courses.filter(course =>
     difficultyFilter ? course.difficulty.toLowerCase() === difficultyFilter.toLowerCase() : true
   );

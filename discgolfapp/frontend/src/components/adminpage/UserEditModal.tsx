@@ -4,7 +4,7 @@ import User from '../../types/user';
 import { useTranslation } from 'react-i18next';
 
 /**
- * author: Ibrahim Queeum
+ * @author: Ibrahim Queeum & Lars Andreas
  * @description This component represents a modal for editing user details. 
  * It allows administrators to update a user's display name, email, and role.
  * 

@@ -6,6 +6,18 @@ import Invitations from './Invitations'
 import Minutes from './Minutes'
 import { useTranslation } from 'react-i18next';
 
+/**
+ * @author Lars Andreas
+ * @description The Meetings component provides a tabbed interface for managing club meetings.
+ * Users can switch between two tabs: Invitations and Minutes. Each tab displays relevant content 
+ * for meeting invitations and meeting minutes, respectively.
+ * 
+ * Features:
+ * - Displays a tabbed interface for managing meetings.
+ * - Allows users to switch between "Invitations" and "Minutes" tabs.
+ * - Dynamically renders content for each tab.
+ * - Uses i18next for localization support.
+ */
 const Meetings = () => {
   const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState<'invitations' | 'minutes'>('invitations');
@@ -31,6 +43,7 @@ const Meetings = () => {
       </div>
 
       {/* Tab Content */}
+      
       <div>
         {activeTab === 'invitations' && (
           <div aria-label="Møteinnkallinger" className="flex flex-col gap-4">

@@ -23,7 +23,7 @@
  * @property {Line[]} lines - The list of lines connecting pins in the course.
  * @property {ObjectId[]} reviews - References to reviews associated with the course.
  * 
- * @author Andreas Nilsen
+ * @author Andreas Nilsen, Lars Andreas & Ibrahim Queeum
  */
 
 import mongoose from 'mongoose';

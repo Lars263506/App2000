@@ -8,6 +8,21 @@ import Button from '../global/Button'
 
 import { useTranslation } from 'react-i18next'
 
+/**
+ * @author: Lars Andreas, Ibrahim Queeum & Andreas Nilsen
+ * @description The CourseDetails component displays detailed information about a selected disc golf course.
+ * It provides functionality for viewing course details, weather information, and user reviews.
+ * Users can also submit reviews for the course.
+ * 
+ * Features:
+ * - Displays course details such as location, difficulty, and family-friendliness.
+ * - Fetches and displays weather data for the course location.
+ * - Fetches and displays user reviews for the course.
+ * - Allows logged-in users to submit reviews with a rating and comment.
+ * - Provides a tabbed interface for switching between details, weather, and reviews.
+ * - Uses i18next for localization support.
+ */
+
 interface CourseDetailsProps {
   selectedCourse: Course | null
   setSelectedCourse: (course: Course | null) => void
@@ -36,6 +51,15 @@ const CourseDetails: React.FC<CourseDetailsProps> = ({ selectedCourse, setSelect
 
   const isLoggedIn = !!localStorage.getItem('accessToken')
 
+ /**
+ * Fetches weather data for the selected course using the WeatherAPI.
+ * Updates the `weatherData` state with the fetched data.
+ * Displays an error toast if the fetch operation fails.
+ * 
+ * @author Andreas Nilsen
+ * @function fetchWeather
+ */
+
   useEffect(() => {
     if (selectedCourse != null) {
       const fetchWeather = async () => {
@@ -57,6 +81,15 @@ const CourseDetails: React.FC<CourseDetailsProps> = ({ selectedCourse, setSelect
     }
   }, [selectedCourse])
 
+  /**
+ * Fetches reviews for the selected course from the backend.
+ * Updates the `reviews` state with the fetched data.
+ * Displays an error toast if the fetch operation fails.
+ * 
+ * @author Ibrahim Queeum
+ * @function fetchReviews
+ */
+
   useEffect(() => {
     if (selectedCourse) {
       const fetchReviews = async () => {
@@ -73,6 +106,15 @@ const CourseDetails: React.FC<CourseDetailsProps> = ({ selectedCourse, setSelect
       fetchReviews();
     }
   }, [selectedCourse]);
+
+  /**
+ * Submits a new review for the selected course to the backend.
+ * Updates the `reviews` state with the newly added review.
+ * Displays success or error toasts based on the outcome.
+ * 
+ * @author Ibrahim Queeum
+ * @function handleSubmitReview
+ */
 
   const handleSubmitReview = async () => {
     if (!selectedCourse) return;
@@ -92,7 +134,6 @@ const CourseDetails: React.FC<CourseDetailsProps> = ({ selectedCourse, setSelect
         },
       });
 
-      // Fetch updated reviews
       const response = await axios.get(
         `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/reviews/course/${selectedCourse._id}`
       );

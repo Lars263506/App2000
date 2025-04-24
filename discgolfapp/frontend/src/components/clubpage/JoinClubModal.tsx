@@ -6,10 +6,33 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 
+
+/**
+ * @author Lars Andreas
+ * @description The JoinClubModal component provides a modal interface for users to request membership in a club.
+ * Users can input a reason for joining, which is sent to the backend for processing.
+ * The component displays success or error notifications based on the response from the backend.
+ * 
+ * Features:
+ * - Displays a modal with a text area for users to input their reason for joining.
+ * - Sends the join request to the backend with the provided reason.
+ * - Displays success or error toasts based on the backend response.
+ * - Reloads the page upon successful submission.
+ * - Uses i18next for localization support.
+ */
+
 const JoinClubModal: React.FC<{ clubId: string; onClose: () => void }> = ({ clubId, onClose }) => {
   const { t } = useTranslation();
     const [reason, setReason] = useState('');
 
+
+ /**
+ * Handles the submission of the join club request.
+ * Sends the user's reason for joining to the backend and displays a success or error toast based on the response.
+ * Reloads the page upon successful submission.
+ * 
+ * @function handleSubmit
+ */ 
     const handleSubmit = async () => {
       try {
         const url = `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/clubpage/join/${clubId}`;

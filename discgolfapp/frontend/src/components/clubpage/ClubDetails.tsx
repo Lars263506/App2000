@@ -12,6 +12,21 @@ import Meetings from './Meetings';
 import JoinClubModal from './JoinClubModal';
 import MemberBenefit from './MemberBenefit';
 
+/**
+ * @author Lars Andreas
+ * @description The ClubDetails component displays detailed information about a selected club.
+ * It provides functionality for members and non-members, including viewing announcements, meetings, and member lists.
+ * Non-members can join the club through a modal, while members can access additional club features.
+ * 
+ * Features:
+ * - Checks membership status for the logged-in user.
+ * - Displays member-specific sections like MemberList, Announcements, and Meetings.
+ * - Provides a Join Club button for non-members.
+ * - Includes a modal for joining the club.
+ * - Uses i18next for localization support.
+ * - Displays a responsive layout for both members and non-members.
+ */
+
 interface ClubDetailsProps {
     clubData: Club | null;
     setSelectedPage: (page: string) => void;
@@ -24,6 +39,13 @@ const ClubDetails: React.FC<ClubDetailsProps> = ({ clubData, setSelectedPage }) 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isMember, setIsMember] = useState(false);
 
+ /**
+ * Checks the membership status of the logged-in user for the selected club.
+ * Fetches the membership status from the backend and updates the `isMember` state.
+ * Displays an error toast if the fetch operation fails.
+ * 
+ * @function checkMembership
+ */
   useEffect(() => {
     const checkMembership = async () => {
       const accessToken = localStorage.getItem('accessToken');
@@ -58,6 +80,13 @@ const ClubDetails: React.FC<ClubDetailsProps> = ({ clubData, setSelectedPage }) 
     checkMembership();
   }, []);
 
+ /**
+ * Handles the click event for the "Join Club" button.
+ * Opens the join club modal if the user is logged in.
+ * Displays an error toast if the user is not logged in.
+ * 
+ * @function handleJoinClubClick
+ */
   const handleJoinClubClick = () => {
     const accessToken = localStorage.getItem('accessToken');
     if (!accessToken) {

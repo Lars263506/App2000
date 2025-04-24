@@ -17,7 +17,7 @@ import translationsRoutes from './routes/translationsRoutes.js'
 import userRoutes from './routes/userRoutes.js'
 
 /**
- * @author Lars Andreas Strand and Andreas Nilsen
+ * @author Lars Andreas Strand, Andreas Nilsen & Ibrahim Queeum
  * @description This is the main server file for the Discgolf app,
  * which sets up middleware, routes and database connection, and starts the server
  */

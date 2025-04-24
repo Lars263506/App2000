@@ -3,7 +3,7 @@ import User from '../models/User.js'; // Legg til denne linjen
 
 
 /**
- * @author Lars Andreas Strand and Andreas Nilsen
+ * @author Lars Andreas Strand, Andreas Nilsen & Ibrahim Queeum
  * @description This controller contains request handlers for user registration, authentication and user data management
  */
 
