@@ -1,3 +1,19 @@
+/**
+ * Copilot has been used to generate the code for the functions and comments,
+ * but all content has been reviewed and edited to ensure accuracy and alignment
+ * with the project's requirements.
+ */
+
+/**
+ * @author
+ * Lars Andreas Strand
+ * @description This component manages meeting minutes for a club. It allows club owners to:
+ * - View a list of meeting minutes.
+ * - Add, edit, or delete meeting minutes.
+ * - Download meeting minutes as PDF files.
+ * The component also checks if the user is the owner of the selected club.
+ */
+
 import React, { useState, useEffect } from 'react';
 import jsPDF from 'jspdf';
 import { toast } from 'react-toastify';
@@ -17,6 +33,10 @@ const Minutes: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
   const [currentMinute, setCurrentMinute] = useState<Minute | null>(null);
 
+  /**
+   * Fetches meeting minutes from the backend and updates the state.
+   * Displays an error toast if the fetch fails.
+   */
   useEffect(() => {
     const fetchMinutes = async () => {
       const accessToken = localStorage.getItem('accessToken');
@@ -28,15 +48,14 @@ const Minutes: React.FC = () => {
             Authorization: `Bearer ${accessToken}`,
           },
         });
-        if (response.status !== 200) throw new Error('Failed to fetch minutes');
+        if (response.status !== 200) throw new Error(t('minutes_toast_error_fetch_minutes'));
         const data: Minute[] = await response.json();
         setMinutes(data);
       } catch (error) {
         if (error instanceof Error) {
           toast.error(error.message);
-        }
-        else {
-          toast.error(t("minutes_toast_error_fetch_minutes"));
+        } else {
+          toast.error(t('minutes_toast_error_fetch_minutes'));
         }
       }
     };
@@ -45,6 +64,10 @@ const Minutes: React.FC = () => {
     fetchMinutes();
   }, []);
 
+  /**
+   * Checks if the current user is the owner of the selected club.
+   * Updates the `isClubOwner` state accordingly.
+   */
   useEffect(() => {
     if (selectedClub) {
       const checkClubOwner = async () => {
@@ -57,7 +80,7 @@ const Minutes: React.FC = () => {
             headers: {
               'Content-Type': 'application/json',
               Authorization: `Bearer ${accessToken}`,
-            }
+            },
           });
           if (response.status === 200) {
             const { isOwner } = await response.json();
@@ -69,7 +92,7 @@ const Minutes: React.FC = () => {
           if (error instanceof Error) {
             toast.error(error.message);
           } else {
-            toast.error(t("minutes_toast_error_check_owner"));
+            toast.error(t('minutes_toast_error_check_owner'));
             setIsClubOwner(false);
           }
         }
@@ -78,6 +101,10 @@ const Minutes: React.FC = () => {
     }
   }, [selectedClub]);
 
+  /**
+   * Downloads a meeting minute as a PDF file.
+   * @param minute The meeting minute to download.
+   */
   const handleDownloadPDF = (minute: Minute) => {
     const doc = new jsPDF();
     doc.setFont('helvetica', 'bold');
@@ -95,19 +122,30 @@ const Minutes: React.FC = () => {
     doc.save(`${minute.title}.pdf`);
   };
 
+  /**
+   * Opens the modal to add a new meeting minute.
+   */
   const handleAddMinute = () => {
     const maxId = minutes && minutes.length > 0
-      ? Math.max(...minutes.map((inv) => inv.id))
+      ? Math.max(...minutes.map((minute) => minute.id))
       : 0;
     setCurrentMinute({ id: maxId + 1, title: '', description: '', text: '' });
     setShowModal(true);
   };
 
+  /**
+   * Opens the modal to edit an existing meeting minute.
+   * @param minute The meeting minute to edit.
+   */
   const handleEditMinute = (minute: Minute) => {
     setCurrentMinute(minute);
     setShowModal(true);
   };
 
+  /**
+   * Deletes a meeting minute from the backend and updates the state.
+   * @param id The ID of the meeting minute to delete.
+   */
   const handleDeleteMinute = async (id: number) => {
     try {
       const accessToken = localStorage.getItem('accessToken');
@@ -121,21 +159,23 @@ const Minutes: React.FC = () => {
         },
         body: JSON.stringify({
           minuteId: id,
-          clubId: selectedClub?._id || 0
+          clubId: selectedClub?._id || 0,
         }),
       });
-      if (response.status !== 200) throw new Error(t("minutes_error_delete"));
-      setMinutes((prev) => prev.filter((meeting) => meeting.id !== id));
+      if (response.status !== 200) throw new Error(t('minutes_toast_error_delete'));
+      setMinutes((prev) => prev.filter((minute) => minute.id !== id));
     } catch (error) {
       if (error instanceof Error) {
         toast.error(error.message);
-      }
-      else {
-        toast.error(t("minutes_toast_error_delete"));
+      } else {
+        toast.error(t('minutes_toast_error_delete'));
       }
     }
   };
 
+  /**
+   * Saves the current meeting minute (either creates or updates it).
+   */
   const handleSaveMinute = async () => {
     if (currentMinute) {
       try {
@@ -153,7 +193,7 @@ const Minutes: React.FC = () => {
             },
             body: JSON.stringify(currentMinute),
           });
-          if (response.status !== 201) throw new Error(t("minutes_toast_error_create"));
+          if (response.status !== 201) throw new Error(t('minutes_toast_error_create'));
           setMinutes((prev) => [...prev, currentMinute]);
         } else {
           const response = await fetch(backendUrl, {
@@ -168,7 +208,7 @@ const Minutes: React.FC = () => {
               request: currentMinute,
             }),
           });
-          if (response.status !== 200) throw new Error(t("minutes_toast_error_update"));
+          if (response.status !== 200) throw new Error(t('minutes_toast_error_update'));
           setMinutes((prev) =>
             prev.map((minute) =>
               minute.id === currentMinute.id ? currentMinute : minute
@@ -179,7 +219,7 @@ const Minutes: React.FC = () => {
         if (error instanceof Error) {
           toast.error(error.message);
         } else {
-          toast.error(t("minutes_toast_error_save"));
+          toast.error(t('minutes_toast_error_save'));
         }
       }
     }
@@ -232,50 +272,50 @@ const Minutes: React.FC = () => {
           </div>
         ))
       ) : (
-        <p className="text-gray-500">{t("minutes_no_minutes_found")}</p>
+        <p className="text-gray-500">{t('minutes_no_minutes_found')}</p>
       )}
 
       {showModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
           <div className="bg-white p-6 rounded-lg shadow-lg w-96">
             <h2 className="text-lg font-bold mb-4">
-              {t("minutes_all_fields_required")}
+              {t('minutes_all_fields_required')}
             </h2>
             <div className="mb-4">
-              <label className="block text-sm font-medium mb-1">{t("minutes_title")}</label>
+              <label className="block text-sm font-medium mb-1">{t('minutes_title')}</label>
               <input
-              type="text"
-              value={currentMinute?.title || ''}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setCurrentMinute((prev: Minute | null) =>
-                prev ? { ...prev, title: e.target.value } : null
-                )
-              }
-              className="w-full px-3 py-2 border rounded"
+                type="text"
+                value={currentMinute?.title || ''}
+                onChange={(e) =>
+                  setCurrentMinute((prev) =>
+                    prev ? { ...prev, title: e.target.value } : null
+                  )
+                }
+                className="w-full px-3 py-2 border rounded"
               />
             </div>
             <div className="mb-4">
-              <label className="block text-sm font-medium mb-1">{t("minutes_description")}</label>
+              <label className="block text-sm font-medium mb-1">{t('minutes_description')}</label>
               <textarea
-              value={currentMinute?.description || ''}
-              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
-                setCurrentMinute((prev: Minute | null) =>
-                prev ? { ...prev, description: e.target.value } : null
-                )
-              }
-              className="w-full px-3 py-2 border rounded"
+                value={currentMinute?.description || ''}
+                onChange={(e) =>
+                  setCurrentMinute((prev) =>
+                    prev ? { ...prev, description: e.target.value } : null
+                  )
+                }
+                className="w-full px-3 py-2 border rounded"
               />
             </div>
             <div className="mb-4">
-              <label className="block text-sm font-medium mb-1">{t("minutes_text")}</label>
+              <label className="block text-sm font-medium mb-1">{t('minutes_text')}</label>
               <textarea
-              value={currentMinute?.text || ''}
-              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
-                setCurrentMinute((prev: Minute | null) =>
-                prev ? { ...prev, text: e.target.value } : null
-                )
-              }
-              className="w-full px-3 py-2 border rounded"
+                value={currentMinute?.text || ''}
+                onChange={(e) =>
+                  setCurrentMinute((prev) =>
+                    prev ? { ...prev, text: e.target.value } : null
+                  )
+                }
+                className="w-full px-3 py-2 border rounded"
               />
             </div>
             <div className="flex justify-end gap-2">
@@ -283,13 +323,13 @@ const Minutes: React.FC = () => {
                 onClick={() => setShowModal(false)}
                 className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
               >
-                {t("minutes_cancel")}
+                {t('minutes_cancel')}
               </button>
               <button
                 onClick={handleSaveMinute}
                 className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
               >
-                {t("minutes_save")}
+                {t('minutes_save')}
               </button>
             </div>
           </div>

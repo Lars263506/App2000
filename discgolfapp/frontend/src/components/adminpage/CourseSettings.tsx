@@ -6,6 +6,12 @@
  * @author Lars Andreas Strand and Andreas Nilsen
  */
 
+/**
+ * Copilot has been used to generate the code for the functions and comments,
+ * but all content has been reviewed and edited to ensure accuracy and alignment
+ * with the project's requirements.
+ */
+
 import { useState, useEffect } from "react";
 import { GoogleMap, LoadScript, Marker, OverlayView, Polyline } from "@react-google-maps/api";
 

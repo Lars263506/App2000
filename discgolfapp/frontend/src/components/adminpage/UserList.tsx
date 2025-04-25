@@ -13,6 +13,12 @@ import { useTranslation } from 'react-i18next';
  * A modal is used for editing user details, with success and error notifications.
  */
 
+/**
+ * Copilot has been used to generate the code for the functions and comments,
+ * but all content has been reviewed and edited to ensure accuracy and alignment
+ * with the project's requirements.
+ */
+
 const UserList: React.FC = () => {
   const { t } = useTranslation()
   const [users, setUsers] = useState<User[]>([]);

@@ -12,6 +12,12 @@ import { useTranslation } from 'react-i18next';
  */
 
 /**
+ * Copilot has been used to generate the code for the functions and comments,
+ * but all content has been reviewed and edited to ensure accuracy and alignment
+ * with the project's requirements.
+ */
+
+/**
  * Props for the WithAdminAccess component
  * @typedef {Object} WithAdminAccessProps
  * @property {React.ReactNode} children - The content to display if the user has admin access.

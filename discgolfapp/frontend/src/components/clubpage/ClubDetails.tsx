@@ -27,6 +27,12 @@ import MemberBenefit from './MemberBenefit';
  * - Displays a responsive layout for both members and non-members.
  */
 
+/**
+ * Copilot has been used to generate the code for the functions and comments,
+ * but all content has been reviewed and edited to ensure accuracy and alignment
+ * with the project's requirements.
+ */
+
 interface ClubDetailsProps {
     clubData: Club | null;
     setSelectedPage: (page: string) => void;

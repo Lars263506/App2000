@@ -14,6 +14,12 @@ import { useTranslation } from 'react-i18next'
  * Success and error notifications are shown for geocoding and data fetching.
  */
 
+/**
+ * Copilot has been used to generate the code for the functions and comments,
+ * but all content has been reviewed and edited to ensure accuracy and alignment
+ * with the project's requirements.
+ */
+
 interface ClubMapProps {
   selectedClub: Club | null
   setSelectedPage: ( page: string ) => void

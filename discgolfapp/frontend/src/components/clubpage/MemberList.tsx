@@ -1,6 +1,24 @@
 /**
  * @description Translated by Ibrahim Queeum using i18next.
  */
+
+/**
+ * @author
+ * Lars Andreas Strand
+ * @description This component displays a list of members in a club. It allows:
+ * - Club owners to view and edit member positions.
+ * - Members to view their roles and positions.
+ * - Fetching member data from the backend.
+ * - Updating member positions via the backend.
+ * The component also handles loading states and error handling for API requests.
+ */
+
+/**
+ * Copilot has been used to generate the code for the functions and comments,
+ * but all content has been reviewed and edited to ensure accuracy and alignment
+ * with the project's requirements.
+ */
+
 import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 
@@ -9,6 +27,9 @@ import Club from '../../types/club';
 import { useTranslation } from 'react-i18next';
 
 interface MemberListProps {
+  /**
+   * @property clubData The data of the selected club, passed as a prop.
+   */
   clubData: Club | null;
 }
 
@@ -18,6 +39,11 @@ const MemberList: React.FC<MemberListProps> = () => {
   const [loading, setLoading] = useState(true);
   const [userRole, setUserRole] = useState<string | null>(null);
 
+  /**
+   * Fetches the list of members from the backend.
+   * Updates the `members` state with the fetched data.
+   * Displays a toast notification in case of errors.
+   */
   useEffect(() => {
     const fetchMembers = async () => {
       const accessToken = localStorage.getItem('accessToken');
@@ -53,6 +79,15 @@ const MemberList: React.FC<MemberListProps> = () => {
     fetchMembers();
   }, [t]);
 
+  /**
+   * Handles updating the position of a member.
+   * Sends a PATCH request to the backend to update the member's position.
+   * Updates the `members` state locally to reflect the change.
+   * Displays success or error notifications based on the API response.
+   *
+   * @param index The index of the member in the `members` array.
+   * @param newPosition The new position to assign to the member.
+   */
   const handlePositionChange = async (index: number, newPosition: string) => {
     const updatedMembers = [...members];
     updatedMembers[index].position = newPosition;
@@ -82,7 +117,6 @@ const MemberList: React.FC<MemberListProps> = () => {
       } else {
         throw new Error(`${t('memberlist_server_answered')} ${response.status}`);
       }
-
     } catch (error) {
       if (error instanceof Error) {
         toast.error(error.message || t('memberlist_error'));
@@ -94,7 +128,10 @@ const MemberList: React.FC<MemberListProps> = () => {
 
   return (
     <div className="p-4 border rounded-lg shadow-md bg-white w-full h-full">
+      {/* Title */}
       <h2 className="text-xl font-bold mb-2 text-black">{t('memberlist_title')}</h2>
+
+      {/* Loading State */}
       {loading ? (
         <p className="text-gray-500">{t('memberlist_loading')}</p>
       ) : members.length > 0 ? (
@@ -130,7 +167,7 @@ const MemberList: React.FC<MemberListProps> = () => {
                 {userRole === 'Clubowner' ? (
                   <input
                     type="text"
-                    value={member.position|| ''}
+                    value={member.position || ''}
                     onChange={(e) => {
                       const updatedMembers = [...members];
                       updatedMembers[index].position = e.target.value;

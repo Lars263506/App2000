@@ -1,3 +1,18 @@
+/**
+ * Copilot has been used to generate the code for the functions and comments,
+ * but all content has been reviewed and edited to ensure accuracy and alignment
+ * with the project's requirements.
+ */
+
+/**
+ * @author Lars Andreas Strand
+ * @description This component manages invitations for a club. It allows club owners to:
+ * - View a list of invitations.
+ * - Add, edit, or delete invitations.
+ * - Download invitations as PDF files.
+ * The component also checks if the user is the owner of the selected club.
+ */
+
 import React, { useState, useEffect } from 'react';
 import jsPDF from 'jspdf';
 import { toast } from 'react-toastify';
@@ -17,6 +32,10 @@ const Invitations: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
   const [currentInvitation, setCurrentInvitation] = useState<Invitation | null>(null);
 
+  /**
+   * Fetches invitations from the backend and updates the state.
+   * Displays an error toast if the fetch fails.
+   */
   useEffect(() => {
     const fetchInvitations = async () => {
       const accessToken = localStorage.getItem('accessToken');
@@ -34,8 +53,7 @@ const Invitations: React.FC = () => {
       } catch (error) {
         if (error instanceof Error) {
           toast.error(error.message);
-        }
-        else {
+        } else {
           toast.error(t('invitations_toast_error_fetch_invitations'));
         }
       }
@@ -45,6 +63,10 @@ const Invitations: React.FC = () => {
     fetchInvitations();
   }, []);
 
+  /**
+   * Checks if the current user is the owner of the selected club.
+   * Updates the `isClubOwner` state accordingly.
+   */
   useEffect(() => {
     if (selectedClub) {
       const checkClubOwner = async () => {
@@ -57,7 +79,7 @@ const Invitations: React.FC = () => {
             headers: {
               'Content-Type': 'application/json',
               Authorization: `Bearer ${accessToken}`,
-            }
+            },
           });
           if (response.status === 200) {
             const { isOwner } = await response.json();
@@ -78,6 +100,10 @@ const Invitations: React.FC = () => {
     }
   }, [selectedClub]);
 
+  /**
+   * Downloads an invitation as a PDF file.
+   * @param invitation The invitation to download.
+   */
   const handleDownloadPDF = (invitation: Invitation) => {
     const doc = new jsPDF();
     doc.setFont('helvetica', 'bold');
@@ -95,6 +121,9 @@ const Invitations: React.FC = () => {
     doc.save(`${invitation.title}.pdf`);
   };
 
+  /**
+   * Opens the modal to add a new invitation.
+   */
   const handleAddInvitation = () => {
     const maxId = invitations && invitations.length > 0
       ? Math.max(...invitations.map((inv) => inv.id))
@@ -103,11 +132,19 @@ const Invitations: React.FC = () => {
     setShowModal(true);
   };
 
+  /**
+   * Opens the modal to edit an existing invitation.
+   * @param invitation The invitation to edit.
+   */
   const handleEditInvitation = (invitation: Invitation) => {
     setCurrentInvitation(invitation);
     setShowModal(true);
   };
 
+  /**
+   * Deletes an invitation from the backend and updates the state.
+   * @param id The ID of the invitation to delete.
+   */
   const handleDeleteInvitation = async (id: number) => {
     try {
       const accessToken = localStorage.getItem('accessToken');
@@ -121,7 +158,7 @@ const Invitations: React.FC = () => {
         },
         body: JSON.stringify({
           invitationId: id,
-          clubId: selectedClub?._id || 0
+          clubId: selectedClub?._id || 0,
         }),
       });
       if (response.status !== 200) throw new Error(t('invitations_error_delete_invitation'));
@@ -129,13 +166,15 @@ const Invitations: React.FC = () => {
     } catch (error) {
       if (error instanceof Error) {
         toast.error(error.message);
-      }
-      else {
+      } else {
         toast.error(t('invitations_toast_error_delete_invitation'));
       }
     }
   };
 
+  /**
+   * Saves the current invitation (either creates or updates it).
+   */
   const handleSaveInvitation = async () => {
     if (currentInvitation) {
       try {
@@ -165,7 +204,7 @@ const Invitations: React.FC = () => {
             body: JSON.stringify({
               invitationId: currentInvitation.id,
               clubId: selectedClub?._id || 0,
-              request: currentInvitation
+              request: currentInvitation,
             }),
           });
           if (response.status !== 200) throw new Error(t('invitations_error_update_invitation'));
@@ -178,8 +217,7 @@ const Invitations: React.FC = () => {
       } catch (error) {
         if (error instanceof Error) {
           toast.error(error.message);
-        }
-        else {
+        } else {
           toast.error('Det oppstod en feil med å lagre møteinnkallingen.');
         }
       }
@@ -233,7 +271,7 @@ const Invitations: React.FC = () => {
           </div>
         ))
       ) : (
-        <p className="text-gray-500">{t("invitations_no_invitations_found")}</p>
+        <p className="text-gray-500">{t('invitations_no_invitations_found')}</p>
       )}
 
       {showModal && (
@@ -243,7 +281,7 @@ const Invitations: React.FC = () => {
               {t('invitations_all_fields_required')}
             </h2>
             <div className="mb-4">
-              <label className="block text-sm font-medium mb-1">{t("invitations_title")}</label>
+              <label className="block text-sm font-medium mb-1">{t('invitations_title')}</label>
               <input
                 type="text"
                 value={currentInvitation?.title || ''}
@@ -256,7 +294,7 @@ const Invitations: React.FC = () => {
               />
             </div>
             <div className="mb-4">
-              <label className="block text-sm font-medium mb-1">{t("invitations_description")}</label>
+              <label className="block text-sm font-medium mb-1">{t('invitations_description')}</label>
               <textarea
                 value={currentInvitation?.description || ''}
                 onChange={(e) =>
@@ -268,7 +306,7 @@ const Invitations: React.FC = () => {
               />
             </div>
             <div className="mb-4">
-              <label className="block text-sm font-medium mb-1">{t("invitations_text")}</label>
+              <label className="block text-sm font-medium mb-1">{t('invitations_text')}</label>
               <textarea
                 value={currentInvitation?.text || ''}
                 onChange={(e) =>
