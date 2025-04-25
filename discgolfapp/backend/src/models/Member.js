@@ -4,6 +4,8 @@ import mongoose from 'mongoose';
  * @author Lars Andreas Strand and Adrian Johansen
  * @description This is the schema for the Member model.
  * It defines the structure of the Member document in the database.
+ * Copilot has been used to generate the schema and comments,
+ * but has been reviewed and edited by the authors.
  */
 
 const memberSchema = new mongoose.Schema({

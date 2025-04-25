@@ -4,12 +4,13 @@ import Course from '../models/Course.js';
 
 /**
  * @author Ibrahim Queeum
- * @description This file contains the controller logic for handling review-related operations. 
- * It provides endpoints to fetch all reviews, fetch reviews for a specific course, and add a new review. 
+ * @description This file contains the controller logic for handling review-related operations.
+ * It provides endpoints to fetch all reviews, fetch reviews for a specific course, and add a new review.
  * The controller interacts with the review service and the Course model to perform database operations.
- * 
+ * Copilot has been used to generate the code for the functions and comments,
+ * but has been reviewed and edited by the authors.
 /**
- 
+
  * @description Get all reviews.
  * @param {object} req - The request object.
  * @param {object} res - The response object.
@@ -58,7 +59,7 @@ const addReview = async (req, res) => {
 
     await Course.findByIdAndUpdate(
       courseId,
-      { $push: { reviews: newReview._id } }, 
+      { $push: { reviews: newReview._id } },
       { new: true }
     );
 

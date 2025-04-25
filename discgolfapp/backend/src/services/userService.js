@@ -14,6 +14,8 @@ import ClubPage from '../models/Clubpage.js'
  * It uses the User model to interact with the database.
  * It also uses the bcrypt package to hash passwords and the jsonwebtoken package to create tokens.
  * It uses the GridFSBucket from mongodb to store and retrieve profile images.
+ * Copilot has been used to help with the code, but it has been reviewed and modified by the author.
+ * The author has also added comments to explain the code.
  */
 
 /**

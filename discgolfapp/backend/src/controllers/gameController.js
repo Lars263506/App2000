@@ -3,6 +3,8 @@ import * as gameService from '../services/gameService.js';
 /**
  * @author Ibrahim Queeum and Lars Andreas Strand
  * @description This file contains the controller functions for the game routes.
+ * Copilot has been used to generate the code for the functions and comments,
+ * but has been reviewed and edited by the authors.
  */
 
 /**

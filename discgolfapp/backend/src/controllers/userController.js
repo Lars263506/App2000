@@ -5,6 +5,8 @@ import User from '../models/User.js'; // Legg til denne linjen
 /**
  * @author Lars Andreas Strand, Andreas Nilsen & Ibrahim Queeum
  * @description This controller contains request handlers for user registration, authentication and user data management
+ * Copilot has been used to generate the code for the functions and comments,
+ * but has been reviewed and edited by the authors.
  */
 
 /**
@@ -170,7 +172,7 @@ const checkIfAdmin = async (req, res) => {
  * Determines if the user is a club owner or an admin and sends the access status as a response.
  * If successful, sends a 200 status code with the access status.
  * If there is an error, sends a 500 status code with an error message.
- * 
+ *
  * @function hasAccess
  * @param {Object} req - The request object containing the user's role.
  * @param {Object} res - The response object to send the access status or error message.

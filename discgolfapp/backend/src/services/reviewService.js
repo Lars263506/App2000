@@ -4,10 +4,11 @@ import mongoose from 'mongoose';
 
 /**
  * @author Ibrahim Queeum
- * @description This file contains the service logic for handling review-related operations. 
- * It provides functions to fetch all reviews, fetch reviews for a specific course, and add a new review. 
+ * @description This file contains the service logic for handling review-related operations.
+ * It provides functions to fetch all reviews, fetch reviews for a specific course, and add a new review.
  * These functions interact with the Review model to perform database operations.
- * 
+ * Copilot has been used to generate the code for the functions and comments,
+ * but has been reviewed and edited by the author.
  */
 
 
@@ -31,7 +32,7 @@ const getAllReviews = async () => {
 const getReviewsByCourseId = async (courseId) => {
 
   const reviews = await Review.find({ courseId: new mongoose.Types.ObjectId(courseId) }).populate('userId', 'displayName');
-  return reviews; 
+  return reviews;
 };
 
 /**

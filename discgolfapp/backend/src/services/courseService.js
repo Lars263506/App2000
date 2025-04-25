@@ -1,6 +1,15 @@
 import Course from '../models/Course.js';
 import User from '../models/User.js';
 
+/**
+ * @author Lars Andreas Strand
+ * @description This file contains the course service functions.
+ * It handles the CRUD operations for courses in the database.
+ * It uses the Course model to interact with the database.
+ * Copilot has been used to generate the code for the functions and comments,
+ * but has been reviewed and edited by the author.
+ */
+
 const getAllCourses = async () => {
   const courses = await Course.aggregate([
     {

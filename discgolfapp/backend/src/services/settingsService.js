@@ -3,6 +3,11 @@ import User from '../models/User.js'
 /**
  * @author Lars Andreas Strand
  * @description Service for settings
+ * It provides functions to get all settings available to the logged in admin user,
+ * grant a setting to the admin user, and revoke a setting from the admin user.
+ * These functions interact with the User model to perform database operations.
+ * Copilot has been used to generate the code for the functions and comments,
+ * but has been reviewed and edited by the author.
 
 /**
  * @author Lars Andreas Strand

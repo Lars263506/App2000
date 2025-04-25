@@ -1,12 +1,12 @@
 /**
  * Course Model
  * Represents a disc golf course with its details, including location, difficulty, and associated pins and lines.
- * 
+ *
  * @module models/Course
  * @requires mongoose
  * @requires Pin
  * @requires Line
- * 
+ *
  * @typedef {Object} Course
  * @property {string} name - The name of the course (unique and required).
  * @property {string} courseOwner - The owner of the course (default: 'Unknown').
@@ -22,8 +22,10 @@
  * @property {Pin[]} pins - The list of pins associated with the course.
  * @property {Line[]} lines - The list of lines connecting pins in the course.
  * @property {ObjectId[]} reviews - References to reviews associated with the course.
- * 
+ *
  * @author Andreas Nilsen, Lars Andreas & Ibrahim Queeum
+ * @description Copilot has been used to generate the code for the functions and comments,
+ * but has been reviewed and edited by the authors.
  */
 
 import mongoose from 'mongoose';
@@ -40,7 +42,7 @@ const schema = new mongoose.Schema(
     },
     courseOwner: {
       type: String,
-      default: 'Unknown', 
+      default: 'Unknown',
     },
     location: {
       type: String,
