@@ -39,6 +39,12 @@ import { useTranslation } from 'react-i18next';
  * It also ensures session validation and persists the selected page across reloads.
  */
 
+/**
+ Copilot has been used to generate the code for the functions and comments,
+but all content has been reviewed and edited to ensure accuracy and alignment
+with the project's requirements.
+*/
+
 const Index = () => {
   const { t } = useTranslation();
   const { popupType, toggleLoginPopup, toggleRegisterPopup, closePopup } = usePopup();

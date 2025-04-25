@@ -2,6 +2,12 @@ import i18next from 'i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 import { initReactI18next } from 'react-i18next';
 
+/**
+ Copilot has been used to generate the code for the functions and comments,
+but all content has been reviewed and edited to ensure accuracy and alignment
+with the project's requirements.
+*/
+
 const storedLanguage =
   typeof window !== 'undefined' && localStorage.getItem('selectedLanguage')
     ? localStorage.getItem('selectedLanguage') || 'no'

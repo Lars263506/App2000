@@ -21,6 +21,12 @@ import Review from '@/types/review';
  * - Uses i18next for localization support.
  */
 
+/**
+ Copilot has been used to generate the code for the functions and comments,
+but all content has been reviewed and edited to ensure accuracy and alignment
+with the project's requirements.
+*/
+
 interface CourseListProps {
   courses: Course[];
   setCourses: (courses: Course[]) => void;

@@ -4,6 +4,12 @@ import { toast } from 'react-toastify'
 import { useTranslation } from 'react-i18next'
 
 /**
+ Copilot has been used to generate the code for the functions and comments,
+but all content has been reviewed and edited to ensure accuracy and alignment
+with the project's requirements.
+*/
+
+/**
  * ContactPage Component
  * Provides a contact form for users to submit inquiries or feedback.
  * Includes translated text using i18next for localization support.

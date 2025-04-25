@@ -12,6 +12,11 @@ import Club from '@/types/club'
  * Users can search for clubs, select a club from the list, or interact with the map to view club details.
  * The page dynamically updates based on the selected club and search term.
  */
+/**
+ Copilot has been used to generate the code for the functions and comments,
+but all content has been reviewed and edited to ensure accuracy and alignment
+with the project's requirements.
+*/
 
 interface ClubLandingPageProps {
   setSelectedPage: (page: string) => void

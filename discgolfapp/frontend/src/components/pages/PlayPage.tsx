@@ -14,6 +14,13 @@
  * - Saves game progress locally and submits results to the backend.
  * - Provides a summary of the game results upon completion.
  */
+
+/**
+ Copilot has been used to generate the code for the functions and comments,
+but all content has been reviewed and edited to ensure accuracy and alignment
+with the project's requirements.
+*/
+
 import { useState, useEffect, useRef } from "react";
 import { GoogleMap, LoadScript, Marker, Polyline, InfoWindow } from '@react-google-maps/api';
 import { toast } from "react-toastify";

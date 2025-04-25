@@ -20,6 +20,11 @@ import { useTranslation } from 'react-i18next';
   - Dynamically centers and zooms the map based on the selected course.
   - Translations are used for all text, and the map supports responsiveness and interactivity.
  */
+/**
+ Copilot has been used to generate the code for the functions and comments,
+but all content has been reviewed and edited to ensure accuracy and alignment
+with the project's requirements.
+*/
 
 interface CourseMapProps {
   selectedCourse: Course | null;
