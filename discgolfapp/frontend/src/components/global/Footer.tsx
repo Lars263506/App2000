@@ -17,6 +17,9 @@ import { useTranslation } from 'react-i18next'
  * @description This component renders the footer for the application.
  * It includes navigation buttons for "Contact" and "Privacy" pages, as well as links to social media platforms.
  * The footer uses translations for text and includes hover effects for interactivity.
+ * 
+ * Copilot has been used to generate the code for the functions and comments,
+ * but has been reviewed and edited by the authors
  */
 
 interface FooterProps {

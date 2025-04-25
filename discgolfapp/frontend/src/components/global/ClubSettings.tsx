@@ -6,11 +6,34 @@ import SelectButton from './SelectButton'
 
 import { useTranslation } from 'react-i18next'
 
+
+/**
+ * @author Lars Andreas Stand
+ * @description The ClubSettings component provides an interface for managing club information.
+ * Users can update club details such as name, address, contact information, and website URL.
+ * It also allows users to delete a club or navigate back to the club list.
+ * 
+ * Features:
+ * - Allows users to update club information and save changes to the backend.
+ * - Provides functionality to delete a club.
+ * - Displays success or error notifications using toast messages.
+ * - Uses i18next for localization support.
+ * - Responsive layout for seamless user interaction.
+ * 
+ * Copilot has been used to generate the code for the functions and comments,
+ * but has been reviewed and edited by the authors
+ * 
+ */
+
 interface ClubDetailsProps {
   selectedClub: Club | null;
   setSelectedClub: (club: Club | null) => void;
 }
 
+/**
+ * Updates the selected club's information in the backend.
+ * Displays success or error toast messages based on the response.
+ */
 const ClubSettings: React.FC<ClubDetailsProps> = ({ selectedClub, setSelectedClub }) => {
     const { t } = useTranslation()
     const changeClubInformation = async () => {
@@ -45,6 +68,11 @@ const ClubSettings: React.FC<ClubDetailsProps> = ({ selectedClub, setSelectedClu
       }
     };
 
+   /**
+    * Deletes the selected club from the backend.
+    * Displays success or error toast messages based on the response.
+    * Resets the selected club to null upon successful deletion.
+    */
     const deleteClub = async (clubId: string) => {
       if (!clubId) {
         toast.error('Klubb-ID mangler');

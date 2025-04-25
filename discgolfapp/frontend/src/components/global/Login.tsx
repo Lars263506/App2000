@@ -16,6 +16,9 @@ import { useTranslation } from 'react-i18next'
  * It allows users to log in, log out, navigate to their profile, or reset their password.
  * The component displays a login form or user options based on the login state.
  * Success and error notifications are shown for login and logout actions.
+ * 
+ * Copilot has been used to generate the code for the functions and comments,
+ * but has been reviewed and edited by the authors
  */
 
 interface LoginProps {

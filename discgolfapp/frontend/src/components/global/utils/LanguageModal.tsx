@@ -1,5 +1,21 @@
 import React, { useEffect, useRef } from 'react';
 
+/**
+ * @description The LanguageModal component provides a modal interface for selecting a language.
+ * It displays a list of available languages with their respective flags and allows users to choose a language.
+ * The modal closes when clicking outside of it or selecting a language.
+ * 
+ * Features:
+ * - Displays a list of available languages with flags.
+ * - Allows users to select a language, triggering a callback function.
+ * - Closes the modal when clicking outside of it.
+ * - Uses `Intl.DisplayNames` for localized language names.
+ * - Styled for responsiveness and accessibility.
+ * 
+ * Copilot has been used to generate the code for the functions and comments,
+ * but has been reviewed and edited by the authors
+ * 
+ */
 interface LanguageModalProps {
   selectedLanguage: string;
   onSelectLanguage: (language: string) => void;

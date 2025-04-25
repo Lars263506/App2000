@@ -5,6 +5,10 @@ import { useState } from 'react'
  * Manages the state and behavior of popups (login, register, mypage) in the application.
  * 
  * @author Andreas Nilsen
+ * 
+ * Copilot has been used to generate the code for the functions and comments,
+ * but has been reviewed and edited by the authors
+ * 
  */
 
 type PopupType = 'login' | 'register' | 'mypage'| null

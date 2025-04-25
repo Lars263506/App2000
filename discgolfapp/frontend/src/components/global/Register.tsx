@@ -14,6 +14,9 @@ import { useTranslation } from 'react-i18next'
  * Provides a registration interface for users, including functionality for creating a new account.
  * Includes translated text using i18next for localization support.
  * 
+ * Copilot has been used to generate the code for the functions and comments,
+ * but has been reviewed and edited by the authors
+ * 
  * @author Andreas Nilsen
  */
 

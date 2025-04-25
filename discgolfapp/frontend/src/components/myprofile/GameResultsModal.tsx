@@ -16,6 +16,9 @@
  * - Shows scores for each basket in a table format.
  * - Calculates and displays the total score for each player.
  * 
+ * Copilot has been used to generate the code for the functions and comments,
+ * but has been reviewed and edited by the authors
+ * 
  * @component
  * @param {GameResultsModalProps} props - The props for the GameResultsModal component.
  * @param {Object} props.game - The game object containing course, date, players, and scores.
