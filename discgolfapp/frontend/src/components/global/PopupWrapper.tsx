@@ -3,6 +3,10 @@
  * Dynamically renders different popup components (Login, Register) based on the provided popup type.
  * 
  * @author Andreas Nilsen
+ * 
+ * Copilot has been used to generate the code for the functions and comments,
+ * but has been reviewed and edited by the authors
+ * 
  */
 
 import Login from '@/components/global/Login'

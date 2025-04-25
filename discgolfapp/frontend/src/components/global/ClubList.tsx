@@ -9,6 +9,9 @@ import { useTranslation } from 'react-i18next'
  * Provides a list of clubs with search and selection functionality.
  * Includes translated text using i18next for localization support.
  * 
+ * Copilot has been used to generate the code for the functions and comments,
+ * but has been reviewed and edited by the authors
+ * 
  * @author Lars Andreas Strand and Andreas Nilsen
  */
 

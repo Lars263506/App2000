@@ -20,6 +20,10 @@ import { useTranslation } from 'react-i18next';
  * @description This component provides the main navigation for the front page.
  * It displays clickable cards for navigating to different sections of the app, such as Play, Courses, Get Started, and Clubs.
  * Each card uses translations for its title and description and includes hover effects for interactivity.
+ * 
+ * Copilot has been used to generate the code for the functions and comments,
+ * but has been reviewed and edited by the authors
+ * 
  */
 
 interface NavigationProps {

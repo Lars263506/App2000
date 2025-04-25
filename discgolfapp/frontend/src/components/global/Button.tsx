@@ -5,6 +5,9 @@ import React from "react";
  * @description This is a reusable button component with custom styles and hover effects.
  * It supports all standard button attributes and allows dynamic content through children props.
  * The button changes color on hover and includes focus styling for accessibility.
+ * 
+ * Copilot has been used to generate the code for the functions and comments,
+ * but has been reviewed and edited by the authors
  */
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {

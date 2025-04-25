@@ -22,6 +22,9 @@ import WithPageEditAccess from '../adminpage/WithEditPageAccess';
  * It includes links to the home page, profile, language selection, and admin pages.
  * The navbar supports language switching, test data reset, and displays a logo with the app's name.
  * Translations are used for all tooltips and text, and success/error notifications are shown for actions.
+ * 
+ * Copilot has been used to generate the code for the functions and comments,
+ * but has been reviewed and edited by the authors
  */
 
 interface NavBarProps {
