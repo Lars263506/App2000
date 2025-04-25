@@ -16,6 +16,12 @@ import { useTranslation } from 'react-i18next';
  * @param {(updatedUser: User) => void} props.onSave - A function to save the updated user details.
  */
 
+/**
+ * Copilot has been used to generate the code for the functions and comments,
+ * but all content has been reviewed and edited to ensure accuracy and alignment
+ * with the project's requirements.
+ */
+
 interface UserEditModalProps {
   user: User;
   isOpen: boolean;

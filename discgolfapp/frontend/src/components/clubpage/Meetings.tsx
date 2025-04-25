@@ -18,6 +18,13 @@ import { useTranslation } from 'react-i18next';
  * - Dynamically renders content for each tab.
  * - Uses i18next for localization support.
  */
+
+/**
+ * Copilot has been used to generate the code for the functions and comments,
+ * but all content has been reviewed and edited to ensure accuracy and alignment
+ * with the project's requirements.
+ */
+
 const Meetings = () => {
   const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState<'invitations' | 'minutes'>('invitations');

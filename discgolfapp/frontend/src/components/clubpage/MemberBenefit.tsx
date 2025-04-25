@@ -19,6 +19,12 @@ import { useTranslation, Trans } from 'react-i18next';
  - It uses translations to dynamically render a list of member benefits.
  */
 
+ /**
+ * Copilot has been used to generate the code for the functions and comments,
+ * but all content has been reviewed and edited to ensure accuracy and alignment
+ * with the project's requirements.
+ */
+
 const MemberBenefit = () => {
   const { t } = useTranslation();
 
