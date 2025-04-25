@@ -19,6 +19,12 @@ import { toast } from 'react-toastify';
  * The page dynamically updates content based on user selection and supports translations for all text.
  */
 
+/**
+ Copilot has been used to generate the code for the functions and comments,
+but all content has been reviewed and edited to ensure accuracy and alignment
+with the project's requirements.
+*/
+
 const GetStartedPage = () => {
   const { t, i18n } = useTranslation();
 

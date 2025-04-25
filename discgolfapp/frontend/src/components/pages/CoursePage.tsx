@@ -19,6 +19,12 @@ import Course from '@/types/course'
  * 
  
  */
+
+/**
+ Copilot has been used to generate the code for the functions and comments,
+but all content has been reviewed and edited to ensure accuracy and alignment
+with the project's requirements.
+*/
 const CoursePage = () => {
   const [courses, setCourses] = useState<Course[]>([])
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null)

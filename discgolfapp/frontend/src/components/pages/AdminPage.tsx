@@ -8,6 +8,12 @@ import WithPageEditAccess from '../adminpage/WithEditPageAccess';
  * This page is only accessible by users with the role 'admin'.
 */
 
+/**
+ Copilot has been used to generate the code for the functions and comments,
+but all content has been reviewed and edited to ensure accuracy and alignment
+with the project's requirements.
+*/
+
 interface AdminPageProps {
     setSelectedPage: (page: string) => void;
 }

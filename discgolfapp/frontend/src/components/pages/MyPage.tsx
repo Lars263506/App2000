@@ -6,6 +6,12 @@
  * @author Andreas Nilsen, Ibrahim Queeum & Lars Andreas
  */
 
+/**
+ Copilot has been used to generate the code for the functions and comments,
+but all content has been reviewed and edited to ensure accuracy and alignment
+with the project's requirements.
+*/
+
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { PencilIcon } from '@heroicons/react/20/solid'
