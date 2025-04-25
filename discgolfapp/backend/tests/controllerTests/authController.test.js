@@ -2,6 +2,13 @@ import { jest } from '@jest/globals'
 import { refreshSession } from '../../src/controllers/authController.js'
 import * as authService from '../../src/services/authService.js'
 
+/**
+ * @author Lars Andreas Strand
+ * @description This test file contains unit tests for the authController module.
+ * Copilot was used to generate the initial test cases and the initial structure of the tests.
+ * The author has modified some mocks and added comments to the code.
+ */
+
 describe('authController - refreshSession', () => {
     let mockReq, mockRes
 

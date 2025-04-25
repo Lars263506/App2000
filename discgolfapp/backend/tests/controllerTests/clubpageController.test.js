@@ -4,6 +4,13 @@ import * as clubpageService from '../../src/services/clubpageService.js';
 jest.mock('../../src/controllers/clubpageController.js');
 jest.mock('../../src/services/clubpageService.js');
 
+/**
+ * @author Lars Andreas Strand
+ * @description This test file contains unit tests for the clubpageController module.
+ * Copilot was used to generate the initial test cases and the initial structure of the tests.
+ * The author has modified some mocks and added comments to the code.
+ */
+
 describe('clubpageController.getAllClubPages', () => {
     it('should return all club pages', async () => {
         const mockResponse = [{ id: '1', name: 'Club 1' }, { id: '2', name: 'Club 2' }];

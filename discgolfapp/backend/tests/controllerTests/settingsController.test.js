@@ -3,6 +3,13 @@ import * as settingsService from '../../src/services/settingsService.js';
 
 jest.mock('../../src/services/settingsService.js');
 
+/**
+ * @author Lars Andreas Strand
+ * @description This test file contains unit tests for the settingsController module.
+ * Copilot was used to generate the initial test cases and the initial structure of the tests.
+ * The author has modified some mocks and added comments to the code.
+ */
+
 describe('settingsController', () => {
     describe('getSettings', () => {
         it('should return user settings', async () => {

@@ -13,6 +13,13 @@ jest.mock('../../src/models/Translation', () => ({
     bulkWrite: jest.fn(),
 }));
 
+/**
+ * @author Lars Andreas Strand
+ * @description This test file contains unit tests for the translationsService module.
+ * Copilot was used to generate the initial test cases and the initial structure of the tests.
+ * The author has modified some mocks and added comments to the code.
+ */
+
 describe('translationsService', () => {
     afterEach(() => {
         jest.clearAllMocks();

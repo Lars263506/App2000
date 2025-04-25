@@ -7,6 +7,13 @@ jest.mock('../../src/services/clubpageService.js');
 jest.mock('../../src/services/courseService.js');
 jest.mock('../../src/models/Course.js');
 
+/**
+ * @author Lars Andreas Strand
+ * @description This test file contains unit tests for the courseController module.
+ * Copilot was used to generate the initial test cases and the initial structure of the tests.
+ * The author has modified some mocks and added comments to the code.
+ */
+
 describe('Course Controller', () => {
     let mockReq, mockRes;
 

@@ -24,6 +24,13 @@ jest.mock('../../src/models/User', () => ({
     findById: jest.fn(),
 }));
 
+/**
+ * @author Lars Andreas Strand
+ * @description This test file contains unit tests for the courseService module.
+ * Copilot was used to generate the initial test cases and the initial structure of the tests.
+ * The author has modified some mocks and added comments to the code.
+ */
+
 describe('courseService', () => {
     afterEach(() => {
         jest.clearAllMocks();

@@ -3,6 +3,13 @@ import * as invitationsService from '../../src/services/invitationsService.js';
 
 jest.mock('../../src/services/invitationsService.js');
 
+/**
+ * @author Lars Andreas Strand
+ * @description This test file contains unit tests for the invitationsController module.
+ * Copilot was used to generate the initial test cases and the initial structure of the tests.
+ * The author has modified some mocks and added comments to the code.
+ */
+
 describe('invitationsController', () => {
     describe('getInvitations', () => {
         it('should return all invitations for the user', async () => {

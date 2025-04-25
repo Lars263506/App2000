@@ -3,6 +3,13 @@ import * as minutesService from '../../src/services/minutesService.js';
 
 jest.mock('../../src/services/minutesService.js');
 
+/**
+ * @author Lars Andreas Strand
+ * @description This test file contains unit tests for the minutesController module.
+ * Copilot was used to generate the initial test cases and the initial structure of the tests.
+ * The author has modified some mocks and added comments to the code.
+ */
+
 describe('minutesController', () => {
     describe('getMinutes', () => {
         it('should return all minutes for the user', async () => {

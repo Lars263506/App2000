@@ -1,3 +1,10 @@
+/**
+ * @author Lars Andreas Strand
+ * @description This file sets up the testing environment for the backend of the discgolfapp.
+ * Copilot was used to generate the initial test cases and the initial structure of the tests.
+ * The author has modified some mocks and added comments to the code.
+ */
+
 // Mock environment variables for tests
 process.env.SECRET_OR_KEY = 'test-secret';
 process.env.MONGO_URI = 'mongodb://localhost:27017/testdb'; // Mock MongoDB URI for tests
