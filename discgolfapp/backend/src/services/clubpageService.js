@@ -5,6 +5,8 @@ import User from '../models/User.js'
  * @author Lars Andreas Strand
  * @description This service handles the club page related CRUD operations towards the MongoDB database.
  * It uses the ClubPage model to interact with the database.
+ * Copilot has been used to generate the code for the functions and comments,
+ * but has been reviewed and edited by the author.
  */
 
 /**

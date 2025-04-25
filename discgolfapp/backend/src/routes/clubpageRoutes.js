@@ -35,6 +35,8 @@ const router = express.Router()
  * It also handles middleware for authentication and authorization.
  * It uses the passport middleware for authentication
  * and it uses the authorization middleware for authorization.
+ * Copilot has been used to generate the code for the functions and comments,
+ * but has been reviewed and edited by the authors.
  */
 
 router.get('/',

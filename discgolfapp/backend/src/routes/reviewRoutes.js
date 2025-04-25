@@ -3,11 +3,11 @@ import { getAllReviews, getReviewsByCourseId, addReview } from '../controllers/r
 
 /**
  * @author Ibrahim Queeum
- * @description This file defines the routes for handling review-related operations. 
- * It maps HTTP requests to the appropriate controller functions for fetching all reviews, fetching reviews by course ID, 
+ * @description This file defines the routes for handling review-related operations.
+ * It maps HTTP requests to the appropriate controller functions for fetching all reviews, fetching reviews by course ID,
  * and adding a new review.
- * 
- 
+ * Copilot has been used to generate the code for the functions and comments,
+ * but has been reviewed and edited by the author.
  */
 
 

@@ -20,6 +20,8 @@ import userRoutes from './routes/userRoutes.js'
  * @author Lars Andreas Strand, Andreas Nilsen & Ibrahim Queeum
  * @description This is the main server file for the Discgolf app,
  * which sets up middleware, routes and database connection, and starts the server
+ * Copilot has been used to modify the code and add comments to the code,
+ * but the logic and structure of the code is written by the authors.
  */
 
 const app = express();

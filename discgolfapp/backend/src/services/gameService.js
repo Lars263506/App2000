@@ -8,6 +8,8 @@ import User from '../models/User.js';
  * It handles the logic for saving game results to the database.
  * It uses the Game and User models to save the game results.
  * It also uses the uuid package to generate a unique game ID.
+ * Copilot has been used to generate the code for the functions and comments,
+ * but has been reviewed and edited by the author.
  */
 
 /**
@@ -17,7 +19,7 @@ import User from '../models/User.js';
  * @returns The saved game object.
  * @throws An error if the user is not found or if the game data is not provided.
  */
-  
+
 const saveGameResult = async (userId, game) => {
   const user = await User.findById(userId);
 

@@ -3,6 +3,8 @@ import * as settingsService from '../services/settingsService.js'
 /**
  * @author Lars Andreas Strand
  * @description This file contains the controller functions for the settings routes.
+ * Copilot has been used to generate the code for the functions and comments,
+ * but has been reviewed and edited by the authors.
  */
 
 /**
