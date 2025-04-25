@@ -6,6 +6,13 @@ jest.mock('../../src/services/resetService.js');
 // Mock console.error to suppress error logs during tests
 jest.spyOn(console, 'error').mockImplementation(() => {});
 
+/**
+ * @author Lars Andreas Strand
+ * @description This test file contains unit tests for the resetController module.
+ * Copilot was used to generate the initial test cases and the initial structure of the tests.
+ * The author has modified some mocks and added comments to the code.
+ */
+
 describe('resetController', () => {
   let req, res;
 

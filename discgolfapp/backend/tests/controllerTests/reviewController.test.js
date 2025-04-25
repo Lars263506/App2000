@@ -5,6 +5,13 @@ import Course from '../../src/models/Course.js';
 jest.mock('../../src/services/reviewService.js');
 jest.mock('../../src/models/Course.js');
 
+/**
+ * @author Lars Andreas Strand
+ * @description This test file contains unit tests for the reviewController module.
+ * Copilot was used to generate the initial test cases and the initial structure of the tests.
+ * The author has modified some mocks and added comments to the code.
+ */
+
 describe('reviewController', () => {
     describe('getAllReviews', () => {
         it('should return all reviews', async () => {

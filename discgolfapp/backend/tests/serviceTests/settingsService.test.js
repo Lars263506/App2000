@@ -8,6 +8,13 @@ jest.mock('../../src/models/User', () => ({
     findOneAndUpdate: jest.fn(),
 }));
 
+/**
+ * @author Lars Andreas Strand
+ * @description This test file contains unit tests for the settingsService module.
+ * Copilot was used to generate the initial test cases and the initial structure of the tests.
+ * The author has modified some mocks and added comments to the code.
+ */
+
 describe('settingsService', () => {
     afterEach(() => {
         jest.clearAllMocks();

@@ -3,6 +3,13 @@ import * as gameService from '../../src/services/gameService.js';
 
 jest.mock('../../src/services/gameService.js');
 
+/**
+ * @author Lars Andreas Strand
+ * @description This test file contains unit tests for the gameController module.
+ * Copilot was used to generate the initial test cases and the initial structure of the tests.
+ * The author has modified some mocks and added comments to the code.
+ */
+
 describe('gameController', () => {
     describe('saveGameResult', () => {
         it('should save a game result and return the saved result', async () => {

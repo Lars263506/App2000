@@ -11,6 +11,13 @@ jest.mock('jsonwebtoken', () => ({
     sign: jest.fn(),
 }));
 
+/**
+ * @author Lars Andreas Strand
+ * @description This test file contains unit tests for the authService module.
+ * Copilot was used to generate the initial test cases and the initial structure of the tests.
+ * The author has modified some mocks and added comments to the code.
+ */
+
 describe('refreshSession', () => {
     afterEach(() => {
         jest.clearAllMocks();
