@@ -6,6 +6,8 @@ import { initReactI18next } from 'react-i18next';
  Copilot has been used to generate the code for the functions and comments,
 but all content has been reviewed and edited to ensure accuracy and alignment
 with the project's requirements.
+
+The translations are located in the database and will be loaded from there when web application is refreshed.
 */
 
 const storedLanguage =
